@@ -1,0 +1,15 @@
+# Local code-execution engine (Piston). Start with: pnpm piston:up
+# After it starts, install a runtime once (see docs/ROADMAP.md, M0).
+services:
+  piston:
+    image: ghcr.io/engineer-man/piston
+    container_name: loophole-piston
+    restart: unless-stopped
+    privileged: true
+    ports:
+      - "2000:2000"
+    volumes:
+      - ./data/piston/packages:/piston/packages
+    tmpfs:
+      - /piston/jobs:exec,uid=1000,gid=1000,mode=711
+      - /tmp:exec

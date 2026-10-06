@@ -1,0 +1,25 @@
+# dependencies
+node_modules/
+
+# builds
+dist/
+.next/
+out/
+build/
+*.tsbuildinfo
+coverage/
+
+# env (keep the .env.example files)
+.env
+.env.*
+!.env.example
+
+# piston runtime data
+infra/data/
+
+# os / editor
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
