@@ -7,6 +7,8 @@ export default defineConfig({
   plugins: [tsconfigPaths()],
   test: {
     globals: true,
+    // NestJS loads reflect-metadata at startup; tests that skip Nest need it too.
+    setupFiles: ['reflect-metadata'],
     root: './',
     include: ['**/*.spec.ts'],
   },
