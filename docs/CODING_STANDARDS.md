@@ -46,9 +46,9 @@ Conventions every file follows. AI assistants should apply these without being a
 
 | What | Tool | Rule |
 | --- | --- | --- |
-| Services | Jest | Every public method; fakes for every injected interface |
-| Domain logic (streaks, ELO, state machine, matcher) | Jest | Table-driven tests for every branch |
-| Repositories | Jest + a test database | Happy path and constraint violations |
+| Services | Vitest | Every public method; fakes for every injected interface |
+| Domain logic (streaks, ELO, state machine, matcher) | Vitest | Table-driven tests for every branch |
+| Repositories | Vitest + a test database | Happy path and constraint violations |
 | Components | Vitest + Testing Library | Behaviour, not snapshots |
 | End to end | Playwright | J-1 first lesson, J-3 duel (two browser contexts) |
 

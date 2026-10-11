@@ -74,41 +74,51 @@ Wrap all motion in a `useReducedMotion()` check; with reduced motion, swap anima
 | DuelHeader | Ink band, white text, Orange countdown and opponent progress bar |
 | EditorPanel | CodeMirror, light theme, JetBrains Mono 14 |
 
-## 7. Tailwind config
+## 7. Tailwind config (v4, ADR-013)
 
-```ts
-// apps/web/tailwind.config.ts (extend, do not replace)
-theme: {
-  extend: {
-    colors: {
-      ink: '#171717',
-      paper: '#FFFFFF',
-      surface: '#EDEDED',
-      'border-muted': '#D4D4D4',
-      orange: { DEFAULT: '#FF6A00', dark: '#CC5500', tint: '#FFB380' },
-      'text-secondary': '#6B6B6B',
-      'text-tertiary': '#8A8A8A',
-    },
-    fontFamily: {
-      display: ['var(--font-baloo)', 'sans-serif'],
-      sans: ['var(--font-nunito)', 'sans-serif'],
-      mono: ['var(--font-jetbrains)', 'monospace'],
-    },
-    borderRadius: { node: '9999px', card: '1rem', badge: '0.5rem' },
-    boxShadow: {
-      'press-orange': '0 4px 0 #CC5500',
-      'press-ink': '0 4px 0 #000000',
-      'press-locked': '0 4px 0 #D4D4D4',
-    },
-    keyframes: {
-      pop: { '0%': { transform: 'scale(1)' }, '40%': { transform: 'scale(1.25)' }, '100%': { transform: 'scale(1)' } },
-      'pulse-node': { '0%,100%': { transform: 'scale(1)' }, '50%': { transform: 'scale(1.06)' } },
-    },
-    animation: {
-      pop: 'pop 0.5s cubic-bezier(0.34,1.56,0.64,1)',
-      'pulse-node': 'pulse-node 1.6s ease-in-out infinite',
-    },
-  },
+Tailwind v4 has no `tailwind.config.ts`; tokens are CSS variables in `@theme` blocks. Each variable becomes utilities by its prefix: `--color-ink` → `bg-ink`, `text-ink`; `--radius-card` → `rounded-card`; `--shadow-press-orange` → `shadow-press-orange`; `--animate-pop` → `animate-pop`. Defining `--color-orange` adds `bg-orange` alongside Tailwind's built-in `orange-50`…`orange-950` scale; use only the tokens below.
+
+```css
+/* apps/web/app/globals.css — replace the create-next-app defaults */
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #171717;
+  --color-paper: #ffffff;
+  --color-surface: #ededed;
+  --color-border-muted: #d4d4d4;
+  --color-orange: #ff6a00;
+  --color-orange-dark: #cc5500;
+  --color-orange-tint: #ffb380;
+  --color-text-secondary: #6b6b6b;
+  --color-text-tertiary: #8a8a8a;
+
+  --radius-node: 9999px;
+  --radius-card: 1rem;
+  --radius-badge: 0.5rem;
+
+  --shadow-press-orange: 0 4px 0 #cc5500;
+  --shadow-press-ink: 0 4px 0 #000000;
+  --shadow-press-locked: 0 4px 0 #d4d4d4;
+
+  --animate-pop: pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  --animate-pulse-node: pulse-node 1.6s ease-in-out infinite;
+
+  @keyframes pop {
+    0%, 100% { transform: scale(1); }
+    40% { transform: scale(1.25); }
+  }
+  @keyframes pulse-node {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.06); }
+  }
+}
+
+/* `inline` because these point at variables next/font sets on <html> */
+@theme inline {
+  --font-display: var(--font-baloo), sans-serif;
+  --font-sans: var(--font-nunito), sans-serif;
+  --font-mono: var(--font-jetbrains), monospace;
 }
 ```
 

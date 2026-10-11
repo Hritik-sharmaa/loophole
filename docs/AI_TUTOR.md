@@ -7,7 +7,7 @@ The AI tutor explains errors and gives hints. It runs only on the server, behind
 | Item | Value |
 | --- | --- |
 | SDK | `@google/genai` (the legacy `@google/generative-ai` must not be used) |
-| Node | 22 LTS (SDK v3+ requires Node 22) |
+| Node | 24 LTS (ADR-013; SDK v3+ requires Node 22 or newer) |
 | Key | `GEMINI_API_KEY` in `apps/api/.env`, created in Google AI Studio |
 | Model | `GEMINI_MODEL` in env, default `gemini-flash-latest` (an alias, so a retired model name never breaks the app) |
 | Timeout | 10 s |

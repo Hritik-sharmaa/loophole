@@ -2,11 +2,11 @@
 
 Twelve milestones, about 10–12 hours a week. Tick boxes as you go and update "Current milestone" in `AGENTS.md`. A phase starts only after the gate before it passes.
 
-Each milestone follows the same loop: **learn** the concept → **sketch** it on Excalidraw → **explain** each class's one job → **write** it yourself → **test** → **review** with AI.
+Each milestone follows the same loop: **learn** the concept → **sketch** it on Excalidraw → **explain** each class's one job → AI **writes** it in small pieces → you **review** and change it → **test** (ADR-014).
 
 ## Week 0 — before you start
 
-- [ ] Install Node.js 22 LTS, pnpm, Docker Desktop, Git
+- [ ] Install Node.js 24 LTS, pnpm, Docker Desktop, Git
 - [ ] Create the GitHub repo `loophole`; add `AGENTS.md`, `CLAUDE.md`, `GEMINI.md` and `docs/`
 - [ ] Create a Supabase project; note URL, anon key, service key, JWT secret
 - [ ] Create a Gemini API key in Google AI Studio
@@ -21,7 +21,7 @@ Learn: HLD vs LLD, the four layers, monorepos.
 - [ ] Empty Next.js app and NestJS app run together with `pnpm dev`
 - [ ] `infra/docker-compose.yml` runs Piston locally; Python runtime installed
 - [ ] `.env.example` in both apps; config validation in the API
-- [ ] ESLint, Prettier, TypeScript strict; GitHub Actions running lint + typecheck
+- [ ] ESLint in both apps (replace oxlint in the API), Prettier, TypeScript strict; GitHub Actions running lint + typecheck
 - **Done when:** `pnpm dev` starts both apps and a request to local Piston prints "hello".
 
 ### M1 · Domain and fakes (week 2)
@@ -29,7 +29,7 @@ Learn: interfaces, dependency inversion, SOLID, DI tokens, unit tests with fakes
 - [ ] `Submission` entity
 - [ ] `ICodeExecutor`, `ISubmissionRepository`, `IExerciseRepository` with Symbol tokens
 - [ ] `FakeCodeExecutor`, in-memory repositories
-- [ ] `SubmissionsService.submit` with Jest tests
+- [ ] `SubmissionsService.submit` with Vitest tests
 - **Done when:** tests prove pass, fail and "already completed" paths with no network or database.
 
 ### M2 · Auth (week 3)

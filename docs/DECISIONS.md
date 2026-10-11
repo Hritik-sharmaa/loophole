@@ -6,6 +6,17 @@ Format: **ADR-NNN · Title** — Status (Accepted / Superseded by ADR-NNN) · Da
 
 ---
 
+**ADR-014 · AI writes the code; developer reviews** — Accepted · 2026-10-11 · Supersedes ADR-001
+- Decision: AI assistants write the code in small, verified pieces and explain each one; the developer reviews, asks questions, makes changes, and approves before anything is committed. Design decisions stay with the developer: the AI presents options and trade-offs, the developer picks.
+- Why: writing every file from scratch, including setup and boilerplate, was slowing progress more than it was teaching. Reviewing working code with explanations keeps the learning goal (G-3) while moving faster.
+- Trade-off: reading code teaches less than writing it, so review must be active: the developer follows each request through the code, answers the check questions, and rewrites parts when something is unclear.
+
+**ADR-013 · Tooling: Vitest everywhere, ESLint, Node 24 LTS, Tailwind v4** — Accepted · 2026-10-11
+- Decision: Vitest for all unit and integration tests in both apps (Jest is dropped; Playwright stays for e2e). ESLint for linting both apps, replacing the oxlint the API currently uses. Node.js 24 LTS. Tailwind CSS v4, with design tokens defined in CSS through `@theme` instead of `tailwind.config.ts`.
+- Why: Vitest already runs in the API and handles its ES-module setup (`"type": "module"`, `.js` import paths) with no extra config, while Jest needs a transformer and module mapping for the same setup; one test runner across the repo means one API to learn. ESLint matches the web app, so there is one linter and one config style everywhere, and it has the larger rule and plugin ecosystem. Node 24 is the current LTS and the installed version; 22 is in maintenance. Tailwind v4 is the version installed with Next.js, and v4 moves configuration into CSS.
+- Trade-off: most NestJS docs and tutorials show Jest, so their test snippets need translating (`jest.fn()` → `vi.fn()`, `jest.mock` → `vi.mock`). ESLint is slower than oxlint. Node 26 becomes the next LTS later and will need another bump. Tailwind v3 tutorials and `tailwind.config.ts` examples no longer apply directly.
+- Updates the Jest, Node 22 and `tailwind.config.ts` references in `AGENTS.md`, `CODING_STANDARDS.md`, `ROADMAP.md`, `AI_TUTOR.md` and `DESIGN_SYSTEM.md`.
+
 **ADR-012 · Default numeric rules for gamification and duels** — Accepted · 2026-10-02
 - Decision: 10 XP per lesson; one streak freeze earned per 7-day streak, max 2; weekly board resets Monday 00:00 IST; duels last 5 minutes; ELO K = 32, start 1200; disconnect forfeit after 30 s.
 - Why: sensible starting values so implementation is not blocked. Tune after real play.
@@ -51,6 +62,6 @@ Format: **ADR-NNN · Title** — Status (Accepted / Superseded by ADR-NNN) · Da
 - Decision: build 1v1 real-time duels on buggy programs, not more languages or features Coddy already has.
 - Why: a different engagement loop that solo-lesson platforms do not offer; a strong system-design exercise.
 
-**ADR-001 · Developer writes the code; AI tutors** — Accepted · 2026-10-02
+**ADR-001 · Developer writes the code; AI tutors** — Superseded by ADR-014 · 2026-10-02
 - Decision: AI assistants default to explaining and reviewing; they write full code only in "build mode".
 - Why: the project's purpose includes learning HLD and LLD by building.

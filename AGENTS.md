@@ -10,16 +10,17 @@ It is a solo portfolio project. Its second purpose is to teach the developer pro
 
 ## 2. How to work with the developer — IMPORTANT
 
-The developer (Hritik) writes the code himself and uses AI as a **tutor and reviewer**, not as a code generator. Default to **tutor mode** unless the message explicitly says otherwise.
+**AI writes, the developer reviews** (ADR-014). The AI writes the code; the developer (Hritik) reviews every piece, asks questions, and makes changes. The developer still owns every design decision. The goal is still for the developer to learn system design, so each change must teach as well as work.
 
-**Tutor mode (default):**
-- Explain *what* to build and *why* before any code: the class's one responsibility, what it depends on, which pattern it uses.
-- When asked "how do I build X", give the design, the steps, and the gotchas — not the finished file.
-- When he is stuck, give the **smallest hint** that unblocks him. Escalate only if he asks again: hint → pseudocode → small snippet (under ~15 lines) → full code.
-- When he pastes code, review it honestly: layering violations, missing tests, naming, edge cases, security. Say what a senior engineer would change and why.
-- Before a milestone is marked done, offer to quiz him on its concept.
-
-**Build mode:** only when he writes "build mode", "write it for me", or "generate the code". Then write complete, working code that follows every rule in this file.
+**Review mode (default):**
+- **Design decisions belong to the developer.** When there is a real choice (where code lives, which pattern, a trade-off), present 2–3 options with their trade-offs and wait for a pick. Don't decide silently.
+- **Small pieces.** One reviewable unit at a time (a module, a config change, a migration), not a whole milestone in one go. Don't start the next piece until the current one is approved.
+- **Verify before handing over.** Run the tests, the build, and a real request or command where possible, and report what passed.
+- **Explain every file.** Its one job, the NestJS or architecture concept it uses, and why it is shaped that way, in plain language.
+- **Give a "what to check" list** and one or two questions that test understanding of the piece.
+- **Commit only after the developer approves**, one idea per commit (see `CODING_STANDARDS.md` §6).
+- **Respect the developer's edits.** If they change code after review, build on their version; if a change breaks a rule in this file, say so and explain why.
+- Before a milestone is marked done, offer to quiz the developer on its concepts.
 
 **Always:**
 - Follow the architecture in `docs/ARCHITECTURE.md`. If a request would break a rule, say so and suggest the compliant way.
@@ -43,7 +44,7 @@ The developer (Hritik) writes the code himself and uses AI as a **tutor and revi
 | Layer | Choice |
 | --- | --- |
 | Monorepo | pnpm workspaces: `apps/web`, `apps/api`, `packages/shared` |
-| Runtime | Node.js 22 LTS, TypeScript (strict) |
+| Runtime | Node.js 24 LTS, TypeScript (strict) |
 | Backend | NestJS, @nestjs/event-emitter, @nestjs/websockets + Socket.io, @nestjs/throttler |
 | Database | Supabase Postgres via Drizzle ORM (drizzle-kit migrations) |
 | Auth | Supabase Auth; NestJS guard verifies the JWT |
@@ -51,7 +52,8 @@ The developer (Hritik) writes the code himself and uses AI as a **tutor and revi
 | AI | Google Gemini via `@google/genai` (not the legacy `@google/generative-ai`) |
 | Frontend | Next.js App Router, Tailwind, shadcn/ui, CodeMirror, TanStack Query, zustand, Framer Motion |
 | Validation | class-validator (API DTOs), zod (frontend forms) |
-| Tests | Jest (API), Vitest + Testing Library (web), Playwright (e2e) |
+| Tests | Vitest (API and web), Testing Library (web components), Playwright (e2e) |
+| Lint / format | ESLint and Prettier in both apps |
 | Hosting | Vercel (web); one VPS with Docker Compose + Caddy (API + Piston); Supabase cloud |
 
 ## 5. Repository layout
