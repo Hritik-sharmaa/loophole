@@ -11,9 +11,14 @@
     "dev:api": "pnpm --filter @loophole/api run dev",
     "build": "pnpm -r run build",
     "lint": "pnpm -r run lint",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "typecheck": "pnpm -r run typecheck",
     "test": "pnpm -r run test",
     "piston:up": "docker compose -f infra/docker-compose.yml up -d",
     "piston:down": "docker compose -f infra/docker-compose.yml down"
+  },
+  "devDependencies": {
+    "prettier": "^3.9.9"
   }
 }

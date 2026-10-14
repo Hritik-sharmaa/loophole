@@ -43,9 +43,7 @@ content/
   "exercise": {
     "prompt": "Read two integers from input, one per line, and print their sum.",
     "starterCode": "a = int(input())\nb = int(input())\n# print the sum below\n",
-    "sampleTests": [
-      { "input": "2\n3\n", "expectedOutput": "5" }
-    ],
+    "sampleTests": [{ "input": "2\n3\n", "expectedOutput": "5" }],
     "hiddenTests": [
       { "input": "0\n0\n", "expectedOutput": "0" },
       { "input": "-4\n10\n", "expectedOutput": "6" },
@@ -69,15 +67,15 @@ Each test runs the program with `input` as stdin. It passes when **trimmed stdou
 
 ## 4. v1 Python track (40 exercises)
 
-| Unit | Topics | Lessons |
-| --- | --- | --- |
-| 1 Basics | print, input, variables, arithmetic | 6 |
-| 2 Conditionals | if / elif / else, comparisons, booleans | 6 |
-| 3 Loops | for, while, range, break | 7 |
-| 4 Strings | indexing, slicing, methods, f-strings | 6 |
-| 5 Lists | append, loops over lists, sum / min / max | 6 |
-| 6 Functions | def, return, parameters | 5 |
-| 7 Dictionaries | keys, values, counting | 4 |
+| Unit           | Topics                                    | Lessons |
+| -------------- | ----------------------------------------- | ------- |
+| 1 Basics       | print, input, variables, arithmetic       | 6       |
+| 2 Conditionals | if / elif / else, comparisons, booleans   | 6       |
+| 3 Loops        | for, while, range, break                  | 7       |
+| 4 Strings      | indexing, slicing, methods, f-strings     | 6       |
+| 5 Lists        | append, loops over lists, sum / min / max | 6       |
+| 6 Functions    | def, return, parameters                   | 5       |
+| 7 Dictionaries | keys, values, counting                    | 4       |
 
 ## 5. Duel problem file
 
@@ -90,9 +88,7 @@ Each test runs the program with `input` as stdin. It passes when **trimmed stdou
   "description": "Print the sum of all integers from 1 to N inclusive, where N is read from input.",
   "buggyCode": "n = int(input())\ntotal = 0\nfor i in range(1, n):\n    total += i\nprint(total)\n",
   "bugCount": 1,
-  "sampleTests": [
-    { "input": "3\n", "expectedOutput": "6" }
-  ],
+  "sampleTests": [{ "input": "3\n", "expectedOutput": "6" }],
   "hiddenTests": [
     { "input": "1\n", "expectedOutput": "1" },
     { "input": "10\n", "expectedOutput": "55" },

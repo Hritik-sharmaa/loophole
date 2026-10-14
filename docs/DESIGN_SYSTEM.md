@@ -10,17 +10,17 @@ Black, white and orange. Colour carries meaning, motion answers an action, and b
 
 ## 2. Colour tokens
 
-| Token | Hex | Use |
-| --- | --- | --- |
-| `ink` | #171717 | Text, completed nodes, duel header band |
-| `paper` | #FFFFFF | Page background |
-| `surface` | #EDEDED | Locked nodes, muted cards, progress-bar track |
-| `border-muted` | #D4D4D4 | Locked and disabled borders |
-| `orange` | #FF6A00 | The only accent: active node, XP, streak, primary CTA, timers |
-| `orange-dark` | #CC5500 | Pressed and shadow shade for orange |
-| `orange-tint` | #FFB380 | Confetti, hover backgrounds |
-| `text-secondary` | #6B6B6B | Secondary text (passes AA) |
-| `text-tertiary` | #8A8A8A | Large text and icons only (fails AA for small text) |
+| Token            | Hex     | Use                                                           |
+| ---------------- | ------- | ------------------------------------------------------------- |
+| `ink`            | #171717 | Text, completed nodes, duel header band                       |
+| `paper`          | #FFFFFF | Page background                                               |
+| `surface`        | #EDEDED | Locked nodes, muted cards, progress-bar track                 |
+| `border-muted`   | #D4D4D4 | Locked and disabled borders                                   |
+| `orange`         | #FF6A00 | The only accent: active node, XP, streak, primary CTA, timers |
+| `orange-dark`    | #CC5500 | Pressed and shadow shade for orange                           |
+| `orange-tint`    | #FFB380 | Confetti, hover backgrounds                                   |
+| `text-secondary` | #6B6B6B | Secondary text (passes AA)                                    |
+| `text-tertiary`  | #8A8A8A | Large text and icons only (fails AA for small text)           |
 
 **Contrast rules (measured):** Ink on Paper ≈ 17.9:1 · Ink on Orange ≈ 7.3:1 · White on Orange ≈ 2.9:1 (fails) — **text on orange is always Ink.**
 
@@ -28,15 +28,15 @@ Open decision: a muted red for failed tests only. Until decided, failed tests us
 
 ## 3. Typography
 
-| Token | Font | Size / weight / line height | Use |
-| --- | --- | --- | --- |
-| display | Baloo 2 | 32 / 800 / 1.2 | Page titles |
-| h1 | Baloo 2 | 24 / 700 / 1.3 | Section titles |
-| h2 | Baloo 2 | 20 / 700 / 1.3 | Card titles |
-| body | Nunito | 16 / 500 / 1.5 | Default text |
-| body-sm | Nunito | 14 / 500 / 1.5 | Labels, secondary text |
-| caption | Nunito | 12 / 600 / 1.4 | Badges, timestamps |
-| code | JetBrains Mono | 14 / 400 / 1.6 | Editor and console |
+| Token   | Font           | Size / weight / line height | Use                    |
+| ------- | -------------- | --------------------------- | ---------------------- |
+| display | Baloo 2        | 32 / 800 / 1.2              | Page titles            |
+| h1      | Baloo 2        | 24 / 700 / 1.3              | Section titles         |
+| h2      | Baloo 2        | 20 / 700 / 1.3              | Card titles            |
+| body    | Nunito         | 16 / 500 / 1.5              | Default text           |
+| body-sm | Nunito         | 14 / 500 / 1.5              | Labels, secondary text |
+| caption | Nunito         | 12 / 600 / 1.4              | Badges, timestamps     |
+| code    | JetBrains Mono | 14 / 400 / 1.6              | Editor and console     |
 
 Load fonts with `next/font/google`.
 
@@ -49,30 +49,30 @@ Load fonts with `next/font/google`.
 
 ## 5. Motion
 
-| Token | Value | Use |
-| --- | --- | --- |
-| press | 50 ms | Button press and release |
-| base | 300–500 ms | Node unlock, XP count-up |
-| pulse | 1.6 s loop | Active node |
-| ease-pop | `cubic-bezier(0.34, 1.56, 0.64, 1)` | Overshoot on unlock |
-| spring | `{ type: 'spring', stiffness: 400, damping: 15 }` | Framer Motion equivalent |
+| Token    | Value                                             | Use                      |
+| -------- | ------------------------------------------------- | ------------------------ |
+| press    | 50 ms                                             | Button press and release |
+| base     | 300–500 ms                                        | Node unlock, XP count-up |
+| pulse    | 1.6 s loop                                        | Active node              |
+| ease-pop | `cubic-bezier(0.34, 1.56, 0.64, 1)`               | Overshoot on unlock      |
+| spring   | `{ type: 'spring', stiffness: 400, damping: 15 }` | Framer Motion equivalent |
 
 Wrap all motion in a `useReducedMotion()` check; with reduced motion, swap animations for instant state changes and skip confetti.
 
 ## 6. Components
 
-| Component | Spec |
-| --- | --- |
-| PrimaryButton | Orange fill, Ink text, radius 16, `press-orange` |
-| SecondaryButton | Paper fill, Ink text, 1 px `border-muted`, no press shadow |
-| LessonNode | 64 px circle, 3 px border. Locked: Surface / border-muted / lock icon. Active: Orange / orange-dark / pulse. Done: Ink / black / white check |
-| LessonPath | Hand-built SVG; nodes zig-zag down the page, connected by a 6 px Surface path; completed segments Ink |
-| Card | Paper, radius 16, `shadow-md`, padding 24 |
-| XpBadge / StreakBadge | Caption text, Orange icon (lightning / flame), Ink text |
-| ProgressBar | Surface track, Orange fill, `ease-out` width change |
-| TestResultRow | ✓ Orange or ✕ Ink, input / expected / actual for sample tests |
-| DuelHeader | Ink band, white text, Orange countdown and opponent progress bar |
-| EditorPanel | CodeMirror, light theme, JetBrains Mono 14 |
+| Component             | Spec                                                                                                                                         |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| PrimaryButton         | Orange fill, Ink text, radius 16, `press-orange`                                                                                             |
+| SecondaryButton       | Paper fill, Ink text, 1 px `border-muted`, no press shadow                                                                                   |
+| LessonNode            | 64 px circle, 3 px border. Locked: Surface / border-muted / lock icon. Active: Orange / orange-dark / pulse. Done: Ink / black / white check |
+| LessonPath            | Hand-built SVG; nodes zig-zag down the page, connected by a 6 px Surface path; completed segments Ink                                        |
+| Card                  | Paper, radius 16, `shadow-md`, padding 24                                                                                                    |
+| XpBadge / StreakBadge | Caption text, Orange icon (lightning / flame), Ink text                                                                                      |
+| ProgressBar           | Surface track, Orange fill, `ease-out` width change                                                                                          |
+| TestResultRow         | ✓ Orange or ✕ Ink, input / expected / actual for sample tests                                                                                |
+| DuelHeader            | Ink band, white text, Orange countdown and opponent progress bar                                                                             |
+| EditorPanel           | CodeMirror, light theme, JetBrains Mono 14                                                                                                   |
 
 ## 7. Tailwind config (v4, ADR-013)
 
@@ -80,7 +80,7 @@ Tailwind v4 has no `tailwind.config.ts`; tokens are CSS variables in `@theme` bl
 
 ```css
 /* apps/web/app/globals.css — replace the create-next-app defaults */
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
   --color-ink: #171717;
@@ -105,12 +105,22 @@ Tailwind v4 has no `tailwind.config.ts`; tokens are CSS variables in `@theme` bl
   --animate-pulse-node: pulse-node 1.6s ease-in-out infinite;
 
   @keyframes pop {
-    0%, 100% { transform: scale(1); }
-    40% { transform: scale(1.25); }
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    40% {
+      transform: scale(1.25);
+    }
   }
   @keyframes pulse-node {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.06); }
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.06);
+    }
   }
 }
 
@@ -126,4 +136,4 @@ Tailwind v4 has no `tailwind.config.ts`; tokens are CSS variables in `@theme` bl
 
 - Do use Orange for one thing per screen region. Don't make three orange buttons sit side by side.
 - Do draw the lesson path by hand in SVG. Don't use a diagram library for it.
-- Do keep the Duolingo *feel*. Don't copy Duolingo's or Coddy's assets, mascot or green palette.
+- Do keep the Duolingo _feel_. Don't copy Duolingo's or Coddy's assets, mascot or green palette.

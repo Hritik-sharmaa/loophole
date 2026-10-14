@@ -16,7 +16,11 @@ describe('validateEnv', () => {
 
   it.each([
     ['CORS_ORIGIN is missing', { PORT: '3001' }, /CORS_ORIGIN/],
-    ['CORS_ORIGIN is not a URL', { ...valid, CORS_ORIGIN: 'nope' }, /CORS_ORIGIN/],
+    [
+      'CORS_ORIGIN is not a URL',
+      { ...valid, CORS_ORIGIN: 'nope' },
+      /CORS_ORIGIN/,
+    ],
     ['PORT is not a number', { ...valid, PORT: 'abc' }, /PORT/],
     ['PORT is out of range', { ...valid, PORT: '70000' }, /PORT/],
   ])('throws when %s', (_case, config, message) => {

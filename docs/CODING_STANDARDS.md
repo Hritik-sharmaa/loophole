@@ -12,18 +12,18 @@ Conventions every file follows. AI assistants should apply these without being a
 
 ## 2. Naming
 
-| Thing | Convention | Example |
-| --- | --- | --- |
-| Files | kebab-case | `submissions.service.ts`, `piston-executor.ts` |
-| Classes | PascalCase | `SubmissionsService`, `PistonExecutor` |
-| Interfaces (contracts) | `I` prefix | `ICodeExecutor` |
-| DI tokens | SCREAMING_SNAKE | `CODE_EXECUTOR` |
-| DTOs | `<Action>Dto` | `CreateSubmissionDto` |
-| Events | `noun.past-verb` | `lesson.completed` |
-| Errors | `<Reason>Error` | `LessonLockedError` |
-| DB tables / columns | snake_case | `user_progress.completed_at` |
-| React components | PascalCase file and name | `LessonNode.tsx` |
-| Hooks | `use` prefix | `useDuelSocket` |
+| Thing                  | Convention               | Example                                        |
+| ---------------------- | ------------------------ | ---------------------------------------------- |
+| Files                  | kebab-case               | `submissions.service.ts`, `piston-executor.ts` |
+| Classes                | PascalCase               | `SubmissionsService`, `PistonExecutor`         |
+| Interfaces (contracts) | `I` prefix               | `ICodeExecutor`                                |
+| DI tokens              | SCREAMING_SNAKE          | `CODE_EXECUTOR`                                |
+| DTOs                   | `<Action>Dto`            | `CreateSubmissionDto`                          |
+| Events                 | `noun.past-verb`         | `lesson.completed`                             |
+| Errors                 | `<Reason>Error`          | `LessonLockedError`                            |
+| DB tables / columns    | snake_case               | `user_progress.completed_at`                   |
+| React components       | PascalCase file and name | `LessonNode.tsx`                               |
+| Hooks                  | `use` prefix             | `useDuelSocket`                                |
 
 ## 3. Backend rules
 
@@ -44,13 +44,13 @@ Conventions every file follows. AI assistants should apply these without being a
 
 ## 5. Testing
 
-| What | Tool | Rule |
-| --- | --- | --- |
-| Services | Vitest | Every public method; fakes for every injected interface |
-| Domain logic (streaks, ELO, state machine, matcher) | Vitest | Table-driven tests for every branch |
-| Repositories | Vitest + a test database | Happy path and constraint violations |
-| Components | Vitest + Testing Library | Behaviour, not snapshots |
-| End to end | Playwright | J-1 first lesson, J-3 duel (two browser contexts) |
+| What                                                | Tool                     | Rule                                                    |
+| --------------------------------------------------- | ------------------------ | ------------------------------------------------------- |
+| Services                                            | Vitest                   | Every public method; fakes for every injected interface |
+| Domain logic (streaks, ELO, state machine, matcher) | Vitest                   | Table-driven tests for every branch                     |
+| Repositories                                        | Vitest + a test database | Happy path and constraint violations                    |
+| Components                                          | Vitest + Testing Library | Behaviour, not snapshots                                |
+| End to end                                          | Playwright               | J-1 first lesson, J-3 duel (two browser contexts)       |
 
 A milestone is not done until its tests pass in CI.
 

@@ -4,14 +4,14 @@ The AI tutor explains errors and gives hints. It runs only on the server, behind
 
 ## 1. Setup
 
-| Item | Value |
-| --- | --- |
-| SDK | `@google/genai` (the legacy `@google/generative-ai` must not be used) |
-| Node | 24 LTS (ADR-013; SDK v3+ requires Node 22 or newer) |
-| Key | `GEMINI_API_KEY` in `apps/api/.env`, created in Google AI Studio |
-| Model | `GEMINI_MODEL` in env, default `gemini-flash-latest` (an alias, so a retired model name never breaks the app) |
-| Timeout | 10 s |
-| Daily cap | 20 requests per user (`AI_DAILY_LIMIT`) |
+| Item      | Value                                                                                                         |
+| --------- | ------------------------------------------------------------------------------------------------------------- |
+| SDK       | `@google/genai` (the legacy `@google/generative-ai` must not be used)                                         |
+| Node      | 24 LTS (ADR-013; SDK v3+ requires Node 22 or newer)                                                           |
+| Key       | `GEMINI_API_KEY` in `apps/api/.env`, created in Google AI Studio                                              |
+| Model     | `GEMINI_MODEL` in env, default `gemini-flash-latest` (an alias, so a retired model name never breaks the app) |
+| Timeout   | 10 s                                                                                                          |
+| Daily cap | 20 requests per user (`AI_DAILY_LIMIT`)                                                                       |
 
 Gemini model names and API surfaces change often. Before writing or changing this module, check the current docs at https://ai.google.dev/gemini-api/docs and the SDK readme at https://github.com/googleapis/js-genai.
 
@@ -32,7 +32,11 @@ export interface ExplainInput {
   language: string;
   exercisePrompt: string;
   code: string;
-  failingTest: { input: string; expectedOutput: string; actualOutput: string } | null;
+  failingTest: {
+    input: string;
+    expectedOutput: string;
+    actualOutput: string;
+  } | null;
   stderr: string;
 }
 
@@ -43,12 +47,15 @@ export interface HintInput {
 }
 
 export interface IAiTutor {
-  explainError(input: ExplainInput): Promise<{ explanation: string; line: number | null }>;
+  explainError(
+    input: ExplainInput,
+  ): Promise<{ explanation: string; line: number | null }>;
   giveHint(input: HintInput): Promise<{ hint: string }>;
 }
 ```
 
 `AiService` order of operations:
+
 1. Check and increment `ai_usage` for today; over the cap → throw `DailyLimitReachedError` (429).
 2. Load the exercise and, for explain, the submission and its first failing **sample** test (never send hidden test data the learner has not seen).
 3. Call the tutor with a 10 s timeout.
@@ -101,13 +108,13 @@ Response schema: `{ hint: string }`
 
 ## 4. Request settings
 
-| Setting | Value |
-| --- | --- |
+| Setting             | Value                        |
+| ------------------- | ---------------------------- |
 | `systemInstruction` | the system instruction above |
-| `responseMimeType` | `application/json` |
-| `responseSchema` | per call, as above |
-| `temperature` | 0.3 |
-| `maxOutputTokens` | 300 |
+| `responseMimeType`  | `application/json`           |
+| `responseSchema`    | per call, as above           |
+| `temperature`       | 0.3                          |
+| `maxOutputTokens`   | 300                          |
 
 Use `ai.models.generateContent({ model, contents, config })` for these single-shot calls. Google's docs now also promote an Interactions API; either is fine as long as only `GeminiTutor` knows which.
 

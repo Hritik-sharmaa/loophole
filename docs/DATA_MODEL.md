@@ -7,159 +7,174 @@ Conventions: `uuid` primary keys (`gen_random_uuid()`), `timestamptz` in UTC, sn
 ## Tables
 
 ### profiles — M2
-| Column | Type | Notes |
-| --- | --- | --- |
-| id | uuid PK | = `auth.users.id` |
-| username | text | unique, 3–20 chars |
-| avatar_url | text | nullable |
-| created_at | timestamptz | |
+
+| Column     | Type        | Notes              |
+| ---------- | ----------- | ------------------ |
+| id         | uuid PK     | = `auth.users.id`  |
+| username   | text        | unique, 3–20 chars |
+| avatar_url | text        | nullable           |
+| created_at | timestamptz |                    |
 
 ### courses — M3
-| Column | Type | Notes |
-| --- | --- | --- |
-| id | uuid PK | |
-| slug | text | unique, e.g. `python` |
-| language | text | Piston language name, e.g. `python` |
-| title | text | |
+
+| Column   | Type    | Notes                               |
+| -------- | ------- | ----------------------------------- |
+| id       | uuid PK |                                     |
+| slug     | text    | unique, e.g. `python`               |
+| language | text    | Piston language name, e.g. `python` |
+| title    | text    |                                     |
 
 ### units — M3
-| Column | Type | Notes |
-| --- | --- | --- |
-| id | uuid PK | |
-| course_id | uuid FK → courses | |
-| slug | text | unique per course |
-| title | text | |
-| position | int | order in course; unique (course_id, position) |
+
+| Column    | Type              | Notes                                         |
+| --------- | ----------------- | --------------------------------------------- |
+| id        | uuid PK           |                                               |
+| course_id | uuid FK → courses |                                               |
+| slug      | text              | unique per course                             |
+| title     | text              |                                               |
+| position  | int               | order in course; unique (course_id, position) |
 
 ### lessons — M3
-| Column | Type | Notes |
-| --- | --- | --- |
-| id | uuid PK | |
-| unit_id | uuid FK → units | |
-| slug | text | unique per unit |
-| title | text | |
-| position | int | unique (unit_id, position) |
+
+| Column   | Type            | Notes                      |
+| -------- | --------------- | -------------------------- |
+| id       | uuid PK         |                            |
+| unit_id  | uuid FK → units |                            |
+| slug     | text            | unique per unit            |
+| title    | text            |                            |
+| position | int             | unique (unit_id, position) |
 
 ### exercises — M3
-| Column | Type | Notes |
-| --- | --- | --- |
-| id | uuid PK | |
-| lesson_id | uuid FK → lessons | one exercise per lesson in v1 |
-| prompt | text | Markdown |
-| starter_code | text | |
-| sample_tests | jsonb | `[{ input, expectedOutput }]` — shown to learner |
-| hidden_tests | jsonb | `[{ input, expectedOutput }]` — **never returned by the API** |
+
+| Column       | Type              | Notes                                                         |
+| ------------ | ----------------- | ------------------------------------------------------------- |
+| id           | uuid PK           |                                                               |
+| lesson_id    | uuid FK → lessons | one exercise per lesson in v1                                 |
+| prompt       | text              | Markdown                                                      |
+| starter_code | text              |                                                               |
+| sample_tests | jsonb             | `[{ input, expectedOutput }]` — shown to learner              |
+| hidden_tests | jsonb             | `[{ input, expectedOutput }]` — **never returned by the API** |
 
 ### user_progress — M3
-| Column | Type | Notes |
-| --- | --- | --- |
-| user_id | uuid FK → profiles | |
-| lesson_id | uuid FK → lessons | |
-| status | text | `completed` (absence = not done) |
-| completed_at | timestamptz | |
-| | | **PK (user_id, lesson_id)** |
+
+| Column       | Type               | Notes                            |
+| ------------ | ------------------ | -------------------------------- |
+| user_id      | uuid FK → profiles |                                  |
+| lesson_id    | uuid FK → lessons  |                                  |
+| status       | text               | `completed` (absence = not done) |
+| completed_at | timestamptz        |                                  |
+|              |                    | **PK (user_id, lesson_id)**      |
 
 ### submissions — M4
-| Column | Type | Notes |
-| --- | --- | --- |
-| id | uuid PK | |
-| user_id | uuid FK → profiles | |
-| exercise_id | uuid FK → exercises | |
-| code | text | max 20 KB (validated in DTO) |
-| status | text | `passed` \| `failed` \| `error` |
-| tests_passed | int | |
-| total_tests | int | |
-| stderr | text | truncated to 4 KB |
-| submitted_at | timestamptz | index (user_id, exercise_id, submitted_at desc) |
+
+| Column       | Type                | Notes                                           |
+| ------------ | ------------------- | ----------------------------------------------- |
+| id           | uuid PK             |                                                 |
+| user_id      | uuid FK → profiles  |                                                 |
+| exercise_id  | uuid FK → exercises |                                                 |
+| code         | text                | max 20 KB (validated in DTO)                    |
+| status       | text                | `passed` \| `failed` \| `error`                 |
+| tests_passed | int                 |                                                 |
+| total_tests  | int                 |                                                 |
+| stderr       | text                | truncated to 4 KB                               |
+| submitted_at | timestamptz         | index (user_id, exercise_id, submitted_at desc) |
 
 ### xp_events — M5
-| Column | Type | Notes |
-| --- | --- | --- |
-| id | uuid PK | |
-| user_id | uuid FK → profiles | |
-| amount | int | |
-| source | text | `lesson` in v1 (more sources may be added later) |
-| source_id | uuid | the lesson id |
-| created_at | timestamptz | index (created_at) for weekly board |
-| | | **unique (user_id, source, source_id)** — stops double XP |
+
+| Column     | Type               | Notes                                                     |
+| ---------- | ------------------ | --------------------------------------------------------- |
+| id         | uuid PK            |                                                           |
+| user_id    | uuid FK → profiles |                                                           |
+| amount     | int                |                                                           |
+| source     | text               | `lesson` in v1 (more sources may be added later)          |
+| source_id  | uuid               | the lesson id                                             |
+| created_at | timestamptz        | index (created_at) for weekly board                       |
+|            |                    | **unique (user_id, source, source_id)** — stops double XP |
 
 ### streaks — M5
-| Column | Type | Notes |
-| --- | --- | --- |
-| user_id | uuid PK FK → profiles | |
-| current_streak | int | default 0 |
-| longest_streak | int | default 0 |
-| last_active_date | date | in Asia/Kolkata calendar |
-| freezes_available | int | default 0, max 2 |
+
+| Column            | Type                  | Notes                    |
+| ----------------- | --------------------- | ------------------------ |
+| user_id           | uuid PK FK → profiles |                          |
+| current_streak    | int                   | default 0                |
+| longest_streak    | int                   | default 0                |
+| last_active_date  | date                  | in Asia/Kolkata calendar |
+| freezes_available | int                   | default 0, max 2         |
 
 ### ai_usage — M6
-| Column | Type | Notes |
-| --- | --- | --- |
-| user_id | uuid FK → profiles | |
-| day | date | |
-| count | int | |
-| | | **PK (user_id, day)**; increment with `insert … on conflict do update` |
+
+| Column  | Type               | Notes                                                                  |
+| ------- | ------------------ | ---------------------------------------------------------------------- |
+| user_id | uuid FK → profiles |                                                                        |
+| day     | date               |                                                                        |
+| count   | int                |                                                                        |
+|         |                    | **PK (user_id, day)**; increment with `insert … on conflict do update` |
 
 ### duel_problems — M8
-| Column | Type | Notes |
-| --- | --- | --- |
-| id | uuid PK | |
-| slug | text | unique |
-| language | text | |
-| title | text | |
-| description | text | what the program should do |
-| buggy_code | text | given to both players |
-| sample_tests | jsonb | shown |
-| hidden_tests | jsonb | never returned |
-| difficulty | int | 1–3 |
+
+| Column       | Type    | Notes                      |
+| ------------ | ------- | -------------------------- |
+| id           | uuid PK |                            |
+| slug         | text    | unique                     |
+| language     | text    |                            |
+| title        | text    |                            |
+| description  | text    | what the program should do |
+| buggy_code   | text    | given to both players      |
+| sample_tests | jsonb   | shown                      |
+| hidden_tests | jsonb   | never returned             |
+| difficulty   | int     | 1–3                        |
 
 ### duels — M8
-| Column | Type | Notes |
-| --- | --- | --- |
-| id | uuid PK | |
-| problem_id | uuid FK → duel_problems | |
-| player_a | uuid FK → profiles | |
-| player_b | uuid FK → profiles | |
-| status | text | `matched` \| `in_progress` \| `completed` |
-| result | text | nullable: `win` \| `draw` \| `forfeit` |
-| winner_id | uuid | nullable; set only with `where winner_id is null` |
-| started_at | timestamptz | |
-| ends_at | timestamptz | server-side deadline |
-| ended_at | timestamptz | nullable |
-| | | check (player_a <> player_b) |
+
+| Column     | Type                    | Notes                                             |
+| ---------- | ----------------------- | ------------------------------------------------- |
+| id         | uuid PK                 |                                                   |
+| problem_id | uuid FK → duel_problems |                                                   |
+| player_a   | uuid FK → profiles      |                                                   |
+| player_b   | uuid FK → profiles      |                                                   |
+| status     | text                    | `matched` \| `in_progress` \| `completed`         |
+| result     | text                    | nullable: `win` \| `draw` \| `forfeit`            |
+| winner_id  | uuid                    | nullable; set only with `where winner_id is null` |
+| started_at | timestamptz             |                                                   |
+| ends_at    | timestamptz             | server-side deadline                              |
+| ended_at   | timestamptz             | nullable                                          |
+|            |                         | check (player_a <> player_b)                      |
 
 `waiting` is a queue state held in memory, so it never appears in this table.
 
 ### duel_submissions — M8
-| Column | Type | Notes |
-| --- | --- | --- |
-| id | uuid PK | |
-| duel_id | uuid FK → duels | |
-| user_id | uuid FK → profiles | |
-| code | text | |
-| tests_passed | int | |
-| total_tests | int | |
-| submitted_at | timestamptz | index (duel_id, submitted_at) — used for replay later |
+
+| Column       | Type               | Notes                                                 |
+| ------------ | ------------------ | ----------------------------------------------------- |
+| id           | uuid PK            |                                                       |
+| duel_id      | uuid FK → duels    |                                                       |
+| user_id      | uuid FK → profiles |                                                       |
+| code         | text               |                                                       |
+| tests_passed | int                |                                                       |
+| total_tests  | int                |                                                       |
+| submitted_at | timestamptz        | index (duel_id, submitted_at) — used for replay later |
 
 ### ratings — M9
-| Column | Type | Notes |
-| --- | --- | --- |
-| user_id | uuid PK FK → profiles | |
-| elo | int | default 1200 |
-| wins | int | default 0 |
-| losses | int | default 0 |
-| draws | int | default 0 |
-| updated_at | timestamptz | |
+
+| Column     | Type                  | Notes        |
+| ---------- | --------------------- | ------------ |
+| user_id    | uuid PK FK → profiles |              |
+| elo        | int                   | default 1200 |
+| wins       | int                   | default 0    |
+| losses     | int                   | default 0    |
+| draws      | int                   | default 0    |
+| updated_at | timestamptz           |              |
 
 ### certificates — M10
-| Column | Type | Notes |
-| --- | --- | --- |
-| id | uuid PK | |
-| user_id | uuid FK → profiles | |
-| course_id | uuid FK → courses | |
-| public_slug | text | unique, random 10 chars |
-| issued_at | timestamptz | |
-| | | unique (user_id, course_id) |
+
+| Column      | Type               | Notes                       |
+| ----------- | ------------------ | --------------------------- |
+| id          | uuid PK            |                             |
+| user_id     | uuid FK → profiles |                             |
+| course_id   | uuid FK → courses  |                             |
+| public_slug | text               | unique, random 10 chars     |
+| issued_at   | timestamptz        |                             |
+|             |                    | unique (user_id, course_id) |
 
 ## Relationships
 
@@ -175,13 +190,13 @@ duels 1─* duel_submissions
 
 ## Rules that live in the database
 
-| Rule | Enforced by |
-| --- | --- |
-| A lesson completes once per user | PK on user_progress |
-| XP pays once per source | unique (user_id, source, source_id) on xp_events |
-| One winner per duel | conditional update `where winner_id is null` |
-| A player cannot duel themselves | check constraint on duels |
-| One certificate per course per user | unique on certificates |
+| Rule                                | Enforced by                                      |
+| ----------------------------------- | ------------------------------------------------ |
+| A lesson completes once per user    | PK on user_progress                              |
+| XP pays once per source             | unique (user_id, source, source_id) on xp_events |
+| One winner per duel                 | conditional update `where winner_id is null`     |
+| A player cannot duel themselves     | check constraint on duels                        |
+| One certificate per course per user | unique on certificates                           |
 
 ## Row-level security
 

@@ -16,14 +16,14 @@ How Loophole is built: the high-level design (HLD) first, then the low-level des
              Supabase Postgres   Gemini API   Supabase Auth
 ```
 
-| Component | Responsibility | Talks to |
-| --- | --- | --- |
-| Next.js web | UI, editor, duel room, auth session | NestJS API (REST + Socket.io), Supabase Auth |
-| NestJS API | Business rules, grading, rewards, duels, AI calls | Postgres, Piston, Gemini |
-| Piston | Runs untrusted code in isolated, time- and memory-limited processes | Nothing (no outbound network) |
-| Supabase Postgres | All persistent data | — |
-| Supabase Auth | Issues JWTs | — |
-| Gemini API | Error explanations and hints | — |
+| Component         | Responsibility                                                      | Talks to                                     |
+| ----------------- | ------------------------------------------------------------------- | -------------------------------------------- |
+| Next.js web       | UI, editor, duel room, auth session                                 | NestJS API (REST + Socket.io), Supabase Auth |
+| NestJS API        | Business rules, grading, rewards, duels, AI calls                   | Postgres, Piston, Gemini                     |
+| Piston            | Runs untrusted code in isolated, time- and memory-limited processes | Nothing (no outbound network)                |
+| Supabase Postgres | All persistent data                                                 | —                                            |
+| Supabase Auth     | Issues JWTs                                                         | —                                            |
+| Gemini API        | Error explanations and hints                                        | —                                            |
 
 ### Why it is shaped this way
 
@@ -41,12 +41,12 @@ Controller / Gateway  →  Service  →  Domain (entities + interfaces)  ←  In
      HTTP, WS only       rules         plain TypeScript, no framework     Drizzle, Piston, Gemini
 ```
 
-| Layer | May import | Must not import |
-| --- | --- | --- |
-| Controller / Gateway | Its service, DTOs | Repositories, Drizzle, SDKs |
-| Service | Domain interfaces (via DI tokens), EventEmitter2, other services' public methods | Drizzle, `@supabase/*`, Piston client, `@google/genai` |
-| Domain | Nothing outside the domain | NestJS decorators, any SDK |
-| Infrastructure | Domain interfaces it implements, SDKs | Services, controllers |
+| Layer                | May import                                                                       | Must not import                                        |
+| -------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| Controller / Gateway | Its service, DTOs                                                                | Repositories, Drizzle, SDKs                            |
+| Service              | Domain interfaces (via DI tokens), EventEmitter2, other services' public methods | Drizzle, `@supabase/*`, Piston client, `@google/genai` |
+| Domain               | Nothing outside the domain                                                       | NestJS decorators, any SDK                             |
+| Infrastructure       | Domain interfaces it implements, SDKs                                            | Services, controllers                                  |
 
 ### 2.2 Module layout (every feature module)
 
@@ -88,22 +88,22 @@ Swapping Piston for Judge0, or Drizzle for something else, changes only the modu
 
 ### 2.4 Patterns and where they live
 
-| Pattern | Used for | Location |
-| --- | --- | --- |
-| Repository | All database access | `*/infra/drizzle-*.repository.ts` |
-| Strategy | Swappable code executor | `submissions/domain/code-executor.interface.ts` |
-| Adapter | Gemini behind `IAiTutor` | `ai/infra/gemini-tutor.ts` |
+| Pattern                  | Used for                             | Location                                                 |
+| ------------------------ | ------------------------------------ | -------------------------------------------------------- |
+| Repository               | All database access                  | `*/infra/drizzle-*.repository.ts`                        |
+| Strategy                 | Swappable code executor              | `submissions/domain/code-executor.interface.ts`          |
+| Adapter                  | Gemini behind `IAiTutor`             | `ai/infra/gemini-tutor.ts`                               |
 | Observer (domain events) | XP, streaks, ratings react to events | `gamification/*.listener.ts`, `duels/rating.listener.ts` |
-| State machine | Duel lifecycle | `duels/domain/duel-state-machine.ts` |
-| Guard | JWT auth | `auth/jwt-auth.guard.ts` |
-| DTO | Validated request shapes | `*/dto/*.dto.ts` |
+| State machine            | Duel lifecycle                       | `duels/domain/duel-state-machine.ts`                     |
+| Guard                    | JWT auth                             | `auth/jwt-auth.guard.ts`                                 |
+| DTO                      | Validated request shapes             | `*/dto/*.dto.ts`                                         |
 
 ### 2.5 Domain events
 
-| Event | Emitted by | Payload | Listeners |
-| --- | --- | --- | --- |
-| `lesson.completed` | SubmissionsService | userId, lessonId, submissionId, completedAt | XpListener, StreakListener, CertificateListener |
-| `duel.finished` | DuelsService | duelId, winnerId \| null, playerA, playerB, finishedAt | RatingListener |
+| Event              | Emitted by         | Payload                                                | Listeners                                       |
+| ------------------ | ------------------ | ------------------------------------------------------ | ----------------------------------------------- |
+| `lesson.completed` | SubmissionsService | userId, lessonId, submissionId, completedAt            | XpListener, StreakListener, CertificateListener |
+| `duel.finished`    | DuelsService       | duelId, winnerId \| null, playerA, playerB, finishedAt | RatingListener                                  |
 
 Events are emitted **after** the database write that caused them succeeds. Listeners must be idempotent (see `DATA_MODEL.md` unique constraints).
 
@@ -138,13 +138,13 @@ Events are emitted **after** the database write that caused them succeeds. Liste
 
 ## 4. Deployment
 
-| Piece | Host | Notes |
-| --- | --- | --- |
-| `apps/web` | Vercel | Env: `NEXT_PUBLIC_API_URL`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` |
-| `apps/api` | VPS, Docker Compose | Behind Caddy for HTTPS; env in `apps/api/.env` |
-| Piston | Same VPS, Docker Compose | `privileged: true`; not exposed publicly |
-| Postgres + Auth | Supabase cloud | Migrations run from CI or by hand with drizzle-kit |
-| CI | GitHub Actions | Lint, typecheck, test on every push |
+| Piece           | Host                     | Notes                                                                                   |
+| --------------- | ------------------------ | --------------------------------------------------------------------------------------- |
+| `apps/web`      | Vercel                   | Env: `NEXT_PUBLIC_API_URL`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` |
+| `apps/api`      | VPS, Docker Compose      | Behind Caddy for HTTPS; env in `apps/api/.env`                                          |
+| Piston          | Same VPS, Docker Compose | `privileged: true`; not exposed publicly                                                |
+| Postgres + Auth | Supabase cloud           | Migrations run from CI or by hand with drizzle-kit                                      |
+| CI              | GitHub Actions           | Lint, typecheck, test on every push                                                     |
 
 ## 5. Scaling notes (not needed for v1)
 

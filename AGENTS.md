@@ -13,6 +13,7 @@ It is a solo portfolio project. Its second purpose is to teach the developer pro
 **AI writes, the developer reviews** (ADR-014). The AI writes the code; the developer (Hritik) reviews every piece, asks questions, and makes changes. The developer still owns every design decision. The goal is still for the developer to learn system design, so each change must teach as well as work.
 
 **Review mode (default):**
+
 - **Design decisions belong to the developer.** When there is a real choice (where code lives, which pattern, a trade-off), present 2–3 options with their trade-offs and wait for a pick. Don't decide silently.
 - **Small pieces.** One reviewable unit at a time (a module, a config change, a migration), not a whole milestone in one go. Don't start the next piece until the current one is approved.
 - **Verify before handing over.** Run the tests, the build, and a real request or command where possible, and report what passed.
@@ -23,6 +24,7 @@ It is a solo portfolio project. Its second purpose is to teach the developer pro
 - Before a milestone is marked done, offer to quiz the developer on its concepts.
 
 **Always:**
+
 - Follow the architecture in `docs/ARCHITECTURE.md`. If a request would break a rule, say so and suggest the compliant way.
 - Never invent requirements. If something is not in `docs/`, ask or flag it as an open question.
 - Keep answers specific to this repo's stack and names.
@@ -41,20 +43,20 @@ It is a solo portfolio project. Its second purpose is to teach the developer pro
 
 ## 4. Stack (decided — do not swap without an entry in `docs/DECISIONS.md`)
 
-| Layer | Choice |
-| --- | --- |
-| Monorepo | pnpm workspaces: `apps/web`, `apps/api`, `packages/shared` |
-| Runtime | Node.js 24 LTS, TypeScript (strict) |
-| Backend | NestJS, @nestjs/event-emitter, @nestjs/websockets + Socket.io, @nestjs/throttler |
-| Database | Supabase Postgres via Drizzle ORM (drizzle-kit migrations) |
-| Auth | Supabase Auth; NestJS guard verifies the JWT |
-| Code execution | Piston, self-hosted in Docker (privileged container) |
-| AI | Google Gemini via `@google/genai` (not the legacy `@google/generative-ai`) |
-| Frontend | Next.js App Router, Tailwind, shadcn/ui, CodeMirror, TanStack Query, zustand, Framer Motion |
-| Validation | class-validator (API DTOs), zod (frontend forms) |
-| Tests | Vitest (API and web), Testing Library (web components), Playwright (e2e) |
-| Lint / format | ESLint and Prettier in both apps |
-| Hosting | Vercel (web); one VPS with Docker Compose + Caddy (API + Piston); Supabase cloud |
+| Layer          | Choice                                                                                      |
+| -------------- | ------------------------------------------------------------------------------------------- |
+| Monorepo       | pnpm workspaces: `apps/web`, `apps/api`, `packages/shared`                                  |
+| Runtime        | Node.js 24 LTS, TypeScript (strict)                                                         |
+| Backend        | NestJS, @nestjs/event-emitter, @nestjs/websockets + Socket.io, @nestjs/throttler            |
+| Database       | Supabase Postgres via Drizzle ORM (drizzle-kit migrations)                                  |
+| Auth           | Supabase Auth; NestJS guard verifies the JWT                                                |
+| Code execution | Piston, self-hosted in Docker (privileged container)                                        |
+| AI             | Google Gemini via `@google/genai` (not the legacy `@google/generative-ai`)                  |
+| Frontend       | Next.js App Router, Tailwind, shadcn/ui, CodeMirror, TanStack Query, zustand, Framer Motion |
+| Validation     | class-validator (API DTOs), zod (frontend forms)                                            |
+| Tests          | Vitest (API and web), Testing Library (web components), Playwright (e2e)                    |
+| Lint / format  | ESLint and Prettier in both apps                                                            |
+| Hosting        | Vercel (web); one VPS with Docker Compose + Caddy (API + Piston); Supabase cloud            |
 
 ## 5. Repository layout
 
@@ -88,18 +90,18 @@ loophole/
 
 ## 6. Where to look
 
-| Task | Read |
-| --- | --- |
-| What a feature must do | `docs/PRD.md` |
-| Where code goes, which pattern, request flows | `docs/ARCHITECTURE.md` |
-| Tables, columns, constraints | `docs/DATA_MODEL.md` |
-| Routes, socket events, payloads | `docs/API_SPEC.md` |
-| Colours, fonts, motion, components | `docs/DESIGN_SYSTEM.md` |
-| Gemini prompts and limits | `docs/AI_TUTOR.md` |
-| Exercise and duel file formats | `docs/CONTENT_GUIDE.md` |
-| Naming, testing, git, env | `docs/CODING_STANDARDS.md` |
-| What to build next | `docs/ROADMAP.md` |
-| Why something was chosen | `docs/DECISIONS.md` |
+| Task                                          | Read                       |
+| --------------------------------------------- | -------------------------- |
+| What a feature must do                        | `docs/PRD.md`              |
+| Where code goes, which pattern, request flows | `docs/ARCHITECTURE.md`     |
+| Tables, columns, constraints                  | `docs/DATA_MODEL.md`       |
+| Routes, socket events, payloads               | `docs/API_SPEC.md`         |
+| Colours, fonts, motion, components            | `docs/DESIGN_SYSTEM.md`    |
+| Gemini prompts and limits                     | `docs/AI_TUTOR.md`         |
+| Exercise and duel file formats                | `docs/CONTENT_GUIDE.md`    |
+| Naming, testing, git, env                     | `docs/CODING_STANDARDS.md` |
+| What to build next                            | `docs/ROADMAP.md`          |
+| Why something was chosen                      | `docs/DECISIONS.md`        |
 
 ## 7. Current status
 

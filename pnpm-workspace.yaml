@@ -1,6 +1,6 @@
 packages:
-  - "apps/*"
-  - "packages/*"
+  - 'apps/*'
+  - 'packages/*'
 
 # pnpm only runs install scripts for packages listed here
 onlyBuiltDependencies:
@@ -8,7 +8,7 @@ onlyBuiltDependencies:
 
 # reviewed and not needed
 ignoredBuiltDependencies:
-  - "@google/genai"
+  - '@google/genai'
   - protobufjs
   - sharp
   - unrs-resolver
