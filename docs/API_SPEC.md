@@ -14,7 +14,9 @@ Base URL: `https://api.<domain>` (local: `http://localhost:3001`). All bodies ar
 | 403  | `LESSON_LOCKED`                           | Lesson not yet unlocked              |
 | 404  | `NOT_FOUND`                               | Resource does not exist              |
 | 409  | `ILLEGAL_TRANSITION`                      | Duel action not allowed in its state |
+| 409  | `USERNAME_TAKEN`                          | `PATCH /me` with a username in use   |
 | 429  | `RATE_LIMITED` / `DAILY_LIMIT_REACHED`    | Throttle or AI cap                   |
+| 500  | `INTERNAL_ERROR`                          | Unexpected server error              |
 | 502  | `EXECUTOR_UNAVAILABLE` / `AI_UNAVAILABLE` | Piston or Gemini down                |
 
 ## REST endpoints

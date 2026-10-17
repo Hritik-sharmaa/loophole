@@ -11,8 +11,13 @@ export default defineConfig({
     include: ['**/*.e2e-spec.ts'],
     // e2e tests boot the whole AppModule, so they need a valid env even in CI
     // where there is no .env file.
+    // Dummy values: postgres-js connects lazily and the Supabase client is
+    // stubbed, so nothing here is ever contacted.
     env: {
       CORS_ORIGIN: 'http://localhost:3000',
+      DATABASE_URL: 'postgresql://postgres:postgres@localhost:5432/postgres',
+      SUPABASE_URL: 'https://example.supabase.co',
+      SUPABASE_SERVICE_KEY: 'test-service-key',
     },
   },
 });

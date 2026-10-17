@@ -2,3 +2,4 @@
 # These are committed but generated, so they are never hand-formatted.
 pnpm-lock.yaml
 apps/web/next-env.d.ts
+apps/api/src/db/migrations/

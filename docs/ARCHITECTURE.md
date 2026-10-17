@@ -56,18 +56,20 @@ modules/<feature>/
   <feature>.service.ts         business rules + Drizzle queries
   dto/
     <action>.dto.ts
-  <feature>.service.spec.ts    only when the module has logic worth testing
+  __tests__/<feature>.service.spec.ts   only when the module has logic worth testing
 ```
 
 Shared infrastructure, one job each:
 
 ```
-src/db/schema.ts                     Drizzle table definitions
+src/db/schema/<table>.ts             Drizzle table definitions (index.ts re-exports all)
 src/db/db.module.ts                  global module exporting DbService
 src/db/db.service.ts                 the one Drizzle instance
 src/db/migrations/                   drizzle-kit output
 src/integrations/piston.client.ts    the only file that calls Piston
 src/integrations/gemini.client.ts    the only file that imports @google/genai
+src/integrations/supabase-auth.client.ts  the only API file that calls Supabase Auth (token checks)
+src/modules/auth/                    global JwtAuthGuard, @Public(), @CurrentUser()
 src/common/http-exception.filter.ts  shapes errors as { error: { code, message } }
 ```
 
@@ -91,14 +93,14 @@ In a test, stub a client with `Test.createTestingModule({ ... }).overrideProvide
 
 ### 2.4 Patterns and where they live
 
-| Pattern            | Used for                         | Location                                  |
-| ------------------ | -------------------------------- | ----------------------------------------- |
-| Client (adapter)   | Piston and Gemini behind a class | `integrations/*.client.ts`                |
-| Guard              | JWT auth                         | `modules/auth/jwt-auth.guard.ts`          |
-| DTO                | Validated request shapes         | `*/dto/*.dto.ts`                          |
-| Transition check   | Duel lifecycle                   | `canTransition(from, to)` in `duels/`     |
-| Conditional update | Single duel winner               | `DuelsService`, `where winner_id is null` |
-| Unique constraint  | Idempotent XP                    | `xp_events` (see `DATA_MODEL.md`)         |
+| Pattern            | Used for                                     | Location                                  |
+| ------------------ | -------------------------------------------- | ----------------------------------------- |
+| Client (adapter)   | Piston, Gemini, Supabase Auth behind a class | `integrations/*.client.ts`                |
+| Guard              | JWT auth                                     | `modules/auth/jwt-auth.guard.ts`          |
+| DTO                | Validated request shapes                     | `*/dto/*.dto.ts`                          |
+| Transition check   | Duel lifecycle                               | `canTransition(from, to)` in `duels/`     |
+| Conditional update | Single duel winner                           | `DuelsService`, `where winner_id is null` |
+| Unique constraint  | Idempotent XP                                | `xp_events` (see `DATA_MODEL.md`)         |
 
 ### 2.5 Cross-module calls
 

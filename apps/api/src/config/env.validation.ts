@@ -1,8 +1,16 @@
 import { plainToInstance } from 'class-transformer';
-import { IsInt, IsUrl, Max, Min, validateSync } from 'class-validator';
+import {
+  IsInt,
+  IsNotEmpty,
+  IsString,
+  IsUrl,
+  Max,
+  Min,
+  validateSync,
+} from 'class-validator';
 
 // Only keys the code reads today. Each slice adds the keys it starts
-// using (DATABASE_URL in S1, PISTON_URL in S3, GEMINI_API_KEY in S5, ...).
+// using (PISTON_URL in S3, GEMINI_API_KEY in S5, ...).
 export class EnvironmentVariables {
   @IsInt()
   @Min(1)
@@ -16,6 +24,22 @@ export class EnvironmentVariables {
     protocols: ['http', 'https'],
   })
   CORS_ORIGIN: string;
+
+  // Supabase Postgres connection string (Session pooler URI).
+  @IsUrl({
+    require_tld: false,
+    require_protocol: true,
+    protocols: ['postgres', 'postgresql'],
+  })
+  DATABASE_URL: string;
+
+  @IsUrl({ require_protocol: true, protocols: ['https', 'http'] })
+  SUPABASE_URL: string;
+
+  // Server-only. Never sent to the web app (AGENTS.md hard rule 3).
+  @IsString()
+  @IsNotEmpty()
+  SUPABASE_SERVICE_KEY: string;
 }
 
 export function validateEnv(

@@ -3,27 +3,86 @@ import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import type { App } from 'supertest/types.js';
 import { AppModule } from './../src/app.module.js';
+import {
+  SupabaseAuthClient,
+  type AuthUser,
+} from './../src/integrations/supabase-auth.client.js';
 
+// No network and no database: Supabase is stubbed, and every case below is
+// decided by the guard or the validation pipe before a query runs.
 describe('API (e2e)', () => {
   let app: INestApplication<App>;
+  const verify = vi.fn<(token: string) => Promise<AuthUser | null>>();
+  const user: AuthUser = {
+    id: '00000000-0000-0000-0000-000000000001',
+    email: 'test@example.com',
+    name: 'Test User',
+  };
 
   beforeEach(async () => {
+    verify.mockReset();
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    })
+      .overrideProvider(SupabaseAuthClient)
+      .useValue({ verify })
+      .compile();
 
     app = moduleFixture.createNestApplication();
     await app.init();
   });
 
-  it('GET /health', () => {
+  afterEach(async () => {
+    await app.close();
+  });
+
+  it('GET /health is public', () => {
     return request(app.getHttpServer())
       .get('/health')
       .expect(200)
       .expect({ status: 'ok' });
   });
 
-  afterEach(async () => {
-    await app.close();
+  it('GET /me without a token returns 401 UNAUTHENTICATED', async () => {
+    const res = await request(app.getHttpServer()).get('/me').expect(401);
+
+    expect(res.body).toMatchObject({ error: { code: 'UNAUTHENTICATED' } });
+    expect(verify).not.toHaveBeenCalled();
+  });
+
+  it('GET /me with an invalid token returns 401', async () => {
+    verify.mockResolvedValue(null);
+
+    const res = await request(app.getHttpServer())
+      .get('/me')
+      .set('Authorization', 'Bearer not-a-real-token')
+      .expect(401);
+
+    expect(res.body).toMatchObject({ error: { code: 'UNAUTHENTICATED' } });
+    expect(verify).toHaveBeenCalledWith('not-a-real-token');
+  });
+
+  it('PATCH /me with a too-short username returns 400 VALIDATION_FAILED', async () => {
+    verify.mockResolvedValue(user);
+
+    const res = await request(app.getHttpServer())
+      .patch('/me')
+      .set('Authorization', 'Bearer good-token')
+      .send({ username: 'a' })
+      .expect(400);
+
+    expect(res.body).toMatchObject({ error: { code: 'VALIDATION_FAILED' } });
+  });
+
+  it('PATCH /me with an unknown field returns 400', async () => {
+    verify.mockResolvedValue(user);
+
+    const res = await request(app.getHttpServer())
+      .patch('/me')
+      .set('Authorization', 'Bearer good-token')
+      .send({ xp: 9999 })
+      .expect(400);
+
+    expect(res.body).toMatchObject({ error: { code: 'VALIDATION_FAILED' } });
   });
 });

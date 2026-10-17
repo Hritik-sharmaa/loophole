@@ -8,12 +8,12 @@ Conventions: `uuid` primary keys (`gen_random_uuid()`), `timestamptz` in UTC, sn
 
 ### profiles — S1
 
-| Column     | Type        | Notes              |
-| ---------- | ----------- | ------------------ |
-| id         | uuid PK     | = `auth.users.id`  |
-| username   | text        | unique, 3–20 chars |
-| avatar_url | text        | nullable           |
-| created_at | timestamptz |                    |
+| Column     | Type        | Notes                                                                                       |
+| ---------- | ----------- | ------------------------------------------------------------------------------------------- |
+| id         | uuid PK     | = `auth.users.id`                                                                           |
+| username   | text        | unique, 3–20 chars of a–z, 0–9, _ ; auto-generated on first login, editable via `PATCH /me` |
+| avatar_url | text        | nullable                                                                                    |
+| created_at | timestamptz |                                                                                             |
 
 ### courses — S2
 
@@ -165,7 +165,7 @@ Conventions: `uuid` primary keys (`gen_random_uuid()`), `timestamptz` in UTC, sn
 | draws      | int                   | default 0    |
 | updated_at | timestamptz           |              |
 
-### certificates — M10
+### certificates — Phase 3
 
 | Column      | Type               | Notes                       |
 | ----------- | ------------------ | --------------------------- |
