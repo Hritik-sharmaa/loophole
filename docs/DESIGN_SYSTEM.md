@@ -5,7 +5,7 @@ Black, white and orange. Colour carries meaning, motion answers an action, and b
 ## 1. Principles
 
 1. **Three meanings, three colours.** Ink = done. Orange = your move now. Gray = not yet. A new colour needs a new meaning first.
-2. **Motion answers an action.** Unlocks, XP gains and duel wins animate; nothing animates on page load. The one exception is the active node's pulse, which signals "start here".
+2. **Motion answers an action.** Unlocks, XP gains and duel wins animate; nothing animates on page load. Two exceptions: the active node's pulse, which signals "start here", and the public landing page (`/`), where the hero, demos and section reveals animate on load and scroll to show the product in motion. Inside the app the rule holds.
 3. **Chunky and physical.** Pressable things have a hard 4 px offset shadow that collapses on press.
 
 ## 2. Colour tokens
@@ -57,7 +57,7 @@ Load fonts with `next/font/google`.
 | ease-pop | `cubic-bezier(0.34, 1.56, 0.64, 1)`               | Overshoot on unlock      |
 | spring   | `{ type: 'spring', stiffness: 400, damping: 15 }` | Framer Motion equivalent |
 
-Wrap all motion in a `useReducedMotion()` check; with reduced motion, swap animations for instant state changes and skip confetti.
+Wrap all motion in a `useReducedMotion()` check; with reduced motion, swap animations for instant state changes and skip confetti. The landing page wraps everything in `<MotionConfig reducedMotion="user">` and its looping demos show their final frame instead.
 
 ## 6. Components
 

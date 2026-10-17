@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { primaryButton, secondaryButton } from '@/components/ui/buttons';
 import { supabase } from '@/lib/supabase';
 
 const schema = z.object({
@@ -37,18 +38,18 @@ export default function LoginPage() {
         password,
       });
       if (error) return setError(error.message);
-      router.push('/');
+      router.push('/profile');
       return;
     }
 
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      options: { emailRedirectTo: `${window.location.origin}/` },
+      options: { emailRedirectTo: `${window.location.origin}/profile` },
     });
     if (error) return setError(error.message);
     // With "Confirm email" off in Supabase, sign-up returns a session at once.
-    if (data.session) router.push('/');
+    if (data.session) router.push('/profile');
     else setNotice('Check your email to confirm your account, then log in.');
   }
 
@@ -56,14 +57,14 @@ export default function LoginPage() {
     setError(null);
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo: `${window.location.origin}/` },
+      options: { redirectTo: `${window.location.origin}/profile` },
     });
     if (error) setError(error.message);
   }
 
   return (
     <main className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center gap-6 px-6 py-16">
-      <h1 className="text-3xl font-extrabold">
+      <h1 className="font-display text-3xl font-extrabold">
         {mode === 'login' ? 'Log in' : 'Create your account'}
       </h1>
 
@@ -77,7 +78,7 @@ export default function LoginPage() {
           <input
             type="email"
             autoComplete="email"
-            className="rounded-2xl border-2 border-border-muted px-4 py-3 text-base font-medium focus:border-ink focus:outline-none"
+            className="rounded-card border-2 border-border-muted px-4 py-3 text-base font-medium focus:border-ink focus:outline-none"
             {...register('email')}
           />
           {errors.email && (
@@ -94,7 +95,7 @@ export default function LoginPage() {
             autoComplete={
               mode === 'login' ? 'current-password' : 'new-password'
             }
-            className="rounded-2xl border-2 border-border-muted px-4 py-3 text-base font-medium focus:border-ink focus:outline-none"
+            className="rounded-card border-2 border-border-muted px-4 py-3 text-base font-medium focus:border-ink focus:outline-none"
             {...register('password')}
           />
           {errors.password && (
@@ -112,11 +113,7 @@ export default function LoginPage() {
         {notice && <p className="text-sm font-semibold">{notice}</p>}
 
         {/* Text on orange is Ink, never white (AGENTS.md rule 8). */}
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="rounded-2xl bg-orange px-4 py-3 font-bold text-ink shadow-[0_4px_0_var(--color-orange-dark)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink active:translate-y-1 active:shadow-none disabled:opacity-60"
-        >
+        <button type="submit" disabled={isSubmitting} className={primaryButton}>
           {mode === 'login' ? 'Log in' : 'Sign up'}
         </button>
       </form>
@@ -124,7 +121,7 @@ export default function LoginPage() {
       <button
         type="button"
         onClick={signInWithGoogle}
-        className="rounded-2xl border-2 border-ink px-4 py-3 font-bold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+        className={secondaryButton}
       >
         Continue with Google
       </button>
