@@ -32,85 +32,90 @@ How Loophole is built: the high-level design (HLD) first, then the low-level des
 - **WebSockets for duels.** Polling every second would be slow and wasteful; the server pushes progress the moment a submission is graded.
 - **Postgres, not files.** Progress, XP and duel results need transactions and unique constraints to stay correct.
 
-## 2. Low-level design rules
+## 2. Low-level design rules (plain NestJS, ADR-015)
 
 ### 2.1 Layers
 
 ```
-Controller / Gateway  →  Service  →  Domain (entities + interfaces)  ←  Infrastructure
-     HTTP, WS only       rules         plain TypeScript, no framework     Drizzle, Piston, Gemini
+Controller / Gateway  →  Service  →  DbService (Drizzle) · PistonClient · GeminiClient
+   HTTP / WS + DTOs       the rules     one small class per outside system
 ```
 
-| Layer                | May import                                                                       | Must not import                                        |
-| -------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| Controller / Gateway | Its service, DTOs                                                                | Repositories, Drizzle, SDKs                            |
-| Service              | Domain interfaces (via DI tokens), EventEmitter2, other services' public methods | Drizzle, `@supabase/*`, Piston client, `@google/genai` |
-| Domain               | Nothing outside the domain                                                       | NestJS decorators, any SDK                             |
-| Infrastructure       | Domain interfaces it implements, SDKs                                            | Services, controllers                                  |
+| Layer                | Job                                                      | May import                                   | Must not import                     |
+| -------------------- | -------------------------------------------------------- | -------------------------------------------- | ----------------------------------- |
+| Controller / Gateway | Validate the DTO, call one service method, return result | Its service, DTOs                            | Drizzle, `DbService`, clients, SDKs |
+| Service              | Business rules and database queries                      | `DbService`, schema, clients, other services | `@google/genai`, raw Piston HTTP    |
+| Client               | Talk to one outside system                               | Its SDK or `fetch`, `ConfigService`          | Services, controllers               |
 
 ### 2.2 Module layout (every feature module)
 
 ```
 modules/<feature>/
-  <feature>.module.ts        wiring: binds DI tokens to concrete classes
-  <feature>.controller.ts    or <feature>.gateway.ts
-  <feature>.service.ts
-  domain/
-    <entity>.entity.ts
-    <thing>.interface.ts     interface + Symbol token
-  infra/
-    drizzle-<entity>.repository.ts
-    <vendor>-<thing>.ts
+  <feature>.module.ts
+  <feature>.controller.ts      or <feature>.gateway.ts
+  <feature>.service.ts         business rules + Drizzle queries
   dto/
     <action>.dto.ts
-  __tests__/
-    <feature>.service.spec.ts
-    fakes/
+  <feature>.service.spec.ts    only when the module has logic worth testing
 ```
 
-### 2.3 Dependency injection with interfaces
+Shared infrastructure, one job each:
 
-TypeScript interfaces vanish at runtime, so each interface exports a `Symbol` token. Services inject the token; the module binds it.
+```
+src/db/schema.ts                     Drizzle table definitions
+src/db/db.module.ts                  global module exporting DbService
+src/db/db.service.ts                 the one Drizzle instance
+src/db/migrations/                   drizzle-kit output
+src/integrations/piston.client.ts    the only file that calls Piston
+src/integrations/gemini.client.ts    the only file that imports @google/genai
+src/common/http-exception.filter.ts  shapes errors as { error: { code, message } }
+```
+
+### 2.3 Dependency injection
+
+Plain classes, injected by type. No interfaces or Symbol tokens.
 
 ```ts
-// domain/code-executor.interface.ts
-export const CODE_EXECUTOR = Symbol('CODE_EXECUTOR');
-export interface ICodeExecutor { run(input: RunInput): Promise<RunResult>; }
-
-// submissions.module.ts
-providers: [{ provide: CODE_EXECUTOR, useClass: PistonExecutor }]
-
 // submissions.service.ts
-constructor(@Inject(CODE_EXECUTOR) private readonly executor: ICodeExecutor) {}
+@Injectable()
+export class SubmissionsService {
+  constructor(
+    private readonly db: DbService,
+    private readonly piston: PistonClient,
+    private readonly gamification: GamificationService,
+  ) {}
+}
 ```
 
-Swapping Piston for Judge0, or Drizzle for something else, changes only the module binding.
+In a test, stub a client with `Test.createTestingModule({ ... }).overrideProvider(PistonClient).useValue({ run: vi.fn() })`.
 
 ### 2.4 Patterns and where they live
 
-| Pattern                  | Used for                             | Location                                                 |
-| ------------------------ | ------------------------------------ | -------------------------------------------------------- |
-| Repository               | All database access                  | `*/infra/drizzle-*.repository.ts`                        |
-| Strategy                 | Swappable code executor              | `submissions/domain/code-executor.interface.ts`          |
-| Adapter                  | Gemini behind `IAiTutor`             | `ai/infra/gemini-tutor.ts`                               |
-| Observer (domain events) | XP, streaks, ratings react to events | `gamification/*.listener.ts`, `duels/rating.listener.ts` |
-| State machine            | Duel lifecycle                       | `duels/domain/duel-state-machine.ts`                     |
-| Guard                    | JWT auth                             | `auth/jwt-auth.guard.ts`                                 |
-| DTO                      | Validated request shapes             | `*/dto/*.dto.ts`                                         |
+| Pattern            | Used for                         | Location                                  |
+| ------------------ | -------------------------------- | ----------------------------------------- |
+| Client (adapter)   | Piston and Gemini behind a class | `integrations/*.client.ts`                |
+| Guard              | JWT auth                         | `modules/auth/jwt-auth.guard.ts`          |
+| DTO                | Validated request shapes         | `*/dto/*.dto.ts`                          |
+| Transition check   | Duel lifecycle                   | `canTransition(from, to)` in `duels/`     |
+| Conditional update | Single duel winner               | `DuelsService`, `where winner_id is null` |
+| Unique constraint  | Idempotent XP                    | `xp_events` (see `DATA_MODEL.md`)         |
 
-### 2.5 Domain events
+### 2.5 Cross-module calls
 
-| Event              | Emitted by         | Payload                                                | Listeners                                       |
-| ------------------ | ------------------ | ------------------------------------------------------ | ----------------------------------------------- |
-| `lesson.completed` | SubmissionsService | userId, lessonId, submissionId, completedAt            | XpListener, StreakListener, CertificateListener |
-| `duel.finished`    | DuelsService       | duelId, winnerId \| null, playerA, playerB, finishedAt | RatingListener                                  |
-
-Events are emitted **after** the database write that caused them succeeds. Listeners must be idempotent (see `DATA_MODEL.md` unique constraints).
+Services call each other directly; there are no domain events in v1. After a lesson completes, `SubmissionsService` calls `GamificationService` to award XP and update the streak. After a duel finishes, `DuelsService` calls `RatingsService`. These calls happen **after** the write that caused them succeeds, and each one is idempotent (unique constraints in `DATA_MODEL.md`).
 
 ### 2.6 Errors
 
-- Domain code throws typed errors (`LessonLockedError`, `DailyLimitReachedError`, `IllegalTransitionError`).
-- A global exception filter maps them to HTTP codes (403, 429, 409). Services never throw `HttpException`.
+Services throw Nest's built-in exceptions with the code from `API_SPEC.md`:
+
+```ts
+throw new ForbiddenException({
+  code: 'LESSON_LOCKED',
+  message: 'Finish the previous lesson first.',
+});
+```
+
+One global `HttpExceptionFilter` turns every exception into `{ error: { code, message } }`.
 
 ## 3. Key flows
 
@@ -118,23 +123,22 @@ Events are emitted **after** the database write that caused them succeeds. Liste
 
 1. `POST /submissions` with `{ exerciseId, code }`; `JwtAuthGuard` attaches `userId`.
 2. Controller validates the DTO and calls `SubmissionsService.submit(userId, exerciseId, code)`.
-3. Service loads the exercise (with hidden tests) through `IExerciseRepository`; checks the lesson is unlocked for this user.
-4. Service calls `ICodeExecutor.run` once per test (sample and hidden, or batched), collecting pass/fail.
-5. Service builds a `Submission` entity and saves it through `ISubmissionRepository`.
-6. If every test passed and the lesson was not already complete: mark progress complete, then emit `lesson.completed`.
-7. Controller returns `{ status, testsPassed, totalTests, results }` — sample-test details only.
-8. XpListener inserts an `xp_events` row (unique on source + source id); StreakListener updates the streak.
+3. Service loads the exercise (with hidden tests) through `DbService` and checks the lesson is unlocked for this user (else `LESSON_LOCKED`).
+4. Service calls `PistonClient.run` once per test (sample and hidden), comparing trimmed stdout (ADR-011).
+5. Service inserts a `submissions` row.
+6. If every test passed and the lesson was not already complete: mark progress complete, then call `GamificationService` to award XP (unique on source + source id) and update the streak.
+7. Controller returns `{ status, testsPassed, totalTests, results }`, with sample-test details only.
 
 ### 3.2 Live duel
 
 1. Client connects to the `/duels` namespace with its JWT; gateway verifies it.
-2. `queue:join` → MatchmakingService adds the player to the in-memory queue.
-3. Matcher pairs two players → DuelsService creates a `duels` row (`matched`), picks a problem, and joins both sockets to room `duel:<id>`.
-4. Server emits `duel:start` with the buggy code, sample tests and `endsAt`; state → `in_progress`.
-5. `duel:submit` → service grades through the same `ICodeExecutor`, saves a `duel_submissions` row, and emits `duel:progress` (passed / total) to the room.
-6. A fully passing submission tries `update duels set winner_id = $1, status = 'completed' where id = $2 and winner_id is null`. Exactly one caller updates a row; that caller emits `duel:end` and `duel.finished`.
+2. `queue:join` → `MatchmakingService` adds the player to the in-memory queue.
+3. When two players are waiting, `DuelsService` creates a `duels` row (`matched`), picks a problem, and joins both sockets to room `duel:<id>`.
+4. Server emits `duel:start` with the buggy code, sample tests and `endsAt`; status → `in_progress`.
+5. `duel:submit` → service grades through the same `PistonClient`, saves a `duel_submissions` row, and emits `duel:progress` (passed / total) to the room.
+6. A fully passing submission tries `update duels set winner_id = $1, status = 'completed' where id = $2 and winner_id is null`. Exactly one caller updates a row; that caller emits `duel:end` and calls `RatingsService`.
 7. A server timer at `endsAt` finishes the duel by most tests passed, or a draw.
-8. RatingListener applies ELO in one transaction.
+8. `RatingsService` applies ELO to both players in one transaction.
 
 ## 4. Deployment
 
@@ -146,8 +150,12 @@ Events are emitted **after** the database write that caused them succeeds. Liste
 | Postgres + Auth | Supabase cloud           | Migrations run from CI or by hand with drizzle-kit                                      |
 | CI              | GitHub Actions           | Lint, typecheck, test on every push                                                     |
 
-## 5. Scaling notes (not needed for v1)
+## 5. Later (Phase 3, only when needed)
 
-- More than one API instance → move matchmaking queue and Socket.io adapter to Redis; swap the in-process event emitter for BullMQ.
-- Heavy grading load → Piston on its own machine, API calls it over a private network.
-- None of these change service code, only module bindings and infrastructure.
+| Add back                                        | When                                                        |
+| ----------------------------------------------- | ----------------------------------------------------------- |
+| Interfaces for the executor or AI tutor         | Actually swapping Piston or Gemini, or adding a second one  |
+| Domain events (`@nestjs/event-emitter`)         | Several modules react to one action and direct calls tangle |
+| Redis for matchmaking queue + Socket.io adapter | Running more than one API instance                          |
+| BullMQ for background jobs                      | Grading or AI calls need to leave the request path          |
+| Piston on its own machine                       | Heavy grading load                                          |

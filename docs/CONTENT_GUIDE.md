@@ -102,4 +102,4 @@ Each test runs the program with `input` as stdin. It passes when **trimmed stdou
 - Start from a correct program, then inject 1–3 realistic bugs (off-by-one, wrong operator, wrong variable, missing return, bad condition).
 - The buggy code must run without crashing on at least one test, so both players see partial progress.
 - Solvable by an intermediate learner in 2–4 minutes.
-- At least 15 problems before M8 ends: 6 at difficulty 1, 6 at 2, 3 at 3.
+- At least 15 problems before S7 ends: 6 at difficulty 1, 6 at 2, 3 at 3.

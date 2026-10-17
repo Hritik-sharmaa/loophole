@@ -6,7 +6,7 @@ Conventions: `uuid` primary keys (`gen_random_uuid()`), `timestamptz` in UTC, sn
 
 ## Tables
 
-### profiles — M2
+### profiles — S1
 
 | Column     | Type        | Notes              |
 | ---------- | ----------- | ------------------ |
@@ -15,7 +15,7 @@ Conventions: `uuid` primary keys (`gen_random_uuid()`), `timestamptz` in UTC, sn
 | avatar_url | text        | nullable           |
 | created_at | timestamptz |                    |
 
-### courses — M3
+### courses — S2
 
 | Column   | Type    | Notes                               |
 | -------- | ------- | ----------------------------------- |
@@ -24,7 +24,7 @@ Conventions: `uuid` primary keys (`gen_random_uuid()`), `timestamptz` in UTC, sn
 | language | text    | Piston language name, e.g. `python` |
 | title    | text    |                                     |
 
-### units — M3
+### units — S2
 
 | Column    | Type              | Notes                                         |
 | --------- | ----------------- | --------------------------------------------- |
@@ -34,7 +34,7 @@ Conventions: `uuid` primary keys (`gen_random_uuid()`), `timestamptz` in UTC, sn
 | title     | text              |                                               |
 | position  | int               | order in course; unique (course_id, position) |
 
-### lessons — M3
+### lessons — S2
 
 | Column   | Type            | Notes                      |
 | -------- | --------------- | -------------------------- |
@@ -44,7 +44,7 @@ Conventions: `uuid` primary keys (`gen_random_uuid()`), `timestamptz` in UTC, sn
 | title    | text            |                            |
 | position | int             | unique (unit_id, position) |
 
-### exercises — M3
+### exercises — S2
 
 | Column       | Type              | Notes                                                         |
 | ------------ | ----------------- | ------------------------------------------------------------- |
@@ -55,7 +55,7 @@ Conventions: `uuid` primary keys (`gen_random_uuid()`), `timestamptz` in UTC, sn
 | sample_tests | jsonb             | `[{ input, expectedOutput }]` — shown to learner              |
 | hidden_tests | jsonb             | `[{ input, expectedOutput }]` — **never returned by the API** |
 
-### user_progress — M3
+### user_progress — S2
 
 | Column       | Type               | Notes                            |
 | ------------ | ------------------ | -------------------------------- |
@@ -65,7 +65,7 @@ Conventions: `uuid` primary keys (`gen_random_uuid()`), `timestamptz` in UTC, sn
 | completed_at | timestamptz        |                                  |
 |              |                    | **PK (user_id, lesson_id)**      |
 
-### submissions — M4
+### submissions — S3
 
 | Column       | Type                | Notes                                           |
 | ------------ | ------------------- | ----------------------------------------------- |
@@ -79,7 +79,7 @@ Conventions: `uuid` primary keys (`gen_random_uuid()`), `timestamptz` in UTC, sn
 | stderr       | text                | truncated to 4 KB                               |
 | submitted_at | timestamptz         | index (user_id, exercise_id, submitted_at desc) |
 
-### xp_events — M5
+### xp_events — S4
 
 | Column     | Type               | Notes                                                     |
 | ---------- | ------------------ | --------------------------------------------------------- |
@@ -91,7 +91,7 @@ Conventions: `uuid` primary keys (`gen_random_uuid()`), `timestamptz` in UTC, sn
 | created_at | timestamptz        | index (created_at) for weekly board                       |
 |            |                    | **unique (user_id, source, source_id)** — stops double XP |
 
-### streaks — M5
+### streaks — S4
 
 | Column            | Type                  | Notes                    |
 | ----------------- | --------------------- | ------------------------ |
@@ -101,7 +101,7 @@ Conventions: `uuid` primary keys (`gen_random_uuid()`), `timestamptz` in UTC, sn
 | last_active_date  | date                  | in Asia/Kolkata calendar |
 | freezes_available | int                   | default 0, max 2         |
 
-### ai_usage — M6
+### ai_usage — S5
 
 | Column  | Type               | Notes                                                                  |
 | ------- | ------------------ | ---------------------------------------------------------------------- |
@@ -110,7 +110,7 @@ Conventions: `uuid` primary keys (`gen_random_uuid()`), `timestamptz` in UTC, sn
 | count   | int                |                                                                        |
 |         |                    | **PK (user_id, day)**; increment with `insert … on conflict do update` |
 
-### duel_problems — M8
+### duel_problems — S7
 
 | Column       | Type    | Notes                      |
 | ------------ | ------- | -------------------------- |
@@ -124,7 +124,7 @@ Conventions: `uuid` primary keys (`gen_random_uuid()`), `timestamptz` in UTC, sn
 | hidden_tests | jsonb   | never returned             |
 | difficulty   | int     | 1–3                        |
 
-### duels — M8
+### duels — S7
 
 | Column     | Type                    | Notes                                             |
 | ---------- | ----------------------- | ------------------------------------------------- |
@@ -142,7 +142,7 @@ Conventions: `uuid` primary keys (`gen_random_uuid()`), `timestamptz` in UTC, sn
 
 `waiting` is a queue state held in memory, so it never appears in this table.
 
-### duel_submissions — M8
+### duel_submissions — S7
 
 | Column       | Type               | Notes                                                 |
 | ------------ | ------------------ | ----------------------------------------------------- |
@@ -154,7 +154,7 @@ Conventions: `uuid` primary keys (`gen_random_uuid()`), `timestamptz` in UTC, sn
 | total_tests  | int                |                                                       |
 | submitted_at | timestamptz        | index (duel_id, submitted_at) — used for replay later |
 
-### ratings — M9
+### ratings — S8
 
 | Column     | Type                  | Notes        |
 | ---------- | --------------------- | ------------ |

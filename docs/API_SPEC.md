@@ -25,14 +25,14 @@ Base URL: `https://api.<domain>` (local: `http://localhost:3001`). All bodies ar
 | ------ | --------- | ------ | ------------------------------------------ |
 | GET    | `/health` | Public | `{ status: "ok", piston: "ok" \| "down" }` |
 
-### Users — M2
+### Users — S1
 
 | Method | Path  | Body                        | Response                                                                                           |
 | ------ | ----- | --------------------------- | -------------------------------------------------------------------------------------------------- |
 | GET    | `/me` | —                           | `{ id, username, avatarUrl, xp, streak: { current, longest, freezes }, rating, lessonsCompleted }` |
 | PATCH  | `/me` | `{ username?, avatarUrl? }` | updated profile                                                                                    |
 
-### Lessons — M3
+### Lessons — S2
 
 | Method | Path                  | Response                                                                                                         |
 | ------ | --------------------- | ---------------------------------------------------------------------------------------------------------------- |
@@ -42,7 +42,7 @@ Base URL: `https://api.<domain>` (local: `http://localhost:3001`). All bodies ar
 
 `hidden_tests` must never appear in any of these responses. Add a test that asserts this.
 
-### Submissions — M4
+### Submissions — S3
 
 | Method | Path                       | Body                                           | Response                                            |
 | ------ | -------------------------- | ---------------------------------------------- | --------------------------------------------------- |
@@ -73,14 +73,14 @@ Base URL: `https://api.<domain>` (local: `http://localhost:3001`). All bodies ar
 
 Hidden test results show only `passed`, never input or expected output. Throttle: 10 per minute per user.
 
-### Gamification — M5
+### Gamification — S4
 
 | Method | Path                           | Response                                                                     |
 | ------ | ------------------------------ | ---------------------------------------------------------------------------- |
 | GET    | `/leaderboard/weekly?limit=50` | `{ weekStart, entries: [{ rank, userId, username, xp }], me: { rank, xp } }` |
-| GET    | `/leaderboard/rating?limit=50` | `{ entries: [{ rank, userId, username, elo }], me: { rank, elo } }` (M9)     |
+| GET    | `/leaderboard/rating?limit=50` | `{ entries: [{ rank, userId, username, elo }], me: { rank, elo } }` (S8)     |
 
-### AI tutor — M6
+### AI tutor — S5
 
 | Method | Path          | Body                                 | Response                                                |
 | ------ | ------------- | ------------------------------------ | ------------------------------------------------------- |
@@ -96,7 +96,7 @@ The server loads the exercise, failing test and stderr itself; the client sends 
 | GET    | `/certificates`       | Yes    | the user's certificates               |
 | GET    | `/certificates/:slug` | Public | `{ username, courseTitle, issuedAt }` |
 
-## Socket.io — duels (M8)
+## Socket.io — duels (S7)
 
 Namespace: `/duels`. Connect with `auth: { token: <supabase access token> }`; the server rejects bad tokens on connect.
 

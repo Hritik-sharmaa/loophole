@@ -6,7 +6,20 @@ Format: **ADR-NNN · Title** — Status (Accepted / Superseded by ADR-NNN) · Da
 
 ---
 
-**ADR-014 · AI writes the code; developer reviews** — Accepted · 2026-10-11 · Supersedes ADR-001
+**ADR-016 · MVP-first slice roadmap and lighter review** — Accepted · 2026-10-17 · Amends ADR-014
+
+- Decision: the roadmap becomes vertical slices (S1–S8), each ending in a feature usable in the browser; M1 "Domain and fakes" is removed and deployment moves before duels. One reviewable piece is one feature slice (backend route + the page that uses it), not one file; explanations are short, with no quiz or Excalidraw step required.
+- Why: one-file-at-a-time review and scaffolding-only milestones made progress too slow to finish the project.
+- Trade-off: bigger pieces mean less depth per file in review; polish, hardening and scalability work move to Phase 3.
+
+**ADR-015 · Plain NestJS layering for v1** — Accepted · 2026-10-17
+
+- Decision: controllers → services → `DbService` (Drizzle), `PistonClient`, `GeminiClient`. No domain interfaces, Symbol DI tokens, repository classes, hand-written fakes, domain events or typed domain errors. Services query Drizzle directly, call each other directly, and throw Nest's built-in HTTP exceptions with the codes in `API_SPEC.md`. Only the two client files touch Piston and Gemini. Tests cover only logic that is easy to get wrong (grading, streaks, ELO, duel winner, hidden-test leaks).
+- Why: the extra layers doubled the files per feature before anything worked. The goal now is a working app first; scalability later.
+- Trade-off: swapping a vendor or the ORM touches services, not just a module binding; fewer tests means less safety on refactors. Interfaces, events and Redis can be reintroduced in Phase 3 if needed.
+- Changes the layering in `ARCHITECTURE.md` §2, `AGENTS.md` hard rules 4–6, `CODING_STANDARDS.md` §3 and §5, and `AI_TUTOR.md` §2.
+
+**ADR-014 · AI writes the code; developer reviews** — Accepted · 2026-10-11 · Supersedes ADR-001 · Piece size amended by ADR-016
 
 - Decision: AI assistants write the code in small, verified pieces and explain each one; the developer reviews, asks questions, makes changes, and approves before anything is committed. Design decisions stay with the developer: the AI presents options and trade-offs, the developer picks.
 - Why: writing every file from scratch, including setup and boilerplate, was slowing progress more than it was teaching. Reviewing working code with explanations keeps the learning goal (G-3) while moving faster.
@@ -42,8 +55,8 @@ Format: **ADR-NNN · Title** — Status (Accepted / Superseded by ADR-NNN) · Da
 
 **ADR-008 · Gemini for the AI tutor** — Accepted · 2026-10-02
 
-- Decision: Google Gemini via `@google/genai`, model name from env (default `gemini-flash-latest`), behind `IAiTutor`.
-- Why: developer's choice of provider; free tier for development; the interface keeps a later switch to another provider to one class.
+- Decision: Google Gemini via `@google/genai`, model name from env (default `gemini-flash-latest`), behind `IAiTutor` (changed by ADR-015: behind the plain `GeminiClient` class).
+- Why: developer's choice of provider; free tier for development; keeping the SDK in one class keeps a later switch to another provider small.
 
 **ADR-007 · API and Piston on one VPS** — Accepted · 2026-10-02
 
@@ -62,7 +75,7 @@ Format: **ADR-NNN · Title** — Status (Accepted / Superseded by ADR-NNN) · Da
 
 **ADR-004 · Drizzle ORM over the Supabase JS client for data access** — Accepted · 2026-10-02
 
-- Decision: repositories use Drizzle against Supabase Postgres; the Supabase client is used only for auth.
+- Decision: repositories use Drizzle against Supabase Postgres; the Supabase client is used only for auth. (ADR-015: no repository classes; services use Drizzle through `DbService`.)
 - Why: typed queries and migrations in code; keeps the database vendor behind repositories.
 
 **ADR-003 · NestJS for the backend** — Accepted · 2026-10-02

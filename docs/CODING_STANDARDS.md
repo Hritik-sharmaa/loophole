@@ -5,32 +5,30 @@ Conventions every file follows. AI assistants should apply these without being a
 ## 1. TypeScript
 
 - `strict: true` in every `tsconfig.json`. No `any`; use `unknown` and narrow.
-- Prefer `type` for data shapes and `interface` for contracts a class implements.
-- Domain entities are plain classes with `readonly` fields and no framework imports.
+- Use `type` for data shapes. Row types come from the Drizzle schema (`typeof table.$inferSelect`).
 - No default exports except Next.js pages and layouts.
-- Async functions return `Promise<T>` explicitly in services and interfaces.
+- Async functions return `Promise<T>` explicitly in services and clients.
 
 ## 2. Naming
 
-| Thing                  | Convention               | Example                                        |
-| ---------------------- | ------------------------ | ---------------------------------------------- |
-| Files                  | kebab-case               | `submissions.service.ts`, `piston-executor.ts` |
-| Classes                | PascalCase               | `SubmissionsService`, `PistonExecutor`         |
-| Interfaces (contracts) | `I` prefix               | `ICodeExecutor`                                |
-| DI tokens              | SCREAMING_SNAKE          | `CODE_EXECUTOR`                                |
-| DTOs                   | `<Action>Dto`            | `CreateSubmissionDto`                          |
-| Events                 | `noun.past-verb`         | `lesson.completed`                             |
-| Errors                 | `<Reason>Error`          | `LessonLockedError`                            |
-| DB tables / columns    | snake_case               | `user_progress.completed_at`                   |
-| React components       | PascalCase file and name | `LessonNode.tsx`                               |
-| Hooks                  | `use` prefix             | `useDuelSocket`                                |
+| Thing               | Convention               | Example                                        |
+| ------------------- | ------------------------ | ---------------------------------------------- |
+| Files               | kebab-case               | `submissions.service.ts`, `piston-executor.ts` |
+| Classes             | PascalCase               | `SubmissionsService`, `PistonClient`           |
+| Clients             | `<Vendor>Client`         | `piston.client.ts` → `PistonClient`            |
+| DTOs                | `<Action>Dto`            | `CreateSubmissionDto`                          |
+| Error codes         | SCREAMING_SNAKE          | `LESSON_LOCKED` (from `API_SPEC.md`)           |
+| DB tables / columns | snake_case               | `user_progress.completed_at`                   |
+| React components    | PascalCase file and name | `LessonNode.tsx`                               |
+| Hooks               | `use` prefix             | `useDuelSocket`                                |
 
 ## 3. Backend rules
 
 - Controllers: parse, validate, call one service method, shape the response. No business logic.
-- Services: depend on interfaces through DI tokens. Never import Drizzle, Supabase, Piston or Gemini clients.
-- Repositories: return domain entities, never raw rows.
-- Throw typed domain errors; a global filter maps them to HTTP.
+- Services: hold the business rules and query the database through `DbService`. Call other services directly.
+- Clients: only `integrations/piston.client.ts` and `integrations/gemini.client.ts` talk to Piston and Gemini.
+- Throw Nest's built-in exceptions with an `API_SPEC.md` code, e.g. `new ForbiddenException({ code: 'LESSON_LOCKED', message })`; the global filter shapes the response.
+- Never select `hidden_tests` in a query whose result goes to a response.
 - Read config through `@nestjs/config`, validated at startup (fail fast if a key is missing).
 - Log with the Nest/pino logger, never `console.log`. Never log tokens, keys or user code.
 
@@ -44,23 +42,24 @@ Conventions every file follows. AI assistants should apply these without being a
 
 ## 5. Testing
 
-| What                                                | Tool                     | Rule                                                    |
-| --------------------------------------------------- | ------------------------ | ------------------------------------------------------- |
-| Services                                            | Vitest                   | Every public method; fakes for every injected interface |
-| Domain logic (streaks, ELO, state machine, matcher) | Vitest                   | Table-driven tests for every branch                     |
-| Repositories                                        | Vitest + a test database | Happy path and constraint violations                    |
-| Components                                          | Vitest + Testing Library | Behaviour, not snapshots                                |
-| End to end                                          | Playwright               | J-1 first lesson, J-3 duel (two browser contexts)       |
+Test the logic that is easy to get wrong; skip tests for plain wiring.
 
-A milestone is not done until its tests pass in CI.
+| What                                                             | Tool                 | Rule                                                                |
+| ---------------------------------------------------------------- | -------------------- | ------------------------------------------------------------------- |
+| Pure logic (output comparison, streak, ELO, duel winner/timeout) | Vitest               | Table-driven tests for every branch                                 |
+| Services with logic worth testing                                | Vitest               | Stub clients with `overrideProvider(...).useValue({ ... vi.fn() })` |
+| Hidden-test leaks                                                | Vitest e2e           | No lesson or submission response contains `hiddenTests`             |
+| End to end                                                       | Playwright (Phase 3) | J-1 first lesson, J-3 duel                                          |
+
+A slice is not done until its tests pass in CI.
 
 ## 6. Git
 
-- Branches: `m<N>-<short-name>`, e.g. `m4-piston-executor`.
+- Branches: `s<N>-<short-name>`, e.g. `s3-run-and-submit`.
 - Commits follow Conventional Commits with the requirement ID when there is one:
   `feat(submissions): FR-06 grade against hidden tests`
   `fix(duels): FR-21 prevent double winner`
-  `docs: update ROADMAP after M3`
+  `docs: update ROADMAP after S2`
 - Small commits, one idea each. Merge to `main` only when CI is green.
 
 ## 7. Environment variables
@@ -93,8 +92,8 @@ Only `NEXT_PUBLIC_*` values may appear in the web app, and none of them are secr
 
 ## 8. Definition of done (every task)
 
-- [ ] Follows the layer rules in `ARCHITECTURE.md`
-- [ ] Tests written and passing
+- [ ] Follows the layer rules in `ARCHITECTURE.md` §2
+- [ ] Tests for any tricky logic written and passing
 - [ ] No secrets, hidden tests or answers reachable from the client
 - [ ] Types shared through `packages/shared` where both apps use them
 - [ ] Relevant doc in `docs/` updated if behaviour changed

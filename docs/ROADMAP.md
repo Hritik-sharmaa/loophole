@@ -1,8 +1,8 @@
 # Loophole — Roadmap
 
-Twelve milestones, about 10–12 hours a week. Tick boxes as you go and update "Current milestone" in `AGENTS.md`. A phase starts only after the gate before it passes.
+MVP first, in vertical slices (ADR-016). Each slice is one feature, backend route plus the page that uses it, and ends with something you can click through in the browser. Tick boxes as you go and update "Current milestone" in `AGENTS.md`.
 
-Each milestone follows the same loop: **learn** the concept → **sketch** it on Excalidraw → **explain** each class's one job → AI **writes** it in small pieces → you **review** and change it → **test** (ADR-014).
+Loop for every slice: AI **writes** the slice → you **review** and change it → **test** → you commit (ADR-014).
 
 ## Week 0 — before you start
 
@@ -10,136 +10,94 @@ Each milestone follows the same loop: **learn** the concept → **sketch** it on
 - [ ] Create the GitHub repo `loophole`; add `AGENTS.md`, `CLAUDE.md`, `GEMINI.md` and `docs/`
 - [ ] Create a Supabase project; note URL, anon key, service key, JWT secret
 - [ ] Create a Gemini API key in Google AI Studio
-- [ ] Put the architecture diagram on an Excalidraw board
 - [ ] Draft the first 10 Python exercises
 
-## Phase 1 — Core learning platform (weeks 1–8)
+## Phase 1 — Working learning app
 
-### M0 · Setup (week 1)
+### M0 · Setup ✅
 
-Learn: HLD vs LLD, the four layers, monorepos.
-
-- [ ] pnpm workspace: `apps/web`, `apps/api`, `packages/shared`
-- [ ] Empty Next.js app and NestJS app run together with `pnpm dev`
-- [ ] `infra/docker-compose.yml` runs Piston locally; Python runtime installed
-- [ ] `.env.example` in both apps; config validation in the API
-- [ ] ESLint in both apps (replace oxlint in the API), Prettier, TypeScript strict; GitHub Actions running lint + typecheck
+- [x] pnpm workspace: `apps/web`, `apps/api`, `packages/shared`
+- [x] Empty Next.js app and NestJS app run together with `pnpm dev`
+- [x] `infra/docker-compose.yml` runs Piston locally; Python runtime installed
+- [x] `.env.example` in both apps; config validation in the API
+- [x] ESLint in both apps (replace oxlint in the API), Prettier, TypeScript strict; GitHub Actions running lint + typecheck
 - **Done when:** `pnpm dev` starts both apps and a request to local Piston prints "hello".
 
-### M1 · Domain and fakes (week 2)
+### S1 · Auth
 
-Learn: interfaces, dependency inversion, SOLID, DI tokens, unit tests with fakes.
-
-- [ ] `Submission` entity
-- [ ] `ICodeExecutor`, `ISubmissionRepository`, `IExerciseRepository` with Symbol tokens
-- [ ] `FakeCodeExecutor`, in-memory repositories
-- [ ] `SubmissionsService.submit` with Vitest tests
-- **Done when:** tests prove pass, fail and "already completed" paths with no network or database.
-
-### M2 · Auth (week 3)
-
-Learn: JWTs, NestJS guards, Supabase Auth.
-
-- [ ] Sign-up, login, logout pages (email + Google)
+- [ ] Login page (email + Google) with Supabase Auth; logout
 - [ ] `JwtAuthGuard` verifying Supabase tokens
-- [ ] `profiles` table, created on first login
-- [ ] `GET /me`, `PATCH /me`
-- **Done when:** `/me` returns your profile with a token and 401 without one. (FR-01, FR-02)
+- [ ] `DbService` + Drizzle setup; `profiles` table, row created on first request
+- [ ] `GET /me`, `PATCH /me`; global `HttpExceptionFilter`
+- **Done when:** you log in and see your profile on a page; `/me` returns 401 without a token. (FR-01, FR-02)
 
-### M3 · Lessons (week 4)
-
-Learn: repository pattern with Drizzle, migrations, DTOs, seed scripts.
+### S2 · Lessons
 
 - [ ] Tables: courses, units, lessons, exercises, user_progress
-- [ ] Idempotent seed loader for `content/python/`
+- [ ] Idempotent seed script for 10 exercises in `content/python/`
 - [ ] `GET /courses`, `GET /courses/:slug/path`, `GET /lessons/:id`
+- [ ] Plain path page (list of nodes) and exercise page (prompt, starter code, sample tests)
 - [ ] Test: no response ever contains `hiddenTests`
-- **Done when:** 10 seeded exercises are served and locked lessons return 403. (FR-03, FR-04, FR-05, FR-16)
+- **Done when:** the path shows locked / active nodes and a locked lesson returns 403. (FR-03, FR-04, FR-05, FR-16)
 
-### M4 · Code runs (week 5)
+### S3 · Run and submit
 
-Learn: strategy and adapter patterns, timeouts, server-side grading.
+- [ ] `PistonClient` with time and memory limits
+- [ ] `POST /submissions`; trimmed exact-match grading (unit-tested); next lesson unlocks
+- [ ] CodeMirror editor, Run button, results panel
+- **Done when:** journey J-1 works: you solve exercise 1 in the browser and node 2 unlocks. (FR-06, FR-07, FR-08)
 
-- [ ] `PistonExecutor` with time and memory limits
-- [ ] Drizzle repositories replace the in-memory ones (module bindings only)
-- [ ] `POST /submissions`; trimmed exact-match grading
-- [ ] Exercise page: CodeMirror editor, Run button, results panel
-- **Done when:** you solve an exercise in the browser and the next lesson unlocks. (FR-06, FR-07, FR-08)
+### S4 · XP, streak, leaderboard
 
-### M5 · XP and streaks (week 6)
+- [ ] `xp_events` with a unique constraint; `SubmissionsService` calls `GamificationService` after the progress write
+- [ ] Daily streak (unit-tested); freezes come in Phase 3
+- [ ] Weekly XP leaderboard route and page
+- **Done when:** a repeated completion pays once and the streak goes up on the next day. (FR-09, FR-10 basic, FR-11)
 
-Learn: observer pattern, domain events, idempotency.
+### S5 · AI tutor
 
-- [ ] Emit `lesson.completed` after the progress write
-- [ ] `XpListener` → `xp_events` (unique constraint)
-- [ ] `StreakListener` with freeze rules, unit-tested
-- [ ] Weekly leaderboard route and page
-- **Done when:** a repeated completion pays once and a missed day spends a freeze. (FR-09, FR-10, FR-11)
-
-### M6 · Gemini tutor (week 7)
-
-Learn: adapters for third-party APIs, prompt design, structured output, rate limits.
-
-- [ ] `IAiTutor`, `GeminiTutor`, `FakeAiTutor`
+- [ ] `GeminiClient`
 - [ ] `POST /ai/explain`, `POST /ai/hint`, daily cap in `ai_usage`
 - [ ] "Explain my error" and "Hint" buttons
-- **Done when:** explanations are useful, hints never contain a full solution, the 21st call returns 429. (FR-12, FR-13, FR-14)
+- **Done when:** explanations are useful, hints never contain a full solution, and the 21st call returns 429. (FR-12, FR-13, FR-14)
 
-### M7 · Lesson path and polish (week 8)
+### S6 · Deploy early
 
-Learn: SVG layout, Framer Motion springs, Tailwind tokens.
+- [ ] VPS (2 vCPU / 4 GB) with Docker Compose: API + Piston + Caddy
+- [ ] Web on Vercel with production env
+- [ ] README: what it is, how to run locally, demo link
+- **Gate 1 — done when:** a friend on another network signs up and finishes a lesson.
 
-- [ ] Hand-built SVG lesson path
-- [ ] Pressable buttons, unlock pop, confetti, XP count-up, reduced-motion support
-- [ ] Profile page with XP, streak, lessons done
-- [ ] Python track complete: 40 exercises
-- **Gate 1 — done when:** a fresh account finishes the whole track on desktop and mobile.
+## Phase 2 — Live debugging duels
 
-## Phase 2 — Live debugging duels (weeks 9–11)
-
-### M8 · Duel rooms (weeks 9–10)
-
-Learn: WebSockets, state pattern, race conditions, server authority.
+### S7 · Duel rooms
 
 - [ ] Tables: duel_problems, duels, duel_submissions; 15 problems seeded
 - [ ] `DuelsGateway` on `/duels` with JWT check on connect
 - [ ] In-memory `MatchmakingService` (first two in queue)
-- [ ] `DuelStateMachine` with tests for every legal and illegal transition
+- [ ] `canTransition(from, to)` with a test for each legal and illegal transition
 - [ ] Duel room page: problem, editor, countdown from `endsAt`, opponent progress bar
 - [ ] Winner via conditional update; server timer for timeout and draw
-- [ ] Sentry on API and web
 - **Done when:** two browsers are matched, race, and see the same single result. (FR-17, FR-19 to FR-22, FR-25, FR-26)
 
-### M9 · Ratings and hardening (week 11)
+### S8 · Ratings
 
-Learn: ELO, failure handling, basic load testing.
-
-- [ ] `RatingListener` on `duel.finished` (K = 32), one transaction
+- [ ] `RatingsService`: ELO (K = 32) for both players in one transaction, unit-tested
 - [ ] Rating leaderboard
-- [ ] Disconnect forfeit after 30 s; reconnect resumes
-- [ ] Rating-band matchmaking
+- **Gate 2 — done when:** both ratings update after every duel. (FR-24)
+
+## Phase 3 — Polish and later (pick one at a time)
+
+- [ ] Hand-built SVG lesson path; pressable buttons, unlock pop, confetti, XP count-up, reduced-motion support
+- [ ] Profile page with XP, streak, lessons done
+- [ ] Python track complete: 40 exercises (G-1)
+- [ ] Streak freezes (full FR-10 rules)
+- [ ] Certificates and public `/c/:slug` page (FR-15)
+- [ ] Rating-band matchmaking (FR-18)
+- [ ] Disconnect forfeit after 30 s; reconnect resumes (FR-23)
 - [ ] Throttles on every write route and socket event
+- [ ] Sentry on API and web
 - [ ] Script running two fake socket clients through 50 duels
-- **Gate 2 — done when:** all 50 scripted duels end with exactly one result. (FR-18, FR-23, FR-24)
-
-## Launch (week 12)
-
-### M10 · Deploy and certificates
-
-Learn: Docker Compose in production, reverse proxies, CI/CD.
-
-- [ ] VPS (2 vCPU / 4 GB) with Docker Compose: API + Piston + Caddy
-- [ ] Web on Vercel with production env
-- [ ] GitHub Actions: lint, typecheck, tests, and a deploy step
-- [ ] Certificates: issue on track completion; public `/c/:slug` page
-- [ ] README: what it is, architecture diagram, how to run locally, demo link
-- **Done when:** a friend on another network signs up, finishes a lesson and duels you. (FR-15)
-
-## Phase 3 — Stretch (after launch)
-
-### M11 · One at a time
-
-- [ ] Replay a finished duel (FR-27)
-- [ ] Daily bug-of-the-day bracket (FR-28)
-- [ ] Spectate mode (FR-29)
-- [ ] JavaScript track (FR-30)
+- [ ] Playwright e2e for J-1 and J-3; deploy step in GitHub Actions
+- [ ] Scalability, only if needed: see `ARCHITECTURE.md` §5
+- [ ] Stretch: replay (FR-27), bug of the day (FR-28), spectate (FR-29), JavaScript track (FR-30)

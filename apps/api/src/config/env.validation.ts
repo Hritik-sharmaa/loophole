@@ -1,8 +1,8 @@
 import { plainToInstance } from 'class-transformer';
 import { IsInt, IsUrl, Max, Min, validateSync } from 'class-validator';
 
-// Only keys the code reads today. Each milestone adds the keys it starts
-// using (DATABASE_URL in M3, GEMINI_API_KEY in M6, ...).
+// Only keys the code reads today. Each slice adds the keys it starts
+// using (DATABASE_URL in S1, PISTON_URL in S3, GEMINI_API_KEY in S5, ...).
 export class EnvironmentVariables {
   @IsInt()
   @Min(1)

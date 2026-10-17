@@ -6,22 +6,21 @@ This file tells any AI coding assistant (Claude, Gemini, Cursor, Copilot, Codex)
 
 Loophole is a Duolingo-style web app for learning to code. Learners move along a lesson path, write real code in an in-browser editor, get graded in a sandbox, and earn XP and streaks. Its differentiator is **live 1v1 debugging duels**: two players get the same buggy program and race to fix it; the server decides the winner.
 
-It is a solo portfolio project. Its second purpose is to teach the developer production-grade system design (HLD and LLD).
+It is a solo portfolio project. Its second purpose is to teach the developer system design by building a working full-stack app; deeper LLD patterns come after launch.
 
 ## 2. How to work with the developer — IMPORTANT
 
-**AI writes, the developer reviews** (ADR-014). The AI writes the code; the developer (Hritik) reviews every piece, asks questions, and makes changes. The developer still owns every design decision. The goal is still for the developer to learn system design, so each change must teach as well as work.
+**AI writes, the developer reviews** (ADR-014, ADR-016). The AI writes the code; the developer (Hritik) reviews, asks questions, and makes changes. **Priority right now: a working app first, kept simple. Scalability comes later.**
 
 **Review mode (default):**
 
-- **Design decisions belong to the developer.** When there is a real choice (where code lives, which pattern, a trade-off), present 2–3 options with their trade-offs and wait for a pick. Don't decide silently.
-- **Small pieces.** One reviewable unit at a time (a module, a config change, a migration), not a whole milestone in one go. Don't start the next piece until the current one is approved.
+- **One piece = one feature slice.** A slice is a backend route plus the page that uses it, something the developer can click through in the browser. It is not one file at a time. Don't start the next slice until the current one is approved.
+- **Real design choices go to the developer.** When a choice matters (a trade-off this file and `docs/` don't settle), present 2–3 short options and wait for a pick. Routine choices follow `docs/ARCHITECTURE.md` without asking.
 - **Verify before handing over.** Run the tests, the build, and a real request or command where possible, and report what passed.
-- **Explain every file.** Its one job, the NestJS or architecture concept it uses, and why it is shaped that way, in plain language.
-- **Give a "what to check" list** and one or two questions that test understanding of the piece.
-- **Commit only after the developer approves**, one idea per commit (see `CODING_STANDARDS.md` §6).
+- **Explain briefly.** A few lines per slice: what each file does and why. Plain language.
+- **Give a short "what to check" list.**
+- **The developer creates every branch and commit.** The AI only edits files.
 - **Respect the developer's edits.** If they change code after review, build on their version; if a change breaks a rule in this file, say so and explain why.
-- Before a milestone is marked done, offer to quiz the developer on its concepts.
 
 **Always:**
 
@@ -35,9 +34,9 @@ It is a solo portfolio project. Its second purpose is to teach the developer pro
 1. **The client is never trusted.** Grading, XP, streaks, ratings and duel winners are computed on the server only.
 2. **Hidden test cases and duel solutions never leave the server.** No API response may include `hidden_tests`.
 3. **Secrets live only in `apps/api/.env`.** `GEMINI_API_KEY`, `SUPABASE_SERVICE_KEY` and `PISTON_URL` never reach the frontend bundle.
-4. **Dependencies point inward.** Controllers → services → domain interfaces ← infrastructure. A service never imports Drizzle, Supabase, Piston or `@google/genai` directly.
-5. **One job per class.** If a class description needs "and", split it.
-6. **Every service has unit tests against fakes** (fake executor, in-memory repository, fake AI tutor).
+4. **Thin controllers.** Controllers and gateways validate, call one service method, and return. Business rules live in services (ADR-015).
+5. **One file per outside system.** Only `integrations/piston.client.ts` talks to Piston and only `integrations/gemini.client.ts` imports `@google/genai`. Services use the shared `DbService` for Drizzle; there are no repository classes, interfaces or DI tokens in v1.
+6. **Test the logic that is easy to get wrong:** grading, streaks, ELO, the duel winner, and that no response contains hidden tests.
 7. **Idempotent rewards.** The same completion never pays XP twice; a duel never has two winners.
 8. **Text on orange is Ink (#171717), never white** (white fails contrast).
 
@@ -47,7 +46,7 @@ It is a solo portfolio project. Its second purpose is to teach the developer pro
 | -------------- | ------------------------------------------------------------------------------------------- |
 | Monorepo       | pnpm workspaces: `apps/web`, `apps/api`, `packages/shared`                                  |
 | Runtime        | Node.js 24 LTS, TypeScript (strict)                                                         |
-| Backend        | NestJS, @nestjs/event-emitter, @nestjs/websockets + Socket.io, @nestjs/throttler            |
+| Backend        | NestJS, @nestjs/websockets + Socket.io, @nestjs/throttler (@nestjs/event-emitter: later)    |
 | Database       | Supabase Postgres via Drizzle ORM (drizzle-kit migrations)                                  |
 | Auth           | Supabase Auth; NestJS guard verifies the JWT                                                |
 | Code execution | Piston, self-hosted in Docker (privileged container)                                        |
@@ -67,17 +66,18 @@ loophole/
     api/src/
       main.ts
       app.module.ts
-      modules/
+      modules/            each: module, controller, service, dto/ (see ARCHITECTURE §2.2)
         auth/             guard, JWT verification
         users/            profiles
         lessons/          courses, units, lessons, exercises, progress
-        submissions/      service, controller, domain/, infra/, dto/ (see ARCHITECTURE §2.2)
-        gamification/     xp + streak listeners, leaderboard
-        ai/               IAiTutor, GeminiTutor, usage limits
-        duels/            gateway, matchmaking, state machine, ratings
-        certificates/
-      shared/             events, base types, utils
-      db/                 drizzle schema + migrations
+        submissions/      grading
+        gamification/     xp, streaks, leaderboard
+        ai/               explain, hint, daily cap
+        duels/            gateway, matchmaking, ratings
+        certificates/     (Phase 3)
+      db/                 drizzle schema, DbService, migrations
+      integrations/       piston.client.ts, gemini.client.ts
+      common/             exception filter, small utils
     web/
       app/                routes (App Router)
       components/
@@ -107,4 +107,4 @@ loophole/
 
 Update this line as milestones finish:
 
-**Current milestone: M0 — Setup.** Nothing is built yet.
+**Current milestone: S1 — Auth.** M0 is done: `pnpm dev` runs both apps, local Piston runs Python, and CI runs format, lint, typecheck and tests.

@@ -1,6 +1,6 @@
 # Loophole — AI Tutor (Gemini)
 
-The AI tutor explains errors and gives hints. It runs only on the server, behind an interface, with a daily cap per user.
+The AI tutor explains errors and gives hints. It runs only on the server, inside one `GeminiClient` class, with a daily cap per user.
 
 ## 1. Setup
 
@@ -18,17 +18,14 @@ Gemini model names and API surfaces change often. Before writing or changing thi
 ## 2. Design
 
 ```
-AiController ─► AiService ─► IAiTutor (domain interface)
-                    │              ▲
-                    │              └── GeminiTutor (infra, the only file importing @google/genai)
-                    └─► IAiUsageRepository (daily cap)
+AiController ─► AiService ─► GeminiClient (integrations/gemini.client.ts, the only file importing @google/genai)
+                    │
+                    └─► DbService (ai_usage row for the daily cap)
 ```
 
 ```ts
-// ai/domain/ai-tutor.interface.ts
-export const AI_TUTOR = Symbol('AI_TUTOR');
-
-export interface ExplainInput {
+// integrations/gemini.client.ts
+export type ExplainInput = {
   language: string;
   exercisePrompt: string;
   code: string;
@@ -38,15 +35,17 @@ export interface ExplainInput {
     actualOutput: string;
   } | null;
   stderr: string;
-}
+};
 
-export interface HintInput {
+export type HintInput = {
   language: string;
   exercisePrompt: string;
   code: string;
-}
+};
 
-export interface IAiTutor {
+// public methods of GeminiClient (signatures only)
+@Injectable()
+export class GeminiClient {
   explainError(
     input: ExplainInput,
   ): Promise<{ explanation: string; line: number | null }>;
@@ -56,12 +55,12 @@ export interface IAiTutor {
 
 `AiService` order of operations:
 
-1. Check and increment `ai_usage` for today; over the cap → throw `DailyLimitReachedError` (429).
+1. Check and increment `ai_usage` for today; over the cap → throw `HttpException({ code: 'DAILY_LIMIT_REACHED', message }, 429)`.
 2. Load the exercise and, for explain, the submission and its first failing **sample** test (never send hidden test data the learner has not seen).
 3. Call the tutor with a 10 s timeout.
 4. Validate the JSON shape; on failure or timeout, return a friendly fallback and do not count the request.
 
-Tests use a `FakeAiTutor`; no test calls Gemini.
+No test calls Gemini: tests stub it with `overrideProvider(GeminiClient).useValue({ explainError: vi.fn(), giveHint: vi.fn() })`.
 
 ## 3. Prompts
 
@@ -116,7 +115,7 @@ Response schema: `{ hint: string }`
 | `temperature`       | 0.3                          |
 | `maxOutputTokens`   | 300                          |
 
-Use `ai.models.generateContent({ model, contents, config })` for these single-shot calls. Google's docs now also promote an Interactions API; either is fine as long as only `GeminiTutor` knows which.
+Use `ai.models.generateContent({ model, contents, config })` for these single-shot calls. Google's docs now also promote an Interactions API; either is fine as long as only `GeminiClient` knows which.
 
 ## 5. Safety and cost
 
