@@ -1,0 +1,70 @@
+import type { TestCase } from '@loophole/shared';
+import {
+  integer,
+  jsonb,
+  pgTable,
+  text,
+  unique,
+  uuid,
+} from 'drizzle-orm/pg-core';
+
+// Course content, loaded from content/ by the seed script
+// (docs/DATA_MODEL.md, docs/CONTENT_GUIDE.md). RLS on with no policies on
+// every table: the browser's anon key can read none of it, hidden tests
+// included. The API reads it as the database owner.
+
+export const courses = pgTable('courses', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  slug: text('slug').notNull().unique(),
+  // Piston language name, e.g. "python".
+  language: text('language').notNull(),
+  title: text('title').notNull(),
+}).enableRLS();
+
+export const units = pgTable(
+  'units',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    courseId: uuid('course_id')
+      .notNull()
+      .references(() => courses.id, { onDelete: 'cascade' }),
+    slug: text('slug').notNull(),
+    title: text('title').notNull(),
+    position: integer('position').notNull(),
+  },
+  (t) => [
+    unique('units_course_slug').on(t.courseId, t.slug),
+    unique('units_course_position').on(t.courseId, t.position),
+  ],
+).enableRLS();
+
+export const lessons = pgTable(
+  'lessons',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    unitId: uuid('unit_id')
+      .notNull()
+      .references(() => units.id, { onDelete: 'cascade' }),
+    slug: text('slug').notNull(),
+    title: text('title').notNull(),
+    position: integer('position').notNull(),
+  },
+  (t) => [
+    unique('lessons_unit_slug').on(t.unitId, t.slug),
+    unique('lessons_unit_position').on(t.unitId, t.position),
+  ],
+).enableRLS();
+
+// One exercise per lesson in v1. hidden_tests must never be selected into an
+// API response (AGENTS.md hard rule 2).
+export const exercises = pgTable('exercises', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  lessonId: uuid('lesson_id')
+    .notNull()
+    .unique()
+    .references(() => lessons.id, { onDelete: 'cascade' }),
+  prompt: text('prompt').notNull(),
+  starterCode: text('starter_code').notNull(),
+  sampleTests: jsonb('sample_tests').$type<TestCase[]>().notNull(),
+  hiddenTests: jsonb('hidden_tests').$type<TestCase[]>().notNull(),
+}).enableRLS();

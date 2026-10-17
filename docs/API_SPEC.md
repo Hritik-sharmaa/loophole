@@ -36,13 +36,13 @@ Base URL: `https://api.<domain>` (local: `http://localhost:3001`). All bodies ar
 
 ### Lessons — S2
 
-| Method | Path                  | Response                                                                                                         |
-| ------ | --------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| GET    | `/courses`            | `[{ id, slug, title, language }]`                                                                                |
-| GET    | `/courses/:slug/path` | `{ course, units: [{ id, title, lessons: [{ id, title, state: "locked" \| "active" \| "completed" }] }] }`       |
-| GET    | `/lessons/:id`        | `{ id, title, exercise: { id, prompt, starterCode, sampleTests: [{ input, expectedOutput }] } }` — 403 if locked |
+| Method | Path                  | Response                                                                                                                                                                    |
+| ------ | --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET    | `/courses`            | `[{ id, slug, title, language }]`                                                                                                                                           |
+| GET    | `/courses/:slug/path` | `{ course, units: [{ id, title, lessons: [{ id, title, state: "locked" \| "active" \| "completed" }] }] }`                                                                  |
+| GET    | `/lessons/:id`        | `{ id, title, exercise: { id, prompt, starterCode, sampleTests: [{ input, expectedOutput }] } }` — 403 `LESSON_LOCKED` if locked, 404 if unknown, 400 if `id` is not a uuid |
 
-`hidden_tests` must never appear in any of these responses. Add a test that asserts this.
+`hidden_tests` must never appear in any of these responses. `test/lessons.e2e-spec.ts` searches every response body for it.
 
 ### Submissions — S3
 

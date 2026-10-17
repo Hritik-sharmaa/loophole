@@ -42,20 +42,20 @@ It is a solo portfolio project. Its second purpose is to teach the developer sys
 
 ## 4. Stack (decided — do not swap without an entry in `docs/DECISIONS.md`)
 
-| Layer          | Choice                                                                                      |
-| -------------- | ------------------------------------------------------------------------------------------- |
-| Monorepo       | pnpm workspaces: `apps/web`, `apps/api`, `packages/shared`                                  |
-| Runtime        | Node.js 24 LTS, TypeScript (strict)                                                         |
-| Backend        | NestJS, @nestjs/websockets + Socket.io, @nestjs/throttler (@nestjs/event-emitter: later)    |
-| Database       | Supabase Postgres via Drizzle ORM (drizzle-kit migrations)                                  |
-| Auth           | Supabase Auth; NestJS guard verifies the JWT                                                |
-| Code execution | Piston, self-hosted in Docker (privileged container)                                        |
-| AI             | Google Gemini via `@google/genai` (not the legacy `@google/generative-ai`)                  |
-| Frontend       | Next.js App Router, Tailwind, shadcn/ui, CodeMirror, TanStack Query, zustand, Framer Motion |
-| Validation     | class-validator (API DTOs), zod (frontend forms)                                            |
-| Tests          | Vitest (API and web), Testing Library (web components), Playwright (e2e)                    |
-| Lint / format  | ESLint and Prettier in both apps                                                            |
-| Hosting        | Vercel (web); one VPS with Docker Compose + Caddy (API + Piston); Supabase cloud            |
+| Layer          | Choice                                                                                                            |
+| -------------- | ----------------------------------------------------------------------------------------------------------------- |
+| Monorepo       | pnpm workspaces: `apps/web`, `apps/api`, `packages/shared`                                                        |
+| Runtime        | Node.js 24 LTS, TypeScript (strict)                                                                               |
+| Backend        | NestJS, @nestjs/websockets + Socket.io, @nestjs/throttler (@nestjs/event-emitter: later)                          |
+| Database       | Supabase Postgres via Drizzle ORM (drizzle-kit migrations)                                                        |
+| Auth           | Supabase Auth; NestJS guard verifies the JWT                                                                      |
+| Code execution | Piston, self-hosted in Docker (privileged container)                                                              |
+| AI             | Google Gemini via `@google/genai` (not the legacy `@google/generative-ai`)                                        |
+| Frontend       | Next.js App Router, Tailwind, shadcn/ui, CodeMirror, TanStack Query, zustand, Framer Motion                       |
+| Validation     | class-validator (API DTOs), zod (frontend forms)                                                                  |
+| Tests          | Vitest (API and web), PGlite for API database tests (ADR-017), Testing Library (web components), Playwright (e2e) |
+| Lint / format  | ESLint and Prettier in both apps                                                                                  |
+| Hosting        | Vercel (web); one VPS with Docker Compose + Caddy (API + Piston); Supabase cloud                                  |
 
 ## 5. Repository layout
 
@@ -107,4 +107,4 @@ loophole/
 
 Update this line as milestones finish:
 
-**Current milestone: S1 — Auth.** M0 is done: `pnpm dev` runs both apps, local Piston runs Python, and CI runs format, lint, typecheck and tests.
+**Current milestone: S2 — Lessons** (S1 code done; its manual login test waits on the Supabase project). M0 is done: `pnpm dev` runs both apps, local Piston runs Python, and CI runs format, lint, typecheck and tests.

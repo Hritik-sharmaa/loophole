@@ -1,0 +1,16 @@
+{
+  "slug": "even-or-odd",
+  "title": "Even or odd",
+  "position": 2,
+  "exercise": {
+    "prompt": "Read a whole number and print `even` if it divides by 2 with nothing left over, otherwise print `odd`.",
+    "starterCode": "n = int(input())\n# print even or odd below\n",
+    "sampleTests": [{ "input": "4\n", "expectedOutput": "even" }],
+    "hiddenTests": [
+      { "input": "7\n", "expectedOutput": "odd" },
+      { "input": "0\n", "expectedOutput": "even" },
+      { "input": "-3\n", "expectedOutput": "odd" },
+      { "input": "-8\n", "expectedOutput": "even" }
+    ]
+  }
+}

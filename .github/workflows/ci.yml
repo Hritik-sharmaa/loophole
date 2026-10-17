@@ -37,3 +37,5 @@ jobs:
       - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm test
+      # API e2e tests run on PGlite (in-memory Postgres), so CI needs no database.
+      - run: pnpm --filter @loophole/api test:e2e

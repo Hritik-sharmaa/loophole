@@ -71,6 +71,7 @@ src/integrations/gemini.client.ts    the only file that imports @google/genai
 src/integrations/supabase-auth.client.ts  the only API file that calls Supabase Auth (token checks)
 src/modules/auth/                    global JwtAuthGuard, @Public(), @CurrentUser()
 src/common/http-exception.filter.ts  shapes errors as { error: { code, message } }
+src/db/seed/                         content/ loader + idempotent seedContent(db, dir); run-seed.ts is the CLI
 ```
 
 ### 2.3 Dependency injection
@@ -89,6 +90,7 @@ export class SubmissionsService {
 }
 ```
 
+Database tests use PGlite (ADR-017): `test/support/test-db.ts` starts an in-memory Postgres, stubs Supabase's `auth.users`, and applies the real migrations. e2e tests override `DbService` with `{ drizzle: db }`.
 In a test, stub a client with `Test.createTestingModule({ ... }).overrideProvider(PistonClient).useValue({ run: vi.fn() })`.
 
 ### 2.4 Patterns and where they live

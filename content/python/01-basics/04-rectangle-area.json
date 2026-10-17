@@ -1,0 +1,15 @@
+{
+  "slug": "rectangle-area",
+  "title": "Area of a rectangle",
+  "position": 4,
+  "exercise": {
+    "prompt": "Read the width and then the height of a rectangle (whole numbers, one per line) and print its area.",
+    "starterCode": "width = int(input())\nheight = int(input())\n# print the area below\n",
+    "sampleTests": [{ "input": "3\n4\n", "expectedOutput": "12" }],
+    "hiddenTests": [
+      { "input": "1\n1\n", "expectedOutput": "1" },
+      { "input": "0\n7\n", "expectedOutput": "0" },
+      { "input": "250\n40\n", "expectedOutput": "10000" }
+    ]
+  }
+}

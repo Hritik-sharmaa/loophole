@@ -2,38 +2,34 @@
 
 import type { MeResponse } from '@loophole/shared';
 import { useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState, type FormEvent, type ReactNode } from 'react';
+import { useState, type FormEvent, type ReactNode } from 'react';
+import { AppHeader } from '@/components/app-header';
 import { secondaryButton } from '@/components/ui/buttons';
 import { ApiError } from '@/lib/api';
 import { useMe, useUpdateMe } from '@/lib/queries/use-me';
 import { supabase } from '@/lib/supabase';
-import { useSession } from '@/lib/use-session';
+import { useRequireSession } from '@/lib/use-require-session';
 
 // The signed-in user's page. Visitors without a session go to /login.
 export default function ProfilePage() {
-  const router = useRouter();
-  const { session, loading } = useSession();
-  const me = useMe(!!session);
+  const { loading } = useRequireSession();
+  const me = useMe(!loading);
 
-  useEffect(() => {
-    if (!loading && !session) router.replace('/login');
-  }, [loading, session, router]);
-
-  if (loading || !session || me.isPending) {
-    return <Centered>Loading…</Centered>;
-  }
-
-  if (me.isError) {
-    return (
-      <Centered>
-        <p role="alert">✕ Could not load your profile: {me.error.message}</p>
-        <LogoutButton />
-      </Centered>
-    );
-  }
-
-  return <Profile me={me.data!} />;
+  return (
+    <>
+      <AppHeader />
+      {loading || me.isPending ? (
+        <Centered>Loading…</Centered>
+      ) : me.isError ? (
+        <Centered>
+          <p role="alert">✕ Could not load your profile: {me.error.message}</p>
+          <LogoutButton />
+        </Centered>
+      ) : (
+        <Profile me={me.data} />
+      )}
+    </>
+  );
 }
 
 function Profile({ me }: { me: MeResponse }) {
@@ -42,10 +38,11 @@ function Profile({ me }: { me: MeResponse }) {
       <h1 className="font-display text-3xl font-extrabold">
         Hi, {me.username}
       </h1>
-      <dl className="grid w-full grid-cols-3 gap-3 text-center">
+      <dl className="grid w-full grid-cols-2 gap-3 text-center">
         <Stat label="XP" value={me.xp} />
         <Stat label="Streak" value={me.streak.current} />
         <Stat label="Rating" value={me.rating} />
+        <Stat label="Lessons done" value={me.lessonsCompleted} />
       </dl>
       <UsernameForm current={me.username} />
       <LogoutButton />

@@ -1,16 +1,21 @@
 import { Injectable, OnModuleDestroy } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { drizzle, type PostgresJsDatabase } from 'drizzle-orm/postgres-js';
+import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
+import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import type { EnvironmentVariables } from '../config/env.validation.js';
 import * as schema from './schema/index.js';
+
+// Any Drizzle Postgres database with our schema: postgres-js in the app,
+// PGlite in tests (test/support/test-db.ts). Services only use this type.
+export type Db = PgDatabase<PgQueryResultHKT, typeof schema>;
 
 // Holds the one database connection pool for the whole API.
 // Services inject this and query through `this.db.drizzle`.
 @Injectable()
 export class DbService implements OnModuleDestroy {
   private readonly client: postgres.Sql;
-  readonly drizzle: PostgresJsDatabase<typeof schema>;
+  readonly drizzle: Db;
 
   constructor(config: ConfigService<EnvironmentVariables, true>) {
     // postgres-js connects lazily, on the first query.

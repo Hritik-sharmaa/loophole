@@ -1,0 +1,19 @@
+{
+  "slug": "letter-grade",
+  "title": "Letter grade",
+  "position": 4,
+  "exercise": {
+    "prompt": "Read a score from 0 to 100 and print its letter grade: `A` for 90 or more, `B` for 80 to 89, `C` for 70 to 79, `D` for 60 to 69, and `F` below 60.",
+    "starterCode": "score = int(input())\n# print the letter grade below\n",
+    "sampleTests": [{ "input": "85\n", "expectedOutput": "B" }],
+    "hiddenTests": [
+      { "input": "90\n", "expectedOutput": "A" },
+      { "input": "100\n", "expectedOutput": "A" },
+      { "input": "89\n", "expectedOutput": "B" },
+      { "input": "70\n", "expectedOutput": "C" },
+      { "input": "60\n", "expectedOutput": "D" },
+      { "input": "59\n", "expectedOutput": "F" },
+      { "input": "0\n", "expectedOutput": "F" }
+    ]
+  }
+}

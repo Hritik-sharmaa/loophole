@@ -6,6 +6,7 @@ import { validateEnv } from './config/env.validation.js';
 import { DbModule } from './db/db.module.js';
 import { AuthModule } from './modules/auth/auth.module.js';
 import { HealthModule } from './modules/health/health.module.js';
+import { LessonsModule } from './modules/lessons/lessons.module.js';
 import { UsersModule } from './modules/users/users.module.js';
 
 @Module({
@@ -15,6 +16,7 @@ import { UsersModule } from './modules/users/users.module.js';
     AuthModule,
     HealthModule,
     UsersModule,
+    LessonsModule,
   ],
   // Registered here rather than in main.ts so e2e tests get them too.
   providers: [

@@ -1,0 +1,16 @@
+{
+  "slug": "minutes-to-hours",
+  "title": "Minutes to hours",
+  "position": 5,
+  "exercise": {
+    "prompt": "Read a number of minutes and print it as `H h M min`. Use `//` for the whole hours and `%` for the minutes left over. For `135`, print `2 h 15 min`",
+    "starterCode": "minutes = int(input())\n# work out the hours and the leftover minutes\n",
+    "sampleTests": [{ "input": "135\n", "expectedOutput": "2 h 15 min" }],
+    "hiddenTests": [
+      { "input": "0\n", "expectedOutput": "0 h 0 min" },
+      { "input": "59\n", "expectedOutput": "0 h 59 min" },
+      { "input": "60\n", "expectedOutput": "1 h 0 min" },
+      { "input": "1440\n", "expectedOutput": "24 h 0 min" }
+    ]
+  }
+}

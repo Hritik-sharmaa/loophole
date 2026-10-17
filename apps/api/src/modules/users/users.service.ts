@@ -1,8 +1,8 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import type { MeResponse } from '@loophole/shared';
-import { eq } from 'drizzle-orm';
+import { count, eq } from 'drizzle-orm';
 import { DbService } from '../../db/db.service.js';
-import { profiles, type Profile } from '../../db/schema/index.js';
+import { profiles, userProgress, type Profile } from '../../db/schema/index.js';
 import type { AuthUser } from '../../integrations/supabase-auth.client.js';
 import type { UpdateMeDto } from './dto/update-me.dto.js';
 import { toUsernameBase, withRandomSuffix } from './username.js';
@@ -81,17 +81,21 @@ export class UsersService {
     return row;
   }
 
-  private toMe(profile: Profile): MeResponse {
+  private async toMe(profile: Profile): Promise<MeResponse> {
+    const [{ done }] = await this.db.drizzle
+      .select({ done: count() })
+      .from(userProgress)
+      .where(eq(userProgress.userId, profile.id));
+
     return {
       id: profile.id,
       username: profile.username,
       avatarUrl: profile.avatarUrl,
-      // Fixed until their tables exist: XP and streak in S4, rating in S8,
-      // lessons completed in S2/S3.
+      // Fixed until their tables exist: XP and streak in S4, rating in S8.
       xp: 0,
       streak: { current: 0, longest: 0, freezes: 0 },
       rating: 1200,
-      lessonsCompleted: 0,
+      lessonsCompleted: done,
     };
   }
 }

@@ -1,0 +1,16 @@
+{
+  "slug": "last-digit",
+  "title": "The last digit",
+  "position": 6,
+  "exercise": {
+    "prompt": "Read a whole number (0 or more) and print its last digit. Hint: the remainder after dividing by 10 is the last digit.",
+    "starterCode": "n = int(input())\n# print the last digit below\n",
+    "sampleTests": [{ "input": "1234\n", "expectedOutput": "4" }],
+    "hiddenTests": [
+      { "input": "0\n", "expectedOutput": "0" },
+      { "input": "7\n", "expectedOutput": "7" },
+      { "input": "90\n", "expectedOutput": "0" },
+      { "input": "987654321\n", "expectedOutput": "1" }
+    ]
+  }
+}

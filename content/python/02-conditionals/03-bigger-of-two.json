@@ -1,0 +1,16 @@
+{
+  "slug": "bigger-of-two",
+  "title": "The bigger number",
+  "position": 3,
+  "exercise": {
+    "prompt": "Read two whole numbers, one per line, and print the bigger one. If they are equal, print that number.",
+    "starterCode": "a = int(input())\nb = int(input())\n# print the bigger number below\n",
+    "sampleTests": [{ "input": "3\n9\n", "expectedOutput": "9" }],
+    "hiddenTests": [
+      { "input": "9\n3\n", "expectedOutput": "9" },
+      { "input": "5\n5\n", "expectedOutput": "5" },
+      { "input": "-2\n-7\n", "expectedOutput": "-2" },
+      { "input": "0\n-1\n", "expectedOutput": "0" }
+    ]
+  }
+}

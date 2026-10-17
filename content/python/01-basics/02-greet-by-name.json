@@ -1,0 +1,15 @@
+{
+  "slug": "greet-by-name",
+  "title": "Greet by name",
+  "position": 2,
+  "exercise": {
+    "prompt": "Read a name from input and print `Hi, <name>!`. For `Ada`, print `Hi, Ada!`",
+    "starterCode": "name = input()\n# print the greeting below\n",
+    "sampleTests": [{ "input": "Ada\n", "expectedOutput": "Hi, Ada!" }],
+    "hiddenTests": [
+      { "input": "Grace\n", "expectedOutput": "Hi, Grace!" },
+      { "input": "Bo\n", "expectedOutput": "Hi, Bo!" },
+      { "input": "Mary Jane\n", "expectedOutput": "Hi, Mary Jane!" }
+    ]
+  }
+}

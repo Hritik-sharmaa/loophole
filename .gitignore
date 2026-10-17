@@ -17,6 +17,9 @@ coverage/
 # piston runtime data
 infra/data/
 
+# exercise reference solutions (docs/CONTENT_GUIDE.md §3)
+content-solutions/
+
 # os / editor
 .DS_Store
 Thumbs.db

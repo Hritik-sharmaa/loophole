@@ -6,6 +6,12 @@ Format: **ADR-NNN · Title** — Status (Accepted / Superseded by ADR-NNN) · Da
 
 ---
 
+**ADR-017 · PGlite for API database tests** — Accepted · 2026-10-17
+
+- Decision: API tests that need a database use `@electric-sql/pglite` (pinned dev dependency): real Postgres compiled to WebAssembly, running inside the test process. `test/support/test-db.ts` applies the real migrations and stubs Supabase's `auth.users`. e2e tests run in CI with no services.
+- Why: the unlock rules and "hidden tests never leak" depend on real SQL; fakes would not catch a wrong query. PGlite needs no Docker, no Supabase project and no CI setup.
+- Trade-off: PGlite is not Supabase: the `auth` schema and Supabase extensions are absent, and RLS policies are not exercised (the API connects as owner anyway). A staging check against Supabase still happens at deploy (S6).
+
 **ADR-016 · MVP-first slice roadmap and lighter review** — Accepted · 2026-10-17 · Amends ADR-014
 
 - Decision: the roadmap becomes vertical slices (S1–S8), each ending in a feature usable in the browser; M1 "Domain and fakes" is removed and deployment moves before duels. One reviewable piece is one feature slice (backend route + the page that uses it), not one file; explanations are short, with no quiz or Excalidraw step required.

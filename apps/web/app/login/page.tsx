@@ -38,18 +38,18 @@ export default function LoginPage() {
         password,
       });
       if (error) return setError(error.message);
-      router.push('/profile');
+      router.push('/learn');
       return;
     }
 
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      options: { emailRedirectTo: `${window.location.origin}/profile` },
+      options: { emailRedirectTo: `${window.location.origin}/learn` },
     });
     if (error) return setError(error.message);
     // With "Confirm email" off in Supabase, sign-up returns a session at once.
-    if (data.session) router.push('/profile');
+    if (data.session) router.push('/learn');
     else setNotice('Check your email to confirm your account, then log in.');
   }
 
@@ -57,7 +57,7 @@ export default function LoginPage() {
     setError(null);
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo: `${window.location.origin}/profile` },
+      options: { redirectTo: `${window.location.origin}/learn` },
     });
     if (error) setError(error.message);
   }

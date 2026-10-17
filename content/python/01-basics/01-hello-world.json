@@ -1,0 +1,15 @@
+{
+  "slug": "hello-world",
+  "title": "Hello, world",
+  "position": 1,
+  "exercise": {
+    "prompt": "Every programmer starts here. Print exactly `Hello, Loophole!`",
+    "starterCode": "# Print the greeting below\n",
+    "sampleTests": [{ "input": "", "expectedOutput": "Hello, Loophole!" }],
+    "hiddenTests": [
+      { "input": "", "expectedOutput": "Hello, Loophole!" },
+      { "input": "\n", "expectedOutput": "Hello, Loophole!" },
+      { "input": "ignored\n", "expectedOutput": "Hello, Loophole!" }
+    ]
+  }
+}

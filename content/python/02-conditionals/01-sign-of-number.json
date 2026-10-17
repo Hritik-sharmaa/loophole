@@ -1,0 +1,16 @@
+{
+  "slug": "sign-of-number",
+  "title": "Positive, negative or zero",
+  "position": 1,
+  "exercise": {
+    "prompt": "Read a whole number. Print `positive` if it is greater than 0, `negative` if it is less than 0, and `zero` otherwise.",
+    "starterCode": "n = int(input())\n# use if / elif / else below\n",
+    "sampleTests": [{ "input": "5\n", "expectedOutput": "positive" }],
+    "hiddenTests": [
+      { "input": "-3\n", "expectedOutput": "negative" },
+      { "input": "0\n", "expectedOutput": "zero" },
+      { "input": "1000000\n", "expectedOutput": "positive" },
+      { "input": "-1\n", "expectedOutput": "negative" }
+    ]
+  }
+}

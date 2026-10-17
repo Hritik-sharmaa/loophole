@@ -1,6 +1,6 @@
 # Loophole — Content Guide
 
-Lessons and duel problems are JSON files in `content/`, loaded by the seed script (`pnpm --filter api seed`). The seed is idempotent: it upserts by `slug`.
+Lessons and duel problems are JSON files in `content/`, loaded by the seed script (`pnpm --filter @loophole/api db:seed`). The seed is idempotent: it upserts by `slug`.
 
 ## 1. Folder layout
 
@@ -63,7 +63,8 @@ Each test runs the program with `input` as stdin. It passes when **trimmed stdou
 - At least 1 sample test and 3 hidden tests, including an edge case (zero, negative, empty, large).
 - Starter code runs without errors, even if it fails tests.
 - Use stdin/stdout only; no files, network or randomness.
-- Write the reference solution in a comment-free `solution.py` beside the lesson during authoring and check it passes every test before committing. Do not commit it to `content/` (keep it in `content-solutions/`, git-ignored, or a private repo).
+- Write the reference solution during authoring and check it passes every test before committing. Keep it out of `content/`: it goes in `content-solutions/<course>/<unit-folder>/<lesson-file>.py`, which is git-ignored.
+- `content-files.spec.ts` in the API parses the real `content/` folder in CI, so a malformed lesson file fails the build, not the seed.
 
 ## 4. v1 Python track (40 exercises)
 

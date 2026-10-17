@@ -1,18 +1,18 @@
 'use client';
 
 import { motion, useInView, useReducedMotion } from 'framer-motion';
-import { Check, Lock, Star } from 'lucide-react';
+import type { LessonState } from '@loophole/shared';
 import { useRef } from 'react';
+import { LessonNode } from '../lesson-node';
 
 // A small version of the lesson path (DESIGN_SYSTEM §6 LessonPath). When it
 // scrolls into view, the completed part of the path draws in Ink and the
 // nodes pop in one after another.
-type NodeState = 'done' | 'active' | 'locked';
 
-const NODES: { x: number; y: number; state: NodeState; label: string }[] = [
-  { x: 150, y: 50, state: 'done', label: 'Print' },
-  { x: 230, y: 150, state: 'done', label: 'Variables' },
-  { x: 150, y: 250, state: 'done', label: 'If / else' },
+const NODES: { x: number; y: number; state: LessonState; label: string }[] = [
+  { x: 150, y: 50, state: 'completed', label: 'Print' },
+  { x: 230, y: 150, state: 'completed', label: 'Variables' },
+  { x: 150, y: 250, state: 'completed', label: 'If / else' },
   { x: 70, y: 350, state: 'active', label: 'Loops' },
   { x: 150, y: 450, state: 'locked', label: 'Functions' },
   { x: 230, y: 550, state: 'locked', label: 'Lists' },
@@ -98,30 +98,5 @@ export function PathPreview() {
         </motion.div>
       ))}
     </div>
-  );
-}
-
-function LessonNode({ state }: { state: NodeState }) {
-  if (state === 'done') {
-    return (
-      <span className="flex size-16 items-center justify-center rounded-node border-[3px] border-black bg-ink text-paper shadow-press-ink">
-        <Check className="size-7" strokeWidth={3.5} />
-      </span>
-    );
-  }
-  if (state === 'active') {
-    return (
-      <span className="relative flex size-16 animate-pulse-node items-center justify-center rounded-node border-[3px] border-orange-dark bg-orange text-ink shadow-press-orange">
-        <Star className="size-7" strokeWidth={3} fill="currentColor" />
-        <span className="absolute top-1/2 left-full ml-3 -translate-y-1/2 rounded-badge bg-ink px-2 py-0.5 text-xs font-bold whitespace-nowrap text-paper">
-          Start here
-        </span>
-      </span>
-    );
-  }
-  return (
-    <span className="flex size-16 items-center justify-center rounded-node border-[3px] border-border-muted bg-surface text-text-tertiary shadow-press-locked">
-      <Lock className="size-6" strokeWidth={3} />
-    </span>
   );
 }

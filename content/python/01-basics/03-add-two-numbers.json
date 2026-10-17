@@ -1,0 +1,15 @@
+{
+  "slug": "add-two-numbers",
+  "title": "Add two numbers",
+  "position": 3,
+  "exercise": {
+    "prompt": "Read two whole numbers from input, one per line, and print their sum.",
+    "starterCode": "a = int(input())\nb = int(input())\n# print the sum below\n",
+    "sampleTests": [{ "input": "2\n3\n", "expectedOutput": "5" }],
+    "hiddenTests": [
+      { "input": "0\n0\n", "expectedOutput": "0" },
+      { "input": "-4\n10\n", "expectedOutput": "6" },
+      { "input": "1000000\n1\n", "expectedOutput": "1000001" }
+    ]
+  }
+}
