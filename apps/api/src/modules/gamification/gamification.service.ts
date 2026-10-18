@@ -3,7 +3,7 @@ import type { MeResponse, WeeklyLeaderboard } from '@loophole/shared';
 import { asc, eq, gte, sql } from 'drizzle-orm';
 import { DbService } from '../../db/db.service.js';
 import { profiles, streaks, xpEvents } from '../../db/schema/index.js';
-import { istDate, istWeekStart } from './ist-calendar.js';
+import { istDate, istWeekStart } from '../../common/ist-calendar.js';
 import {
   NO_STREAK,
   nextStreak,

@@ -1,4 +1,8 @@
-import { addDays, istDate, istWeekStart } from '../ist-calendar.js';
+import {
+  addDays,
+  istDate,
+  istWeekStart,
+} from '../../../common/ist-calendar.js';
 import { NO_STREAK, nextStreak, visibleStreak } from '../streak.js';
 
 const at = (current: number, longest: number, lastActiveDate: string) => ({

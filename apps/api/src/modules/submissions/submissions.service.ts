@@ -109,6 +109,7 @@ export class SubmissionsService {
         testsPassed: result.testsPassed,
         totalTests: result.totalTests,
         stderr: result.stderr,
+        results: result.results,
       })
       .returning({ id: submissions.id });
 

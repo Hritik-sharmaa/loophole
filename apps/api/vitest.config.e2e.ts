@@ -9,6 +9,10 @@ export default defineConfig({
     setupFiles: ['reflect-metadata'],
     root: './',
     include: ['**/*.e2e-spec.ts'],
+    // Each file's beforeAll starts PGlite, runs every migration, seeds the
+    // content and boots Nest. With all files in parallel on a busy machine
+    // that passed the default 10 s and failed whole files.
+    hookTimeout: 60_000,
     // e2e tests boot the whole AppModule, so they need a valid env even in CI
     // where there is no .env file.
     // Dummy values: postgres-js connects lazily and the Supabase client is
@@ -20,6 +24,8 @@ export default defineConfig({
       SUPABASE_SERVICE_KEY: 'test-service-key',
       // PistonClient is stubbed in tests, so this is never called either.
       PISTON_URL: 'http://localhost:2000',
+      // GeminiClient is stubbed in tests too.
+      GEMINI_API_KEY: 'test-gemini-key',
     },
   },
 });

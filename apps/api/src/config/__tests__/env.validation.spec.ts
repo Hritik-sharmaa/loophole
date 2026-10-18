@@ -7,6 +7,7 @@ describe('validateEnv', () => {
     SUPABASE_URL: 'https://abc.supabase.co',
     SUPABASE_SERVICE_KEY: 'service-key',
     PISTON_URL: 'http://localhost:2000',
+    GEMINI_API_KEY: 'test-gemini-key',
   };
   const valid = { PORT: '3001', ...required };
 
@@ -53,6 +54,16 @@ describe('validateEnv', () => {
       'PISTON_URL is missing',
       { ...valid, PISTON_URL: undefined },
       /PISTON_URL/,
+    ],
+    [
+      'GEMINI_API_KEY is missing',
+      { ...valid, GEMINI_API_KEY: undefined },
+      /GEMINI_API_KEY/,
+    ],
+    [
+      'AI_DAILY_LIMIT is below 1',
+      { ...valid, AI_DAILY_LIMIT: '0' },
+      /AI_DAILY_LIMIT/,
     ],
   ])('throws when %s', (_case, config, message) => {
     expect(() => validateEnv(config)).toThrow(message);

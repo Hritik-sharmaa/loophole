@@ -45,6 +45,21 @@ export class EnvironmentVariables {
   // production (http://piston:2000). Server-only, like the keys above.
   @IsUrl({ require_tld: false, require_protocol: true, protocols: ['http'] })
   PISTON_URL: string;
+
+  // Google AI Studio key. Server-only (AGENTS.md hard rule 3).
+  @IsString()
+  @IsNotEmpty()
+  GEMINI_API_KEY: string;
+
+  // An alias by default, so a retired model name never breaks the app.
+  @IsString()
+  @IsNotEmpty()
+  GEMINI_MODEL: string = 'gemini-flash-latest';
+
+  // AI requests per user per IST day (FR-14).
+  @IsInt()
+  @Min(1)
+  AI_DAILY_LIMIT: number = 20;
 }
 
 export function validateEnv(

@@ -104,3 +104,16 @@ export type SubmissionSummary = {
   code: string;
   submittedAt: string;
 };
+
+// POST /ai/explain. The server loads the code, failing example and stderr.
+export type ExplainRequest = { submissionId: string };
+export type ExplainResponse = {
+  explanation: string;
+  // 1-based line in the submitted code, when the tutor can point at one.
+  line: number | null;
+  remainingToday: number;
+};
+
+// POST /ai/hint, for the code currently in the editor.
+export type HintRequest = { exerciseId: string; code: string };
+export type HintResponse = { hint: string; remainingToday: number };

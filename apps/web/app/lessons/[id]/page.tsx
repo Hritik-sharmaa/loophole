@@ -9,6 +9,7 @@ import { AppHeader } from '@/components/app-header';
 import { CodeEditor } from '@/components/code-editor';
 import { InlineCode } from '@/components/inline-code';
 import { TestResults } from '@/components/test-results';
+import { TutorPanel } from '@/components/tutor-panel';
 import { primaryButton, secondaryButton } from '@/components/ui/buttons';
 import { ApiError } from '@/lib/api';
 import { useLesson } from '@/lib/queries/use-lessons';
@@ -155,6 +156,11 @@ function Exercise({
       )}
 
       {result && <TestResults result={result} />}
+
+      {/* After the results, so Explain sits under the error it explains. */}
+      {!completed && (
+        <TutorPanel exerciseId={exerciseId} code={code} submission={result} />
+      )}
     </article>
   );
 }

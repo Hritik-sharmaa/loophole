@@ -55,10 +55,11 @@ export class GeminiClient {
 
 `AiService` order of operations:
 
-1. Check and increment `ai_usage` for today; over the cap → throw `HttpException({ code: 'DAILY_LIMIT_REACHED', message }, 429)`.
-2. Load the exercise and, for explain, the submission and its first failing **sample** test (never send hidden test data the learner has not seen).
+1. Check and increment `ai_usage` for today (the IST calendar day, like streaks) in one atomic upsert; over the cap → throw `HttpException({ code: 'DAILY_LIMIT_REACHED', message }, 429)`.
+2. Load the exercise and, for explain, the submission and its first failing **sample** test, read from `submissions.results` (what the learner was shown). Never send hidden test data the learner has not seen; if only hidden tests failed, the prompt says only that the example passes but other inputs fail. (The service loads and checks access first, so a 403 or 404 is never counted.)
 3. Call the tutor with a 10 s timeout.
-4. Validate the JSON shape; on failure or timeout, return a friendly fallback and do not count the request.
+4. Validate the JSON shape; on failure or timeout, return 502 `AI_UNAVAILABLE` with a friendly message (shown as-is in the UI) and give the request back, so it is not counted.
+5. Post-check: cut the text to 120 words, drop a line number outside the code, and replace a hint holding a code block (§5).
 
 No test calls Gemini: tests stub it with `overrideProvider(GeminiClient).useValue({ explainError: vi.fn(), giveHint: vi.fn() })`.
 
@@ -113,7 +114,10 @@ Response schema: `{ hint: string }`
 | `responseMimeType`  | `application/json`           |
 | `responseSchema`    | per call, as above           |
 | `temperature`       | 0.3                          |
-| `maxOutputTokens`   | 300                          |
+| `maxOutputTokens`   | 1024                         |
+| `thinkingConfig`    | `{ thinkingLevel: LOW }`     |
+
+Why 1024, not 300: current Flash models think by default and thought tokens count toward `maxOutputTokens`; at 300 the JSON can come back cut off or empty. `LOW` is the lowest thinking level every current Flash model accepts (checked against the Gemini docs on 2026-10-18). Length stays short through the prompt and the 120-word post-check.
 
 Use `ai.models.generateContent({ model, contents, config })` for these single-shot calls. Google's docs now also promote an Interactions API; either is fine as long as only `GeminiClient` knows which.
 

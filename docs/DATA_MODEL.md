@@ -67,17 +67,18 @@ Conventions: `uuid` primary keys (`gen_random_uuid()`), `timestamptz` in UTC, sn
 
 ### submissions — S3
 
-| Column       | Type                | Notes                                           |
-| ------------ | ------------------- | ----------------------------------------------- |
-| id           | uuid PK             |                                                 |
-| user_id      | uuid FK → profiles  |                                                 |
-| exercise_id  | uuid FK → exercises |                                                 |
-| code         | text                | max 20 KB (validated in DTO)                    |
-| status       | text                | `passed` \| `failed` \| `error`                 |
-| tests_passed | int                 |                                                 |
-| total_tests  | int                 |                                                 |
-| stderr       | text                | truncated to 4 KB                               |
-| submitted_at | timestamptz         | index (user_id, exercise_id, submitted_at desc) |
+| Column       | Type                | Notes                                                                                    |
+| ------------ | ------------------- | ---------------------------------------------------------------------------------------- |
+| id           | uuid PK             |                                                                                          |
+| user_id      | uuid FK → profiles  |                                                                                          |
+| exercise_id  | uuid FK → exercises |                                                                                          |
+| code         | text                | max 20 KB (validated in DTO)                                                             |
+| status       | text                | `passed` \| `failed` \| `error`                                                          |
+| tests_passed | int                 |                                                                                          |
+| total_tests  | int                 |                                                                                          |
+| stderr       | text                | truncated to 4 KB                                                                        |
+| results      | jsonb               | what the learner was shown: sample details, hidden pass/fail only (S5, for the AI tutor) |
+| submitted_at | timestamptz         | index (user_id, exercise_id, submitted_at desc)                                          |
 
 ### xp_events — S4
 
@@ -106,7 +107,7 @@ Conventions: `uuid` primary keys (`gen_random_uuid()`), `timestamptz` in UTC, sn
 | Column  | Type               | Notes                                                                  |
 | ------- | ------------------ | ---------------------------------------------------------------------- |
 | user_id | uuid FK → profiles |                                                                        |
-| day     | date               |                                                                        |
+| day     | date               | IST calendar day, like streaks                                         |
 | count   | int                |                                                                        |
 |         |                    | **PK (user_id, day)**; increment with `insert … on conflict do update` |
 

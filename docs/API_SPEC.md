@@ -101,6 +101,11 @@ Hidden test results show only `passed`, never input or expected output. Throttle
 
 The server loads the exercise, failing test and stderr itself; the client sends only IDs and current code.
 
+- Both return 200. `remainingToday` counts down from `AI_DAILY_LIMIT` (20) per IST day; the next request after 0 is 429 `DAILY_LIMIT_REACHED`.
+- 502 `AI_UNAVAILABLE` when Gemini fails or answers badly; that request is not counted.
+- Explain: 404 for an unknown submission or someone else's. Hint: 403 `LESSON_LOCKED`, 404 unknown exercise. Neither is counted.
+- `explanation` and `hint` are at most 120 words; `line` is null unless it points at a real line of the submitted code; a hint that contains a code block is replaced by a generic one.
+
 ### Certificates — M10
 
 | Method | Path                  | Auth   | Response                              |

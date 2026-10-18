@@ -47,11 +47,11 @@ Loop for every slice: AI **writes** the slice → you **review** and change it �
 - [x] CodeMirror editor, Run button, results panel
 - **Done when:** journey J-1 works: you solve exercise 1 in the browser and node 2 unlocks. (FR-06, FR-07, FR-08)
 
-### S4 · XP, streak, leaderboard
+### S4 · XP, streak, leaderboard ✅
 
-- [ ] `xp_events` with a unique constraint; `SubmissionsService` calls `GamificationService` after the progress write
-- [ ] Daily streak (unit-tested); freezes come in Phase 3
-- [ ] Weekly XP leaderboard route and page
+- [x] `xp_events` with a unique constraint; `SubmissionsService` calls `GamificationService` after the progress write
+- [x] Daily streak (unit-tested); only a first lesson completion moves it; freezes come in Phase 3
+- [x] Weekly XP leaderboard route and page
 - **Done when:** a repeated completion pays once and the streak goes up on the next day. (FR-09, FR-10 basic, FR-11)
 
 ### S5 · AI tutor

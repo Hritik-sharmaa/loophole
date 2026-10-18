@@ -1,4 +1,4 @@
-import { addDays } from './ist-calendar.js';
+import { addDays } from '../../common/ist-calendar.js';
 
 // A user's stored streak. Dates are IST calendar days, "YYYY-MM-DD".
 export type StreakState = {

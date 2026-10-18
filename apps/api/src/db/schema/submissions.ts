@@ -1,7 +1,8 @@
-import type { SubmissionStatus } from '@loophole/shared';
+import type { SubmissionStatus, TestResult } from '@loophole/shared';
 import {
   index,
   integer,
+  jsonb,
   pgTable,
   text,
   timestamp,
@@ -28,6 +29,9 @@ export const submissions = pgTable(
     totalTests: integer('total_tests').notNull(),
     // Truncated to 4 KB by the service.
     stderr: text('stderr').notNull().default(''),
+    // What the learner was shown (TestResult[]): sample details, hidden
+    // pass/fail only. The AI tutor explains from this (docs/AI_TUTOR.md).
+    results: jsonb('results').$type<TestResult[]>().notNull().default([]),
     submittedAt: timestamp('submitted_at', { withTimezone: true })
       .notNull()
       .defaultNow(),

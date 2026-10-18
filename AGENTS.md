@@ -107,4 +107,4 @@ loophole/
 
 Update this line as milestones finish:
 
-**Current milestone: S4 — XP, streak, leaderboard.** M0 and S1–S3 are done: you can sign in, follow the Python path, and solve exercises graded in local Piston (runs are serialized, ADR-018). CI runs format, lint, typecheck and tests.
+**Current milestone: S5 — AI tutor.** M0 and S1–S4 are done: you can sign in, follow the Python path, solve exercises graded in local Piston (runs are serialized, ADR-018), and earn XP, a daily streak and a weekly rank. CI runs format, lint, typecheck and tests.
