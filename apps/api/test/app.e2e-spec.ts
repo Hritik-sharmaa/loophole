@@ -3,12 +3,13 @@ import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import type { App } from 'supertest/types.js';
 import { AppModule } from './../src/app.module.js';
+import { PistonClient } from './../src/integrations/piston.client.js';
 import {
   SupabaseAuthClient,
   type AuthUser,
 } from './../src/integrations/supabase-auth.client.js';
 
-// No network and no database: Supabase is stubbed, and every case below is
+// No network and no database: Supabase and Piston are stubbed, and every case below is
 // decided by the guard or the validation pipe before a query runs.
 describe('API (e2e)', () => {
   let app: INestApplication<App>;
@@ -26,6 +27,8 @@ describe('API (e2e)', () => {
     })
       .overrideProvider(SupabaseAuthClient)
       .useValue({ verify })
+      .overrideProvider(PistonClient)
+      .useValue({ isUp: () => Promise.resolve(true) })
       .compile();
 
     app = moduleFixture.createNestApplication();
@@ -36,11 +39,11 @@ describe('API (e2e)', () => {
     await app.close();
   });
 
-  it('GET /health is public', () => {
+  it('GET /health is public and reports Piston', () => {
     return request(app.getHttpServer())
       .get('/health')
       .expect(200)
-      .expect({ status: 'ok' });
+      .expect({ status: 'ok', piston: 'ok' });
   });
 
   it('GET /me without a token returns 401 UNAUTHENTICATED', async () => {

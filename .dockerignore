@@ -1,0 +1,14 @@
+# Keeps the API image build context small and free of secrets.
+**/node_modules
+**/dist
+**/.next
+**/*.tsbuildinfo
+**/coverage
+.git
+# Secrets: env files are passed at runtime, never copied into an image.
+**/.env
+**/.env.*
+!**/.env.example
+infra/data
+content-solutions
+apps/web

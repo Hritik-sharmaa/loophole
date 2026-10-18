@@ -54,11 +54,11 @@ Loop for every slice: AI **writes** the slice → you **review** and change it �
 - [x] Weekly XP leaderboard route and page
 - **Done when:** a repeated completion pays once and the streak goes up on the next day. (FR-09, FR-10 basic, FR-11)
 
-### S5 · AI tutor
+### S5 · AI tutor ✅
 
-- [ ] `GeminiClient`
-- [ ] `POST /ai/explain`, `POST /ai/hint`, daily cap in `ai_usage`
-- [ ] "Explain my error" and "Hint" buttons
+- [x] `GeminiClient`
+- [x] `POST /ai/explain`, `POST /ai/hint`, daily cap in `ai_usage`
+- [x] "Explain my error" and "Hint" buttons
 - **Done when:** explanations are useful, hints never contain a full solution, and the 21st call returns 429. (FR-12, FR-13, FR-14)
 
 ### S6 · Deploy early
@@ -66,7 +66,8 @@ Loop for every slice: AI **writes** the slice → you **review** and change it �
 - [ ] VPS (2 vCPU / 4 GB) with Docker Compose: API + Piston + Caddy
 - [ ] Re-test parallel Piston runs on the VPS; raise the limit in `PistonClient` if they are stable (ADR-018)
 - [ ] Web on Vercel with production env
-- [ ] README: what it is, how to run locally, demo link
+- [x] Deploy files: API `Dockerfile`, `infra/docker-compose.prod.yml`, `Caddyfile`, runtime install script; runbook in `docs/DEPLOY.md`
+- [ ] README: what it is, how to run locally, demo link (written; demo link after the deploy)
 - **Gate 1 — done when:** a friend on another network signs up and finishes a lesson.
 
 ## Phase 2 — Live debugging duels

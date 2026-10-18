@@ -1,9 +1,16 @@
+import type { PistonClient } from '../../../integrations/piston.client.js';
 import { HealthService } from '../health.service.js';
 
 describe('HealthService', () => {
-  it('reports the API as ok', () => {
-    const service = new HealthService();
+  it.each([
+    [true, 'ok'],
+    [false, 'down'],
+  ])('Piston up = %s reports piston "%s"', async (up, piston) => {
+    const client = { isUp: () => Promise.resolve(up) } as PistonClient;
 
-    expect(service.check()).toEqual({ status: 'ok' });
+    expect(await new HealthService(client).check()).toEqual({
+      status: 'ok',
+      piston,
+    });
   });
 });

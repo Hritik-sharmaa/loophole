@@ -1,0 +1,66 @@
+# Production stack for the VPS: API + Piston + Caddy (ADR-007, docs/DEPLOY.md).
+# From the repo root:
+#   docker compose -f infra/docker-compose.prod.yml up -d --build
+# Needs apps/api/.env (the API's secrets) and infra/.env (API_DOMAIN).
+name: loophole
+
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: apps/api/Dockerfile
+    restart: unless-stopped
+    env_file: ../apps/api/.env
+    environment:
+      # Piston by its service name on the internal network, whatever .env says.
+      PISTON_URL: http://piston:2000
+    depends_on:
+      - piston
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://localhost:3001/health').then((r) => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
+      interval: 30s
+      timeout: 5s
+      start_period: 20s
+      retries: 3
+
+  # Runs learners' code. Never public: only the API reaches it, plus the
+  # VPS itself on 127.0.0.1 for installing runtimes.
+  piston:
+    image: ghcr.io/engineer-man/piston
+    restart: unless-stopped
+    privileged: true
+    ports:
+      - '127.0.0.1:2000:2000'
+    volumes:
+      - piston-packages:/piston/packages
+    tmpfs:
+      - /piston/jobs:exec,uid=1000,gid=1000,mode=711
+      - /tmp:exec
+
+  # HTTPS in front of the API. Gets and renews the certificate itself.
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '443:443'
+      - '443:443/udp'
+    environment:
+      API_DOMAIN: ${API_DOMAIN:?Set API_DOMAIN in infra/.env}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - api
+
+volumes:
+  # Installed Piston runtimes survive restarts and rebuilds.
+  piston-packages:
+  # Caddy's certificates; losing them means re-issuing (rate-limited).
+  caddy-data:
+  caddy-config:

@@ -69,6 +69,7 @@ src/db/migrations/                   drizzle-kit output
 src/integrations/piston.client.ts    the only file that calls Piston
 src/integrations/gemini.client.ts    the only file that imports @google/genai
 src/integrations/supabase-auth.client.ts  the only API file that calls Supabase Auth (token checks)
+src/integrations/integrations.module.ts   provides PistonClient and GeminiClient, one instance each (ADR-018)
 src/modules/auth/                    global JwtAuthGuard, @Public(), @CurrentUser()
 src/common/http-exception.filter.ts  shapes errors as { error: { code, message } }
 src/db/seed/                         content/ loader + idempotent seedContent(db, dir); run-seed.ts is the CLI
@@ -153,6 +154,8 @@ One global `HttpExceptionFilter` turns every exception into `{ error: { code, me
 | Piston          | Same VPS, Docker Compose | `privileged: true`; not exposed publicly                                                |
 | Postgres + Auth | Supabase cloud           | Migrations run from CI or by hand with drizzle-kit                                      |
 | CI              | GitHub Actions           | Lint, typecheck, test on every push                                                     |
+
+Step-by-step: `docs/DEPLOY.md`. Files: `apps/api/Dockerfile`, `infra/docker-compose.prod.yml`, `infra/Caddyfile`.
 
 ## 5. Later (Phase 3, only when needed)
 

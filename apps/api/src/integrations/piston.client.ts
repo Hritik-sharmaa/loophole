@@ -11,6 +11,7 @@ const MEMORY_LIMIT_BYTES = 256 * 1024 * 1024;
 // How long we wait for Piston to answer at all. Longer than the run timeout,
 // so a slow program shows up as timedOut, not as Piston being down.
 const REQUEST_TIMEOUT_MS = 10_000;
+const HEALTH_TIMEOUT_MS = 2_000;
 
 // The file name Piston saves the code under, per language.
 const FILE_NAMES: Record<string, string> = { python: 'main.py' };
@@ -43,21 +44,36 @@ type PistonResponse = { run: PistonStage; compile?: PistonStage };
 // signal 6"): about half of parallel runs failed in testing, none of the
 // sequential ones. Re-test concurrency on the VPS (S6) before raising this.
 // The queue lives in this instance, so the API must have only one
-// PistonClient (move it to a shared module when duels need it in S7).
+// PistonClient: IntegrationsModule provides it to every module.
 @Injectable()
 export class PistonClient {
   private readonly logger = new Logger(PistonClient.name);
-  private readonly executeUrl: string;
+  private readonly baseUrl: string;
   // Settles when the previous run finishes; each run waits for it.
   private queue: Promise<unknown> = Promise.resolve();
 
   constructor(config: ConfigService<EnvironmentVariables, true>) {
-    this.executeUrl = `${config.get('PISTON_URL', { infer: true })}/api/v2/execute`;
+    this.baseUrl = `${config.get('PISTON_URL', { infer: true })}/api/v2`;
   }
 
   // Runs `code` once with `stdin`, after any runs already waiting. Throws
   // 502 EXECUTOR_UNAVAILABLE when Piston can't be reached or refuses the
   // job; a crashing or slow program is a normal result, not an error.
+  // For GET /health: is Piston answering, with at least one runtime
+  // installed? Not queued; it runs no code.
+  async isUp(): Promise<boolean> {
+    try {
+      const res = await fetch(`${this.baseUrl}/runtimes`, {
+        signal: AbortSignal.timeout(HEALTH_TIMEOUT_MS),
+      });
+      if (!res.ok) return false;
+      const runtimes = (await res.json()) as unknown[];
+      return runtimes.length > 0;
+    } catch {
+      return false;
+    }
+  }
+
   run(language: string, code: string, stdin: string): Promise<RunResult> {
     const job = this.queue.then(() => this.execute(language, code, stdin));
     // A failed run must not block the ones behind it.
@@ -72,7 +88,7 @@ export class PistonClient {
   ): Promise<RunResult> {
     let res: Response;
     try {
-      res = await fetch(this.executeUrl, {
+      res = await fetch(`${this.baseUrl}/execute`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

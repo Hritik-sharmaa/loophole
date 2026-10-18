@@ -5,6 +5,9 @@ import type { EnvironmentVariables } from './config/env.validation.js';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  // On docker stop (SIGTERM), run onModuleDestroy so DbService closes the
+  // pool instead of being killed mid-query.
+  app.enableShutdownHooks();
   const config =
     app.get<ConfigService<EnvironmentVariables, true>>(ConfigService);
 

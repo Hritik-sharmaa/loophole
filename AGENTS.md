@@ -84,7 +84,7 @@ loophole/
       lib/                api client, socket client, supabase client
   packages/shared/src/    types imported by both apps
   content/                lesson and duel seed files (JSON)
-  infra/                  docker-compose.yml, Caddyfile
+  infra/                  docker-compose.yml (dev Piston), docker-compose.prod.yml, Caddyfile, Piston scripts
   docs/                   everything below
 ```
 
@@ -102,9 +102,10 @@ loophole/
 | Naming, testing, git, env                     | `docs/CODING_STANDARDS.md` |
 | What to build next                            | `docs/ROADMAP.md`          |
 | Why something was chosen                      | `docs/DECISIONS.md`        |
+| Putting it online (VPS, Vercel, Supabase)     | `docs/DEPLOY.md`           |
 
 ## 7. Current status
 
 Update this line as milestones finish:
 
-**Current milestone: S5 — AI tutor.** M0 and S1–S4 are done: you can sign in, follow the Python path, solve exercises graded in local Piston (runs are serialized, ADR-018), and earn XP, a daily streak and a weekly rank. CI runs format, lint, typecheck and tests.
+**Current milestone: S6 — Deploy early.** Deploy files are ready (`docs/DEPLOY.md`); the VPS, Vercel and Gate 1 steps are the developer's. M0 and S1–S5 are done: you can sign in, follow the Python path, solve exercises graded in local Piston (runs are serialized, ADR-018), earn XP, a daily streak and a weekly rank, and ask the AI tutor for hints and error explanations. CI runs format, lint, typecheck and tests.

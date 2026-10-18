@@ -28,6 +28,10 @@ pnpm piston:up                           # local Piston in Docker
 pnpm dev:api                             # http://localhost:3001/health
 ```
 
+## Deploy
+
+`Dockerfile` builds the production image from the repo root; `docs/DEPLOY.md` has the full steps.
+
 ## Check
 
 ```bash
