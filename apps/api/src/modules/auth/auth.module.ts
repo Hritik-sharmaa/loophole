@@ -9,5 +9,7 @@ import { JwtAuthGuard } from './jwt-auth.guard.js';
     // APP_GUARD makes JwtAuthGuard run on every route in the app.
     { provide: APP_GUARD, useClass: JwtAuthGuard },
   ],
+  // For DuelsGateway, which checks socket tokens itself.
+  exports: [SupabaseAuthClient],
 })
 export class AuthModule {}

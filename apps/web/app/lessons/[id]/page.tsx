@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { AppHeader } from '@/components/app-header';
 import { CodeEditor } from '@/components/code-editor';
 import { InlineCode } from '@/components/inline-code';
+import { SampleTests } from '@/components/sample-tests';
 import { TestResults } from '@/components/test-results';
 import { TutorPanel } from '@/components/tutor-panel';
 import { primaryButton, secondaryButton } from '@/components/ui/buttons';
@@ -76,31 +77,7 @@ function Exercise({
         <InlineCode text={prompt} />
       </p>
 
-      <section className="flex flex-col gap-3">
-        <h2 className="font-display text-xl font-bold">Example</h2>
-        <table className="w-full overflow-hidden rounded-card bg-surface text-left font-mono text-sm">
-          <thead className="text-xs tracking-wide text-text-secondary uppercase">
-            <tr>
-              <th className="px-4 py-2 font-bold">Input</th>
-              <th className="px-4 py-2 font-bold">Expected output</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sampleTests.map((test, i) => (
-              <tr key={i} className="border-t border-border-muted align-top">
-                <td className="px-4 py-2 whitespace-pre">
-                  {test.input.trimEnd() || (
-                    <span className="text-text-secondary">(no input)</span>
-                  )}
-                </td>
-                <td className="px-4 py-2 whitespace-pre">
-                  {test.expectedOutput}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </section>
+      <SampleTests tests={sampleTests} />
 
       <CodeEditor value={code} onChange={setCode} fileName="main.py" />
 

@@ -19,6 +19,10 @@ export class JwtAuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    // Sockets are checked once, when they connect (DuelsGateway), not on
+    // every event; this guard only reads HTTP headers.
+    if (context.getType() !== 'http') return true;
+
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC, [
       context.getHandler(),
       context.getClass(),

@@ -1,0 +1,33 @@
+{
+  "slug": "second-largest",
+  "title": "Second largest",
+  "language": "python",
+  "difficulty": 2,
+  "description": "Read whole numbers on one line, separated by spaces (at least two different values). Print the second largest distinct value: for 4 4 3 that is 3.",
+  "buggyCode": "nums = list(map(int, input().split()))\nnums.sort()\nprint(nums[1])\n",
+  "bugCount": 2,
+  "sampleTests": [
+    {
+      "input": "3 1 2\n",
+      "expectedOutput": "2"
+    }
+  ],
+  "hiddenTests": [
+    {
+      "input": "5 9 1 7\n",
+      "expectedOutput": "7"
+    },
+    {
+      "input": "4 4 3\n",
+      "expectedOutput": "3"
+    },
+    {
+      "input": "10 20\n",
+      "expectedOutput": "10"
+    },
+    {
+      "input": "1 2 3\n",
+      "expectedOutput": "2"
+    }
+  ]
+}

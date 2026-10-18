@@ -7,9 +7,11 @@ import type { ReactNode } from 'react';
 import { useMe } from '@/lib/queries/use-me';
 import { useSession } from '@/lib/use-session';
 
+// short: the label on phone-width screens, so four links fit one line.
 const LINKS = [
   { href: '/learn', label: 'Learn' },
-  { href: '/leaderboard', label: 'Leaderboard' },
+  { href: '/duels', label: 'Duels' },
+  { href: '/leaderboard', label: 'Leaderboard', short: 'Ranks' },
   { href: '/profile', label: 'Profile' },
 ];
 
@@ -47,7 +49,7 @@ export function AppHeader() {
         )}
 
         <ul className="flex gap-1">
-          {LINKS.map(({ href, label }) => {
+          {LINKS.map(({ href, label, short }) => {
             const current =
               pathname === href ||
               (href === '/learn' && pathname.startsWith('/lessons'));
@@ -56,9 +58,16 @@ export function AppHeader() {
                 <Link
                   href={href}
                   aria-current={current ? 'page' : undefined}
-                  className={`rounded-badge px-3 py-1.5 text-sm font-bold focus-visible:outline-2 focus-visible:outline-ink ${current ? 'bg-surface text-ink' : 'text-text-secondary'}`}
+                  className={`rounded-badge px-2 py-1.5 sm:px-3 text-sm font-bold focus-visible:outline-2 focus-visible:outline-ink ${current ? 'bg-surface text-ink' : 'text-text-secondary'}`}
                 >
-                  {label}
+                  {short ? (
+                    <>
+                      <span className="sm:hidden">{short}</span>
+                      <span className="hidden sm:inline">{label}</span>
+                    </>
+                  ) : (
+                    label
+                  )}
                 </Link>
               </li>
             );

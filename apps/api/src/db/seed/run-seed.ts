@@ -17,7 +17,7 @@ async function main(): Promise<void> {
   try {
     const summary = await seedContent(drizzle(client, { schema }), contentDir);
     console.log(
-      `Seeded ${summary.courses} course(s), ${summary.units} unit(s), ${summary.lessons} lesson(s) from ${contentDir}`,
+      `Seeded ${summary.courses} course(s), ${summary.units} unit(s), ${summary.lessons} lesson(s), ${summary.duelProblems} duel problem(s) from ${contentDir}`,
     );
     if (summary.stale.length > 0) {
       console.warn(

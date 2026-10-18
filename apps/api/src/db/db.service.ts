@@ -26,7 +26,9 @@ export class DbService implements OnModuleDestroy {
     this.drizzle = drizzle(this.client, { schema });
   }
 
+  // At most 5 s to finish open queries; without a limit, end() can wait
+  // forever on a connection attempt that never completes.
   async onModuleDestroy(): Promise<void> {
-    await this.client.end();
+    await this.client.end({ timeout: 5 });
   }
 }

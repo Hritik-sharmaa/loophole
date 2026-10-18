@@ -117,3 +117,52 @@ export type ExplainResponse = {
 // POST /ai/hint, for the code currently in the editor.
 export type HintRequest = { exerciseId: string; code: string };
 export type HintResponse = { hint: string; remainingToday: number };
+
+// ---- Duels (S7), Socket.io namespace /duels (docs/API_SPEC.md) ----
+
+export type DuelStatus = 'matched' | 'in_progress' | 'completed';
+export type DuelResultKind = 'win' | 'draw' | 'forfeit';
+
+// Client → server
+export type DuelSubmitRequest = { duelId: string; code: string };
+export type DuelForfeitRequest = { duelId: string };
+
+// Server → client
+export type QueueJoined = { position: number };
+export type DuelMatched = {
+  duelId: string;
+  opponent: { username: string; elo: number };
+};
+// Sample tests only; hidden tests never leave the server.
+export type DuelStart = {
+  duelId: string;
+  problem: {
+    title: string;
+    description: string;
+    buggyCode: string;
+    sampleTests: TestCase[];
+  };
+  // ISO timestamp the client counts down to (FR-19).
+  endsAt: string;
+};
+export type DuelProgress = {
+  userId: string;
+  testsPassed: number;
+  totalTests: number;
+};
+// To the submitter only. Hidden tests report only pass/fail.
+export type DuelSubmissionResult = {
+  testsPassed: number;
+  totalTests: number;
+  results: TestResult[];
+  stderr: string;
+};
+export type DuelEnd = {
+  duelId: string;
+  result: DuelResultKind;
+  // null for a draw.
+  winnerId: string | null;
+  // Elo change per player; all 0 until ratings arrive in S8.
+  ratingChange: Record<string, number>;
+};
+export type SocketError = { code: string; message: string };

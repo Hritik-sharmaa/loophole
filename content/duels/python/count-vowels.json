@@ -1,0 +1,33 @@
+{
+  "slug": "count-vowels",
+  "title": "Count the vowels",
+  "language": "python",
+  "difficulty": 1,
+  "description": "Read one word in lowercase letters and print how many vowels (a, e, i, o, u) it contains.",
+  "buggyCode": "word = input()\ncount = 0\nfor ch in word:\n    if ch in \"aeio\":\n        count += 1\nprint(count)\n",
+  "bugCount": 1,
+  "sampleTests": [
+    {
+      "input": "hello\n",
+      "expectedOutput": "2"
+    }
+  ],
+  "hiddenTests": [
+    {
+      "input": "sky\n",
+      "expectedOutput": "0"
+    },
+    {
+      "input": "queue\n",
+      "expectedOutput": "4"
+    },
+    {
+      "input": "education\n",
+      "expectedOutput": "5"
+    },
+    {
+      "input": "banana\n",
+      "expectedOutput": "3"
+    }
+  ]
+}

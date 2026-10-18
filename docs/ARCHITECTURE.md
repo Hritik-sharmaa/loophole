@@ -142,7 +142,8 @@ One global `HttpExceptionFilter` turns every exception into `{ error: { code, me
 4. Server emits `duel:start` with the buggy code, sample tests and `endsAt`; status → `in_progress`.
 5. `duel:submit` → service grades through the same `PistonClient`, saves a `duel_submissions` row, and emits `duel:progress` (passed / total) to the room.
 6. A fully passing submission tries `update duels set winner_id = $1, status = 'completed' where id = $2 and winner_id is null`. Exactly one caller updates a row; that caller emits `duel:end` and calls `RatingsService`.
-7. A server timer at `endsAt` finishes the duel by most tests passed, or a draw.
+7. A server timer at `endsAt` finishes the duel by most tests passed, or a draw. On startup the API re-arms timers for duels still `in_progress` (overdue ones finish at once), so a restart never leaves a duel open.
+   Sockets join `user:<id>` on connect and `duel:<id>` when matched, so reloads and second tabs keep receiving events; a reconnecting player gets the duel again.
 8. `RatingsService` applies ELO to both players in one transaction.
 
 ## 4. Deployment

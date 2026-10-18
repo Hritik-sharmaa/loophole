@@ -139,3 +139,9 @@ Namespace: `/duels`. Connect with `auth: { token: <supabase access token> }`; th
 | `error`         | `{ code, message }`                                                                              | the socket         |
 
 Rules: the opponent's code is never sent; `endsAt` is an ISO timestamp the client counts down to; duel submissions are throttled to 1 every 3 s per player.
+
+- **Connect:** a missing or bad token fails the handshake with `connect_error`, `err.data = { code: "UNAUTHENTICATED", message }`. A player mid-duel who reconnects (reload, second tab) gets `duel:matched` and `duel:start` again for that duel.
+- **Errors** arrive as `error` events with the REST codes: `VALIDATION_FAILED` (bad payload), `NOT_FOUND` (unknown duel or not a player), `ILLEGAL_TRANSITION` (duel not running, or `queue:join` while in a duel), `RATE_LIMITED` (throttle).
+- `duel:result` uses the lesson grading (hidden tests report only `passed`); `duel:progress` goes to both players.
+- `duel:end` reaches both players exactly once. `ratingChange` is 0 for both until S8. A submission graded after `endsAt` or after the end changes nothing.
+- At most 20 duels run at once (NFR-07); beyond that, matched pairs wait in the queue.

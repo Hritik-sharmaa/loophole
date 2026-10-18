@@ -103,4 +103,6 @@ Each test runs the program with `input` as stdin. It passes when **trimmed stdou
 - Start from a correct program, then inject 1–3 realistic bugs (off-by-one, wrong operator, wrong variable, missing return, bad condition).
 - The buggy code must run without crashing on at least one test, so both players see partial progress.
 - Solvable by an intermediate learner in 2–4 minutes.
-- At least 15 problems before S7 ends: 6 at difficulty 1, 6 at 2, 3 at 3.
+- At least 15 problems before S7 ends: 6 at difficulty 1, 6 at 2, 3 at 3. (Done: `content/duels/python/`, checked in CI by `content-files.spec.ts`.)
+- Keep the fixed program in `content-solutions/duels/<language>/<slug>.py` (git-ignored), and check it in Piston before committing: the solution passes every test, and the buggy code passes at least one and fails at least one, so both players see partial progress.
+- `bugCount` is for authors only; the seed does not store it.

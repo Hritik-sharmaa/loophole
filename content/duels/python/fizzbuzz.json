@@ -1,0 +1,33 @@
+{
+  "slug": "fizzbuzz",
+  "title": "FizzBuzz",
+  "language": "python",
+  "difficulty": 2,
+  "description": "Read N and print the numbers 1 to N, one per line, but print Fizz for multiples of 3, Buzz for multiples of 5, and FizzBuzz for multiples of both.",
+  "buggyCode": "n = int(input())\nfor i in range(1, n + 1):\n    if i % 3 == 0:\n        print(\"Fizz\")\n    elif i % 5 == 0:\n        print(\"Buzz\")\n    elif i % 15 == 0:\n        print(\"FizzBuzz\")\n    else:\n        print(i)\n",
+  "bugCount": 1,
+  "sampleTests": [
+    {
+      "input": "5\n",
+      "expectedOutput": "1\n2\nFizz\n4\nBuzz"
+    }
+  ],
+  "hiddenTests": [
+    {
+      "input": "3\n",
+      "expectedOutput": "1\n2\nFizz"
+    },
+    {
+      "input": "15\n",
+      "expectedOutput": "1\n2\nFizz\n4\nBuzz\nFizz\n7\n8\nFizz\nBuzz\n11\nFizz\n13\n14\nFizzBuzz"
+    },
+    {
+      "input": "1\n",
+      "expectedOutput": "1"
+    },
+    {
+      "input": "16\n",
+      "expectedOutput": "1\n2\nFizz\n4\nBuzz\nFizz\n7\n8\nFizz\nBuzz\n11\nFizz\n13\n14\nFizzBuzz\n16"
+    }
+  ]
+}

@@ -108,4 +108,4 @@ loophole/
 
 Update this line as milestones finish:
 
-**Current milestone: S6 — Deploy early.** Deploy files are ready (`docs/DEPLOY.md`); the VPS, Vercel and Gate 1 steps are the developer's. M0 and S1–S5 are done: you can sign in, follow the Python path, solve exercises graded in local Piston (runs are serialized, ADR-018), earn XP, a daily streak and a weekly rank, and ask the AI tutor for hints and error explanations. CI runs format, lint, typecheck and tests.
+**Current milestone: S7 — Duel rooms.** Phase 1 is done and live at <https://loophole-psi.vercel.app> (API on an AWS free-plan VPS, `docs/DEPLOY.md` 2b; Gate 1 friend test is the developer's). You can sign in, follow the Python path, solve exercises graded in Piston (runs are serialized, ADR-018), earn XP, a daily streak and a weekly rank, and ask the AI tutor for hints and error explanations. CI runs format, lint, typecheck and tests.

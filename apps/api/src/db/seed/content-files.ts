@@ -31,6 +31,19 @@ export type CourseContent = {
   units: UnitContent[];
 };
 
+// content/duels/<language>/<slug>.json (docs/CONTENT_GUIDE.md §5).
+export type DuelProblemContent = {
+  slug: string;
+  title: string;
+  language: string;
+  difficulty: number;
+  description: string;
+  buggyCode: string;
+  bugCount: number;
+  sampleTests: TestCase[];
+  hiddenTests: TestCase[];
+};
+
 export class ContentError extends Error {
   constructor(file: string, problem: string) {
     super(`${file}: ${problem}`);
@@ -134,6 +147,61 @@ export function parseLesson(json: unknown, file: string): LessonContent {
   };
 }
 
+// Every content/duels/<language>/*.json file. The folder name must match
+// the file's language, so a problem can't land in the wrong pool.
+export function loadDuelProblems(contentDir: string): DuelProblemContent[] {
+  const duelsDir = join(contentDir, 'duels');
+  if (!existsSync(duelsDir)) return [];
+
+  const problems = readdirSync(duelsDir)
+    .map((name) => join(duelsDir, name))
+    .filter((dir) => statSync(dir).isDirectory())
+    .flatMap((dir) =>
+      readdirSync(dir)
+        .filter((name) => name.endsWith('.json'))
+        .map((name) => join(dir, name))
+        .map((file) => {
+          const where = label(file, contentDir);
+          const problem = parseDuelProblem(readJson(file, contentDir), where);
+          const folder = label(dir, duelsDir);
+          if (problem.language !== folder) {
+            throw new ContentError(
+              where,
+              `language "${problem.language}" does not match its folder "${folder}"`,
+            );
+          }
+          return problem;
+        }),
+    );
+
+  const seen = new Set<string>();
+  for (const p of problems) {
+    if (seen.has(p.slug)) {
+      throw new ContentError('duels', `two problems share slug ${p.slug}`);
+    }
+    seen.add(p.slug);
+  }
+  return problems;
+}
+
+export function parseDuelProblem(
+  json: unknown,
+  file: string,
+): DuelProblemContent {
+  const o = asObject(json, file);
+  return {
+    slug: asSlug(o.slug, file, 'slug'),
+    title: asText(o.title, file, 'title'),
+    language: asText(o.language, file, 'language'),
+    difficulty: asIntIn(o.difficulty, 1, 3, file, 'difficulty'),
+    description: asText(o.description, file, 'description'),
+    buggyCode: asText(o.buggyCode, file, 'buggyCode'),
+    bugCount: asIntIn(o.bugCount, 1, 3, file, 'bugCount'),
+    sampleTests: asTests(o.sampleTests, file, 'sampleTests', MIN_SAMPLE_TESTS),
+    hiddenTests: asTests(o.hiddenTests, file, 'hiddenTests', MIN_HIDDEN_TESTS),
+  };
+}
+
 // --- small checkers -------------------------------------------------------
 
 function readJson(file: string, root: string): unknown {
@@ -183,6 +251,26 @@ function asSlug(value: unknown, file: string, field: string): string {
 function asPosition(value: unknown, file: string): number {
   if (!Number.isInteger(value) || (value as number) < 1) {
     throw new ContentError(file, 'position must be a whole number ≥ 1');
+  }
+  return value as number;
+}
+
+function asIntIn(
+  value: unknown,
+  min: number,
+  max: number,
+  file: string,
+  field: string,
+): number {
+  if (
+    !Number.isInteger(value) ||
+    (value as number) < min ||
+    (value as number) > max
+  ) {
+    throw new ContentError(
+      file,
+      `${field} must be a whole number from ${min} to ${max}`,
+    );
   }
   return value as number;
 }

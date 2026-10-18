@@ -1,15 +1,21 @@
 import type { SubmissionResult, TestResult } from '@loophole/shared';
 import { Check, X } from 'lucide-react';
 
+// What both a lesson submission and a duel submission report.
+type Graded = Pick<
+  SubmissionResult,
+  'testsPassed' | 'totalTests' | 'results' | 'stderr'
+>;
+
 // The results panel after Run (FR-07): passed / total, one row per test,
-// then the program's error output if there was any.
-export function TestResults({ result }: { result: SubmissionResult }) {
-  const { status, testsPassed, totalTests, results, stderr } = result;
+// then the program's error output if there was any. Used by lessons and duels.
+export function TestResults({ result }: { result: Graded }) {
+  const { testsPassed, totalTests, results, stderr } = result;
 
   return (
     <section aria-live="polite" className="flex flex-col gap-3">
       <h2 className="font-display text-xl font-bold">
-        {status === 'passed'
+        {testsPassed === totalTests
           ? `All ${totalTests} tests passed`
           : `${testsPassed} of ${totalTests} tests passed`}
       </h2>

@@ -1,0 +1,37 @@
+{
+  "slug": "run-length",
+  "title": "Run-length encoding",
+  "language": "python",
+  "difficulty": 3,
+  "description": "Read a line of lowercase letters and print each run of repeated letters as the letter followed by its count: aaabcc becomes a3b1c2. An empty line prints an empty line.",
+  "buggyCode": "s = input()\nout = \"\"\ncount = 1\nfor i in range(1, len(s)):\n    if s[i] == s[i - 1]:\n        count += 1\n    else:\n        out += s[i - 1] + str(count)\n        count = 0\nprint(out)\n",
+  "bugCount": 2,
+  "sampleTests": [
+    {
+      "input": "aaabcc\n",
+      "expectedOutput": "a3b1c2"
+    }
+  ],
+  "hiddenTests": [
+    {
+      "input": "\n",
+      "expectedOutput": ""
+    },
+    {
+      "input": "a\n",
+      "expectedOutput": "a1"
+    },
+    {
+      "input": "abcd\n",
+      "expectedOutput": "a1b1c1d1"
+    },
+    {
+      "input": "zzzz\n",
+      "expectedOutput": "z4"
+    },
+    {
+      "input": "aabbbaa\n",
+      "expectedOutput": "a2b3a2"
+    }
+  ]
+}

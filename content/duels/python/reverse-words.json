@@ -1,0 +1,29 @@
+{
+  "slug": "reverse-words",
+  "title": "Reverse the words",
+  "language": "python",
+  "difficulty": 1,
+  "description": "Read a sentence and print its words in reverse order, separated by single spaces. \"hello big world\" becomes \"world big hello\".",
+  "buggyCode": "words = input().split()\nprint(\" \".join(words[::1]))\n",
+  "bugCount": 1,
+  "sampleTests": [
+    {
+      "input": "hello big world\n",
+      "expectedOutput": "world big hello"
+    }
+  ],
+  "hiddenTests": [
+    {
+      "input": "one\n",
+      "expectedOutput": "one"
+    },
+    {
+      "input": "a b\n",
+      "expectedOutput": "b a"
+    },
+    {
+      "input": "stop the bug now\n",
+      "expectedOutput": "now bug the stop"
+    }
+  ]
+}

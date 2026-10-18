@@ -1,12 +1,23 @@
 import { and, eq, inArray, notInArray, sql } from 'drizzle-orm';
 import type { Db } from '../db.service.js';
-import { courses, exercises, lessons, units } from '../schema/index.js';
-import { loadAllContent, type CourseContent } from './content-files.js';
+import {
+  courses,
+  duelProblems,
+  exercises,
+  lessons,
+  units,
+} from '../schema/index.js';
+import {
+  loadAllContent,
+  loadDuelProblems,
+  type CourseContent,
+} from './content-files.js';
 
 export type SeedSummary = {
   courses: number;
   units: number;
   lessons: number;
+  duelProblems: number;
   // "course/unit" or "course/unit/lesson" rows in the database that are no
   // longer in content/. They are left alone so no one's progress is deleted.
   stale: string[];
@@ -19,11 +30,36 @@ export async function seedContent(
   contentDir: string,
 ): Promise<SeedSummary> {
   const content = loadAllContent(contentDir);
-  const summary: SeedSummary = { courses: 0, units: 0, lessons: 0, stale: [] };
+  const problems = loadDuelProblems(contentDir);
+  const summary: SeedSummary = {
+    courses: 0,
+    units: 0,
+    lessons: 0,
+    duelProblems: 0,
+    stale: [],
+  };
 
   await db.transaction(async (tx) => {
     for (const course of content) {
       await seedCourse(tx, course, summary);
+    }
+    // Duel problems are matched by slug too, so past duels keep their row.
+    // (bugCount is for authors only; it is not stored.)
+    for (const p of problems) {
+      const fields = {
+        language: p.language,
+        title: p.title,
+        description: p.description,
+        buggyCode: p.buggyCode,
+        sampleTests: p.sampleTests,
+        hiddenTests: p.hiddenTests,
+        difficulty: p.difficulty,
+      };
+      await tx
+        .insert(duelProblems)
+        .values({ slug: p.slug, ...fields })
+        .onConflictDoUpdate({ target: duelProblems.slug, set: fields });
+      summary.duelProblems++;
     }
   });
   return summary;

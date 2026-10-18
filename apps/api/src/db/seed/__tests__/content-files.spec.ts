@@ -1,7 +1,13 @@
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
-import { ContentError, loadAllContent, parseLesson } from '../content-files.js';
+import {
+  ContentError,
+  loadAllContent,
+  loadDuelProblems,
+  parseDuelProblem,
+  parseLesson,
+} from '../content-files.js';
 
 const REAL_CONTENT = resolve(import.meta.dirname, '../../../../../../content');
 
@@ -115,3 +121,63 @@ describe('loadAllContent folder checks', () => {
 function write(file: string, json: unknown): void {
   writeFileSync(file, JSON.stringify(json));
 }
+
+const validDuel = {
+  slug: 'sum-to-n',
+  title: 'Sum to N',
+  language: 'python',
+  difficulty: 1,
+  description: 'Print the sum from 1 to N.',
+  buggyCode: 'print(0)\n',
+  bugCount: 1,
+  sampleTests: [{ input: '3\n', expectedOutput: '6' }],
+  hiddenTests: [
+    { input: '1\n', expectedOutput: '1' },
+    { input: '2\n', expectedOutput: '3' },
+    { input: '4\n', expectedOutput: '10' },
+  ],
+};
+
+describe('duel problems', () => {
+  // docs/CONTENT_GUIDE.md §5 and FR-26: at least 15, split 6 / 6 / 3.
+  it('the real content/duels folder has 15 problems at the right levels', () => {
+    const problems = loadDuelProblems(REAL_CONTENT);
+    expect(problems).toHaveLength(15);
+    const byLevel = [1, 2, 3].map(
+      (d) => problems.filter((p) => p.difficulty === d).length,
+    );
+    expect(byLevel).toEqual([6, 6, 3]);
+    expect(new Set(problems.map((p) => p.language))).toEqual(
+      new Set(['python']),
+    );
+  });
+
+  it('accepts a valid problem', () => {
+    expect(parseDuelProblem(validDuel, 'x.json').slug).toBe('sum-to-n');
+  });
+
+  it.each([
+    ['difficulty out of range', { difficulty: 4 }, /difficulty/],
+    ['too many bugs', { bugCount: 5 }, /bugCount/],
+    ['no buggy code', { buggyCode: ' ' }, /buggyCode/],
+    ['too few hidden tests', { hiddenTests: [] }, /hiddenTests/],
+  ])('rejects %s', (_case, patch, message) => {
+    expect(() =>
+      parseDuelProblem({ ...validDuel, ...patch }, 'x.json'),
+    ).toThrow(message);
+  });
+
+  it('rejects a problem whose language does not match its folder', () => {
+    const root = mkdtempSync(join(tmpdir(), 'duels-'));
+    try {
+      mkdirSync(join(root, 'duels', 'javascript'), { recursive: true });
+      writeFileSync(
+        join(root, 'duels', 'javascript', 'x.json'),
+        JSON.stringify(validDuel),
+      );
+      expect(() => loadDuelProblems(root)).toThrow(ContentError);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
+});

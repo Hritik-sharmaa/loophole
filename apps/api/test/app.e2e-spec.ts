@@ -4,12 +4,14 @@ import request from 'supertest';
 import type { App } from 'supertest/types.js';
 import { AppModule } from './../src/app.module.js';
 import { PistonClient } from './../src/integrations/piston.client.js';
+import { DuelsService } from './../src/modules/duels/duels.service.js';
 import {
   SupabaseAuthClient,
   type AuthUser,
 } from './../src/integrations/supabase-auth.client.js';
 
-// No network and no database: Supabase and Piston are stubbed, and every case below is
+// No network and no database: Supabase, Piston and the duel service (which
+// reads the database at startup) are stubbed, and every case below is
 // decided by the guard or the validation pipe before a query runs.
 describe('API (e2e)', () => {
   let app: INestApplication<App>;
@@ -29,6 +31,8 @@ describe('API (e2e)', () => {
       .useValue({ verify })
       .overrideProvider(PistonClient)
       .useValue({ isUp: () => Promise.resolve(true) })
+      .overrideProvider(DuelsService)
+      .useValue({ attach: () => undefined })
       .compile();
 
     app = moduleFixture.createNestApplication();

@@ -4,7 +4,7 @@
 
 Coming next: **live 1v1 debugging duels.** Two players get the same buggy program and race to fix it, and the server decides the winner.
 
-**Demo:** _link added after the first deploy_
+**Demo:** <https://loophole-psi.vercel.app>
 
 ## Features
 

@@ -36,6 +36,13 @@
       "when": 1792309705821,
       "tag": "0004_ai_tutor",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1792342298210,
+      "tag": "0005_duels",
+      "breakpoints": true
     }
   ]
 }

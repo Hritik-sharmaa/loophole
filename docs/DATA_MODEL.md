@@ -139,7 +139,8 @@ Conventions: `uuid` primary keys (`gen_random_uuid()`), `timestamptz` in UTC, sn
 | started_at | timestamptz             |                                                   |
 | ends_at    | timestamptz             | server-side deadline                              |
 | ended_at   | timestamptz             | nullable                                          |
-|            |                         | check (player_a <> player_b)                      |
+| created_at | timestamptz             | newest live duel per player (resume)              |
+|            |                         | check (player_a <> player_b); index (status)      |
 
 `waiting` is a queue state held in memory, so it never appears in this table.
 

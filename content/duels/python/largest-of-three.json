@@ -1,0 +1,33 @@
+{
+  "slug": "largest-of-three",
+  "title": "Largest of three",
+  "language": "python",
+  "difficulty": 1,
+  "description": "Read three whole numbers, one per line, and print the largest of them.",
+  "buggyCode": "a = int(input())\nb = int(input())\nc = int(input())\nif a >= b and a >= c:\n    print(a)\nelif b >= a and b >= c:\n    print(b)\nelse:\n    print(a)\n",
+  "bugCount": 1,
+  "sampleTests": [
+    {
+      "input": "3\n1\n2\n",
+      "expectedOutput": "3"
+    }
+  ],
+  "hiddenTests": [
+    {
+      "input": "5\n9\n1\n",
+      "expectedOutput": "9"
+    },
+    {
+      "input": "1\n2\n3\n",
+      "expectedOutput": "3"
+    },
+    {
+      "input": "2\n2\n7\n",
+      "expectedOutput": "7"
+    },
+    {
+      "input": "-1\n-5\n-3\n",
+      "expectedOutput": "-1"
+    }
+  ]
+}

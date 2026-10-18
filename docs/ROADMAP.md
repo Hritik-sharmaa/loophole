@@ -61,13 +61,13 @@ Loop for every slice: AI **writes** the slice → you **review** and change it �
 - [x] "Explain my error" and "Hint" buttons
 - **Done when:** explanations are useful, hints never contain a full solution, and the 21st call returns 429. (FR-12, FR-13, FR-14)
 
-### S6 · Deploy early
+### S6 · Deploy early ✅
 
 - [x] VPS with Docker Compose: API + Piston + Caddy (AWS free plan, t3.small; `docs/DEPLOY.md` 2b)
 - [x] Re-test parallel Piston runs on the VPS: 40/40 stable, ~50 ms per run; limit kept at 1 (ADR-018)
-- [ ] Web on Vercel with production env
+- [x] Web on Vercel with production env (<https://loophole-psi.vercel.app>)
 - [x] Deploy files: API `Dockerfile`, `infra/docker-compose.prod.yml`, `Caddyfile`, runtime install script; runbook in `docs/DEPLOY.md`
-- [ ] README: what it is, how to run locally, demo link (written; demo link after the deploy)
+- [x] README: what it is, how to run locally, demo link
 - **Gate 1 — done when:** a friend on another network signs up and finishes a lesson.
 
 ## Phase 2 — Live debugging duels

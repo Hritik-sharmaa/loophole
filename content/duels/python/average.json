@@ -1,0 +1,33 @@
+{
+  "slug": "average",
+  "title": "Average of a list",
+  "language": "python",
+  "difficulty": 2,
+  "description": "The first line is a count N (at least 1); the second line holds N whole numbers separated by spaces. Print their average with exactly two decimal places, e.g. 2.00.",
+  "buggyCode": "n = int(input())\nnums = list(map(int, input().split()))\ntotal = 0\nfor x in nums:\n    total = x\nprint(f\"{total / (n - 1):.2f}\")\n",
+  "bugCount": 2,
+  "sampleTests": [
+    {
+      "input": "3\n1 2 3\n",
+      "expectedOutput": "2.00"
+    }
+  ],
+  "hiddenTests": [
+    {
+      "input": "2\n0 0\n",
+      "expectedOutput": "0.00"
+    },
+    {
+      "input": "4\n10 20 30 40\n",
+      "expectedOutput": "25.00"
+    },
+    {
+      "input": "1\n7\n",
+      "expectedOutput": "7.00"
+    },
+    {
+      "input": "5\n1 1 1 1 2\n",
+      "expectedOutput": "1.20"
+    }
+  ]
+}

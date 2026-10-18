@@ -5,3 +5,4 @@ export * from './progress.js';
 export * from './submissions.js';
 export * from './gamification.js';
 export * from './ai-usage.js';
+export * from './duels.js';

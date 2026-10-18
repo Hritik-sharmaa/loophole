@@ -10,27 +10,17 @@ import {
   units,
   userProgress,
 } from '../../db/schema/index.js';
-import {
-  PistonClient,
-  type RunResult,
-} from '../../integrations/piston.client.js';
+import { PistonClient } from '../../integrations/piston.client.js';
 import type { AuthUser } from '../../integrations/supabase-auth.client.js';
 import { GamificationService } from '../gamification/gamification.service.js';
 import { LessonsService } from '../lessons/lessons.service.js';
 import { UsersService } from '../users/users.service.js';
 import type { CreateSubmissionDto } from './dto/create-submission.dto.js';
-import { grade, type TestRun } from './grading.js';
+import { grade } from './grading.js';
+import { runTests } from './run-tests.js';
 
 // How many past submissions GET /submissions returns.
 const HISTORY_LIMIT = 10;
-
-// Stands in for a test that was not run; grade() counts it as failed.
-const SKIPPED: RunResult = {
-  stdout: '',
-  stderr: '',
-  exitCode: null,
-  timedOut: false,
-};
 
 @Injectable()
 export class SubmissionsService {
@@ -76,27 +66,13 @@ export class SubmissionsService {
     // The rows below point at profiles; a brand-new user may not have one yet.
     await this.users.ensureProfile(user);
 
-    const tests = [
-      ...exercise.sampleTests.map((test) => ({
-        kind: 'sample' as const,
-        test,
-      })),
-      ...exercise.hiddenTests.map((test) => ({
-        kind: 'hidden' as const,
-        test,
-      })),
-    ];
-    // One test at a time (PistonClient queues runs anyway). After a time-out
-    // the rest are skipped: a program that hangs would otherwise hold the
-    // shared Piston queue for 3 s per test.
-    const runs: TestRun[] = [];
-    for (const t of tests) {
-      const timedOutBefore = runs.some((r) => r.run.timedOut);
-      const run = timedOutBefore
-        ? SKIPPED
-        : await this.piston.run(exercise.language, code, t.test.input);
-      runs.push({ ...t, run });
-    }
+    const runs = await runTests(
+      this.piston,
+      exercise.language,
+      code,
+      exercise.sampleTests,
+      exercise.hiddenTests,
+    );
     const result = grade(runs);
 
     const [row] = await this.db.drizzle
