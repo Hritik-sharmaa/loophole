@@ -56,3 +56,43 @@ export type LessonDetail = {
     sampleTests: TestCase[];
   };
 };
+
+// POST /submissions body. Test cases are never sent; the server looks them up.
+export type CreateSubmissionRequest = { exerciseId: string; code: string };
+
+export type SubmissionStatus = 'passed' | 'failed' | 'error';
+
+// One test's outcome. Hidden tests report only whether they passed.
+export type TestResult =
+  | {
+      kind: 'sample';
+      passed: boolean;
+      input: string;
+      expected: string;
+      actual: string;
+    }
+  | { kind: 'hidden'; passed: boolean };
+
+// POST /submissions response
+export type SubmissionResult = {
+  id: string;
+  status: SubmissionStatus;
+  testsPassed: number;
+  totalTests: number;
+  // True when every test passed, so the lesson is (now) complete.
+  lessonCompleted: boolean;
+  // Always 0 until XP arrives in S4.
+  xpAwarded: number;
+  results: TestResult[];
+  stderr: string;
+};
+
+// GET /submissions?exerciseId= (newest first, at most 10)
+export type SubmissionSummary = {
+  id: string;
+  status: SubmissionStatus;
+  testsPassed: number;
+  totalTests: number;
+  code: string;
+  submittedAt: string;
+};

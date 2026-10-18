@@ -6,6 +6,7 @@ describe('validateEnv', () => {
     DATABASE_URL: 'postgresql://postgres:pw@localhost:5432/postgres',
     SUPABASE_URL: 'https://abc.supabase.co',
     SUPABASE_SERVICE_KEY: 'service-key',
+    PISTON_URL: 'http://localhost:2000',
   };
   const valid = { PORT: '3001', ...required };
 
@@ -47,6 +48,11 @@ describe('validateEnv', () => {
       'SUPABASE_SERVICE_KEY is empty',
       { ...valid, SUPABASE_SERVICE_KEY: '' },
       /SUPABASE_SERVICE_KEY/,
+    ],
+    [
+      'PISTON_URL is missing',
+      { ...valid, PISTON_URL: undefined },
+      /PISTON_URL/,
     ],
   ])('throws when %s', (_case, config, message) => {
     expect(() => validateEnv(config)).toThrow(message);

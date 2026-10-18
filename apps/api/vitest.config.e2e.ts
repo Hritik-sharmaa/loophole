@@ -18,6 +18,8 @@ export default defineConfig({
       DATABASE_URL: 'postgresql://postgres:postgres@localhost:5432/postgres',
       SUPABASE_URL: 'https://example.supabase.co',
       SUPABASE_SERVICE_KEY: 'test-service-key',
+      // PistonClient is stubbed in tests, so this is never called either.
+      PISTON_URL: 'http://localhost:2000',
     },
   },
 });

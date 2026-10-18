@@ -40,6 +40,11 @@ export class EnvironmentVariables {
   @IsString()
   @IsNotEmpty()
   SUPABASE_SERVICE_KEY: string;
+
+  // Local Piston (http://localhost:2000) or the Compose service name in
+  // production (http://piston:2000). Server-only, like the keys above.
+  @IsUrl({ require_tld: false, require_protocol: true, protocols: ['http'] })
+  PISTON_URL: string;
 }
 
 export function validateEnv(

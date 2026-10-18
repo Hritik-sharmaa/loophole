@@ -21,6 +21,12 @@ export class UsersService {
     return this.toMe(await this.getOrCreate(user));
   }
 
+  // For services that write rows pointing at profiles (submissions,
+  // progress): a new user may submit before ever calling GET /me.
+  async ensureProfile(user: AuthUser): Promise<void> {
+    await this.getOrCreate(user);
+  }
+
   async updateMe(user: AuthUser, dto: UpdateMeDto): Promise<MeResponse> {
     const current = await this.getOrCreate(user);
     if (dto.username === undefined && dto.avatarUrl === undefined) {

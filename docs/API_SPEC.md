@@ -46,10 +46,10 @@ Base URL: `https://api.<domain>` (local: `http://localhost:3001`). All bodies ar
 
 ### Submissions — S3
 
-| Method | Path                       | Body                                           | Response                                            |
-| ------ | -------------------------- | ---------------------------------------------- | --------------------------------------------------- |
-| POST   | `/submissions`             | `{ exerciseId: uuid, code: string (≤ 20 KB) }` | see below                                           |
-| GET    | `/submissions?exerciseId=` | —                                              | last 10 of the user's submissions for that exercise |
+| Method | Path                       | Body                                           | Response                                                                                                                                              |
+| ------ | -------------------------- | ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| POST   | `/submissions`             | `{ exerciseId: uuid, code: string (≤ 20 KB) }` | 201, see below — 403 `LESSON_LOCKED`, 404 unknown exercise, 400 for any extra field (e.g. test cases), 429 `RATE_LIMITED`, 502 `EXECUTOR_UNAVAILABLE` |
+| GET    | `/submissions?exerciseId=` | —                                              | last 10 of the user's submissions for that exercise, newest first: `[{ id, status, testsPassed, totalTests, code, submittedAt }]`                     |
 
 ```json
 {
@@ -74,6 +74,12 @@ Base URL: `https://api.<domain>` (local: `http://localhost:3001`). All bodies ar
 ```
 
 Hidden test results show only `passed`, never input or expected output. Throttle: 10 per minute per user.
+
+- `status`: `passed` (every test passed), `error` (some test crashed or ran out of time), otherwise `failed`.
+- `expected` and `actual` are the trimmed strings that were compared (ADR-011).
+- `stderr` is the first non-empty stderr of a **sample** test, never a hidden one (a traceback can quote the hidden input). If none, and any test ran out of time, it is a fixed time-limit message. Truncated to 4 KB.
+- `lessonCompleted` is true whenever every test passed, including a repeat pass of a finished lesson. `xpAwarded` is 0 until S4, then 10 only on the first completion.
+- A 502 saves nothing.
 
 ### Gamification — S4
 

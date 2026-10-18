@@ -86,16 +86,25 @@ export class LessonsService {
       .where(eq(lessons.id, lessonId));
     if (!lesson) throw notFound('Lesson');
 
-    const rows = await this.orderedLessons(lesson.courseId);
+    await this.assertUnlocked(userId, lesson.id, lesson.courseId);
+    return { id: lesson.id, title: lesson.title, exercise: lesson.exercise };
+  }
+
+  // Throws 403 LESSON_LOCKED unless the lesson is active or completed for
+  // this user. Also used by SubmissionsService before grading.
+  async assertUnlocked(
+    userId: string,
+    lessonId: string,
+    courseId: string,
+  ): Promise<void> {
+    const rows = await this.orderedLessons(courseId);
     const states = await this.statesFor(userId, rows);
-    if (states.get(lesson.id) === 'locked') {
+    if (states.get(lessonId) === 'locked') {
       throw new ForbiddenException({
         code: 'LESSON_LOCKED',
         message: 'Finish the previous lesson first.',
       });
     }
-
-    return { id: lesson.id, title: lesson.title, exercise: lesson.exercise };
   }
 
   // Every lesson in a course, in path order.

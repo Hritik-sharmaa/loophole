@@ -15,6 +15,13 @@
       "when": 1792247177446,
       "tag": "0001_lessons",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792305030406,
+      "tag": "0002_submissions",
+      "breakpoints": true
     }
   ]
 }

@@ -1,22 +1,27 @@
 'use client';
 
 import type { LessonDetail } from '@loophole/shared';
-import { ArrowLeft, Lock } from 'lucide-react';
+import { ArrowLeft, Lock, RotateCcw } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
+import { useState } from 'react';
 import { AppHeader } from '@/components/app-header';
+import { CodeEditor } from '@/components/code-editor';
 import { InlineCode } from '@/components/inline-code';
+import { TestResults } from '@/components/test-results';
 import { primaryButton, secondaryButton } from '@/components/ui/buttons';
 import { ApiError } from '@/lib/api';
 import { useLesson } from '@/lib/queries/use-lessons';
+import { useSubmissions, useSubmit } from '@/lib/queries/use-submissions';
 import { useRequireSession } from '@/lib/use-require-session';
 
-// One exercise: prompt, starter code and sample tests. Read-only for now;
-// the editor and Run button arrive in S3.
+// One exercise: prompt, sample tests, editor, Run, and the graded result.
 export default function LessonPage() {
   const { id } = useParams<{ id: string }>();
   const { loading } = useRequireSession();
   const lesson = useLesson(id, !loading);
+  // The editor starts from the user's latest attempt, if any.
+  const history = useSubmissions(lesson.data?.exercise.id, !loading);
 
   return (
     <>
@@ -33,16 +38,35 @@ export default function LessonPage() {
           <p className="text-text-secondary">Loading the lesson…</p>
         ) : lesson.isError ? (
           <LessonError error={lesson.error} />
+        ) : history.isPending ? (
+          <p className="text-text-secondary">Loading your code…</p>
         ) : (
-          <Exercise lesson={lesson.data} />
+          <Exercise
+            key={lesson.data.id}
+            lesson={lesson.data}
+            // A failed history load just means starting from the starter code.
+            initialCode={
+              history.data?.[0]?.code ?? lesson.data.exercise.starterCode
+            }
+          />
         )}
       </main>
     </>
   );
 }
 
-function Exercise({ lesson }: { lesson: LessonDetail }) {
-  const { prompt, starterCode, sampleTests } = lesson.exercise;
+function Exercise({
+  lesson,
+  initialCode,
+}: {
+  lesson: LessonDetail;
+  initialCode: string;
+}) {
+  const { id: exerciseId, prompt, starterCode, sampleTests } = lesson.exercise;
+  const [code, setCode] = useState(initialCode);
+  const submit = useSubmit();
+  const result = submit.data;
+  const completed = result?.lessonCompleted ?? false;
 
   return (
     <article className="flex flex-col gap-6">
@@ -50,15 +74,6 @@ function Exercise({ lesson }: { lesson: LessonDetail }) {
       <p className="text-lg">
         <InlineCode text={prompt} />
       </p>
-
-      <section className="overflow-hidden rounded-card border-2 border-ink">
-        <h2 className="border-b-2 border-ink px-4 py-2 font-mono text-sm font-bold">
-          main.py
-        </h2>
-        <pre className="overflow-x-auto px-4 py-4 font-mono text-sm leading-6">
-          {starterCode || ' '}
-        </pre>
-      </section>
 
       <section className="flex flex-col gap-3">
         <h2 className="font-display text-xl font-bold">Example</h2>
@@ -86,14 +101,54 @@ function Exercise({ lesson }: { lesson: LessonDetail }) {
         </table>
       </section>
 
-      <div className="flex items-center gap-3">
-        <button type="button" disabled className={primaryButton}>
-          Run
+      <CodeEditor value={code} onChange={setCode} fileName="main.py" />
+
+      <div className="flex flex-wrap items-center gap-3">
+        {/* One orange button per region: Continue takes over once passed. */}
+        <button
+          type="button"
+          onClick={() => submit.mutate({ exerciseId, code })}
+          disabled={submit.isPending}
+          className={completed ? secondaryButton : primaryButton}
+        >
+          {submit.isPending ? 'Running…' : 'Run'}
         </button>
-        <span className="text-sm text-text-secondary">
-          The editor arrives in the next update.
-        </span>
+        <button
+          type="button"
+          onClick={() => setCode(starterCode)}
+          disabled={submit.isPending || code === starterCode}
+          className={secondaryButton}
+        >
+          <RotateCcw className="size-4" strokeWidth={3} /> Reset code
+        </button>
       </div>
+
+      {submit.isError && (
+        <p role="alert" className="rounded-card bg-surface px-4 py-3 font-bold">
+          {submit.error.message}
+        </p>
+      )}
+
+      {completed && (
+        <div
+          role="status"
+          className="flex flex-wrap items-center justify-between gap-4 rounded-card border-2 border-ink px-6 py-4"
+        >
+          <div>
+            <p className="font-display text-2xl font-extrabold">
+              Lesson complete!
+            </p>
+            <p className="text-text-secondary">
+              Your next lesson is waiting on the path.
+            </p>
+          </div>
+          <Link href="/learn" className={primaryButton}>
+            Continue
+          </Link>
+        </div>
+      )}
+
+      {result && <TestResults result={result} />}
     </article>
   );
 }
