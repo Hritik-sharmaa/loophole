@@ -30,7 +30,7 @@ Both are safe to run again. Repeat them whenever a slice adds a migration or con
 
 ## 2. VPS
 
-On Google Cloud's free trial? Do [2a](#2a-the-vps-on-google-cloud-free-trial) first, then continue here.
+On a cloud free plan? Do [2a (Google Cloud)](#2a-the-vps-on-google-cloud-free-trial) or [2b (AWS)](#2b-the-vps-on-aws-free-plan) first, then continue here.
 
 **VPS**, as a user with sudo:
 
@@ -129,6 +129,41 @@ Google's free trial gives $300 of credit for 90 days. It needs a card to verify 
 To paste secrets into `apps/api/.env` on the server, open it with `nano apps/api/.env`, paste, then press Ctrl+O, Enter, Ctrl+X. If you close the browser tab, Cloud Shell and the SSH session end, but the server and the app keep running. Reconnect with steps 2 and 7.
 
 **Keep an eye on the credit:** Billing → Overview in the console shows what is left and the days remaining. To stop the server without deleting it, run `gcloud compute instances stop loophole --zone=asia-south1-a`. The reserved IP still costs a little while the server is stopped.
+
+### 2b. The VPS on AWS (free plan)
+
+AWS's free plan (accounts created after 15 July 2025) gives $100 of credit at sign-up, plus up to $100 more for onboarding tasks, for 6 months. On the **free plan** AWS does not charge the card; when the credit or the 6 months run out, the account closes unless you upgrade. One Google or AWS trial per person: use it only if you have never had an AWS account.
+
+The server below (`t3.small`: 2 vCPU / 2 GB, x86, Mumbai, 30 GB disk, fixed IP) costs about $23 a month, so $200 covers the 6 months; with only the first $100 it lasts about 4 months.
+
+1. **Sign up** at <https://aws.amazon.com> → **Create an AWS account**: email, account name, the code from the email, a root password.
+   - Contact info: **Personal**. Billing: a Visa/Mastercard card with online payments on (AWS may hold about ₹2 to verify it). Phone: verify with the SMS code.
+   - When asked for a plan, choose **Free plan**. If no free plan is offered, stop: on a paid plan the server is billed to the card.
+   - Support plan: **Basic support - Free**.
+2. **Sign in** at <https://console.aws.amazon.com> as the root user. Turn on MFA for the root user when the console suggests it (IAM → Add MFA, with an authenticator app).
+3. **Choose Mumbai:** top right, next to your name, pick **Asia Pacific (Mumbai) ap-south-1**. Everything below must be in this region.
+4. **Launch the server:** search **EC2** → **Launch instance**.
+   - Name: `loophole`.
+   - Application and OS image: **Ubuntu** → **Ubuntu Server 24.04 LTS**, architecture **64-bit (x86)** (not Arm: Piston has no Arm build).
+   - Instance type: **t3.small**.
+   - Key pair: **Create new key pair** → name `loophole`, type ED25519, `.pem` → keep the downloaded file safe (backup way in).
+   - Network settings: **Create security group**, tick **Allow SSH traffic from Anywhere**, **Allow HTTPS traffic from the internet** and **Allow HTTP traffic from the internet**. (SSH accepts keys only, never passwords, on Ubuntu images.)
+   - Configure storage: **30** GiB, **gp3**.
+   - **Launch instance**.
+5. **Give it a fixed IP:** EC2 left menu → **Elastic IPs** → **Allocate Elastic IP address** → **Allocate**. Select it → **Actions → Associate Elastic IP address** → Instance: `loophole` → **Associate**. Note the IP, e.g. `13.233.10.20`; your API domain is `13-233-10-20.sslip.io`.
+6. **Log in:** EC2 → **Instances** → tick `loophole` → **Connect** → tab **EC2 Instance Connect** → user `ubuntu` → **Connect**. A terminal opens in the browser: you are on the **VPS**.
+7. **Add 2 GB of swap** (2 GB of RAM is tight while Docker builds the API):
+
+   ```bash
+   sudo fallocate -l 2G /swapfile && sudo chmod 600 /swapfile && sudo mkswap /swapfile
+   sudo swapon /swapfile && echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+   ```
+
+8. Continue with section 2 above, with two differences:
+   - Skip the `ufw` line: the security group from step 4 is the firewall.
+   - Clone with `git clone https://github.com/Hritik-sharmaa/loophole.git`, and set `API_DOMAIN` to the `sslip.io` name from step 5. No DNS step is needed.
+
+**Credit:** Console Home shows the free-plan widget with credit and days left. Its **Explore AWS** tasks (for example launching an EC2 instance, which you just did, or creating a budget) add credit toward the extra $100. To pause the server, EC2 → Instances → **Instance state → Stop**; the disk and Elastic IP still use a little credit while stopped.
 
 ## 3. Web on Vercel
 
