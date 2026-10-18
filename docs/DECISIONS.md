@@ -11,6 +11,7 @@ Format: **ADR-NNN · Title** — Status (Accepted / Superseded by ADR-NNN) · Da
 - Decision: `PistonClient` queues every run, so Piston never receives two jobs at once, across all users. A submission runs its tests one after another and skips the rest after the first time-out.
 - Why: the local Piston image (Docker Desktop) crashes its sandbox when jobs overlap ("Sandbox keeper received fatal signal 6"). In testing, about half of parallel runs failed, even at two at a time; every sequential run passed. A crashed sandbox looked like a wrong answer to the learner.
 - Trade-off: a run takes about 0.6 s locally, so an 8-test exercise takes about 5 s, over NFR-09 (3 s). Concurrent submissions wait for each other. The queue lives in one `PistonClient` instance, so the API must have exactly one (a shared module once duels use it). Re-test parallel runs on the VPS in S6 and raise the limit if they are stable.
+- Re-test 2026-10-18 on the AWS VPS (t3.small, Ubuntu 24.04): sequential 40/40 and parallel 40/40 passed, about 50 ms per run. The crashes are specific to Docker Desktop. Kept at one at a time anyway: an 8-test exercise grades in about 0.4 s on the VPS, well inside NFR-09, and the limit still protects local development. Raise it only if many users grade at the same moment.
 
 **ADR-017 · PGlite for API database tests** — Accepted · 2026-10-17
 

@@ -63,8 +63,8 @@ Loop for every slice: AI **writes** the slice → you **review** and change it �
 
 ### S6 · Deploy early
 
-- [ ] VPS (2 vCPU / 4 GB) with Docker Compose: API + Piston + Caddy
-- [ ] Re-test parallel Piston runs on the VPS; raise the limit in `PistonClient` if they are stable (ADR-018)
+- [x] VPS with Docker Compose: API + Piston + Caddy (AWS free plan, t3.small; `docs/DEPLOY.md` 2b)
+- [x] Re-test parallel Piston runs on the VPS: 40/40 stable, ~50 ms per run; limit kept at 1 (ADR-018)
 - [ ] Web on Vercel with production env
 - [x] Deploy files: API `Dockerfile`, `infra/docker-compose.prod.yml`, `Caddyfile`, runtime install script; runbook in `docs/DEPLOY.md`
 - [ ] README: what it is, how to run locally, demo link (written; demo link after the deploy)
