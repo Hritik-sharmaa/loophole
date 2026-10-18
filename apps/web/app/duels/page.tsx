@@ -3,7 +3,8 @@
 import type { DuelEnd } from '@loophole/shared';
 import { Flag, Swords } from 'lucide-react';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 import { AppHeader } from '@/components/app-header';
 import { CodeEditor } from '@/components/code-editor';
 import { DuelCountdown } from '@/components/duel-countdown';
@@ -12,6 +13,7 @@ import { ProgressBar } from '@/components/progress-bar';
 import { SampleTests } from '@/components/sample-tests';
 import { TestResults } from '@/components/test-results';
 import { primaryButton, secondaryButton } from '@/components/ui/buttons';
+import { useMe } from '@/lib/queries/use-me';
 import { useDuelSocket, type DuelState } from '@/lib/use-duel-socket';
 import { useRequireSession } from '@/lib/use-require-session';
 
@@ -25,6 +27,16 @@ export default function DuelsPage() {
     myId,
     !loading,
   );
+  const me = useMe(!loading);
+  const queryClient = useQueryClient();
+
+  // A finished duel changed ratings (S8): refresh the header, profile and
+  // leaderboards.
+  useEffect(() => {
+    if (!state.end) return;
+    void queryClient.invalidateQueries({ queryKey: ['me'] });
+    void queryClient.invalidateQueries({ queryKey: ['leaderboard'] });
+  }, [state.end, queryClient]);
 
   return (
     <>
@@ -35,7 +47,12 @@ export default function DuelsPage() {
         ) : state.phase === 'offline' ? (
           <Offline message={state.error?.message} />
         ) : state.phase === 'idle' || state.phase === 'queued' ? (
-          <Lobby state={state} onFind={findDuel} onCancel={leaveQueue} />
+          <Lobby
+            state={state}
+            rating={me.data?.rating}
+            onFind={findDuel}
+            onCancel={leaveQueue}
+          />
         ) : (
           <Room
             key={state.duelId}
@@ -53,10 +70,12 @@ export default function DuelsPage() {
 
 function Lobby({
   state,
+  rating,
   onFind,
   onCancel,
 }: {
   state: DuelState;
+  rating: number | undefined;
   onFind: () => void;
   onCancel: () => void;
 }) {
@@ -70,6 +89,11 @@ function Lobby({
         You and an opponent get the same buggy program and five minutes. The
         first fix that passes every test wins.
       </p>
+      {rating !== undefined && (
+        <p className="font-bold">
+          Your rating: <span className="font-display text-xl">{rating}</span>
+        </p>
+      )}
 
       {queued ? (
         <div role="status" className="flex flex-col items-center gap-4">
@@ -241,11 +265,11 @@ function Outcome({
       <div>
         <p className="font-display text-3xl font-extrabold">{title}</p>
         <p className="text-text-secondary">{detail}</p>
-        {change !== 0 && (
-          <p className="font-bold">
-            Rating {change > 0 ? `+${change}` : change}
-          </p>
-        )}
+        <p className="font-bold">
+          {change === 0
+            ? 'Rating unchanged'
+            : `Rating ${change > 0 ? `+${change}` : change}`}
+        </p>
       </div>
       <div className="flex flex-wrap gap-3">
         <button type="button" onClick={onPlayAgain} className={primaryButton}>

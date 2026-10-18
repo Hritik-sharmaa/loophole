@@ -12,6 +12,7 @@ import { DuelsModule } from './modules/duels/duels.module.js';
 import { GamificationModule } from './modules/gamification/gamification.module.js';
 import { HealthModule } from './modules/health/health.module.js';
 import { LessonsModule } from './modules/lessons/lessons.module.js';
+import { RatingsModule } from './modules/ratings/ratings.module.js';
 import { SubmissionsModule } from './modules/submissions/submissions.module.js';
 import { UsersModule } from './modules/users/users.module.js';
 
@@ -38,6 +39,7 @@ import { UsersModule } from './modules/users/users.module.js';
     GamificationModule,
     AiModule,
     DuelsModule,
+    RatingsModule,
   ],
   // Registered here rather than in main.ts so e2e tests get them too.
   providers: [

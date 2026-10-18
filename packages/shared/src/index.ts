@@ -95,6 +95,13 @@ export type WeeklyLeaderboard = {
   me: { rank: number | null; xp: number };
 };
 
+// GET /leaderboard/rating. Duel Elo, highest first (FR-24). Only players
+// who have finished a duel are listed; `me.rank` is null until then.
+export type RatingLeaderboard = {
+  entries: { rank: number; userId: string; username: string; elo: number }[];
+  me: { rank: number | null; elo: number };
+};
+
 // GET /submissions?exerciseId= (newest first, at most 10)
 export type SubmissionSummary = {
   id: string;
@@ -162,7 +169,7 @@ export type DuelEnd = {
   result: DuelResultKind;
   // null for a draw.
   winnerId: string | null;
-  // Elo change per player; all 0 until ratings arrive in S8.
+  // Elo change per player (S8), e.g. { [winnerId]: 16, [loserId]: -16 }.
   ratingChange: Record<string, number>;
 };
 export type SocketError = { code: string; message: string };

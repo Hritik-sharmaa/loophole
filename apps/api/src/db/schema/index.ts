@@ -6,3 +6,4 @@ export * from './submissions.js';
 export * from './gamification.js';
 export * from './ai-usage.js';
 export * from './duels.js';
+export * from './ratings.js';

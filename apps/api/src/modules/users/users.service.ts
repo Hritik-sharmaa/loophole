@@ -5,6 +5,8 @@ import { DbService } from '../../db/db.service.js';
 import { profiles, userProgress, type Profile } from '../../db/schema/index.js';
 import type { AuthUser } from '../../integrations/supabase-auth.client.js';
 import { GamificationService } from '../gamification/gamification.service.js';
+import { STARTING_ELO } from '../ratings/elo.js';
+import { RatingsService } from '../ratings/ratings.service.js';
 import type { UpdateMeDto } from './dto/update-me.dto.js';
 import { toUsernameBase, withRandomSuffix } from './username.js';
 
@@ -19,6 +21,7 @@ export class UsersService {
   constructor(
     private readonly db: DbService,
     private readonly gamification: GamificationService,
+    private readonly ratings: RatingsService,
   ) {}
 
   async getMe(user: AuthUser): Promise<MeResponse> {
@@ -98,6 +101,7 @@ export class UsersService {
       .where(eq(userProgress.userId, profile.id));
 
     const { xp, streak } = await this.gamification.stats(profile.id);
+    const elos = await this.ratings.elosOf([profile.id]);
 
     return {
       id: profile.id,
@@ -105,8 +109,7 @@ export class UsersService {
       avatarUrl: profile.avatarUrl,
       xp,
       streak,
-      // Fixed until the ratings table exists in S8 (ADR-012: start 1200).
-      rating: 1200,
+      rating: elos.get(profile.id) ?? STARTING_ELO,
       lessonsCompleted: done,
     };
   }

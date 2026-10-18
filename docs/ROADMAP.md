@@ -72,14 +72,14 @@ Loop for every slice: AI **writes** the slice → you **review** and change it �
 
 ## Phase 2 — Live debugging duels
 
-### S7 · Duel rooms
+### S7 · Duel rooms ✅
 
-- [ ] Tables: duel_problems, duels, duel_submissions; 15 problems seeded
-- [ ] `DuelsGateway` on `/duels` with JWT check on connect
-- [ ] In-memory `MatchmakingService` (first two in queue)
-- [ ] `canTransition(from, to)` with a test for each legal and illegal transition
-- [ ] Duel room page: problem, editor, countdown from `endsAt`, opponent progress bar
-- [ ] Winner via conditional update; server timer for timeout and draw
+- [x] Tables: duel_problems, duels, duel_submissions; 15 problems seeded
+- [x] `DuelsGateway` on `/duels` with JWT check on connect
+- [x] In-memory `MatchmakingService` (first two in queue)
+- [x] `canTransition(from, to)` with a test for each legal and illegal transition
+- [x] Duel room page: problem, editor, countdown from `endsAt`, opponent progress bar
+- [x] Winner via conditional update; server timer for timeout and draw
 - **Done when:** two browsers are matched, race, and see the same single result. (FR-17, FR-19 to FR-22, FR-25, FR-26)
 
 ### S8 · Ratings

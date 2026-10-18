@@ -107,7 +107,7 @@ In a test, stub a client with `Test.createTestingModule({ ... }).overrideProvide
 
 ### 2.5 Cross-module calls
 
-Services call each other directly; there are no domain events in v1. After a lesson completes, `SubmissionsService` calls `GamificationService` to award XP and update the streak. After a duel finishes, `DuelsService` calls `RatingsService`. These calls happen **after** the write that caused them succeeds, and each one is idempotent (unique constraints in `DATA_MODEL.md`).
+Services call each other directly; there are no domain events in v1. After a lesson completes, `SubmissionsService` calls `GamificationService` to award XP and update the streak. When a duel finishes, `DuelsService` calls `RatingsService` inside the transaction that marks it completed (§3.2). These calls happen **after** the write that caused them succeeds, and each one is idempotent (unique constraints in `DATA_MODEL.md`).
 
 ### 2.6 Errors
 
@@ -144,7 +144,7 @@ One global `HttpExceptionFilter` turns every exception into `{ error: { code, me
 6. A fully passing submission tries `update duels set winner_id = $1, status = 'completed' where id = $2 and winner_id is null`. Exactly one caller updates a row; that caller emits `duel:end` and calls `RatingsService`.
 7. A server timer at `endsAt` finishes the duel by most tests passed, or a draw. On startup the API re-arms timers for duels still `in_progress` (overdue ones finish at once), so a restart never leaves a duel open.
    Sockets join `user:<id>` on connect and `duel:<id>` when matched, so reloads and second tabs keep receiving events; a reconnecting player gets the duel again.
-8. `RatingsService` applies ELO to both players in one transaction.
+8. `RatingsService` applies Elo to both players **inside the same transaction** as the conditional update in step 6 (and the timeout in step 7): the result and both ratings commit together or not at all, so a duel can never pay twice or be lost. The two rating rows are locked in id order (`select … for update`) so concurrent duels can't deadlock.
 
 ## 4. Deployment
 

@@ -1,6 +1,8 @@
 import type { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import type {
+  MeResponse,
+  RatingLeaderboard,
   DuelEnd,
   DuelMatched,
   DuelProgress,
@@ -13,9 +15,10 @@ import { eq, ne } from 'drizzle-orm';
 import type { Server } from 'node:http';
 import type { AddressInfo } from 'node:net';
 import { io, type Socket } from 'socket.io-client';
+import request from 'supertest';
 import { AppModule } from '../src/app.module.js';
 import { DbService, type Db } from '../src/db/db.service.js';
-import { duelProblems, duels } from '../src/db/schema/index.js';
+import { duelProblems, duels, ratings } from '../src/db/schema/index.js';
 import { seedContent } from '../src/db/seed/seed-content.js';
 import {
   PistonClient,
@@ -141,6 +144,13 @@ describe('Duels (e2e)', () => {
   let app: INestApplication<Server>;
   let url: string;
   const players: Player[] = [];
+  const ratingOf = async (userId: string) => {
+    const [row] = await db
+      .select()
+      .from(ratings)
+      .where(eq(ratings.userId, userId));
+    return row;
+  };
   // ana vs ben, from the matching test; reused by the next three.
   let firstDuel: string;
   const byName = (name: string) => players.find((p) => p.name === name)!;
@@ -285,9 +295,23 @@ describe('Duels (e2e)', () => {
     expect(endA).toEqual(endB);
     expect(endA.result).toBe('win');
     expect([pa.id, pb.id]).toContain(endA.winnerId);
-    expect(endA.ratingChange).toEqual({ [pa.id]: 0, [pb.id]: 0 });
     expect(pa.count('duel:end')).toBe(1);
     expect(pb.count('duel:end')).toBe(1);
+
+    // FR-24 / Gate 2: both ratings move, once. Equal 1200s: ±16.
+    const winner = endA.winnerId!;
+    const loser = winner === pa.id ? pb.id : pa.id;
+    expect(endA.ratingChange).toEqual({ [winner]: 16, [loser]: -16 });
+    expect(await ratingOf(winner)).toMatchObject({
+      elo: 1216,
+      wins: 1,
+      losses: 0,
+    });
+    expect(await ratingOf(loser)).toMatchObject({
+      elo: 1184,
+      wins: 0,
+      losses: 1,
+    });
 
     const [row] = await db.select().from(duels).where(eq(duels.id, duelId));
     expect(row).toMatchObject({
@@ -318,7 +342,11 @@ describe('Duels (e2e)', () => {
 
     await app.get(DuelsService).finishOnTimeout(duelId);
     const end = await pa.next<DuelEnd>('duel:end');
-    expect(end).toMatchObject({ result: 'win', winnerId: pa.id });
+    expect(end).toMatchObject({
+      result: 'win',
+      winnerId: pa.id,
+      ratingChange: { [pa.id]: 16, [pb.id]: -16 },
+    });
     expect(await pb.next<DuelEnd>('duel:end')).toEqual(end);
   });
 
@@ -332,7 +360,9 @@ describe('Duels (e2e)', () => {
     expect(await pa.next<DuelEnd>('duel:end')).toMatchObject({
       result: 'draw',
       winnerId: null,
+      ratingChange: { [pa.id]: 0, [pb.id]: 0 },
     });
+    expect(await ratingOf(pa.id)).toMatchObject({ elo: 1200, draws: 1 });
     // A late timer for a finished duel changes nothing.
     await app.get(DuelsService).finishOnTimeout(duelId);
     await settle();
@@ -345,7 +375,55 @@ describe('Duels (e2e)', () => {
     expect(await pb.next<DuelEnd>('duel:end')).toMatchObject({
       result: 'forfeit',
       winnerId: pb.id,
+      ratingChange: { [pb.id]: 16, [pa.id]: -16 },
     });
+  });
+
+  it('a rematch shows the new ratings, and the higher one gains less (FR-24)', async () => {
+    // cal and dee finished one duel: one is at 1216, the other at 1184.
+    const calElo = (await ratingOf(USERS.cal.id)).elo;
+    const deeElo = (await ratingOf(USERS.dee.id)).elo;
+    await new Promise((r) => setTimeout(r, 3_100)); // past the throttle
+    for (const p of players.filter((x) => ['cal', 'dee'].includes(x.name))) {
+      p.socket.disconnect();
+    }
+
+    const { pa, pb, ma, duelId } = await duelBetween('cal', 'dee');
+    expect(ma.opponent.elo).toBe(deeElo);
+    pa.send('duel:submit', { duelId, code: 'fixed' });
+    const end = await pb.next<DuelEnd>('duel:end');
+
+    // Expected change for cal from Elo with K = 32.
+    const expectedCal = Math.round(
+      32 * (1 - 1 / (1 + 10 ** ((deeElo - calElo) / 400))),
+    );
+    expect(end.ratingChange).toEqual({
+      [pa.id]: expectedCal,
+      [pb.id]: -expectedCal,
+    });
+    expect((await ratingOf(pa.id)).elo).toBe(calElo + expectedCal);
+  });
+
+  it('GET /leaderboard/rating and /me show the ratings', async () => {
+    const get = <T>(who: string, url: string) =>
+      request(app.getHttpServer())
+        .get(url)
+        .set('Authorization', `Bearer ${who}`)
+        .expect(200)
+        .then((res) => res.body as T);
+
+    const board = await get<RatingLeaderboard>('ana', '/leaderboard/rating');
+    const elos = board.entries.map((e) => e.elo);
+    expect(elos).toEqual([...elos].sort((x, y) => y - x));
+    expect(board.entries[0]).toMatchObject({ rank: 1 });
+    expect(board.entries.every((e) => e.username && e.userId)).toBe(true);
+
+    // Players who have not finished a duel are not ranked yet.
+    const fresh = await get<RatingLeaderboard>('max', '/leaderboard/rating');
+    expect(fresh.me).toEqual({ rank: null, elo: 1200 });
+
+    const eve = await get<MeResponse>('eve', '/me');
+    expect(eve.rating).toBe((await ratingOf(USERS.eve.id)).elo);
   });
 
   it('a reload mid-duel gets the same duel back; queueing again is refused', async () => {

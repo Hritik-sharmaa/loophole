@@ -31,6 +31,8 @@ import { PistonClient } from '../../integrations/piston.client.js';
 import type { AuthUser } from '../../integrations/supabase-auth.client.js';
 import { grade } from '../submissions/grading.js';
 import { runTests } from '../submissions/run-tests.js';
+import { STARTING_ELO } from '../ratings/elo.js';
+import { RatingsService } from '../ratings/ratings.service.js';
 import { UsersService } from '../users/users.service.js';
 import {
   DUEL_DURATION_MS,
@@ -40,9 +42,6 @@ import {
   timeoutOutcome,
 } from './duel-rules.js';
 import { MatchmakingService } from './matchmaking.service.js';
-
-// ADR-012: everyone starts at 1200. Real ratings arrive in S8.
-const STARTING_ELO = 1200;
 
 type Duel = typeof duels.$inferSelect;
 
@@ -70,6 +69,7 @@ export class DuelsService implements OnApplicationBootstrap, OnModuleDestroy {
     private readonly piston: PistonClient,
     private readonly matchmaking: MatchmakingService,
     private readonly users: UsersService,
+    private readonly ratings: RatingsService,
   ) {}
 
   // Called once by the gateway with the /duels namespace.
@@ -209,6 +209,7 @@ export class DuelsService implements OnApplicationBootstrap, OnModuleDestroy {
       .select({ id: profiles.id, username: profiles.username })
       .from(profiles)
       .where(inArray(profiles.id, [duel.playerA, duel.playerB]));
+    const elos = await this.ratings.elosOf([duel.playerA, duel.playerB]);
 
     const matchedFor = (userId: string): DuelMatched => {
       const opponentId = userId === duel.playerA ? duel.playerB : duel.playerA;
@@ -217,7 +218,7 @@ export class DuelsService implements OnApplicationBootstrap, OnModuleDestroy {
         duelId: duel.id,
         opponent: {
           username: opponent?.username ?? 'opponent',
-          elo: STARTING_ELO,
+          elo: elos.get(opponentId) ?? STARTING_ELO,
         },
       };
     };
@@ -354,18 +355,27 @@ export class DuelsService implements OnApplicationBootstrap, OnModuleDestroy {
     winnerId: string | null,
   ): Promise<void> {
     assertTransition('in_progress', 'completed');
-    const [ended] = await this.db.drizzle
-      .update(duels)
-      .set({ status: 'completed', result, winnerId, endedAt: new Date() })
-      .where(
-        and(
-          eq(duels.id, duel.id),
-          eq(duels.status, 'in_progress'),
-          isNull(duels.winnerId),
-        ),
-      )
-      .returning({ id: duels.id });
-    if (!ended) return;
+    // Ending the duel and paying both ratings is one transaction (FR-24):
+    // if either fails, neither happens.
+    const ratingChange = await this.db.drizzle.transaction(async (tx) => {
+      const [ended] = await tx
+        .update(duels)
+        .set({ status: 'completed', result, winnerId, endedAt: new Date() })
+        .where(
+          and(
+            eq(duels.id, duel.id),
+            eq(duels.status, 'in_progress'),
+            isNull(duels.winnerId),
+          ),
+        )
+        .returning({ id: duels.id });
+      if (!ended) return null;
+
+      const scoreA =
+        winnerId === null ? 0.5 : winnerId === duel.playerA ? 1 : 0;
+      return this.ratings.applyDuel(tx, duel.playerA, duel.playerB, scoreA);
+    });
+    if (!ratingChange) return;
 
     this.clearTimer(duel.id);
     this.lastSubmitAt.delete(duel.playerA);
@@ -374,8 +384,7 @@ export class DuelsService implements OnApplicationBootstrap, OnModuleDestroy {
       duelId: duel.id,
       result,
       winnerId,
-      // S8: RatingsService updates both ratings here, in one transaction.
-      ratingChange: { [duel.playerA]: 0, [duel.playerB]: 0 },
+      ratingChange,
     } satisfies DuelEnd);
     this.room([duelRoom(duel.id)]).socketsLeave(duelRoom(duel.id));
     await this.matchWaiting();
