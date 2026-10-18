@@ -126,7 +126,7 @@ FR-27 replay a finished duel · FR-28 daily "bug of the day" bracket · FR-29 sp
 | NFR-12 | XP and streak updates are idempotent                                                  |
 | NFR-13 | WCAG AA contrast; Ink text on orange                                                  |
 | NFR-14 | Animations respect `prefers-reduced-motion`                                           |
-| NFR-15 | Structured logs; Sentry in Phase 3                                                    |
+| NFR-15 | Structured logs                                                                       |
 | NFR-16 | CI runs lint, typecheck and tests on every push                                       |
 
 ## 8. Open questions

@@ -76,7 +76,6 @@ GEMINI_API_KEY=
 GEMINI_MODEL=gemini-flash-latest
 AI_DAILY_LIMIT=20
 CORS_ORIGIN=http://localhost:3000
-SENTRY_DSN=
 ```
 
 `apps/web/.env.local`:

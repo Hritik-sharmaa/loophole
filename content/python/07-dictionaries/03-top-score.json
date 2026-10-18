@@ -1,0 +1,29 @@
+{
+  "slug": "top-score",
+  "title": "Top score",
+  "position": 3,
+  "exercise": {
+    "prompt": "The first line is a count N; then N lines of `name score`. Print the name with the highest score. If several share it, print the one that came first.",
+    "starterCode": "n = int(input())\nscores = {}\n# read the scores, then print the top name\n",
+    "sampleTests": [
+      {
+        "input": "3\nada 90\nbo 75\ncy 88\n",
+        "expectedOutput": "ada"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "1\nx 5\n",
+        "expectedOutput": "x"
+      },
+      {
+        "input": "2\na 5\nb 9\n",
+        "expectedOutput": "b"
+      },
+      {
+        "input": "3\na 7\nb 9\nc 9\n",
+        "expectedOutput": "b"
+      }
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "slug": "greet-default",
+  "title": "Default values",
+  "position": 3,
+  "exercise": {
+    "prompt": "Finish `greet(name, greeting=\"Hello\")` so it returns `<greeting>, <name>!`. The code below prints `greet(name)` and then `greet(name, \"Welcome\")`.",
+    "starterCode": "def greet(name, greeting=\"Hello\"):\n    # return the greeting text\n    return \"\"\n\n\nname = input()\nprint(greet(name))\nprint(greet(name, \"Welcome\"))\n",
+    "sampleTests": [
+      {
+        "input": "Ada\n",
+        "expectedOutput": "Hello, Ada!\nWelcome, Ada!"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "Bo\n",
+        "expectedOutput": "Hello, Bo!\nWelcome, Bo!"
+      },
+      {
+        "input": "Mary Jane\n",
+        "expectedOutput": "Hello, Mary Jane!\nWelcome, Mary Jane!"
+      },
+      {
+        "input": "x\n",
+        "expectedOutput": "Hello, x!\nWelcome, x!"
+      }
+    ]
+  }
+}

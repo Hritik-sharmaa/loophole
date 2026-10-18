@@ -92,4 +92,23 @@ describe('API (e2e)', () => {
 
     expect(res.body).toMatchObject({ error: { code: 'VALIDATION_FAILED' } });
   });
+
+  it('a write route allows 10 a minute per user, then 429 RATE_LIMITED', async () => {
+    verify.mockResolvedValue(user);
+    const patch = () =>
+      request(app.getHttpServer())
+        .patch('/me')
+        .set('Authorization', 'Bearer good-token')
+        .send({ username: 'a' }); // invalid, so it never reaches the database
+
+    for (let i = 0; i < 10; i++) await patch().expect(400);
+    const res = await patch().expect(429);
+    expect(res.body).toMatchObject({ error: { code: 'RATE_LIMITED' } });
+  });
+
+  it('GET /health is never throttled', async () => {
+    for (let i = 0; i < 130; i++) {
+      await request(app.getHttpServer()).get('/health').expect(200);
+    }
+  });
 });

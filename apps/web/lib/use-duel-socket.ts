@@ -3,6 +3,7 @@
 import type {
   DuelEnd,
   DuelMatched,
+  DuelOpponentStatus,
   DuelProgress,
   DuelStart,
   DuelSubmissionResult,
@@ -28,6 +29,9 @@ export type DuelState = {
   lastResult: DuelSubmissionResult | null;
   end: DuelEnd | null;
   submitting: boolean;
+  // FR-23: when the opponent's last tab closed (ms since epoch); null while
+  // they are connected. They forfeit 30 s after this.
+  opponentAwaySince: number | null;
   error: SocketError | null;
 };
 
@@ -43,6 +47,7 @@ const INITIAL: DuelState = {
   lastResult: null,
   end: null,
   submitting: false,
+  opponentAwaySince: null,
   error: null,
 };
 
@@ -56,6 +61,7 @@ type Action =
   | { type: 'progress'; data: DuelProgress; mine: boolean }
   | { type: 'result'; data: DuelSubmissionResult }
   | { type: 'end'; data: DuelEnd }
+  | { type: 'opponent'; connected: boolean }
   | { type: 'submitting' }
   | { type: 'error'; error: SocketError }
   | { type: 'reset' };
@@ -106,6 +112,11 @@ function reduce(state: DuelState, action: Action): DuelState {
       return { ...state, lastResult: action.data, submitting: false };
     case 'end':
       return { ...state, phase: 'ended', end: action.data, submitting: false };
+    case 'opponent':
+      return {
+        ...state,
+        opponentAwaySince: action.connected ? null : Date.now(),
+      };
     case 'submitting':
       return { ...state, submitting: true, error: null };
     case 'error':
@@ -160,6 +171,11 @@ export function useDuelSocket(myId: string | null, enabled: boolean) {
       dispatch({ type: 'result', data: d }),
     );
     socket.on('duel:end', (d: DuelEnd) => dispatch({ type: 'end', data: d }));
+    socket.on('duel:opponent', (d: DuelOpponentStatus) => {
+      if (d.userId !== myId) {
+        dispatch({ type: 'opponent', connected: d.connected });
+      }
+    });
     socket.on('error', (e: SocketError) =>
       dispatch({ type: 'error', error: e }),
     );

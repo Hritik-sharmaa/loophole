@@ -1,0 +1,29 @@
+{
+  "slug": "countdown",
+  "title": "Countdown",
+  "position": 3,
+  "exercise": {
+    "prompt": "Read N and count down from N to 1, one number per line, then print `Liftoff!`. Use a `while` loop.",
+    "starterCode": "n = int(input())\n# count down with a while loop\nprint(\"Liftoff!\")\n",
+    "sampleTests": [
+      {
+        "input": "3\n",
+        "expectedOutput": "3\n2\n1\nLiftoff!"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "1\n",
+        "expectedOutput": "1\nLiftoff!"
+      },
+      {
+        "input": "5\n",
+        "expectedOutput": "5\n4\n3\n2\n1\nLiftoff!"
+      },
+      {
+        "input": "0\n",
+        "expectedOutput": "Liftoff!"
+      }
+    ]
+  }
+}

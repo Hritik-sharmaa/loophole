@@ -19,11 +19,12 @@ import { UsersModule } from './modules/users/users.module.js';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, validate: validateEnv }),
-    // Only routes with @UseGuards(ThrottlerGuard) are throttled; each sets
-    // its own limit with @Throttle. Counted per signed-in user, not per IP
-    // (JwtAuthGuard runs first and attaches the user).
+    // Every HTTP route: 120 requests a minute per signed-in user (per IP
+    // when signed out). Write routes set a lower limit with @Throttle.
+    // HttpThrottlerGuard runs globally right after JwtAuthGuard (AuthModule),
+    // so the user is known.
     ThrottlerModule.forRoot({
-      throttlers: [{ name: 'default', ttl: 60_000, limit: 10 }],
+      throttlers: [{ name: 'default', ttl: 60_000, limit: 120 }],
       getTracker: (req) =>
         (req as Partial<AuthedRequest>).user?.id ??
         (req as Partial<AuthedRequest>).ip ??

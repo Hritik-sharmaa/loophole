@@ -1,0 +1,33 @@
+{
+  "slug": "count-letter",
+  "title": "Count a letter",
+  "position": 5,
+  "exercise": {
+    "prompt": "The first line is a word, the second a single letter. Print how many times that letter appears in the word (capitals count as different letters).",
+    "starterCode": "word = input()\nletter = input()\n# print how many times letter appears in word\n",
+    "sampleTests": [
+      {
+        "input": "banana\na\n",
+        "expectedOutput": "3"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "banana\nz\n",
+        "expectedOutput": "0"
+      },
+      {
+        "input": "Mississippi\ns\n",
+        "expectedOutput": "4"
+      },
+      {
+        "input": "aaa\na\n",
+        "expectedOutput": "3"
+      },
+      {
+        "input": "Apple\na\n",
+        "expectedOutput": "0"
+      }
+    ]
+  }
+}

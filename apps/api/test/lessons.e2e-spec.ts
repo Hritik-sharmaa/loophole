@@ -85,9 +85,14 @@ describe('Lessons (e2e)', () => {
     expect(path.units.map((u) => u.title)).toEqual([
       'The basics',
       'Making decisions',
+      'Loops',
+      'Working with text',
+      'Lists',
+      'Functions',
+      'Dictionaries',
     ]);
     const states = path.units.flatMap((u) => u.lessons.map((l) => l.state));
-    expect(states).toHaveLength(10);
+    expect(states).toHaveLength(40);
     expect(states[0]).toBe('active');
     expect(states.slice(1).every((s) => s === 'locked')).toBe(true);
     expect(path.units[0].lessons[0].title).toBe('Hello, world');
@@ -146,7 +151,7 @@ describe('Lessons (e2e)', () => {
     const summary = await seedContent(db, CONTENT_DIR);
 
     expect(await counts()).toEqual(before);
-    expect(before).toEqual({ units: 2, lessons: 10, exercises: 10 });
+    expect(before).toEqual({ units: 7, lessons: 40, exercises: 40 });
     expect(summary.stale).toEqual([]);
     // Progress survives a re-seed because lesson ids are kept.
     const [{ n }] = await db.select({ n: count() }).from(userProgress);

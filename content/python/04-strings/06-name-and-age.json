@@ -1,0 +1,29 @@
+{
+  "slug": "name-and-age",
+  "title": "Name and age",
+  "position": 6,
+  "exercise": {
+    "prompt": "Read a name and then an age, each on its own line, and print `<name> is <age> years old.` using an f-string. For `Ada` and `36`, print `Ada is 36 years old.`",
+    "starterCode": "name = input()\nage = int(input())\n# print the sentence with an f-string\n",
+    "sampleTests": [
+      {
+        "input": "Ada\n36\n",
+        "expectedOutput": "Ada is 36 years old."
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "Bo\n7\n",
+        "expectedOutput": "Bo is 7 years old."
+      },
+      {
+        "input": "Mary Jane\n101\n",
+        "expectedOutput": "Mary Jane is 101 years old."
+      },
+      {
+        "input": "X\n0\n",
+        "expectedOutput": "X is 0 years old."
+      }
+    ]
+  }
+}

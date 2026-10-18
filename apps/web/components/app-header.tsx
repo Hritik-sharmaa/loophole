@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type { ReactNode } from 'react';
 import { useMe } from '@/lib/queries/use-me';
+import { useCountUp } from '@/lib/use-count-up';
 import { useSession } from '@/lib/use-session';
 
 // short: the label on phone-width screens, so four links fit one line.
@@ -88,6 +89,8 @@ function Badge({
   label: string;
   value: number;
 }) {
+  // Counts up when XP or the streak grows (DESIGN_SYSTEM §5).
+  const shown = useCountUp(value);
   return (
     <span
       title={label}
@@ -96,7 +99,9 @@ function Badge({
       <span className="text-orange" aria-hidden>
         {icon}
       </span>
-      <span aria-hidden>{value}</span>
+      <span aria-hidden className="tabular-nums">
+        {shown}
+      </span>
       <span className="sr-only">{label}</span>
     </span>
   );

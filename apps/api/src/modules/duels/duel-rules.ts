@@ -7,6 +7,8 @@ export const DUEL_DURATION_MS = 5 * 60 * 1000;
 export const SUBMIT_INTERVAL_MS = 3_000;
 // NFR-07: at most 20 duels running at once (v1).
 export const MAX_ACTIVE_DUELS = 20;
+// FR-23: a player gone this long mid-duel forfeits; back sooner, it resumes.
+export const DISCONNECT_FORFEIT_MS = 30_000;
 
 // 'waiting' is the in-memory queue; the rest are duels.status (FR-25).
 export type DuelPhase = 'waiting' | DuelStatus;

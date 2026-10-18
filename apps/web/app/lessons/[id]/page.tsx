@@ -4,7 +4,7 @@ import type { LessonDetail } from '@loophole/shared';
 import { ArrowLeft, Lock, RotateCcw, Zap } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AppHeader } from '@/components/app-header';
 import { CodeEditor } from '@/components/code-editor';
 import { InlineCode } from '@/components/inline-code';
@@ -13,8 +13,10 @@ import { TestResults } from '@/components/test-results';
 import { TutorPanel } from '@/components/tutor-panel';
 import { primaryButton, secondaryButton } from '@/components/ui/buttons';
 import { ApiError } from '@/lib/api';
+import { celebrate } from '@/lib/celebrate';
 import { useLesson } from '@/lib/queries/use-lessons';
 import { useSubmissions, useSubmit } from '@/lib/queries/use-submissions';
+import { useCountUp } from '@/lib/use-count-up';
 import { useRequireSession } from '@/lib/use-require-session';
 
 // One exercise: prompt, sample tests, editor, Run, and the graded result.
@@ -68,6 +70,11 @@ function Exercise({
   const [code, setCode] = useState(initialCode);
   const submit = useSubmit();
   const result = submit.data;
+
+  // A first completion (XP paid) gets confetti; a repeat pass does not.
+  useEffect(() => {
+    if (result && result.xpAwarded > 0) celebrate();
+  }, [result]);
   const completed = result?.lessonCompleted ?? false;
 
   return (
@@ -116,10 +123,7 @@ function Exercise({
             <p className="flex flex-wrap items-center gap-3 font-display text-2xl font-extrabold">
               Lesson complete!
               {result && result.xpAwarded > 0 && (
-                <span className="flex items-center gap-1 rounded-badge bg-orange px-2 py-0.5 text-base text-ink">
-                  <Zap className="size-4" fill="currentColor" aria-hidden />+
-                  {result.xpAwarded} XP
-                </span>
+                <XpGain amount={result.xpAwarded} />
               )}
             </p>
             <p className="text-text-secondary">
@@ -139,6 +143,17 @@ function Exercise({
         <TutorPanel exerciseId={exerciseId} code={code} submission={result} />
       )}
     </article>
+  );
+}
+
+// "+10 XP", counting up from 0 (DESIGN_SYSTEM §5: XP count-up).
+function XpGain({ amount }: { amount: number }) {
+  const shown = useCountUp(amount, { from: 0 });
+  return (
+    <span className="flex items-center gap-1 rounded-badge bg-orange px-2 py-0.5 text-base text-ink tabular-nums">
+      <Zap className="size-4" fill="currentColor" aria-hidden />+{shown} XP
+      <span className="sr-only">(+{amount} XP)</span>
+    </span>
   );
 }
 

@@ -1,0 +1,29 @@
+{
+  "slug": "word-count",
+  "title": "Word count",
+  "position": 5,
+  "exercise": {
+    "prompt": "Write `word_count(text)` that returns how many words the text has (words are separated by spaces). Read a line and print `word_count` of it.",
+    "starterCode": "def word_count(text):\n    # return the number of words in text\n    return 0\n\n\nprint(word_count(input()))\n",
+    "sampleTests": [
+      {
+        "input": "the quick brown fox\n",
+        "expectedOutput": "4"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "hello\n",
+        "expectedOutput": "1"
+      },
+      {
+        "input": "  spaced   out  \n",
+        "expectedOutput": "2"
+      },
+      {
+        "input": "\n",
+        "expectedOutput": "0"
+      }
+    ]
+  }
+}

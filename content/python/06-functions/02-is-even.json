@@ -1,0 +1,29 @@
+{
+  "slug": "is-even",
+  "title": "Return True or False",
+  "position": 2,
+  "exercise": {
+    "prompt": "Finish `is_even(n)` so it returns `True` when n is even and `False` otherwise. The code below prints `even` or `odd` based on it.",
+    "starterCode": "def is_even(n):\n    # return True or False\n    pass\n\n\nn = int(input())\nif is_even(n):\n    print(\"even\")\nelse:\n    print(\"odd\")\n",
+    "sampleTests": [
+      {
+        "input": "4\n",
+        "expectedOutput": "even"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "7\n",
+        "expectedOutput": "odd"
+      },
+      {
+        "input": "0\n",
+        "expectedOutput": "even"
+      },
+      {
+        "input": "-2\n",
+        "expectedOutput": "even"
+      }
+    ]
+  }
+}

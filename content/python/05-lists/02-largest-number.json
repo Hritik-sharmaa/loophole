@@ -1,0 +1,29 @@
+{
+  "slug": "largest-number",
+  "title": "Largest number",
+  "position": 2,
+  "exercise": {
+    "prompt": "Read whole numbers on one line, separated by spaces, and print the largest. Try `max()`.",
+    "starterCode": "nums = list(map(int, input().split()))\n# print the largest number\n",
+    "sampleTests": [
+      {
+        "input": "3 9 2\n",
+        "expectedOutput": "9"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "-5 -2 -9\n",
+        "expectedOutput": "-2"
+      },
+      {
+        "input": "7\n",
+        "expectedOutput": "7"
+      },
+      {
+        "input": "4 4 1\n",
+        "expectedOutput": "4"
+      }
+    ]
+  }
+}

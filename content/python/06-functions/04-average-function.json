@@ -1,0 +1,29 @@
+{
+  "slug": "average-function",
+  "title": "Average function",
+  "position": 4,
+  "exercise": {
+    "prompt": "Write `average(numbers)` that returns the average of a list. Read whole numbers on one line and print their average with two decimal places, like `2.50`.",
+    "starterCode": "def average(numbers):\n    # return the average of the list\n    return 0\n\n\nnums = list(map(int, input().split()))\nprint(f\"{average(nums):.2f}\")\n",
+    "sampleTests": [
+      {
+        "input": "1 2 3 4\n",
+        "expectedOutput": "2.50"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "5\n",
+        "expectedOutput": "5.00"
+      },
+      {
+        "input": "1 2\n",
+        "expectedOutput": "1.50"
+      },
+      {
+        "input": "-1 1\n",
+        "expectedOutput": "0.00"
+      }
+    ]
+  }
+}

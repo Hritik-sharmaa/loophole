@@ -1,0 +1,29 @@
+{
+  "slug": "square-function",
+  "title": "Your first function",
+  "position": 1,
+  "exercise": {
+    "prompt": "Finish the function `square(n)` so it returns `n * n`. The code below reads a number and prints `square` of it.",
+    "starterCode": "def square(n):\n    # return n times n\n    pass\n\n\nn = int(input())\nprint(square(n))\n",
+    "sampleTests": [
+      {
+        "input": "4\n",
+        "expectedOutput": "16"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "0\n",
+        "expectedOutput": "0"
+      },
+      {
+        "input": "-3\n",
+        "expectedOutput": "9"
+      },
+      {
+        "input": "12\n",
+        "expectedOutput": "144"
+      }
+    ]
+  }
+}

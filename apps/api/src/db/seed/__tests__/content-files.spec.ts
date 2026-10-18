@@ -32,9 +32,16 @@ describe('the real content/ folder', () => {
   it('loads without errors', () => {
     const [python] = loadAllContent(REAL_CONTENT);
     expect(python.slug).toBe('python');
-    expect(python.units.map((u) => u.slug)).toEqual(['basics', 'conditionals']);
-    const lessonCount = python.units.flatMap((u) => u.lessons).length;
-    expect(lessonCount).toBe(10);
+    // The full v1 track (docs/CONTENT_GUIDE.md §4, goal G-1): 40 lessons.
+    expect(python.units.map((u) => [u.slug, u.lessons.length])).toEqual([
+      ['basics', 6],
+      ['conditionals', 6],
+      ['loops', 7],
+      ['strings', 6],
+      ['lists', 6],
+      ['functions', 5],
+      ['dictionaries', 4],
+    ]);
   });
 });
 

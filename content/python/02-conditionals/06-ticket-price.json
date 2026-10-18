@@ -1,0 +1,41 @@
+{
+  "slug": "ticket-price",
+  "title": "Ticket price",
+  "position": 6,
+  "exercise": {
+    "prompt": "Read an age and print the ticket price: `0` for under 3, `5` for ages 3 to 12, `10` for 13 to 64, and `6` for 65 and over.",
+    "starterCode": "age = int(input())\n# print the ticket price below\n",
+    "sampleTests": [
+      {
+        "input": "8\n",
+        "expectedOutput": "5"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "2\n",
+        "expectedOutput": "0"
+      },
+      {
+        "input": "3\n",
+        "expectedOutput": "5"
+      },
+      {
+        "input": "12\n",
+        "expectedOutput": "5"
+      },
+      {
+        "input": "13\n",
+        "expectedOutput": "10"
+      },
+      {
+        "input": "64\n",
+        "expectedOutput": "10"
+      },
+      {
+        "input": "65\n",
+        "expectedOutput": "6"
+      }
+    ]
+  }
+}

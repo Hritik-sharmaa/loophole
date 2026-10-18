@@ -6,12 +6,13 @@ import type {
   HintResponse,
   SubmissionResult,
 } from '@loophole/shared';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
+import { istDate } from '../src/common/ist-calendar.js';
 import request from 'supertest';
 import type { App } from 'supertest/types.js';
 import { AppModule } from '../src/app.module.js';
 import { DbService, type Db } from '../src/db/db.service.js';
-import { exercises } from '../src/db/schema/index.js';
+import { aiUsage, exercises } from '../src/db/schema/index.js';
 import { seedContent } from '../src/db/seed/seed-content.js';
 import {
   GeminiClient,
@@ -34,6 +35,11 @@ const USERS: Record<string, AuthUser> = {
     id: '88888888-8888-4888-8888-888888888888',
     email: 'learner@example.com',
     name: 'Learner',
+  },
+  burst: {
+    id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
+    email: 'burst@example.com',
+    name: 'Burst',
   },
   other: {
     id: '99999999-9999-4999-8999-999999999999',
@@ -250,12 +256,29 @@ describe('AI tutor (e2e)', () => {
     await post('other', '/ai/explain', { submissionId: 'nope' }).expect(400);
   });
 
+  it('more than 10 tutor requests in a minute returns 429 RATE_LIMITED', async () => {
+    giveHint.mockResolvedValue({ hint: 'ok' });
+    for (let i = 0; i < 10; i++) await hint('burst').expect(200);
+    const res = await hint('burst').expect(429);
+    expect(res.body).toMatchObject({ error: { code: 'RATE_LIMITED' } });
+  });
+
   it('the 21st request of the day returns 429 DAILY_LIMIT_REACHED (FR-14)', async () => {
     giveHint.mockResolvedValue({ hint: 'ok' });
-    // learner has used 3 (the explain tests above).
-    for (let used = 3; used < 20; used++) {
-      await hint('learner').expect(200);
-    }
+    // As if learner had used 19 today (faster than 19 calls, and the
+    // 10-a-minute throttle would stop those anyway).
+    await db
+      .update(aiUsage)
+      .set({ count: 19 })
+      .where(
+        and(
+          eq(aiUsage.userId, USERS.learner.id),
+          eq(aiUsage.day, istDate(new Date())),
+        ),
+      );
+    const last = (await hint('learner').expect(200)).body as HintResponse;
+    expect(last.remainingToday).toBe(0);
+
     const res = await hint('learner').expect(429);
     expect(res.body).toMatchObject({
       error: {

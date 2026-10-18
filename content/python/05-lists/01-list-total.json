@@ -1,0 +1,29 @@
+{
+  "slug": "list-total",
+  "title": "Total of a list",
+  "position": 1,
+  "exercise": {
+    "prompt": "Read whole numbers on one line, separated by spaces, and print their total.",
+    "starterCode": "nums = list(map(int, input().split()))\n# print the total of nums\n",
+    "sampleTests": [
+      {
+        "input": "1 2 3\n",
+        "expectedOutput": "6"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "5\n",
+        "expectedOutput": "5"
+      },
+      {
+        "input": "-1 1\n",
+        "expectedOutput": "0"
+      },
+      {
+        "input": "10 20 30 40\n",
+        "expectedOutput": "100"
+      }
+    ]
+  }
+}

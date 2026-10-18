@@ -1,0 +1,29 @@
+{
+  "slug": "spread",
+  "title": "Spread",
+  "position": 6,
+  "exercise": {
+    "prompt": "Read whole numbers on one line and print the difference between the largest and the smallest.",
+    "starterCode": "nums = list(map(int, input().split()))\n# print largest minus smallest\n",
+    "sampleTests": [
+      {
+        "input": "4 9 1\n",
+        "expectedOutput": "8"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "7\n",
+        "expectedOutput": "0"
+      },
+      {
+        "input": "-3 3\n",
+        "expectedOutput": "6"
+      },
+      {
+        "input": "10 10 10\n",
+        "expectedOutput": "0"
+      }
+    ]
+  }
+}

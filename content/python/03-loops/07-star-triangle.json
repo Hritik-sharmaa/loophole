@@ -1,0 +1,29 @@
+{
+  "slug": "star-triangle",
+  "title": "Star triangle",
+  "position": 7,
+  "exercise": {
+    "prompt": "Read N and print a triangle of N rows: row 1 has one `*`, row 2 has two, and so on, with no spaces.",
+    "starterCode": "n = int(input())\n# print the triangle, one row per line\n",
+    "sampleTests": [
+      {
+        "input": "3\n",
+        "expectedOutput": "*\n**\n***"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "1\n",
+        "expectedOutput": "*"
+      },
+      {
+        "input": "5\n",
+        "expectedOutput": "*\n**\n***\n****\n*****"
+      },
+      {
+        "input": "0\n",
+        "expectedOutput": ""
+      }
+    ]
+  }
+}

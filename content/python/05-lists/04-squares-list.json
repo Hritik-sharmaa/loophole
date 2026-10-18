@@ -1,0 +1,29 @@
+{
+  "slug": "squares-list",
+  "title": "List of squares",
+  "position": 4,
+  "exercise": {
+    "prompt": "Read N, build a list of the squares 1, 4, 9, … up to N × N using `append`, then print it with the numbers separated by spaces.",
+    "starterCode": "n = int(input())\nsquares = []\n# append the squares of 1 to n\nprint(\" \".join(map(str, squares)))\n",
+    "sampleTests": [
+      {
+        "input": "4\n",
+        "expectedOutput": "1 4 9 16"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "1\n",
+        "expectedOutput": "1"
+      },
+      {
+        "input": "0\n",
+        "expectedOutput": ""
+      },
+      {
+        "input": "6\n",
+        "expectedOutput": "1 4 9 16 25 36"
+      }
+    ]
+  }
+}

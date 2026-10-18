@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Patch } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 import type { MeResponse } from '@loophole/shared';
 import type { AuthUser } from '../../integrations/supabase-auth.client.js';
 import { CurrentUser } from '../auth/current-user.decorator.js';
@@ -15,7 +16,9 @@ export class UsersController {
     return this.users.getMe(user);
   }
 
+  // A write route: 10 a minute per user.
   @Patch()
+  @Throttle({ default: { limit: 10, ttl: 60_000 } })
   updateMe(
     @CurrentUser() user: AuthUser,
     @Body() dto: UpdateMeDto,

@@ -66,7 +66,7 @@ Each test runs the program with `input` as stdin. It passes when **trimmed stdou
 - Write the reference solution during authoring and check it passes every test before committing. Keep it out of `content/`: it goes in `content-solutions/<course>/<unit-folder>/<lesson-file>.py`, which is git-ignored.
 - `content-files.spec.ts` in the API parses the real `content/` folder in CI, so a malformed lesson file fails the build, not the seed.
 
-## 4. v1 Python track (40 exercises)
+## 4. v1 Python track (40 exercises, complete)
 
 | Unit           | Topics                                    | Lessons |
 | -------------- | ----------------------------------------- | ------- |

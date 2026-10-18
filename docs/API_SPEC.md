@@ -138,6 +138,7 @@ Namespace: `/duels`. Connect with `auth: { token: <supabase access token> }`; th
 | `duel:progress` | `{ userId, testsPassed, totalTests }`                                                            | room               |
 | `duel:result`   | `{ testsPassed, totalTests, results }`                                                           | the submitter only |
 | `duel:end`      | `{ duelId, result: "win" \| "draw" \| "forfeit", winnerId, ratingChange: { [userId]: number } }` | room               |
+| `duel:opponent` | `{ userId, connected }`: a player's last tab closed (`false`) or came back (`true`) (FR-23)      | room               |
 | `error`         | `{ code, message }`                                                                              | the socket         |
 
 Rules: the opponent's code is never sent; `endsAt` is an ISO timestamp the client counts down to; duel submissions are throttled to 1 every 3 s per player.
@@ -147,3 +148,4 @@ Rules: the opponent's code is never sent; `endsAt` is an ISO timestamp the clien
 - `duel:result` uses the lesson grading (hidden tests report only `passed`); `duel:progress` goes to both players.
 - `duel:end` reaches both players exactly once. `ratingChange` is each player's Elo change (S8): K = 32, a draw scores 0.5, a forfeit counts as a loss, and the two changes always add up to 0. A submission graded after `endsAt` or after the end changes nothing.
 - At most 20 duels run at once (NFR-07); beyond that, matched pairs wait in the queue.
+- **Disconnects (FR-23):** when a player's last socket closes mid-duel, the room gets `duel:opponent` with `connected: false`. Back within 30 s, the duel resumes (`connected: true`); otherwise they forfeit: `duel:end` with `result: "forfeit"` and the opponent as winner.

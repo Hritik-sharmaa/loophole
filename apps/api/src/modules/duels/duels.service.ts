@@ -10,6 +10,7 @@ import {
 import type {
   DuelEnd,
   DuelMatched,
+  DuelOpponentStatus,
   DuelProgress,
   DuelResultKind,
   DuelStart,
@@ -20,6 +21,7 @@ import type {
 } from '@loophole/shared';
 import { and, desc, eq, inArray, isNull, max, or, sql } from 'drizzle-orm';
 import type { Namespace, Socket } from 'socket.io';
+import { RateLimiter } from '../../common/rate-limiter.js';
 import { DbService } from '../../db/db.service.js';
 import {
   duelProblems,
@@ -35,6 +37,7 @@ import { STARTING_ELO } from '../ratings/elo.js';
 import { RatingsService } from '../ratings/ratings.service.js';
 import { UsersService } from '../users/users.service.js';
 import {
+  DISCONNECT_FORFEIT_MS,
   DUEL_DURATION_MS,
   MAX_ACTIVE_DUELS,
   SUBMIT_INTERVAL_MS,
@@ -61,6 +64,11 @@ export class DuelsService implements OnApplicationBootstrap, OnModuleDestroy {
   // One timer per running duel; its size is the active-duel count.
   private readonly timers = new Map<string, NodeJS.Timeout>();
   private readonly lastSubmitAt = new Map<string, number>();
+  // Queue joins and forfeits: at most 20 a minute per user (the HTTP
+  // throttler does not see socket events).
+  private readonly actions = new RateLimiter(20, 60_000);
+  // FR-23: per user whose last socket dropped mid-duel, the forfeit timer.
+  private readonly absentTimers = new Map<string, NodeJS.Timeout>();
   // Duels being created right now, so the cap holds while they start.
   private starting = 0;
 
@@ -97,6 +105,8 @@ export class DuelsService implements OnApplicationBootstrap, OnModuleDestroy {
   onModuleDestroy(): void {
     for (const timer of this.timers.values()) clearTimeout(timer);
     this.timers.clear();
+    for (const timer of this.absentTimers.values()) clearTimeout(timer);
+    this.absentTimers.clear();
   }
 
   // ---- connections -------------------------------------------------------
@@ -110,18 +120,58 @@ export class DuelsService implements OnApplicationBootstrap, OnModuleDestroy {
 
     const live = await this.liveDuelOf(user.id);
     if (live?.status === 'in_progress') {
+      // Back within the grace period (FR-23): no forfeit.
+      clearTimeout(this.absentTimers.get(user.id));
+      this.absentTimers.delete(user.id);
       await socket.join(duelRoom(live.id));
       await this.announce(live, { socket, userId: user.id });
+      this.emit(duelRoom(live.id), 'duel:opponent', {
+        userId: user.id,
+        connected: true,
+      } satisfies DuelOpponentStatus);
     }
   }
 
-  disconnect(socketId: string): void {
+  // A socket closed. If it was the user's last one and they are mid-duel,
+  // tell the opponent and start the FR-23 forfeit timer.
+  async disconnect(socketId: string, userId: string): Promise<void> {
     this.matchmaking.leaveSocket(socketId);
+    if (await this.isConnected(userId)) return;
+
+    const live = await this.liveDuelOf(userId);
+    if (live?.status !== 'in_progress') return;
+    this.emit(duelRoom(live.id), 'duel:opponent', {
+      userId,
+      connected: false,
+    } satisfies DuelOpponentStatus);
+
+    clearTimeout(this.absentTimers.get(userId));
+    const timer = setTimeout(() => {
+      this.forfeitIfAbsent(userId).catch((err: unknown) =>
+        this.logger.error(err),
+      );
+    }, DISCONNECT_FORFEIT_MS);
+    timer.unref();
+    this.absentTimers.set(userId, timer);
+  }
+
+  // The FR-23 timer. Checks again when it fires, so a player who came back
+  // never loses to a stale timer. Public so tests can fire it at once.
+  async forfeitIfAbsent(userId: string): Promise<void> {
+    clearTimeout(this.absentTimers.get(userId));
+    this.absentTimers.delete(userId);
+    if (await this.isConnected(userId)) return;
+
+    const live = await this.liveDuelOf(userId);
+    if (live?.status !== 'in_progress') return;
+    const opponent = userId === live.playerA ? live.playerB : live.playerA;
+    await this.finish(live, 'forfeit', opponent);
   }
 
   // ---- queue -------------------------------------------------------------
 
   async joinQueue(userId: string, socketId: string): Promise<void> {
+    this.limitActions(userId);
     if (await this.liveDuelOf(userId)) {
       throw new HttpException(
         { code: 'ILLEGAL_TRANSITION', message: 'You are already in a duel.' },
@@ -309,6 +359,7 @@ export class DuelsService implements OnApplicationBootstrap, OnModuleDestroy {
 
   // Giving up hands the win to the opponent.
   async forfeit(userId: string, duelId: string): Promise<void> {
+    this.limitActions(userId);
     const [row] = await this.db.drizzle
       .select()
       .from(duels)
@@ -434,6 +485,21 @@ export class DuelsService implements OnApplicationBootstrap, OnModuleDestroy {
       throw duelNotFound();
     }
     return duel;
+  }
+
+  private limitActions(userId: string): void {
+    if (!this.actions.hit(userId)) {
+      throw new HttpException(
+        { code: 'RATE_LIMITED', message: 'Too many requests. Wait a minute.' },
+        HttpStatus.TOO_MANY_REQUESTS,
+      );
+    }
+  }
+
+  // Does the user have any open socket (any tab)?
+  private async isConnected(userId: string): Promise<boolean> {
+    const sockets = await this.room([userRoom(userId)]).fetchSockets();
+    return sockets.length > 0;
   }
 
   private room(rooms: string[]) {

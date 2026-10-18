@@ -1,0 +1,29 @@
+{
+  "slug": "above-average",
+  "title": "Above average",
+  "position": 5,
+  "exercise": {
+    "prompt": "Read whole numbers on one line and print how many of them are greater than their average.",
+    "starterCode": "nums = list(map(int, input().split()))\n# work out the average, then count the numbers above it\n",
+    "sampleTests": [
+      {
+        "input": "1 2 3 4\n",
+        "expectedOutput": "2"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "5 5 5\n",
+        "expectedOutput": "0"
+      },
+      {
+        "input": "1 10\n",
+        "expectedOutput": "1"
+      },
+      {
+        "input": "3 1 4 1 5 9 2 6\n",
+        "expectedOutput": "4"
+      }
+    ]
+  }
+}

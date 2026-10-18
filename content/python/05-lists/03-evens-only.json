@@ -1,0 +1,29 @@
+{
+  "slug": "evens-only",
+  "title": "Evens only",
+  "position": 3,
+  "exercise": {
+    "prompt": "Read whole numbers on one line and print only the even ones, in the same order, separated by spaces. If there are none, print an empty line.",
+    "starterCode": "nums = list(map(int, input().split()))\nevens = []\n# add the even numbers to evens\nprint(\" \".join(map(str, evens)))\n",
+    "sampleTests": [
+      {
+        "input": "1 2 3 4\n",
+        "expectedOutput": "2 4"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "1 3 5\n",
+        "expectedOutput": ""
+      },
+      {
+        "input": "10 -2 7\n",
+        "expectedOutput": "10 -2"
+      },
+      {
+        "input": "0\n",
+        "expectedOutput": "0"
+      }
+    ]
+  }
+}

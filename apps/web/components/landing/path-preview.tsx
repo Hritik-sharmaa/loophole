@@ -3,6 +3,7 @@
 import { motion, useInView, useReducedMotion } from 'framer-motion';
 import type { LessonState } from '@loophole/shared';
 import { useRef } from 'react';
+import { pathThrough } from '@/lib/path-geometry';
 import { LessonNode } from '../lesson-node';
 
 // A small version of the lesson path (DESIGN_SYSTEM §6 LessonPath). When it
@@ -20,18 +21,6 @@ const NODES: { x: number; y: number; state: LessonState; label: string }[] = [
 
 const WIDTH = 300;
 const HEIGHT = 600;
-
-// Smooth S-curves between consecutive nodes.
-function pathThrough(points: { x: number; y: number }[]): string {
-  return points
-    .map((p, i) => {
-      if (i === 0) return `M ${p.x} ${p.y}`;
-      const prev = points[i - 1];
-      const midY = (prev.y + p.y) / 2;
-      return `C ${prev.x} ${midY}, ${p.x} ${midY}, ${p.x} ${p.y}`;
-    })
-    .join(' ');
-}
 
 const FULL_PATH = pathThrough(NODES);
 const DONE_PATH = pathThrough(

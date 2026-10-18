@@ -172,4 +172,7 @@ export type DuelEnd = {
   // Elo change per player (S8), e.g. { [winnerId]: 16, [loserId]: -16 }.
   ratingChange: Record<string, number>;
 };
+// FR-23: a player's last tab closed (connected: false; they forfeit in
+// 30 s) or came back (connected: true). Sent to the duel room.
+export type DuelOpponentStatus = { userId: string; connected: boolean };
 export type SocketError = { code: string; message: string };

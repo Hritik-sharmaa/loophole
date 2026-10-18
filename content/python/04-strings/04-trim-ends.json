@@ -1,0 +1,29 @@
+{
+  "slug": "trim-ends",
+  "title": "Trim the ends",
+  "position": 4,
+  "exercise": {
+    "prompt": "Read a word of at least two letters and print it without its first and last letters, using slicing. For `python`, print `ytho`.",
+    "starterCode": "word = input()\n# print word without its first and last letters\n",
+    "sampleTests": [
+      {
+        "input": "python\n",
+        "expectedOutput": "ytho"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "ab\n",
+        "expectedOutput": ""
+      },
+      {
+        "input": "loophole\n",
+        "expectedOutput": "oophol"
+      },
+      {
+        "input": "cat\n",
+        "expectedOutput": "a"
+      }
+    ]
+  }
+}

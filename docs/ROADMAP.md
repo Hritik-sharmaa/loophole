@@ -82,23 +82,22 @@ Loop for every slice: AI **writes** the slice → you **review** and change it �
 - [x] Winner via conditional update; server timer for timeout and draw
 - **Done when:** two browsers are matched, race, and see the same single result. (FR-17, FR-19 to FR-22, FR-25, FR-26)
 
-### S8 · Ratings
+### S8 · Ratings ✅
 
-- [ ] `RatingsService`: ELO (K = 32) for both players in one transaction, unit-tested
-- [ ] Rating leaderboard
+- [x] `RatingsService`: ELO (K = 32) for both players in one transaction, unit-tested
+- [x] Rating leaderboard
 - **Gate 2 — done when:** both ratings update after every duel. (FR-24)
 
 ## Phase 3 — Polish and later (pick one at a time)
 
-- [ ] Hand-built SVG lesson path; pressable buttons, unlock pop, confetti, XP count-up, reduced-motion support
-- [ ] Profile page with XP, streak, lessons done
-- [ ] Python track complete: 40 exercises (G-1)
+- [x] Hand-built SVG lesson path; pressable buttons, unlock pop, confetti, XP count-up, reduced-motion support
+- [x] Profile page with XP, streak, rating, lessons done
+- [x] Python track complete: 40 exercises in 7 units (G-1)
 - [ ] Streak freezes (full FR-10 rules)
 - [ ] Certificates and public `/c/:slug` page (FR-15)
 - [ ] Rating-band matchmaking (FR-18)
-- [ ] Disconnect forfeit after 30 s; reconnect resumes (FR-23)
-- [ ] Throttles on every write route and socket event
-- [ ] Sentry on API and web
+- [x] Disconnect forfeit after 30 s; reconnect resumes (FR-23)
+- [x] Throttles on every route (120/min per user; writes and AI 10/min) and socket event
 - [ ] Script running two fake socket clients through 50 duels
 - [ ] Playwright e2e for J-1 and J-3; deploy step in GitHub Actions
 - [ ] Scalability, only if needed: see `ARCHITECTURE.md` §5

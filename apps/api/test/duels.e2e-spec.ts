@@ -5,6 +5,7 @@ import type {
   RatingLeaderboard,
   DuelEnd,
   DuelMatched,
+  DuelOpponentStatus,
   DuelProgress,
   DuelStart,
   DuelSubmissionResult,
@@ -48,6 +49,8 @@ const NAMES = [
   'leo',
   'max',
   'ned',
+  'oli',
+  'pam',
 ];
 const USERS: Record<string, AuthUser> = Object.fromEntries(
   NAMES.map((name, i) => [
@@ -457,6 +460,39 @@ describe('Duels (e2e)', () => {
     await settle();
     expect(ned.count('duel:matched')).toBe(0);
     ned.send('queue:leave');
+  });
+
+  it('a player who leaves mid-duel and returns within 30 s keeps playing (FR-23)', async () => {
+    const { pa, pb, duelId } = await duelBetween('oli', 'pam');
+    pa.socket.disconnect();
+    expect(await pb.next<DuelOpponentStatus>('duel:opponent')).toEqual({
+      userId: pa.id,
+      connected: false,
+    });
+
+    const back = await connect('oli');
+    expect((await back.next<DuelStart>('duel:start')).duelId).toBe(duelId);
+    expect(await pb.next<DuelOpponentStatus>('duel:opponent')).toEqual({
+      userId: pa.id,
+      connected: true,
+    });
+
+    // The 30 s timer firing late does nothing: oli is back.
+    await app.get(DuelsService).forfeitIfAbsent(pa.id);
+    await settle();
+    expect(pb.count('duel:end')).toBe(0);
+  });
+
+  it('a player gone for 30 s forfeits; the opponent wins and gains rating (FR-23)', async () => {
+    const oli = players.filter((p) => p.name === 'oli').at(-1)!;
+    const pam = byName('pam');
+    oli.socket.disconnect();
+    await pam.next('duel:opponent');
+
+    await app.get(DuelsService).forfeitIfAbsent(oli.id); // the timer firing
+    const end = await pam.next<DuelEnd>('duel:end');
+    expect(end).toMatchObject({ result: 'forfeit', winnerId: pam.id });
+    expect(end.ratingChange[pam.id]).toBeGreaterThan(0);
   });
 
   // AGENTS.md hard rule 2: hidden tests never leave the server, and the

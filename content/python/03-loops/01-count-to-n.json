@@ -1,0 +1,29 @@
+{
+  "slug": "count-to-n",
+  "title": "Count to N",
+  "position": 1,
+  "exercise": {
+    "prompt": "Read a number N and print the numbers from 1 to N, one per line. Use a `for` loop with `range`.",
+    "starterCode": "n = int(input())\n# print 1 to n, one per line\n",
+    "sampleTests": [
+      {
+        "input": "3\n",
+        "expectedOutput": "1\n2\n3"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "1\n",
+        "expectedOutput": "1"
+      },
+      {
+        "input": "5\n",
+        "expectedOutput": "1\n2\n3\n4\n5"
+      },
+      {
+        "input": "0\n",
+        "expectedOutput": ""
+      }
+    ]
+  }
+}

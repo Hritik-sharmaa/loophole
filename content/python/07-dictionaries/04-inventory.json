@@ -1,0 +1,29 @@
+{
+  "slug": "inventory",
+  "title": "Inventory",
+  "position": 4,
+  "exercise": {
+    "prompt": "The first line is a count N; then N lines of `item quantity`, where the same item can appear more than once. Print each item once with its total, as `item total`, in the order items first appeared.",
+    "starterCode": "n = int(input())\ntotals = {}\n# add up the quantities per item, then print them\n",
+    "sampleTests": [
+      {
+        "input": "3\napple 2\npear 1\napple 3\n",
+        "expectedOutput": "apple 5\npear 1"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "1\negg 12\n",
+        "expectedOutput": "egg 12"
+      },
+      {
+        "input": "4\na 1\nb 1\na 1\nb 1\n",
+        "expectedOutput": "a 2\nb 2"
+      },
+      {
+        "input": "2\nx 0\ny 5\n",
+        "expectedOutput": "x 0\ny 5"
+      }
+    ]
+  }
+}

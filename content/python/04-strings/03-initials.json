@@ -1,0 +1,29 @@
+{
+  "slug": "initials",
+  "title": "Initials",
+  "position": 3,
+  "exercise": {
+    "prompt": "Read a full name and print its initials in capital letters, with no spaces: `ada lovelace` becomes `AL`. Words may be separated by more than one space.",
+    "starterCode": "name = input()\n# print the initials\n",
+    "sampleTests": [
+      {
+        "input": "ada lovelace\n",
+        "expectedOutput": "AL"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "Grace Brewster Hopper\n",
+        "expectedOutput": "GBH"
+      },
+      {
+        "input": "linus\n",
+        "expectedOutput": "L"
+      },
+      {
+        "input": "  alan   turing \n",
+        "expectedOutput": "AT"
+      }
+    ]
+  }
+}

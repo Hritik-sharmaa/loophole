@@ -1,0 +1,29 @@
+{
+  "slug": "shout",
+  "title": "Shout it",
+  "position": 1,
+  "exercise": {
+    "prompt": "Read a line of text and print it in capital letters followed by `!`. For `hello`, print `HELLO!`",
+    "starterCode": "text = input()\n# print text in capitals with ! at the end\n",
+    "sampleTests": [
+      {
+        "input": "hello\n",
+        "expectedOutput": "HELLO!"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "Loophole rocks\n",
+        "expectedOutput": "LOOPHOLE ROCKS!"
+      },
+      {
+        "input": "a\n",
+        "expectedOutput": "A!"
+      },
+      {
+        "input": "123 go\n",
+        "expectedOutput": "123 GO!"
+      }
+    ]
+  }
+}

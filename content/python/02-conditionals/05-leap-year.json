@@ -1,0 +1,33 @@
+{
+  "slug": "leap-year",
+  "title": "Leap year",
+  "position": 5,
+  "exercise": {
+    "prompt": "Read a year and print `leap` if it is a leap year, otherwise `common`. A year is a leap year if it divides by 4, except that years dividing by 100 are not, unless they also divide by 400.",
+    "starterCode": "year = int(input())\n# print leap or common below\n",
+    "sampleTests": [
+      {
+        "input": "2024\n",
+        "expectedOutput": "leap"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "2023\n",
+        "expectedOutput": "common"
+      },
+      {
+        "input": "1900\n",
+        "expectedOutput": "common"
+      },
+      {
+        "input": "2000\n",
+        "expectedOutput": "leap"
+      },
+      {
+        "input": "2100\n",
+        "expectedOutput": "common"
+      }
+    ]
+  }
+}

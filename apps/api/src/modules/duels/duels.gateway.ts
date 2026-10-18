@@ -71,7 +71,9 @@ export class DuelsGateway
   }
 
   handleDisconnect(socket: Socket): void {
-    this.duels.disconnect(socket.id);
+    this.duels
+      .disconnect(socket.id, userOf(socket).id)
+      .catch((err: unknown) => this.logger.error(err));
   }
 
   @SubscribeMessage('queue:join')

@@ -1,0 +1,29 @@
+{
+  "slug": "sum-of-numbers",
+  "title": "Add them up",
+  "position": 4,
+  "exercise": {
+    "prompt": "The first line is a count N; then N lines follow, each with one whole number. Print their sum.",
+    "starterCode": "n = int(input())\ntotal = 0\n# read n more numbers and add each to total\nprint(total)\n",
+    "sampleTests": [
+      {
+        "input": "3\n4\n5\n6\n",
+        "expectedOutput": "15"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "1\n7\n",
+        "expectedOutput": "7"
+      },
+      {
+        "input": "0\n",
+        "expectedOutput": "0"
+      },
+      {
+        "input": "4\n-1\n-2\n3\n10\n",
+        "expectedOutput": "10"
+      }
+    ]
+  }
+}

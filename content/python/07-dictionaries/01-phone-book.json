@@ -1,0 +1,29 @@
+{
+  "slug": "phone-book",
+  "title": "Phone book",
+  "position": 1,
+  "exercise": {
+    "prompt": "The first line is a count N; then N lines of `name number`. The last line is a name: print its number, or `unknown` if it is not in the book. Store the book in a dictionary; if a name appears twice, the later number wins.",
+    "starterCode": "n = int(input())\nbook = {}\n# read n lines of \"name number\" into book\n# then read one name and print its number or unknown\n",
+    "sampleTests": [
+      {
+        "input": "2\nada 555\nbo 777\nbo\n",
+        "expectedOutput": "777"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "2\nada 555\nbo 777\ncy\n",
+        "expectedOutput": "unknown"
+      },
+      {
+        "input": "1\nx 1\nx\n",
+        "expectedOutput": "1"
+      },
+      {
+        "input": "3\na 1\nb 2\na 3\na\n",
+        "expectedOutput": "3"
+      }
+    ]
+  }
+}

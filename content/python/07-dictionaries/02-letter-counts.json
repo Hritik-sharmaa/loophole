@@ -1,0 +1,29 @@
+{
+  "slug": "letter-counts",
+  "title": "Letter counts",
+  "position": 2,
+  "exercise": {
+    "prompt": "Read a word in lowercase letters and print how many times each letter appears, one per line as `letter count`, in alphabetical order.",
+    "starterCode": "word = input()\ncounts = {}\n# count each letter in counts, then print them in alphabetical order\n",
+    "sampleTests": [
+      {
+        "input": "banana\n",
+        "expectedOutput": "a 3\nb 1\nn 2"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "a\n",
+        "expectedOutput": "a 1"
+      },
+      {
+        "input": "hello\n",
+        "expectedOutput": "e 1\nh 1\nl 2\no 1"
+      },
+      {
+        "input": "zzz\n",
+        "expectedOutput": "z 3"
+      }
+    ]
+  }
+}

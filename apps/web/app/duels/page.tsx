@@ -13,6 +13,7 @@ import { ProgressBar } from '@/components/progress-bar';
 import { SampleTests } from '@/components/sample-tests';
 import { TestResults } from '@/components/test-results';
 import { primaryButton, secondaryButton } from '@/components/ui/buttons';
+import { celebrate } from '@/lib/celebrate';
 import { useMe } from '@/lib/queries/use-me';
 import { useDuelSocket, type DuelState } from '@/lib/use-duel-socket';
 import { useRequireSession } from '@/lib/use-require-session';
@@ -34,9 +35,10 @@ export default function DuelsPage() {
   // leaderboards.
   useEffect(() => {
     if (!state.end) return;
+    if (state.end.winnerId !== null && state.end.winnerId === myId) celebrate();
     void queryClient.invalidateQueries({ queryKey: ['me'] });
     void queryClient.invalidateQueries({ queryKey: ['leaderboard'] });
-  }, [state.end, queryClient]);
+  }, [state.end, myId, queryClient]);
 
   return (
     <>
@@ -174,6 +176,10 @@ function Room({
         )}
       </header>
 
+      {state.opponentAwaySince !== null && !end && (
+        <OpponentAway since={state.opponentAwaySince} />
+      )}
+
       {end && (
         <Outcome
           end={end}
@@ -280,6 +286,23 @@ function Outcome({
         </Link>
       </div>
     </section>
+  );
+}
+
+// FR-23: the opponent's last tab closed. The server forfeits them after
+// 30 s; this only counts down so the waiting player knows.
+function OpponentAway({ since }: { since: number }) {
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    const timer = setInterval(() => setNow(Date.now()), 500);
+    return () => clearInterval(timer);
+  }, []);
+  const left = Math.max(0, Math.ceil((since + 30_000 - now) / 1000));
+
+  return (
+    <p role="status" className="rounded-card bg-surface px-4 py-3 font-bold">
+      Your opponent disconnected. If they are not back in {left} s, you win.
+    </p>
   );
 }
 
