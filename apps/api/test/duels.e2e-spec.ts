@@ -51,6 +51,8 @@ const NAMES = [
   'ned',
   'oli',
   'pam',
+  'qin',
+  'ray',
 ];
 const USERS: Record<string, AuthUser> = Object.fromEntries(
   NAMES.map((name, i) => [
@@ -493,6 +495,28 @@ describe('Duels (e2e)', () => {
     const end = await pam.next<DuelEnd>('duel:end');
     expect(end).toMatchObject({ result: 'forfeit', winnerId: pam.id });
     expect(end.ratingChange[pam.id]).toBeGreaterThan(0);
+  });
+
+  it('players far apart in rating are not paired at once (FR-18)', async () => {
+    const [qin, ray] = [await connect('qin'), await connect('ray')];
+    // Profiles exist now (created on connect); give them distant ratings.
+    await db.insert(ratings).values([
+      { userId: qin.id, elo: 1200 },
+      { userId: ray.id, elo: 1800 },
+    ]);
+
+    qin.send('queue:join');
+    await qin.next('queue:joined');
+    ray.send('queue:join');
+    expect(await ray.next<QueueJoined>('queue:joined')).toEqual({
+      position: 2,
+    });
+    await settle();
+    // 600 apart: outside ±150 until they have waited over a minute.
+    expect(qin.count('duel:matched')).toBe(0);
+    expect(ray.count('duel:matched')).toBe(0);
+    qin.send('queue:leave');
+    ray.send('queue:leave');
   });
 
   // AGENTS.md hard rule 2: hidden tests never leave the server, and the

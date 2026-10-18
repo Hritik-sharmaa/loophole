@@ -9,6 +9,8 @@ export const SUBMIT_INTERVAL_MS = 3_000;
 export const MAX_ACTIVE_DUELS = 20;
 // FR-23: a player gone this long mid-duel forfeits; back sooner, it resumes.
 export const DISCONNECT_FORFEIT_MS = 30_000;
+// How often the queue is re-checked while rating bands widen (FR-18).
+export const REMATCH_INTERVAL_MS = 5_000;
 
 // 'waiting' is the in-memory queue; the rest are duels.status (FR-25).
 export type DuelPhase = 'waiting' | DuelStatus;

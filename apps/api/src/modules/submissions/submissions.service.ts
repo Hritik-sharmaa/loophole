@@ -12,6 +12,7 @@ import {
 } from '../../db/schema/index.js';
 import { PistonClient } from '../../integrations/piston.client.js';
 import type { AuthUser } from '../../integrations/supabase-auth.client.js';
+import { CertificatesService } from '../certificates/certificates.service.js';
 import { GamificationService } from '../gamification/gamification.service.js';
 import { LessonsService } from '../lessons/lessons.service.js';
 import { UsersService } from '../users/users.service.js';
@@ -30,6 +31,7 @@ export class SubmissionsService {
     private readonly lessons: LessonsService,
     private readonly users: UsersService,
     private readonly gamification: GamificationService,
+    private readonly certificates: CertificatesService,
   ) {}
 
   // docs/ARCHITECTURE.md §3.1. Hidden tests are loaded here and leave this
@@ -91,6 +93,7 @@ export class SubmissionsService {
 
     const passed = result.status === 'passed';
     let xpAwarded = 0;
+    let certificateSlug: string | null = null;
     if (passed) {
       // FR-08. The (user_id, lesson_id) primary key makes a repeat pass a
       // no-op; the next lesson unlocks because lessonStates() reads this row.
@@ -105,6 +108,11 @@ export class SubmissionsService {
         user.id,
         exercise.lessonId,
       );
+      // FR-15: the last lesson of a course issues its certificate (once).
+      certificateSlug = await this.certificates.issueIfComplete(
+        user.id,
+        exercise.lessonId,
+      );
     }
 
     return {
@@ -116,6 +124,7 @@ export class SubmissionsService {
       xpAwarded,
       results: result.results,
       stderr: result.stderr,
+      certificateSlug,
     };
   }
 

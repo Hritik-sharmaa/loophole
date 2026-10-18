@@ -127,12 +127,23 @@ function Exercise({
               )}
             </p>
             <p className="text-text-secondary">
-              Your next lesson is waiting on the path.
+              {result?.certificateSlug
+                ? 'You finished the whole course. Your certificate is ready.'
+                : 'Your next lesson is waiting on the path.'}
             </p>
           </div>
-          <Link href="/learn" className={primaryButton}>
-            Continue
-          </Link>
+          {result?.certificateSlug ? (
+            <Link
+              href={`/c/${result.certificateSlug}`}
+              className={primaryButton}
+            >
+              View certificate
+            </Link>
+          ) : (
+            <Link href="/learn" className={primaryButton}>
+              Continue
+            </Link>
+          )}
         </div>
       )}
 

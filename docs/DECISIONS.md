@@ -6,6 +6,12 @@ Format: **ADR-NNN · Title** — Status (Accepted / Superseded by ADR-NNN) · Da
 
 ---
 
+**ADR-019 · Streak freeze rules** — Accepted · 2026-10-19
+
+- Decision: a freeze is earned on every 7th day of a streak (7, 14, 21, …), at most 2 in hand. When the next new lesson comes after missed days, each missed day spends one freeze and the streak continues. If there are fewer freezes than missed days, the streak restarts at 1 and the freezes are kept. The streak shown stays alive while the freezes in hand cover every missed day so far.
+- Why: FR-10 and ADR-012 fix the earn rate and the cap but not what happens when freezes cannot cover a gap; keeping them is the kinder reading and keeps the rule simple to explain.
+- Trade-off: a user can lose a long streak while still holding freezes (e.g. one freeze, two missed days). Freezes are spent only when a lesson is completed, not at midnight, so no background job is needed.
+
 **ADR-018 · Piston runs one job at a time** — Accepted · 2026-10-18
 
 - Decision: `PistonClient` queues every run, so Piston never receives two jobs at once, across all users. A submission runs its tests one after another and skips the rest after the first time-out.

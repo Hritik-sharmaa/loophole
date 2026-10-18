@@ -23,3 +23,12 @@ export function istWeekStart(now: Date): Date {
   const daysSinceMonday = (new Date(`${today}T00:00:00Z`).getUTCDay() + 6) % 7;
   return new Date(`${addDays(today, -daysSinceMonday)}T00:00:00+05:30`);
 }
+
+// Whole days from `from` to `to` ("YYYY-MM-DD"): 1 for consecutive days,
+// negative if `to` is earlier.
+export function daysBetween(from: string, to: string): number {
+  const ms =
+    new Date(`${to}T00:00:00Z`).getTime() -
+    new Date(`${from}T00:00:00Z`).getTime();
+  return Math.round(ms / 86_400_000);
+}

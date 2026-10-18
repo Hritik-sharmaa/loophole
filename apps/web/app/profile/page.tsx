@@ -2,10 +2,13 @@
 
 import type { MeResponse } from '@loophole/shared';
 import { useQueryClient } from '@tanstack/react-query';
+import { Award } from 'lucide-react';
+import Link from 'next/link';
 import { useState, type FormEvent, type ReactNode } from 'react';
 import { AppHeader } from '@/components/app-header';
 import { secondaryButton } from '@/components/ui/buttons';
 import { ApiError } from '@/lib/api';
+import { useMyCertificates } from '@/lib/queries/use-certificates';
 import { useMe, useUpdateMe } from '@/lib/queries/use-me';
 import { supabase } from '@/lib/supabase';
 import { useRequireSession } from '@/lib/use-require-session';
@@ -40,13 +43,49 @@ function Profile({ me }: { me: MeResponse }) {
       </h1>
       <dl className="grid w-full grid-cols-2 gap-3 text-center">
         <Stat label="XP" value={me.xp} />
-        <Stat label="Streak" value={me.streak.current} />
+        <Stat
+          label="Streak"
+          value={me.streak.current}
+          note={
+            me.streak.freezes > 0
+              ? `${me.streak.freezes} freeze${me.streak.freezes === 1 ? '' : 's'} saved`
+              : 'Every 7 days earns a freeze'
+          }
+        />
         <Stat label="Rating" value={me.rating} />
         <Stat label="Lessons done" value={me.lessonsCompleted} />
       </dl>
+      <Certificates />
       <UsernameForm current={me.username} />
       <LogoutButton />
     </Centered>
+  );
+}
+
+// FR-15: one per finished course, each with its public /c/<slug> page.
+function Certificates() {
+  const certs = useMyCertificates(true);
+  if (!certs.data || certs.data.length === 0) return null;
+
+  return (
+    <section className="flex w-full flex-col gap-2 text-left">
+      <h2 className="text-sm font-semibold text-text-secondary">
+        Certificates
+      </h2>
+      <ul className="flex flex-col gap-2">
+        {certs.data.map((c) => (
+          <li key={c.slug}>
+            <Link
+              href={`/c/${c.slug}`}
+              className="flex items-center gap-3 rounded-card border-2 border-ink px-4 py-3 font-bold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+            >
+              <Award className="size-5 text-orange" aria-hidden />
+              {c.courseTitle}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }
 
@@ -117,11 +156,23 @@ function LogoutButton() {
   );
 }
 
-function Stat({ label, value }: { label: string; value: number }) {
+// note: a line of small print under the number.
+function Stat({
+  label,
+  value,
+  note,
+}: {
+  label: string;
+  value: number;
+  note?: string;
+}) {
   return (
     <div className="rounded-card bg-surface p-4">
       <dt className="text-xs font-semibold text-text-secondary">{label}</dt>
       <dd className="font-display text-2xl font-extrabold">{value}</dd>
+      {note && (
+        <dd className="text-xs font-semibold text-text-secondary">{note}</dd>
+      )}
     </div>
   );
 }

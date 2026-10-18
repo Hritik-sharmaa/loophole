@@ -14,7 +14,7 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
-    "lint": "eslint src test",
+    "lint": "eslint src test scripts",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -23,7 +23,8 @@
     "test:e2e": "vitest run --config ./vitest.config.e2e.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "db:seed": "nest build && node dist/db/seed/run-seed.js"
+    "db:seed": "nest build && node dist/db/seed/run-seed.js",
+    "soak:duels": "node scripts/duel-soak.ts"
   },
   "dependencies": {
     "@google/genai": "^2.27.0",

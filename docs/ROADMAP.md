@@ -93,12 +93,12 @@ Loop for every slice: AI **writes** the slice → you **review** and change it �
 - [x] Hand-built SVG lesson path; pressable buttons, unlock pop, confetti, XP count-up, reduced-motion support
 - [x] Profile page with XP, streak, rating, lessons done
 - [x] Python track complete: 40 exercises in 7 units (G-1)
-- [ ] Streak freezes (full FR-10 rules)
-- [ ] Certificates and public `/c/:slug` page (FR-15)
-- [ ] Rating-band matchmaking (FR-18)
+- [x] Streak freezes (full FR-10 rules, ADR-019)
+- [x] Certificates and public `/c/:slug` page (FR-15)
+- [x] Rating-band matchmaking (FR-18)
 - [x] Disconnect forfeit after 30 s; reconnect resumes (FR-23)
 - [x] Throttles on every route (120/min per user; writes and AI 10/min) and socket event
-- [ ] Script running two fake socket clients through 50 duels
+- [x] Script running two socket clients through 50 duels (`pnpm --filter @loophole/api soak:duels`, apps/api/README)
 - [ ] Playwright e2e for J-1 and J-3; deploy step in GitHub Actions
 - [ ] Scalability, only if needed: see `ARCHITECTURE.md` §5
 - [ ] Stretch: replay (FR-27), bug of the day (FR-28), spectate (FR-29), JavaScript track (FR-30)

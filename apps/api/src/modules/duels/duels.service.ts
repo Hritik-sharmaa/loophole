@@ -38,6 +38,7 @@ import { RatingsService } from '../ratings/ratings.service.js';
 import { UsersService } from '../users/users.service.js';
 import {
   DISCONNECT_FORFEIT_MS,
+  REMATCH_INTERVAL_MS,
   DUEL_DURATION_MS,
   MAX_ACTIVE_DUELS,
   SUBMIT_INTERVAL_MS,
@@ -69,6 +70,9 @@ export class DuelsService implements OnApplicationBootstrap, OnModuleDestroy {
   private readonly actions = new RateLimiter(20, 60_000);
   // FR-23: per user whose last socket dropped mid-duel, the forfeit timer.
   private readonly absentTimers = new Map<string, NodeJS.Timeout>();
+  // Re-runs matching every few seconds: rating bands widen while players
+  // wait (FR-18), so a pair that did not fit may fit now.
+  private matchTimer: NodeJS.Timeout | null = null;
   // Duels being created right now, so the cap holds while they start.
   private starting = 0;
 
@@ -92,6 +96,10 @@ export class DuelsService implements OnApplicationBootstrap, OnModuleDestroy {
     this.rearmTimers().catch((err: unknown) =>
       this.logger.error(`Could not re-arm duel timers: ${String(err)}`),
     );
+    this.matchTimer = setInterval(() => {
+      this.matchWaiting().catch((err: unknown) => this.logger.error(err));
+    }, REMATCH_INTERVAL_MS);
+    this.matchTimer.unref();
   }
 
   private async rearmTimers(): Promise<void> {
@@ -103,6 +111,7 @@ export class DuelsService implements OnApplicationBootstrap, OnModuleDestroy {
   }
 
   onModuleDestroy(): void {
+    if (this.matchTimer) clearInterval(this.matchTimer);
     for (const timer of this.timers.values()) clearTimeout(timer);
     this.timers.clear();
     for (const timer of this.absentTimers.values()) clearTimeout(timer);
@@ -178,7 +187,10 @@ export class DuelsService implements OnApplicationBootstrap, OnModuleDestroy {
         HttpStatus.CONFLICT,
       );
     }
-    const position = this.matchmaking.join(userId, socketId);
+    // FR-18: the queue pairs by rating band.
+    const elo =
+      (await this.ratings.elosOf([userId])).get(userId) ?? STARTING_ELO;
+    const position = this.matchmaking.join(userId, socketId, elo);
     this.emit(socketId, 'queue:joined', { position } satisfies QueueJoined);
     await this.matchWaiting();
   }

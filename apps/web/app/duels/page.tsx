@@ -105,6 +105,10 @@ function Lobby({
               ? ` (you are #${state.position} in line)`
               : ''}
           </p>
+          <p className="text-sm text-text-secondary">
+            Matching you with someone near your rating. The longer you wait, the
+            wider the search.
+          </p>
           <button type="button" onClick={onCancel} className={secondaryButton}>
             Cancel
           </button>

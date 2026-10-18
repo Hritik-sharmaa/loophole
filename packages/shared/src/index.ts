@@ -85,6 +85,9 @@ export type SubmissionResult = {
   xpAwarded: number;
   results: TestResult[];
   stderr: string;
+  // Set only by the submission that finished the whole course (FR-15):
+  // the new certificate's /c/<slug>.
+  certificateSlug: string | null;
 };
 
 // GET /leaderboard/weekly. XP earned since Monday 00:00 IST (FR-11).
@@ -176,3 +179,19 @@ export type DuelEnd = {
 // 30 s) or came back (connected: true). Sent to the duel room.
 export type DuelOpponentStatus = { userId: string; connected: boolean };
 export type SocketError = { code: string; message: string };
+
+// ---- Certificates (FR-15) ----
+
+// GET /certificates — the signed-in user's own.
+export type CertificateSummary = {
+  slug: string;
+  courseTitle: string;
+  issuedAt: string;
+};
+
+// GET /certificates/:slug — public, no login; what /c/:slug shows.
+export type PublicCertificate = {
+  username: string;
+  courseTitle: string;
+  issuedAt: string;
+};

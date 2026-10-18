@@ -38,7 +38,7 @@ export function AppHeader() {
           <div className="hidden items-center gap-3 sm:flex">
             <Badge
               icon={<Flame className="size-4" fill="currentColor" />}
-              label={`${me.data.streak.current} day streak`}
+              label={`${me.data.streak.current} day streak${me.data.streak.freezes > 0 ? `, ${me.data.streak.freezes} freeze${me.data.streak.freezes === 1 ? '' : 's'} saved` : ''}`}
               value={me.data.streak.current}
             />
             <Badge

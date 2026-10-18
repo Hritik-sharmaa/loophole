@@ -138,7 +138,7 @@ One global `HttpExceptionFilter` turns every exception into `{ error: { code, me
 
 1. Client connects to the `/duels` namespace with its JWT; gateway verifies it.
 2. `queue:join` → `MatchmakingService` adds the player to the in-memory queue.
-3. When two players are waiting, `DuelsService` creates a `duels` row (`matched`), picks a problem, and joins both sockets to room `duel:<id>`.
+3. When two waiting players are within each other's rating band (FR-18: ±150 Elo, widening by 100 every 15 s), `DuelsService` creates a `duels` row (`matched`), picks a problem, and joins both sockets to room `duel:<id>`.
 4. Server emits `duel:start` with the buggy code, sample tests and `endsAt`; status → `in_progress`.
 5. `duel:submit` → service grades through the same `PistonClient`, saves a `duel_submissions` row, and emits `duel:progress` (passed / total) to the room.
 6. A fully passing submission tries `update duels set winner_id = $1, status = 'completed' where id = $2 and winner_id is null`. Exactly one caller updates a row; that caller emits `duel:end` and calls `RatingsService`.

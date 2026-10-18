@@ -78,6 +78,7 @@ Hidden test results show only `passed`, never input or expected output. Throttle
 - `status`: `passed` (every test passed), `error` (some test crashed or ran out of time), otherwise `failed`.
 - `expected` and `actual` are the trimmed strings that were compared (ADR-011).
 - `stderr` is the first non-empty stderr of a **sample** test, never a hidden one (a traceback can quote the hidden input). If none, and any test ran out of time, it is a fixed time-limit message. Truncated to 4 KB.
+- `certificateSlug` is set only on the submission that finished the whole course (FR-15).
 - `lessonCompleted` is true whenever every test passed, including a repeat pass of a finished lesson. `xpAwarded` is 10 on the first completion of a lesson and 0 on every later pass (FR-09). Only a first completion moves the streak.
 - A 502 saves nothing.
 
@@ -92,7 +93,7 @@ Hidden test results show only `passed`, never input or expected output. Throttle
 
 - Weekly: XP from `xp_events` created since Monday 00:00 IST; `weekStart` is that instant (ISO). `limit` is 1–50 (default 50), else 400.
 - Equal XP shares a rank (1, 1, 3); ties are listed by username. `me` is always present: `{ rank: null, xp: 0 }` with no XP this week.
-- `GET /me` gives all-time `xp`. `streak.current` shows 0 once a day is missed, even before the next lesson resets it; `freezes` stays 0 until Phase 3.
+- `GET /me` gives all-time `xp`. `streak.current` shows 0 once more days are missed than the saved freezes cover, even before the next lesson resets it; `freezes` is how many streak freezes are saved (ADR-019).
 
 ### AI tutor — S5
 
@@ -108,12 +109,14 @@ The server loads the exercise, failing test and stderr itself; the client sends 
 - Explain: 404 for an unknown submission or someone else's. Hint: 403 `LESSON_LOCKED`, 404 unknown exercise. Neither is counted.
 - `explanation` and `hint` are at most 120 words; `line` is null unless it points at a real line of the submitted code; a hint that contains a code block is replaced by a generic one.
 
-### Certificates — M10
+### Certificates — Phase 3 (FR-15)
 
 | Method | Path                  | Auth   | Response                              |
 | ------ | --------------------- | ------ | ------------------------------------- |
 | GET    | `/certificates`       | Yes    | the user's certificates               |
 | GET    | `/certificates/:slug` | Public | `{ username, courseTitle, issuedAt }` |
+
+- Issued automatically by the `POST /submissions` that completes the last lesson of a course; that response carries `certificateSlug` (otherwise `null`). One per user per course. Slugs are 10 random characters from `a–z` and `2–9` without look-alikes; anything else is 404. The web page is `/c/:slug`, public.
 
 ## Socket.io — duels (S7)
 
@@ -148,4 +151,5 @@ Rules: the opponent's code is never sent; `endsAt` is an ISO timestamp the clien
 - `duel:result` uses the lesson grading (hidden tests report only `passed`); `duel:progress` goes to both players.
 - `duel:end` reaches both players exactly once. `ratingChange` is each player's Elo change (S8): K = 32, a draw scores 0.5, a forfeit counts as a loss, and the two changes always add up to 0. A submission graded after `endsAt` or after the end changes nothing.
 - At most 20 duels run at once (NFR-07); beyond that, matched pairs wait in the queue.
+- **Pairing (FR-18):** two waiting players are paired when their Elo gap is within ±150, widening by 100 for every 15 s the longer-waiting one has waited. The longest wait is served first, and the queue is re-checked every 5 s.
 - **Disconnects (FR-23):** when a player's last socket closes mid-duel, the room gets `duel:opponent` with `connected: false`. Back within 30 s, the duel resumes (`connected: true`); otherwise they forfeit: `duel:end` with `result: "forfeit"` and the opponent as winner.

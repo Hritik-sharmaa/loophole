@@ -39,6 +39,9 @@ export function useSubmit() {
         void queryClient.invalidateQueries({ queryKey: ['course-path'] });
         void queryClient.invalidateQueries({ queryKey: ['me'] });
       }
+      if (result.certificateSlug) {
+        void queryClient.invalidateQueries({ queryKey: ['certificates'] });
+      }
       if (result.xpAwarded > 0) {
         void queryClient.invalidateQueries({ queryKey: ['leaderboard'] });
       }

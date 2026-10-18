@@ -7,3 +7,4 @@ export * from './gamification.js';
 export * from './ai-usage.js';
 export * from './duels.js';
 export * from './ratings.js';
+export * from './certificates.js';

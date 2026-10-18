@@ -39,6 +39,11 @@ const USERS: Record<string, AuthUser> = {
     email: 'cara@example.com',
     name: 'Cara',
   },
+  dan: {
+    id: '88888888-8888-4888-8888-888888888881',
+    email: 'dan@example.com',
+    name: 'Dan',
+  },
 };
 
 // IST wall-clock times in the week of Monday 2026-10-12.
@@ -224,5 +229,41 @@ describe('XP, streak and leaderboard (e2e)', () => {
     expect(next.entries).toEqual([]);
     expect(next.me).toEqual({ rank: null, xp: 0 });
     expect((await me('ada')).xp).toBe(40);
+  });
+
+  it('7 days in a row earn a freeze, which then covers a missed day (FR-10)', async () => {
+    // Oct 20 to 26: a new lesson every day.
+    for (let day = 0; day < 7; day++) {
+      vi.setSystemTime(ist(`2026-10-${20 + day}T12:00:00`));
+      await as('dan').solve(day);
+    }
+    expect((await me('dan')).streak).toEqual({
+      current: 7,
+      longest: 7,
+      freezes: 1,
+    });
+
+    // Oct 27 missed. On Oct 28 the freeze still covers it: the streak shows.
+    vi.setSystemTime(ist('2026-10-28T09:00:00'));
+    expect((await me('dan')).streak).toMatchObject({ current: 7, freezes: 1 });
+
+    // A new lesson spends the freeze and the streak carries on.
+    await as('dan').solve(7);
+    expect((await me('dan')).streak).toEqual({
+      current: 8,
+      longest: 8,
+      freezes: 0,
+    });
+  });
+
+  it('without a freeze, a missed day restarts the streak', async () => {
+    vi.setSystemTime(ist('2026-10-30T09:00:00')); // Oct 29 missed
+    expect((await me('dan')).streak.current).toBe(0);
+    await as('dan').solve(8);
+    expect((await me('dan')).streak).toEqual({
+      current: 1,
+      longest: 8,
+      freezes: 0,
+    });
   });
 });

@@ -48,6 +48,7 @@ export class GamificationService {
         currentStreak: next.current,
         longestStreak: next.longest,
         lastActiveDate: next.lastActiveDate,
+        freezesAvailable: next.freezes,
       };
       await tx
         .insert(streaks)
@@ -133,7 +134,7 @@ export class GamificationService {
   private async streakState(
     userId: string,
     tx: Pick<DbService['drizzle'], 'select'> = this.db.drizzle,
-  ): Promise<StreakState & { freezes: number }> {
+  ): Promise<StreakState> {
     const [row] = await tx
       .select({
         current: streaks.currentStreak,
@@ -143,6 +144,6 @@ export class GamificationService {
       })
       .from(streaks)
       .where(eq(streaks.userId, userId));
-    return row ?? { ...NO_STREAK, freezes: 0 };
+    return row ?? NO_STREAK;
   }
 }
