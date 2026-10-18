@@ -23,28 +23,28 @@ Loop for every slice: AI **writes** the slice → you **review** and change it �
 - [x] ESLint in both apps (replace oxlint in the API), Prettier, TypeScript strict; GitHub Actions running lint + typecheck
 - **Done when:** `pnpm dev` starts both apps and a request to local Piston prints "hello".
 
-### S1 · Auth
+### S1 · Auth ✅
 
-- [ ] Login page (email + Google) with Supabase Auth; logout
-- [ ] `JwtAuthGuard` verifying Supabase tokens
-- [ ] `DbService` + Drizzle setup; `profiles` table, row created on first request
-- [ ] `GET /me`, `PATCH /me`; global `HttpExceptionFilter`
+- [x] Login page (email + Google) with Supabase Auth; logout
+- [x] `JwtAuthGuard` verifying Supabase tokens
+- [x] `DbService` + Drizzle setup; `profiles` table, row created on first request
+- [x] `GET /me`, `PATCH /me`; global `HttpExceptionFilter`
 - **Done when:** you log in and see your profile on a page; `/me` returns 401 without a token. (FR-01, FR-02)
 
-### S2 · Lessons
+### S2 · Lessons ✅
 
-- [ ] Tables: courses, units, lessons, exercises, user_progress
-- [ ] Idempotent seed script for 10 exercises in `content/python/`
-- [ ] `GET /courses`, `GET /courses/:slug/path`, `GET /lessons/:id`
-- [ ] Plain path page (list of nodes) and exercise page (prompt, starter code, sample tests)
-- [ ] Test: no response ever contains `hiddenTests`
+- [x] Tables: courses, units, lessons, exercises, user_progress
+- [x] Idempotent seed script for 10 exercises in `content/python/`
+- [x] `GET /courses`, `GET /courses/:slug/path`, `GET /lessons/:id`
+- [x] Plain path page (list of nodes) and exercise page (prompt, starter code, sample tests)
+- [x] Test: no response ever contains `hiddenTests`
 - **Done when:** the path shows locked / active nodes and a locked lesson returns 403. (FR-03, FR-04, FR-05, FR-16)
 
-### S3 · Run and submit
+### S3 · Run and submit ✅
 
-- [ ] `PistonClient` with time and memory limits
-- [ ] `POST /submissions`; trimmed exact-match grading (unit-tested); next lesson unlocks
-- [ ] CodeMirror editor, Run button, results panel
+- [x] `PistonClient` with time and memory limits; runs one at a time (ADR-018)
+- [x] `POST /submissions`; trimmed exact-match grading (unit-tested); next lesson unlocks
+- [x] CodeMirror editor, Run button, results panel
 - **Done when:** journey J-1 works: you solve exercise 1 in the browser and node 2 unlocks. (FR-06, FR-07, FR-08)
 
 ### S4 · XP, streak, leaderboard
@@ -64,6 +64,7 @@ Loop for every slice: AI **writes** the slice → you **review** and change it �
 ### S6 · Deploy early
 
 - [ ] VPS (2 vCPU / 4 GB) with Docker Compose: API + Piston + Caddy
+- [ ] Re-test parallel Piston runs on the VPS; raise the limit in `PistonClient` if they are stable (ADR-018)
 - [ ] Web on Vercel with production env
 - [ ] README: what it is, how to run locally, demo link
 - **Gate 1 — done when:** a friend on another network signs up and finishes a lesson.

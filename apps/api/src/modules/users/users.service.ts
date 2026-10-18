@@ -4,6 +4,7 @@ import { count, eq } from 'drizzle-orm';
 import { DbService } from '../../db/db.service.js';
 import { profiles, userProgress, type Profile } from '../../db/schema/index.js';
 import type { AuthUser } from '../../integrations/supabase-auth.client.js';
+import { GamificationService } from '../gamification/gamification.service.js';
 import type { UpdateMeDto } from './dto/update-me.dto.js';
 import { toUsernameBase, withRandomSuffix } from './username.js';
 
@@ -15,7 +16,10 @@ const UNIQUE_VIOLATION = '23505';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly db: DbService) {}
+  constructor(
+    private readonly db: DbService,
+    private readonly gamification: GamificationService,
+  ) {}
 
   async getMe(user: AuthUser): Promise<MeResponse> {
     return this.toMe(await this.getOrCreate(user));
@@ -93,13 +97,15 @@ export class UsersService {
       .from(userProgress)
       .where(eq(userProgress.userId, profile.id));
 
+    const { xp, streak } = await this.gamification.stats(profile.id);
+
     return {
       id: profile.id,
       username: profile.username,
       avatarUrl: profile.avatarUrl,
-      // Fixed until their tables exist: XP and streak in S4, rating in S8.
-      xp: 0,
-      streak: { current: 0, longest: 0, freezes: 0 },
+      xp,
+      streak,
+      // Fixed until the ratings table exists in S8 (ADR-012: start 1200).
       rating: 1200,
       lessonsCompleted: done,
     };

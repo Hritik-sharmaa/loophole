@@ -81,10 +81,18 @@ export type SubmissionResult = {
   totalTests: number;
   // True when every test passed, so the lesson is (now) complete.
   lessonCompleted: boolean;
-  // Always 0 until XP arrives in S4.
+  // 10 the first time a lesson is completed, 0 on any later pass.
   xpAwarded: number;
   results: TestResult[];
   stderr: string;
+};
+
+// GET /leaderboard/weekly. XP earned since Monday 00:00 IST (FR-11).
+// Equal XP shares a rank (1, 1, 3). `me.rank` is null with no XP this week.
+export type WeeklyLeaderboard = {
+  weekStart: string;
+  entries: { rank: number; userId: string; username: string; xp: number }[];
+  me: { rank: number | null; xp: number };
 };
 
 // GET /submissions?exerciseId= (newest first, at most 10)

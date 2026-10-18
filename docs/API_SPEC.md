@@ -78,7 +78,7 @@ Hidden test results show only `passed`, never input or expected output. Throttle
 - `status`: `passed` (every test passed), `error` (some test crashed or ran out of time), otherwise `failed`.
 - `expected` and `actual` are the trimmed strings that were compared (ADR-011).
 - `stderr` is the first non-empty stderr of a **sample** test, never a hidden one (a traceback can quote the hidden input). If none, and any test ran out of time, it is a fixed time-limit message. Truncated to 4 KB.
-- `lessonCompleted` is true whenever every test passed, including a repeat pass of a finished lesson. `xpAwarded` is 0 until S4, then 10 only on the first completion.
+- `lessonCompleted` is true whenever every test passed, including a repeat pass of a finished lesson. `xpAwarded` is 10 on the first completion of a lesson and 0 on every later pass (FR-09). Only a first completion moves the streak.
 - A 502 saves nothing.
 
 ### Gamification — S4
@@ -87,6 +87,10 @@ Hidden test results show only `passed`, never input or expected output. Throttle
 | ------ | ------------------------------ | ---------------------------------------------------------------------------- |
 | GET    | `/leaderboard/weekly?limit=50` | `{ weekStart, entries: [{ rank, userId, username, xp }], me: { rank, xp } }` |
 | GET    | `/leaderboard/rating?limit=50` | `{ entries: [{ rank, userId, username, elo }], me: { rank, elo } }` (S8)     |
+
+- Weekly: XP from `xp_events` created since Monday 00:00 IST; `weekStart` is that instant (ISO). `limit` is 1–50 (default 50), else 400.
+- Equal XP shares a rank (1, 1, 3); ties are listed by username. `me` is always present: `{ rank: null, xp: 0 }` with no XP this week.
+- `GET /me` gives all-time `xp`. `streak.current` shows 0 once a day is missed, even before the next lesson resets it; `freezes` stays 0 until Phase 3.
 
 ### AI tutor — S5
 

@@ -6,6 +6,12 @@ Format: **ADR-NNN · Title** — Status (Accepted / Superseded by ADR-NNN) · Da
 
 ---
 
+**ADR-018 · Piston runs one job at a time** — Accepted · 2026-10-18
+
+- Decision: `PistonClient` queues every run, so Piston never receives two jobs at once, across all users. A submission runs its tests one after another and skips the rest after the first time-out.
+- Why: the local Piston image (Docker Desktop) crashes its sandbox when jobs overlap ("Sandbox keeper received fatal signal 6"). In testing, about half of parallel runs failed, even at two at a time; every sequential run passed. A crashed sandbox looked like a wrong answer to the learner.
+- Trade-off: a run takes about 0.6 s locally, so an 8-test exercise takes about 5 s, over NFR-09 (3 s). Concurrent submissions wait for each other. The queue lives in one `PistonClient` instance, so the API must have exactly one (a shared module once duels use it). Re-test parallel runs on the VPS in S6 and raise the limit if they are stable.
+
 **ADR-017 · PGlite for API database tests** — Accepted · 2026-10-17
 
 - Decision: API tests that need a database use `@electric-sql/pglite` (pinned dev dependency): real Postgres compiled to WebAssembly, running inside the test process. `test/support/test-db.ts` applies the real migrations and stubs Supabase's `auth.users`. e2e tests run in CI with no services.

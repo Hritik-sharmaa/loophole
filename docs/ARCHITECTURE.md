@@ -128,7 +128,7 @@ One global `HttpExceptionFilter` turns every exception into `{ error: { code, me
 1. `POST /submissions` with `{ exerciseId, code }`; `JwtAuthGuard` attaches `userId`.
 2. Controller validates the DTO and calls `SubmissionsService.submit(userId, exerciseId, code)`.
 3. Service loads the exercise (with hidden tests) through `DbService` and checks the lesson is unlocked for this user (else `LESSON_LOCKED`).
-4. Service calls `PistonClient.run` once per test (sample and hidden), comparing trimmed stdout (ADR-011).
+4. Service calls `PistonClient.run` once per test (sample and hidden), one at a time (ADR-018), comparing trimmed stdout (ADR-011). After a time-out the remaining tests are skipped and count as failed.
 5. Service inserts a `submissions` row.
 6. If every test passed and the lesson was not already complete: mark progress complete, then call `GamificationService` to award XP (unique on source + source id) and update the streak.
 7. Controller returns `{ status, testsPassed, totalTests, results }`, with sample-test details only.

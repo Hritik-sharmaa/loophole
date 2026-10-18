@@ -1,7 +1,7 @@
 'use client';
 
 import type { LessonDetail } from '@loophole/shared';
-import { ArrowLeft, Lock, RotateCcw } from 'lucide-react';
+import { ArrowLeft, Lock, RotateCcw, Zap } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
@@ -135,8 +135,14 @@ function Exercise({
           className="flex flex-wrap items-center justify-between gap-4 rounded-card border-2 border-ink px-6 py-4"
         >
           <div>
-            <p className="font-display text-2xl font-extrabold">
+            <p className="flex flex-wrap items-center gap-3 font-display text-2xl font-extrabold">
               Lesson complete!
+              {result && result.xpAwarded > 0 && (
+                <span className="flex items-center gap-1 rounded-badge bg-orange px-2 py-0.5 text-base text-ink">
+                  <Zap className="size-4" fill="currentColor" aria-hidden />+
+                  {result.xpAwarded} XP
+                </span>
+              )}
             </p>
             <p className="text-text-secondary">
               Your next lesson is waiting on the path.

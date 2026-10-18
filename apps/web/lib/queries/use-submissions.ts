@@ -35,9 +35,12 @@ export function useSubmit() {
         queryKey: ['submissions', exerciseId],
       });
       if (result.lessonCompleted) {
-        // The path (next node unlocked) and lessonsCompleted on /me changed.
+        // The path (next node unlocked) and /me (lessons, XP, streak) changed.
         void queryClient.invalidateQueries({ queryKey: ['course-path'] });
         void queryClient.invalidateQueries({ queryKey: ['me'] });
+      }
+      if (result.xpAwarded > 0) {
+        void queryClient.invalidateQueries({ queryKey: ['leaderboard'] });
       }
     },
   });

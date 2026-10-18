@@ -107,4 +107,4 @@ loophole/
 
 Update this line as milestones finish:
 
-**Current milestone: S2 — Lessons** (S1 code done; its manual login test waits on the Supabase project). M0 is done: `pnpm dev` runs both apps, local Piston runs Python, and CI runs format, lint, typecheck and tests.
+**Current milestone: S4 — XP, streak, leaderboard.** M0 and S1–S3 are done: you can sign in, follow the Python path, and solve exercises graded in local Piston (runs are serialized, ADR-018). CI runs format, lint, typecheck and tests.

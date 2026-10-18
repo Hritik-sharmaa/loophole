@@ -7,6 +7,7 @@ import { validateEnv } from './config/env.validation.js';
 import { DbModule } from './db/db.module.js';
 import type { AuthedRequest } from './modules/auth/current-user.decorator.js';
 import { AuthModule } from './modules/auth/auth.module.js';
+import { GamificationModule } from './modules/gamification/gamification.module.js';
 import { HealthModule } from './modules/health/health.module.js';
 import { LessonsModule } from './modules/lessons/lessons.module.js';
 import { SubmissionsModule } from './modules/submissions/submissions.module.js';
@@ -32,6 +33,7 @@ import { UsersModule } from './modules/users/users.module.js';
     UsersModule,
     LessonsModule,
     SubmissionsModule,
+    GamificationModule,
   ],
   // Registered here rather than in main.ts so e2e tests get them too.
   providers: [

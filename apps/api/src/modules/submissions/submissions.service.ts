@@ -15,6 +15,7 @@ import {
   type RunResult,
 } from '../../integrations/piston.client.js';
 import type { AuthUser } from '../../integrations/supabase-auth.client.js';
+import { GamificationService } from '../gamification/gamification.service.js';
 import { LessonsService } from '../lessons/lessons.service.js';
 import { UsersService } from '../users/users.service.js';
 import type { CreateSubmissionDto } from './dto/create-submission.dto.js';
@@ -38,6 +39,7 @@ export class SubmissionsService {
     private readonly piston: PistonClient,
     private readonly lessons: LessonsService,
     private readonly users: UsersService,
+    private readonly gamification: GamificationService,
   ) {}
 
   // docs/ARCHITECTURE.md §3.1. Hidden tests are loaded here and leave this
@@ -111,14 +113,21 @@ export class SubmissionsService {
       .returning({ id: submissions.id });
 
     const passed = result.status === 'passed';
+    let xpAwarded = 0;
     if (passed) {
       // FR-08. The (user_id, lesson_id) primary key makes a repeat pass a
       // no-op; the next lesson unlocks because lessonStates() reads this row.
-      // S4: when this insert adds a row, call GamificationService for XP.
       await this.db.drizzle
         .insert(userProgress)
         .values({ userId: user.id, lessonId: exercise.lessonId })
         .onConflictDoNothing();
+      // After the progress write (ARCHITECTURE §2.5). Called on every pass,
+      // not only the first: it pays once anyway, and a pass whose award
+      // failed half-way gets paid on the next one.
+      xpAwarded = await this.gamification.awardLesson(
+        user.id,
+        exercise.lessonId,
+      );
     }
 
     return {
@@ -127,7 +136,7 @@ export class SubmissionsService {
       testsPassed: result.testsPassed,
       totalTests: result.totalTests,
       lessonCompleted: passed,
-      xpAwarded: 0,
+      xpAwarded,
       results: result.results,
       stderr: result.stderr,
     };
