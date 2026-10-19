@@ -181,7 +181,7 @@ function Stat({
 
 function Centered({ children }: { children: ReactNode }) {
   return (
-    <main className="mx-auto flex w-full max-w-sm flex-1 flex-col items-center justify-center gap-6 px-6 py-16 text-center">
+    <main className="mx-auto flex w-full max-w-sm flex-1 flex-col items-center justify-center gap-6 px-4 py-10 text-center sm:px-6 sm:py-16">
       {children}
     </main>
   );

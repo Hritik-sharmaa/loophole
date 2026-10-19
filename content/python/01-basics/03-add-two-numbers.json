@@ -2,14 +2,59 @@
   "slug": "add-two-numbers",
   "title": "Add two numbers",
   "position": 3,
+  "learn": {
+    "cards": [
+      {
+        "title": "input() gives text",
+        "body": "`input()` always gives back text, even when the user types digits. Adding two pieces of text glues them together.",
+        "code": "a = input()\nb = input()\nprint(a + b)\n",
+        "input": "2\n3\n",
+        "output": "23"
+      },
+      {
+        "title": "int() makes a number",
+        "body": "Wrap `input()` in `int()` to turn the text into a whole number. Now the maths works.",
+        "code": "a = int(input())\nb = int(input())\nprint(a - b)\n",
+        "input": "10\n4\n",
+        "output": "6"
+      },
+      {
+        "title": "print() shows numbers too",
+        "body": "`print()` works with numbers and with whole calculations.",
+        "code": "print(7 + 1)\nprint(10 - 3)\n",
+        "output": "8\n7"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "print(\"4\" + \"4\")\n",
+      "options": ["8", "44", "An error"],
+      "answer": 1,
+      "explanation": "Both values are strings in quotes, so + joins them into 44."
+    }
+  },
   "exercise": {
     "prompt": "Read two whole numbers from input, one per line, and print their sum.",
     "starterCode": "a = int(input())\nb = int(input())\n# print the sum below\n",
-    "sampleTests": [{ "input": "2\n3\n", "expectedOutput": "5" }],
+    "sampleTests": [
+      {
+        "input": "2\n3\n",
+        "expectedOutput": "5"
+      }
+    ],
     "hiddenTests": [
-      { "input": "0\n0\n", "expectedOutput": "0" },
-      { "input": "-4\n10\n", "expectedOutput": "6" },
-      { "input": "1000000\n1\n", "expectedOutput": "1000001" }
+      {
+        "input": "0\n0\n",
+        "expectedOutput": "0"
+      },
+      {
+        "input": "-4\n10\n",
+        "expectedOutput": "6"
+      },
+      {
+        "input": "1000000\n1\n",
+        "expectedOutput": "1000001"
+      }
     ]
   }
 }

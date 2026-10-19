@@ -15,7 +15,7 @@ export default function LearnPage() {
   return (
     <>
       <AppHeader />
-      <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-10">
+      <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-8 sm:px-6 sm:py-10">
         {loading || courses.isPending || (slug && path.isPending) ? (
           <p className="text-center text-text-secondary">Loading your path…</p>
         ) : courses.isError || path.isError ? (

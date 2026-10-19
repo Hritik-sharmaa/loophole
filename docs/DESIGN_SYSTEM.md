@@ -88,6 +88,13 @@ Shared class strings live in `components/ui/buttons.ts` (`primaryButton`, `secon
 | DuelHeader            | Ink band with `sticker` shadow, white text, Orange countdown, Pink opponent bar                                                                             |
 | EditorPanel           | Sticker card; Ink title bar with three dots (Orange, Lemon, Pink) and the file name; CodeMirror light theme, JetBrains Mono 14                              |
 | ByteSays              | Byte beside a Paper speech bubble with a tail; used for the lesson task                                                                                     |
+| LessonStepper         | Learn · Check · Practice as three outlined tabs. Current: Ink; passed: Blue with a check; ahead: Paper. Any step can be opened (ADR-021)                    |
+| LearnCards            | Sticker card, one card at a time: Lemon "Card n of m" chip, progress dots (walked Blue, current Orange pill), title, body, RunnableExample; Back / Next     |
+| RunnableExample       | Compact EditorPanel (no shadow), secondary "Run it" button, Ink console labelled "Prints" (the content's output) until run, then "Output" (stderr in Pink)  |
+| QuickCheck            | Sticker card with Byte (thinking → oops → happy), Lemon chip, Ink code block, A–D options with press shadows. Right: Blue-tint ✓; wrong: struck through ✕   |
+| AppHeader (phone)     | Below `sm`: the top bar keeps the logo and streak/XP chips; links move to a fixed bottom tab bar (icon + short label, current tab Ink); page bottom padded  |
+
+**Responsive rules:** design at 390 px first. Page gutters are 16 px on phones and 24 px from `sm`. Fixed and sticky bars pad themselves with `env(safe-area-inset-*)`; the viewport uses `viewport-fit=cover` for the installed PWA (ADR-022).
 
 ## 7. Tailwind config (v4, ADR-013)
 

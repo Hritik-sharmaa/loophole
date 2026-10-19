@@ -2,6 +2,29 @@
   "slug": "star-triangle",
   "title": "Star triangle",
   "position": 7,
+  "learn": {
+    "cards": [
+      {
+        "title": "Repeating text with *",
+        "body": "Multiplying a string by a whole number repeats it.",
+        "code": "print(\"ab\" * 3)\nprint(\"-\" * 5)\n",
+        "output": "ababab\n-----"
+      },
+      {
+        "title": "Lines that grow",
+        "body": "Combine the loop variable with string repetition and each line can be a bit longer than the last.",
+        "code": "for i in range(1, 4):\n    print(\"o\" * (i * 2))\n",
+        "output": "oo\noooo\noooooo"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "for i in range(2):\n    print(\"*\" * (i + 1))\n",
+      "options": ["*\n**", "**\n**", "\n*"],
+      "answer": 0,
+      "explanation": "i is 0 and then 1, so the lines have 1 and then 2 stars."
+    }
+  },
   "exercise": {
     "prompt": "Read N and print a triangle of N rows: row 1 has one `*`, row 2 has two, and so on, with no spaces.",
     "starterCode": "n = int(input())\n# print the triangle, one row per line\n",

@@ -2,6 +2,29 @@
   "slug": "spread",
   "title": "Spread",
   "position": 6,
+  "learn": {
+    "cards": [
+      {
+        "title": "Calculating with results",
+        "body": "Built-in functions give back values, so you can use them straight away in a calculation.",
+        "code": "temps = [12, 18, 9, 15]\nprint(max(temps) + min(temps))\n",
+        "output": "27"
+      },
+      {
+        "title": "Inside out",
+        "body": "Python works out `max(...)` and `min(...)` first, then applies the operator between their results.",
+        "code": "print(max([1, 5]) * 2)\n",
+        "output": "10"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "print(max([3, 10]) - min([3, 10]))\n",
+      "options": ["7", "-7", "13"],
+      "answer": 0,
+      "explanation": "max is 10 and min is 3, so 10 - 3 is 7."
+    }
+  },
   "exercise": {
     "prompt": "Read whole numbers on one line and print the difference between the largest and the smallest.",
     "starterCode": "nums = list(map(int, input().split()))\n# print largest minus smallest\n",

@@ -78,6 +78,14 @@ body {
   color: var(--color-ink);
 }
 
+/* Room under the page for the phone tab bar (AppHeader), plus the phone's
+   home-indicator area. The bar is hidden from `sm` (40rem) up. */
+@media (width < 40rem) {
+  body:has([data-tabbar]) {
+    padding-bottom: calc(4.75rem + env(safe-area-inset-bottom));
+  }
+}
+
 /* CSS animations (the node pulse, Byte's cursor) also stop for
    reduced-motion users. */
 @media (prefers-reduced-motion: reduce) {

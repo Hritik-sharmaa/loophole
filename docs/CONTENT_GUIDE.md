@@ -53,6 +53,38 @@ content/
 }
 ```
 
+### The Learn step (ADR-021)
+
+Every lesson teaches before it tests. Put a `learn` block between `position` and `exercise`:
+
+```json
+"learn": {
+  "cards": [
+    {
+      "title": "Reading input",
+      "body": "`input()` reads one line that the user types and gives it back as text.",
+      "code": "name = input()\nprint(name)\n",
+      "input": "Ada\n",
+      "output": "Ada"
+    },
+    { "title": "Every character counts", "body": "The grader compares your output letter by letter." }
+  ],
+  "check": {
+    "question": "What does this print?",
+    "code": "print(\"4\" + \"4\")\n",
+    "options": ["8", "44", "An error"],
+    "answer": 1,
+    "explanation": "Both values are strings in quotes, so + joins them into 44."
+  }
+}
+```
+
+- **Cards:** 1–5 (aim for 2–3). One idea per card; `body` is two sentences at most and may use `backticks` for code. `code` is an example the learner can edit and run; it needs `output` (what the unedited code prints, shown before any run) and may have `input` (stdin). A card without `code` is text only.
+- **Check:** one question with 2–4 different `options`; `answer` is the index of the right one. Prefer "What does this print?" with `code`. Wrong options should be mistakes a beginner would really make.
+- **Teach, don't solve:** the cards build up to the exercise but never contain its solution. Use different names and numbers from the exercise.
+- **Check before committing:** run every example and the check through Piston, and confirm each `output` (and the right option) matches exactly. The Python track's 133 programs were checked this way.
+- `content-files.spec.ts` checks the shape in CI and that every lesson has a `learn` block.
+
 ### Grading rule
 
 Each test runs the program with `input` as stdin. It passes when **trimmed stdout equals trimmed `expectedOutput`** (trailing whitespace and a final newline ignored). Exact match, not "contains".

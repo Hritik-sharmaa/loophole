@@ -2,14 +2,59 @@
   "slug": "greet-by-name",
   "title": "Greet by name",
   "position": 2,
+  "learn": {
+    "cards": [
+      {
+        "title": "Variables hold values",
+        "body": "A variable is a name for a value. `=` stores the value on the right under the name on the left. Use the name later to get the value back.",
+        "code": "city = \"Paris\"\nprint(city)\n",
+        "output": "Paris"
+      },
+      {
+        "title": "Reading input",
+        "body": "`input()` reads one line that the user types and gives it back as text. Store it in a variable to use it.",
+        "code": "name = input()\nprint(name)\n",
+        "input": "Ada\n",
+        "output": "Ada"
+      },
+      {
+        "title": "Joining text with +",
+        "body": "Use `+` to glue strings together. Python adds no spaces for you, so put the spaces and punctuation in yourself.",
+        "code": "name = input()\nprint(\"Hello, \" + name + \".\")\n",
+        "input": "Grace\n",
+        "output": "Hello, Grace."
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "animal = \"cat\"\nprint(\"I love \" + animal + \"s\")\n",
+      "options": ["I love cats", "I love animals", "I love cat s"],
+      "answer": 0,
+      "explanation": "`animal` holds \"cat\", and + joins the pieces exactly as they are, with no extra spaces."
+    }
+  },
   "exercise": {
     "prompt": "Read a name from input and print `Hi, <name>!`. For `Ada`, print `Hi, Ada!`",
     "starterCode": "name = input()\n# print the greeting below\n",
-    "sampleTests": [{ "input": "Ada\n", "expectedOutput": "Hi, Ada!" }],
+    "sampleTests": [
+      {
+        "input": "Ada\n",
+        "expectedOutput": "Hi, Ada!"
+      }
+    ],
     "hiddenTests": [
-      { "input": "Grace\n", "expectedOutput": "Hi, Grace!" },
-      { "input": "Bo\n", "expectedOutput": "Hi, Bo!" },
-      { "input": "Mary Jane\n", "expectedOutput": "Hi, Mary Jane!" }
+      {
+        "input": "Grace\n",
+        "expectedOutput": "Hi, Grace!"
+      },
+      {
+        "input": "Bo\n",
+        "expectedOutput": "Hi, Bo!"
+      },
+      {
+        "input": "Mary Jane\n",
+        "expectedOutput": "Hi, Mary Jane!"
+      }
     ]
   }
 }

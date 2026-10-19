@@ -2,6 +2,29 @@
   "slug": "squares-list",
   "title": "List of squares",
   "position": 4,
+  "learn": {
+    "cards": [
+      {
+        "title": "Building a list in a loop",
+        "body": "Use a `for` loop with `range` to work out a value each round and append it.",
+        "code": "tens = []\nfor i in range(1, 4):\n    tens.append(i * 10)\nprint(tens)\n",
+        "output": "[10, 20, 30]"
+      },
+      {
+        "title": "One append, one item",
+        "body": "Each `append` adds exactly one item, so after the loop the list has one item per round.",
+        "code": "items = []\nitems.append(\"a\")\nitems.append(\"b\")\nprint(len(items), items)\n",
+        "output": "2 ['a', 'b']"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "s = []\nfor i in range(1, 4):\n    s.append(i + i)\nprint(s)\n",
+      "options": ["[2, 4, 6]", "[1, 4, 9]", "[1, 2, 3]"],
+      "answer": 0,
+      "explanation": "Each round appends i + i: 2, then 4, then 6."
+    }
+  },
   "exercise": {
     "prompt": "Read N, build a list of the squares 1, 4, 9, … up to N × N using `append`, then print it with the numbers separated by spaces.",
     "starterCode": "n = int(input())\nsquares = []\n# append the squares of 1 to n\nprint(\" \".join(map(str, squares)))\n",

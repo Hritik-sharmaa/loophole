@@ -2,15 +2,55 @@
   "slug": "even-or-odd",
   "title": "Even or odd",
   "position": 2,
+  "learn": {
+    "cards": [
+      {
+        "title": "Even numbers leave nothing over",
+        "body": "A number is even when dividing it by 2 leaves no remainder, so `n % 2` is `0`.",
+        "code": "print(10 % 2)\nprint(7 % 2)\n",
+        "output": "0\n1"
+      },
+      {
+        "title": "== compares, = stores",
+        "body": "`=` puts a value into a variable. `==` asks whether two values are equal. Inside an `if`, you almost always want `==`.",
+        "code": "n = 9\nif n % 3 == 0:\n    print(\"divides by 3\")\nelse:\n    print(\"does not divide by 3\")\n",
+        "output": "divides by 3"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "print(15 % 2 == 0)\n",
+      "options": ["True", "False", "An error"],
+      "answer": 1,
+      "explanation": "15 % 2 is 1, and 1 == 0 is False, so 15 is odd."
+    }
+  },
   "exercise": {
     "prompt": "Read a whole number and print `even` if it divides by 2 with nothing left over, otherwise print `odd`.",
     "starterCode": "n = int(input())\n# print even or odd below\n",
-    "sampleTests": [{ "input": "4\n", "expectedOutput": "even" }],
+    "sampleTests": [
+      {
+        "input": "4\n",
+        "expectedOutput": "even"
+      }
+    ],
     "hiddenTests": [
-      { "input": "7\n", "expectedOutput": "odd" },
-      { "input": "0\n", "expectedOutput": "even" },
-      { "input": "-3\n", "expectedOutput": "odd" },
-      { "input": "-8\n", "expectedOutput": "even" }
+      {
+        "input": "7\n",
+        "expectedOutput": "odd"
+      },
+      {
+        "input": "0\n",
+        "expectedOutput": "even"
+      },
+      {
+        "input": "-3\n",
+        "expectedOutput": "odd"
+      },
+      {
+        "input": "-8\n",
+        "expectedOutput": "even"
+      }
     ]
   }
 }

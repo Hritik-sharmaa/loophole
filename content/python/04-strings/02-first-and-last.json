@@ -2,6 +2,35 @@
   "slug": "first-and-last",
   "title": "First and last letter",
   "position": 2,
+  "learn": {
+    "cards": [
+      {
+        "title": "Indexes start at 0",
+        "body": "Each character in a string has a position called an index. The first is at `[0]`, the second at `[1]`.",
+        "code": "word = \"cat\"\nprint(word[0])\nprint(word[1])\n",
+        "output": "c\na"
+      },
+      {
+        "title": "Negative indexes count from the end",
+        "body": "`[-1]` is the last character, `[-2]` the one before it.",
+        "code": "word = \"cat\"\nprint(word[-1])\n",
+        "output": "t"
+      },
+      {
+        "title": "len() gives the length",
+        "body": "`len(word)` counts the characters. The last index is always `len(word) - 1`.",
+        "code": "print(len(\"hello\"))\n",
+        "output": "5"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "w = \"python\"\nprint(w[1], w[-2])\n",
+      "options": ["y o", "p n", "y n"],
+      "answer": 0,
+      "explanation": "Index 1 is the second letter, y. Index -2 is the second from the end, o."
+    }
+  },
   "exercise": {
     "prompt": "Read a word and print its first letter and its last letter, separated by a space. Use indexes `[0]` and `[-1]`.",
     "starterCode": "word = input()\n# print the first and last letters\n",

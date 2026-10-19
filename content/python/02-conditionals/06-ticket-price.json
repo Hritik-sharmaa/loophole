@@ -2,6 +2,30 @@
   "slug": "ticket-price",
   "title": "Ticket price",
   "position": 6,
+  "learn": {
+    "cards": [
+      {
+        "title": "Sorting into ranges",
+        "body": "To sort a value into ranges, check one edge at a time. Because the first match wins, each elif needs only one comparison.",
+        "code": "hour = int(input())\nif hour < 12:\n    print(\"morning\")\nelif hour < 18:\n    print(\"afternoon\")\nelse:\n    print(\"evening\")\n",
+        "input": "15\n",
+        "output": "afternoon"
+      },
+      {
+        "title": "Checking a range in one go",
+        "body": "Python can chain comparisons: `3 <= age <= 12` is True when age is from 3 to 12, both included.",
+        "code": "age = 8\nprint(3 <= age <= 12)\n",
+        "output": "True"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "age = 12\nif age < 12:\n    print(\"child\")\nelse:\n    print(\"teen\")\n",
+      "options": ["child", "teen"],
+      "answer": 1,
+      "explanation": "12 < 12 is False, so 12 goes to else. Edges are where < and <= differ, so test them."
+    }
+  },
   "exercise": {
     "prompt": "Read an age and print the ticket price: `0` for under 3, `5` for ages 3 to 12, `10` for 13 to 64, and `6` for 65 and over.",
     "starterCode": "age = int(input())\n# print the ticket price below\n",

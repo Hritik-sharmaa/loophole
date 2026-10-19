@@ -41,9 +41,7 @@
         "courses_slug_unique": {
           "name": "courses_slug_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "slug"
-          ]
+          "columns": ["slug"]
         }
       },
       "policies": {},
@@ -98,12 +96,8 @@
           "name": "exercises_lesson_id_lessons_id_fk",
           "tableFrom": "exercises",
           "tableTo": "lessons",
-          "columnsFrom": [
-            "lesson_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["lesson_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -113,9 +107,7 @@
         "exercises_lesson_id_unique": {
           "name": "exercises_lesson_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "lesson_id"
-          ]
+          "columns": ["lesson_id"]
         }
       },
       "policies": {},
@@ -164,12 +156,8 @@
           "name": "lessons_unit_id_units_id_fk",
           "tableFrom": "lessons",
           "tableTo": "units",
-          "columnsFrom": [
-            "unit_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["unit_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -179,18 +167,12 @@
         "lessons_unit_slug": {
           "name": "lessons_unit_slug",
           "nullsNotDistinct": false,
-          "columns": [
-            "unit_id",
-            "slug"
-          ]
+          "columns": ["unit_id", "slug"]
         },
         "lessons_unit_position": {
           "name": "lessons_unit_position",
           "nullsNotDistinct": false,
-          "columns": [
-            "unit_id",
-            "position"
-          ]
+          "columns": ["unit_id", "position"]
         }
       },
       "policies": {},
@@ -239,12 +221,8 @@
           "name": "units_course_id_courses_id_fk",
           "tableFrom": "units",
           "tableTo": "courses",
-          "columnsFrom": [
-            "course_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["course_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -254,18 +232,12 @@
         "units_course_slug": {
           "name": "units_course_slug",
           "nullsNotDistinct": false,
-          "columns": [
-            "course_id",
-            "slug"
-          ]
+          "columns": ["course_id", "slug"]
         },
         "units_course_position": {
           "name": "units_course_position",
           "nullsNotDistinct": false,
-          "columns": [
-            "course_id",
-            "position"
-          ]
+          "columns": ["course_id", "position"]
         }
       },
       "policies": {},
@@ -309,12 +281,8 @@
           "tableFrom": "profiles",
           "tableTo": "users",
           "schemaTo": "auth",
-          "columnsFrom": [
-            "id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -324,9 +292,7 @@
         "profiles_username_unique": {
           "name": "profiles_username_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "username"
-          ]
+          "columns": ["username"]
         }
       },
       "policies": {},
@@ -375,12 +341,8 @@
           "name": "user_progress_user_id_profiles_id_fk",
           "tableFrom": "user_progress",
           "tableTo": "profiles",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -388,12 +350,8 @@
           "name": "user_progress_lesson_id_lessons_id_fk",
           "tableFrom": "user_progress",
           "tableTo": "lessons",
-          "columnsFrom": [
-            "lesson_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["lesson_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -401,10 +359,7 @@
       "compositePrimaryKeys": {
         "user_progress_user_id_lesson_id_pk": {
           "name": "user_progress_user_id_lesson_id_pk",
-          "columns": [
-            "user_id",
-            "lesson_id"
-          ]
+          "columns": ["user_id", "lesson_id"]
         }
       },
       "uniqueConstraints": {},
@@ -508,12 +463,8 @@
           "name": "submissions_user_id_profiles_id_fk",
           "tableFrom": "submissions",
           "tableTo": "profiles",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -521,12 +472,8 @@
           "name": "submissions_exercise_id_exercises_id_fk",
           "tableFrom": "submissions",
           "tableTo": "exercises",
-          "columnsFrom": [
-            "exercise_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["exercise_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -581,12 +528,8 @@
           "name": "streaks_user_id_profiles_id_fk",
           "tableFrom": "streaks",
           "tableTo": "profiles",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -667,12 +610,8 @@
           "name": "xp_events_user_id_profiles_id_fk",
           "tableFrom": "xp_events",
           "tableTo": "profiles",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -682,11 +621,7 @@
         "xp_events_once_per_source": {
           "name": "xp_events_once_per_source",
           "nullsNotDistinct": false,
-          "columns": [
-            "user_id",
-            "source",
-            "source_id"
-          ]
+          "columns": ["user_id", "source", "source_id"]
         }
       },
       "policies": {},

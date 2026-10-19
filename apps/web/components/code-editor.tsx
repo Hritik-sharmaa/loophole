@@ -21,17 +21,23 @@ const extensions = [
 
 // Tab indents inside the editor; Esc then Tab moves focus out (CodeMirror's
 // built-in escape hatch), so it stays keyboard-reachable both ways.
+// `compact`: a smaller editor with no sticker shadow, for Learn examples
+// inside a card.
 export function CodeEditor({
   value,
   onChange,
   fileName,
+  compact = false,
 }: {
   value: string;
   onChange: (value: string) => void;
   fileName: string;
+  compact?: boolean;
 }) {
   return (
-    <section className="overflow-hidden rounded-card border-2 border-ink bg-paper shadow-sticker focus-within:outline-2 focus-within:outline-offset-4 focus-within:outline-ink">
+    <section
+      className={`overflow-hidden rounded-card border-2 border-ink bg-paper focus-within:outline-2 focus-within:outline-offset-4 focus-within:outline-ink ${compact ? '' : 'shadow-sticker'}`}
+    >
       <div className="flex items-center gap-3 bg-ink px-4 py-2">
         <span aria-hidden className="flex gap-1.5">
           <span className="size-2.5 rounded-full bg-orange" />
@@ -45,7 +51,7 @@ export function CodeEditor({
         onChange={onChange}
         extensions={extensions}
         theme="light"
-        minHeight="12rem"
+        minHeight={compact ? '4rem' : '12rem'}
         basicSetup={{ foldGutter: false }}
       />
     </section>

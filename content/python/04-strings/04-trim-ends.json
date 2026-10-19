@@ -2,6 +2,29 @@
   "slug": "trim-ends",
   "title": "Trim the ends",
   "position": 4,
+  "learn": {
+    "cards": [
+      {
+        "title": "Slices take a piece",
+        "body": "`word[start:stop]` gives the characters from start up to, but not including, stop.",
+        "code": "word = \"rainbow\"\nprint(word[0:4])\nprint(word[4:7])\n",
+        "output": "rain\nbow"
+      },
+      {
+        "title": "Leaving out an end",
+        "body": "Leave out start to begin at 0; leave out stop to go to the end. Negative numbers count from the end.",
+        "code": "word = \"rainbow\"\nprint(word[:3])\nprint(word[3:])\nprint(word[-3:])\n",
+        "output": "rai\nnbow\nbow"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "print(\"python\"[2:4])\n",
+      "options": ["th", "yth", "tho"],
+      "answer": 0,
+      "explanation": "Index 2 is t and index 3 is h. The slice stops before index 4."
+    }
+  },
   "exercise": {
     "prompt": "Read a word of at least two letters and print it without its first and last letters, using slicing. For `python`, print `ytho`.",
     "starterCode": "word = input()\n# print word without its first and last letters\n",

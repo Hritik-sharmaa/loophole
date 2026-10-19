@@ -2,6 +2,29 @@
   "slug": "above-average",
   "title": "Above average",
   "position": 5,
+  "learn": {
+    "cards": [
+      {
+        "title": "The average",
+        "body": "The average is the total divided by how many there are: `sum(nums) / len(nums)`. `/` always gives a decimal.",
+        "code": "nums = [2, 4, 9]\nprint(sum(nums) / len(nums))\n",
+        "output": "5.0"
+      },
+      {
+        "title": "Counting matches",
+        "body": "Keep a counter and add 1 for every item that passes a test.",
+        "code": "count = 0\nfor x in [3, 8, 1, 9]:\n    if x > 5:\n        count += 1\nprint(count)\n",
+        "output": "2"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "nums = [1, 1, 4]\nprint(sum(nums) / len(nums))\n",
+      "options": ["2.0", "6", "3.0"],
+      "answer": 0,
+      "explanation": "The total is 6 and there are 3 numbers, so 6 / 3 is 2.0."
+    }
+  },
   "exercise": {
     "prompt": "Read whole numbers on one line and print how many of them are greater than their average.",
     "starterCode": "nums = list(map(int, input().split()))\n# work out the average, then count the numbers above it\n",

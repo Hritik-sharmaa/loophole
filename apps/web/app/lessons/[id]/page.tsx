@@ -1,7 +1,7 @@
 'use client';
 
 import type { LessonDetail } from '@loophole/shared';
-import { ArrowLeft, Lock, RotateCcw, Zap } from 'lucide-react';
+import { ArrowLeft, Check, Lock, RotateCcw, Zap } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -9,6 +9,8 @@ import { AppHeader } from '@/components/app-header';
 import { Byte, ByteSays } from '@/components/byte';
 import { CodeEditor } from '@/components/code-editor';
 import { InlineCode } from '@/components/inline-code';
+import { LearnCards } from '@/components/learn-cards';
+import { QuickCheck } from '@/components/quick-check';
 import { SampleTests } from '@/components/sample-tests';
 import { TestResults } from '@/components/test-results';
 import { TutorPanel } from '@/components/tutor-panel';
@@ -21,7 +23,8 @@ import { useSubmissions, useSubmit } from '@/lib/queries/use-submissions';
 import { useCountUp } from '@/lib/use-count-up';
 import { useRequireSession } from '@/lib/use-require-session';
 
-// One exercise: prompt, sample tests, editor, Run, and the graded result.
+// One lesson: Learn cards and a quick check, then the exercise (prompt,
+// sample tests, editor, Run, and the graded result).
 export default function LessonPage() {
   const { id } = useParams<{ id: string }>();
   const { loading } = useRequireSession();
@@ -32,7 +35,7 @@ export default function LessonPage() {
   return (
     <>
       <AppHeader />
-      <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-8">
+      <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-6 sm:px-6 sm:py-8">
         <Link
           href="/learn"
           className="mb-6 inline-flex items-center gap-1 rounded-badge text-sm font-bold text-text-secondary hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
@@ -47,17 +50,118 @@ export default function LessonPage() {
         ) : history.isPending ? (
           <p className="text-text-secondary">Loading your code…</p>
         ) : (
-          <Exercise
+          <Lesson
             key={lesson.data.id}
             lesson={lesson.data}
             // A failed history load just means starting from the starter code.
             initialCode={
               history.data?.[0]?.code ?? lesson.data.exercise.starterCode
             }
+            // Someone who already tried the exercise skips straight to it.
+            startAt={history.data?.length ? 'practice' : 'learn'}
           />
         )}
       </main>
     </>
+  );
+}
+
+type Step = 'learn' | 'check' | 'practice';
+
+const STEPS: { id: Step; label: string }[] = [
+  { id: 'learn', label: 'Learn' },
+  { id: 'check', label: 'Check' },
+  { id: 'practice', label: 'Practice' },
+];
+
+// Teach first, then test (ADR-021): Learn cards, a quick check, then the
+// graded exercise. Every step stays mounted (only hidden), so moving
+// between them keeps the code in the editor and the last result.
+function Lesson({
+  lesson,
+  initialCode,
+  startAt,
+}: {
+  lesson: LessonDetail;
+  initialCode: string;
+  startAt: Step;
+}) {
+  const learn = lesson.learn;
+  const [step, setStep] = useState<Step>(learn ? startAt : 'practice');
+
+  function go(next: Step) {
+    setStep(next);
+    window.scrollTo({ top: 0 });
+  }
+
+  return (
+    <article className="flex flex-col gap-6">
+      <h1 className="font-display text-3xl font-extrabold text-balance sm:text-4xl">
+        {lesson.title}
+      </h1>
+
+      {learn && (
+        <>
+          <Stepper current={step} onPick={go} />
+          <div hidden={step !== 'learn'}>
+            <LearnCards
+              lessonId={lesson.id}
+              cards={learn.cards}
+              onDone={() => go('check')}
+            />
+          </div>
+          <div hidden={step !== 'check'}>
+            <QuickCheck check={learn.check} onDone={() => go('practice')} />
+          </div>
+        </>
+      )}
+
+      <div hidden={step !== 'practice'}>
+        <Exercise lesson={lesson} initialCode={initialCode} />
+      </div>
+    </article>
+  );
+}
+
+// Three steps as sticker tabs. Any step can be opened at any time: the
+// Learn step teaches, it doesn't gate.
+function Stepper({
+  current,
+  onPick,
+}: {
+  current: Step;
+  onPick: (step: Step) => void;
+}) {
+  const at = STEPS.findIndex((s) => s.id === current);
+  return (
+    <nav aria-label="Lesson steps">
+      <ol className="flex items-center gap-2">
+        {STEPS.map((s, i) => (
+          <li key={s.id} className="flex flex-1 items-center gap-2">
+            <button
+              type="button"
+              onClick={() => onPick(s.id)}
+              aria-current={s.id === current ? 'step' : undefined}
+              className={`flex w-full items-center justify-center gap-1.5 rounded-card border-2 border-ink px-2 py-2 text-sm font-bold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink ${s.id === current ? 'bg-ink text-paper' : i < at ? 'bg-blue text-paper' : 'bg-paper text-ink'}`}
+            >
+              <span
+                aria-hidden
+                className="flex size-5 items-center justify-center rounded-node border-2 border-current text-[0.7rem]"
+              >
+                {i < at ? <Check className="size-3" strokeWidth={4} /> : i + 1}
+              </span>
+              {s.label}
+            </button>
+            {i < STEPS.length - 1 && (
+              <span
+                aria-hidden
+                className={`hidden h-0.5 w-4 shrink-0 sm:block ${i < at ? 'bg-blue' : 'bg-border-muted'}`}
+              />
+            )}
+          </li>
+        ))}
+      </ol>
+    </nav>
   );
 }
 
@@ -80,8 +184,7 @@ function Exercise({
   const completed = result?.lessonCompleted ?? false;
 
   return (
-    <article className="flex flex-col gap-6">
-      <h1 className="font-display text-4xl font-extrabold">{lesson.title}</h1>
+    <div className="flex flex-col gap-6">
       {/* Byte reads out the task (DESIGN_SYSTEM §9). */}
       <ByteSays>
         <p className="text-xs font-bold tracking-wide text-text-secondary uppercase">
@@ -165,7 +268,7 @@ function Exercise({
       {!completed && (
         <TutorPanel exerciseId={exerciseId} code={code} submission={result} />
       )}
-    </article>
+    </div>
   );
 }
 

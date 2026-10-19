@@ -2,6 +2,29 @@
   "slug": "top-score",
   "title": "Top score",
   "position": 3,
+  "learn": {
+    "cards": [
+      {
+        "title": "Looping over a dictionary",
+        "body": "`for key in d` visits the keys in the order they were added. `d.items()` gives each key and value together.",
+        "code": "scores = {\"ada\": 90, \"bo\": 75}\nfor name, score in scores.items():\n    print(name, score)\n",
+        "output": "ada 90\nbo 75"
+      },
+      {
+        "title": "The best so far",
+        "body": "Keep the best value seen so far and replace it only when you find something strictly better. `None` means \"nothing yet\". Using `>` rather than `>=` keeps the first one on a tie.",
+        "code": "best = None\nfor x in [4, 9, 2, 9]:\n    if best is None or x > best:\n        best = x\nprint(best)\n",
+        "output": "9"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "best = 0\nfor x in [3, 7, 7, 1]:\n    if x > best:\n        best = x\nprint(best)\n",
+      "options": ["7", "3", "1"],
+      "answer": 0,
+      "explanation": "best becomes 3, then 7. The second 7 is not greater, and 1 is smaller."
+    }
+  },
   "exercise": {
     "prompt": "The first line is a count N; then N lines of `name score`. Print the name with the highest score. If several share it, print the one that came first.",
     "starterCode": "n = int(input())\nscores = {}\n# read the scores, then print the top name\n",

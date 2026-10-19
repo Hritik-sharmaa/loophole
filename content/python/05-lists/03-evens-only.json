@@ -2,6 +2,35 @@
   "slug": "evens-only",
   "title": "Evens only",
   "position": 3,
+  "learn": {
+    "cards": [
+      {
+        "title": "Looping over a list",
+        "body": "`for x in nums` visits each item in order.",
+        "code": "for x in [3, 6, 9]:\n    print(x * 10)\n",
+        "output": "30\n60\n90"
+      },
+      {
+        "title": "append() adds to the end",
+        "body": "Start with an empty list `[]` and use `.append(x)` to add items one by one.",
+        "code": "big = []\nfor x in [5, 12, 8, 20]:\n    if x > 10:\n        big.append(x)\nprint(big)\n",
+        "output": "[12, 20]"
+      },
+      {
+        "title": "Printing with spaces",
+        "body": "`\" \".join(...)` joins items with a space between them. It needs strings, so `map(str, ...)` converts the numbers first.",
+        "code": "print(\" \".join(map(str, [1, 2, 3])))\n",
+        "output": "1 2 3"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "r = []\nfor x in [1, 2, 3, 4]:\n    if x % 2 == 1:\n        r.append(x)\nprint(r)\n",
+      "options": ["[1, 3]", "[2, 4]", "[1, 2, 3, 4]"],
+      "answer": 0,
+      "explanation": "x % 2 == 1 is True for odd numbers, so only 1 and 3 are added."
+    }
+  },
   "exercise": {
     "prompt": "Read whole numbers on one line and print only the even ones, in the same order, separated by spaces. If there are none, print an empty line.",
     "starterCode": "nums = list(map(int, input().split()))\nevens = []\n# add the even numbers to evens\nprint(\" \".join(map(str, evens)))\n",

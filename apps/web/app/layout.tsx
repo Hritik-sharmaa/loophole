@@ -1,5 +1,6 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Bricolage_Grotesque, DM_Sans, JetBrains_Mono } from 'next/font/google';
+import { PwaRegister } from '@/components/pwa-register';
 import { Providers } from './providers';
 import './globals.css';
 
@@ -27,6 +28,16 @@ export const metadata: Metadata = {
   title: 'Loophole — learn to code, one bug at a time',
   description:
     'Bite-sized coding lessons with real code, instant grading, AI hints, streaks, and live 1v1 debugging duels.',
+  applicationName: 'Loophole',
+  // Installed on iOS: full-screen, named Loophole (ADR-022).
+  appleWebApp: { capable: true, title: 'Loophole', statusBarStyle: 'default' },
+};
+
+// viewportFit "cover" lets the app draw under a phone's notch and home bar;
+// the header and tab bar pad themselves with env(safe-area-inset-*).
+export const viewport: Viewport = {
+  themeColor: '#ffffff',
+  viewportFit: 'cover',
 };
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {
@@ -37,6 +48,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
     >
       <body className="flex min-h-full flex-col font-sans font-medium">
         <Providers>{children}</Providers>
+        <PwaRegister />
       </body>
     </html>
   );

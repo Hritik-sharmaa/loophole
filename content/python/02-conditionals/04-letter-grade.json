@@ -2,18 +2,66 @@
   "slug": "letter-grade",
   "title": "Letter grade",
   "position": 4,
+  "learn": {
+    "cards": [
+      {
+        "title": "Chains of elif",
+        "body": "Python checks each condition from top to bottom and stops at the first True one. Order your checks from the highest value to the lowest.",
+        "code": "speed = int(input())\nif speed >= 100:\n    print(\"fast\")\nelif speed >= 50:\n    print(\"okay\")\nelse:\n    print(\"slow\")\n",
+        "input": "70\n",
+        "output": "okay"
+      },
+      {
+        "title": "Why the order matters",
+        "body": "If the `>= 50` check came first, a speed of 120 would print okay and never reach the fast check. The first match wins."
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "score = 75\nif score >= 50:\n    print(\"pass\")\nelif score >= 70:\n    print(\"good\")\n",
+      "options": ["pass", "good", "pass\ngood"],
+      "answer": 0,
+      "explanation": "score >= 50 is True first, so Python prints pass and skips every branch below it."
+    }
+  },
   "exercise": {
     "prompt": "Read a score from 0 to 100 and print its letter grade: `A` for 90 or more, `B` for 80 to 89, `C` for 70 to 79, `D` for 60 to 69, and `F` below 60.",
     "starterCode": "score = int(input())\n# print the letter grade below\n",
-    "sampleTests": [{ "input": "85\n", "expectedOutput": "B" }],
+    "sampleTests": [
+      {
+        "input": "85\n",
+        "expectedOutput": "B"
+      }
+    ],
     "hiddenTests": [
-      { "input": "90\n", "expectedOutput": "A" },
-      { "input": "100\n", "expectedOutput": "A" },
-      { "input": "89\n", "expectedOutput": "B" },
-      { "input": "70\n", "expectedOutput": "C" },
-      { "input": "60\n", "expectedOutput": "D" },
-      { "input": "59\n", "expectedOutput": "F" },
-      { "input": "0\n", "expectedOutput": "F" }
+      {
+        "input": "90\n",
+        "expectedOutput": "A"
+      },
+      {
+        "input": "100\n",
+        "expectedOutput": "A"
+      },
+      {
+        "input": "89\n",
+        "expectedOutput": "B"
+      },
+      {
+        "input": "70\n",
+        "expectedOutput": "C"
+      },
+      {
+        "input": "60\n",
+        "expectedOutput": "D"
+      },
+      {
+        "input": "59\n",
+        "expectedOutput": "F"
+      },
+      {
+        "input": "0\n",
+        "expectedOutput": "F"
+      }
     ]
   }
 }

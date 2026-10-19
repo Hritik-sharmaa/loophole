@@ -2,15 +2,55 @@
   "slug": "bigger-of-two",
   "title": "The bigger number",
   "position": 3,
+  "learn": {
+    "cards": [
+      {
+        "title": "Comparing two variables",
+        "body": "A condition can compare two variables, not just a variable and a number.",
+        "code": "a = 4\nb = 7\nif a < b:\n    print(\"a is smaller\")\nelse:\n    print(\"a is not smaller\")\n",
+        "output": "a is smaller"
+      },
+      {
+        "title": ">= includes equal",
+        "body": "`>=` means greater than or equal, so it is True when both values are the same. That is handy for ties.",
+        "code": "print(5 >= 5)\nprint(5 > 5)\n",
+        "output": "True\nFalse"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "a = 6\nb = 6\nif a > b:\n    print(a)\nelse:\n    print(b)\n",
+      "options": ["6", "Nothing", "An error"],
+      "answer": 0,
+      "explanation": "6 > 6 is False, so the else branch prints b, which is also 6."
+    }
+  },
   "exercise": {
     "prompt": "Read two whole numbers, one per line, and print the bigger one. If they are equal, print that number.",
     "starterCode": "a = int(input())\nb = int(input())\n# print the bigger number below\n",
-    "sampleTests": [{ "input": "3\n9\n", "expectedOutput": "9" }],
+    "sampleTests": [
+      {
+        "input": "3\n9\n",
+        "expectedOutput": "9"
+      }
+    ],
     "hiddenTests": [
-      { "input": "9\n3\n", "expectedOutput": "9" },
-      { "input": "5\n5\n", "expectedOutput": "5" },
-      { "input": "-2\n-7\n", "expectedOutput": "-2" },
-      { "input": "0\n-1\n", "expectedOutput": "0" }
+      {
+        "input": "9\n3\n",
+        "expectedOutput": "9"
+      },
+      {
+        "input": "5\n5\n",
+        "expectedOutput": "5"
+      },
+      {
+        "input": "-2\n-7\n",
+        "expectedOutput": "-2"
+      },
+      {
+        "input": "0\n-1\n",
+        "expectedOutput": "0"
+      }
     ]
   }
 }

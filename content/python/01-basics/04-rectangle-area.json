@@ -2,14 +2,57 @@
   "slug": "rectangle-area",
   "title": "Area of a rectangle",
   "position": 4,
+  "learn": {
+    "cards": [
+      {
+        "title": "Maths operators",
+        "body": "Python does maths with `+` (add), `-` (subtract), `*` (multiply) and `/` (divide).",
+        "code": "print(6 * 7)\nprint(3 + 4 * 2)\n",
+        "output": "42\n11"
+      },
+      {
+        "title": "Order of operations",
+        "body": "As in school maths, `*` and `/` happen before `+` and `-`. Use brackets to change the order.",
+        "code": "print((3 + 4) * 2)\n",
+        "output": "14"
+      },
+      {
+        "title": "Maths with variables",
+        "body": "Store numbers in variables, then calculate with their names.",
+        "code": "price = 4\ncount = 3\ntotal = price * count\nprint(total)\n",
+        "output": "12"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "print(2 + 3 * 4)\n",
+      "options": ["20", "14", "24"],
+      "answer": 1,
+      "explanation": "* happens first: 3 * 4 is 12, then 2 + 12 is 14."
+    }
+  },
   "exercise": {
     "prompt": "Read the width and then the height of a rectangle (whole numbers, one per line) and print its area.",
     "starterCode": "width = int(input())\nheight = int(input())\n# print the area below\n",
-    "sampleTests": [{ "input": "3\n4\n", "expectedOutput": "12" }],
+    "sampleTests": [
+      {
+        "input": "3\n4\n",
+        "expectedOutput": "12"
+      }
+    ],
     "hiddenTests": [
-      { "input": "1\n1\n", "expectedOutput": "1" },
-      { "input": "0\n7\n", "expectedOutput": "0" },
-      { "input": "250\n40\n", "expectedOutput": "10000" }
+      {
+        "input": "1\n1\n",
+        "expectedOutput": "1"
+      },
+      {
+        "input": "0\n7\n",
+        "expectedOutput": "0"
+      },
+      {
+        "input": "250\n40\n",
+        "expectedOutput": "10000"
+      }
     ]
   }
 }

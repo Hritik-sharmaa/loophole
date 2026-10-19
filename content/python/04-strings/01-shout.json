@@ -2,6 +2,29 @@
   "slug": "shout",
   "title": "Shout it",
   "position": 1,
+  "learn": {
+    "cards": [
+      {
+        "title": "String methods",
+        "body": "Strings come with built-in tools called methods. Call one with a dot: `word.upper()` gives a capitalised copy, `word.lower()` a lowercase one.",
+        "code": "word = \"PyThOn\"\nprint(word.upper())\nprint(word.lower())\n",
+        "output": "PYTHON\npython"
+      },
+      {
+        "title": "Methods return a new string",
+        "body": "`upper()` does not change the original. It gives back a new string, which you can join to more text with `+`.",
+        "code": "name = \"ada\"\nprint(name.upper() + \"?\")\nprint(name)\n",
+        "output": "ADA?\nada"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "print(\"Hi there\".upper())\n",
+      "options": ["HI THERE", "Hi There", "HI there"],
+      "answer": 0,
+      "explanation": "upper() turns every letter into a capital. The space stays a space."
+    }
+  },
   "exercise": {
     "prompt": "Read a line of text and print it in capital letters followed by `!`. For `hello`, print `HELLO!`",
     "starterCode": "text = input()\n# print text in capitals with ! at the end\n",

@@ -17,7 +17,7 @@ export default function CertificatePage() {
   const cert = usePublicCertificate(slug);
 
   return (
-    <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col items-center justify-center gap-8 px-6 py-12">
+    <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col items-center justify-center gap-8 px-4 py-12 sm:px-6">
       <Logo href="/" />
 
       {cert.isPending ? (

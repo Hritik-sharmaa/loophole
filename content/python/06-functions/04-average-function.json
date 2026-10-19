@@ -2,6 +2,29 @@
   "slug": "average-function",
   "title": "Average function",
   "position": 4,
+  "learn": {
+    "cards": [
+      {
+        "title": "Functions that take a list",
+        "body": "A parameter can be a whole list. Inside the function, use it like any other list.",
+        "code": "def biggest(numbers):\n    return max(numbers)\n\n\nprint(biggest([4, 11, 6]))\n",
+        "output": "11"
+      },
+      {
+        "title": "Two decimal places",
+        "body": "In an f-string, `{value:.2f}` shows a number with exactly two digits after the point.",
+        "code": "x = 7 / 3\nprint(x)\nprint(f\"{x:.2f}\")\n",
+        "output": "2.3333333333333335\n2.33"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "print(f\"{5 / 2:.2f}\")\n",
+      "options": ["2.50", "2.5", "2"],
+      "answer": 0,
+      "explanation": "5 / 2 is 2.5, and :.2f always shows two decimals, so it prints 2.50."
+    }
+  },
   "exercise": {
     "prompt": "Write `average(numbers)` that returns the average of a list. Read whole numbers on one line and print their average with two decimal places, like `2.50`.",
     "starterCode": "def average(numbers):\n    # return the average of the list\n    return 0\n\n\nnums = list(map(int, input().split()))\nprint(f\"{average(nums):.2f}\")\n",

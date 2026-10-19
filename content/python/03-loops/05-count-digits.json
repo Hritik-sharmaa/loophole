@@ -2,6 +2,33 @@
   "slug": "count-digits",
   "title": "Count the digits",
   "position": 5,
+  "learn": {
+    "cards": [
+      {
+        "title": "Shrinking a number",
+        "body": "`n // 10` drops the last digit. Do it again and again, and the number shrinks until it reaches 0.",
+        "code": "n = 345\nwhile n > 0:\n    print(n)\n    n = n // 10\n",
+        "output": "345\n34\n3"
+      },
+      {
+        "title": "Counting rounds",
+        "body": "Add 1 to a counter each time the loop runs to find out how many rounds it took.",
+        "code": "n = 50\nsteps = 0\nwhile n > 1:\n    n = n // 2\n    steps += 1\nprint(steps)\n",
+        "output": "5"
+      },
+      {
+        "title": "Test the edge cases",
+        "body": "Always try the smallest input too. What does your loop do when the number is 0, and how many digits does 0 have?"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "n = 7\ncount = 0\nwhile n > 0:\n    n //= 10\n    count += 1\nprint(count)\n",
+      "options": ["1", "0", "7"],
+      "answer": 0,
+      "explanation": "7 // 10 is 0, so the loop runs exactly once."
+    }
+  },
   "exercise": {
     "prompt": "Read a whole number (0 or more) and print how many digits it has. Do it with arithmetic: keep dividing by 10 with `//` in a loop.",
     "starterCode": "n = int(input())\ndigits = 0\n# count the digits of n\nprint(digits)\n",

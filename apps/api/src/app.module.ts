@@ -14,6 +14,7 @@ import { GamificationModule } from './modules/gamification/gamification.module.j
 import { HealthModule } from './modules/health/health.module.js';
 import { LessonsModule } from './modules/lessons/lessons.module.js';
 import { RatingsModule } from './modules/ratings/ratings.module.js';
+import { RunsModule } from './modules/runs/runs.module.js';
 import { SubmissionsModule } from './modules/submissions/submissions.module.js';
 import { UsersModule } from './modules/users/users.module.js';
 
@@ -38,6 +39,7 @@ import { UsersModule } from './modules/users/users.module.js';
     UsersModule,
     LessonsModule,
     SubmissionsModule,
+    RunsModule,
     GamificationModule,
     AiModule,
     DuelsModule,

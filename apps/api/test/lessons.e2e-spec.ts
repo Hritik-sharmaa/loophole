@@ -107,6 +107,15 @@ describe('Lessons (e2e)', () => {
     expect(body.exercise.sampleTests).toEqual([
       { input: '', expectedOutput: 'Hello, Loophole!' },
     ]);
+    // ADR-021: the Learn step comes with the lesson.
+    expect(body.learn?.cards[0]).toMatchObject({
+      title: 'Your first line of Python',
+      code: 'print("Hello!")\n',
+      output: 'Hello!',
+    });
+    expect(body.learn?.check.options[body.learn.check.answer]).toBe(
+      'Hi, there!',
+    );
   });
 
   it('GET /lessons/:id returns 403 LESSON_LOCKED for a locked lesson', async () => {

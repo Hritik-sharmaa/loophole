@@ -1,4 +1,9 @@
-import type { TestCase } from '@loophole/shared';
+import type {
+  LearnCard,
+  LessonLearn,
+  QuickCheck,
+  TestCase,
+} from '@loophole/shared';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
@@ -9,6 +14,7 @@ export type LessonContent = {
   slug: string;
   title: string;
   position: number;
+  learn: LessonLearn | null;
   exercise: {
     prompt: string;
     starterCode: string;
@@ -53,6 +59,10 @@ export class ContentError extends Error {
 const SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const MIN_SAMPLE_TESTS = 1;
 const MIN_HIDDEN_TESTS = 3;
+// A Learn step stays short: a few cards, then one question (CONTENT_GUIDE §3).
+const MAX_LEARN_CARDS = 5;
+const MIN_CHECK_OPTIONS = 2;
+const MAX_CHECK_OPTIONS = 4;
 
 // Every folder in contentDir that has a course.json is one course.
 // Other folders (e.g. duels/) are skipped.
@@ -128,6 +138,7 @@ export function parseLesson(json: unknown, file: string): LessonContent {
     slug: asSlug(o.slug, file, 'slug'),
     title: asText(o.title, file, 'title'),
     position: asPosition(o.position, file),
+    learn: o.learn === undefined ? null : parseLearn(o.learn, file),
     exercise: {
       prompt: asText(ex.prompt, file, 'exercise.prompt'),
       starterCode: asString(ex.starterCode, file, 'exercise.starterCode'),
@@ -145,6 +156,74 @@ export function parseLesson(json: unknown, file: string): LessonContent {
       ),
     },
   };
+}
+
+export function parseLearn(json: unknown, file: string): LessonLearn {
+  const o = asObject(json, file, 'learn');
+  if (
+    !Array.isArray(o.cards) ||
+    o.cards.length < 1 ||
+    o.cards.length > MAX_LEARN_CARDS
+  ) {
+    throw new ContentError(
+      file,
+      `learn.cards needs 1 to ${MAX_LEARN_CARDS} cards`,
+    );
+  }
+  const cards = o.cards.map((c, i) => parseCard(c, file, `learn.cards[${i}]`));
+  return { cards, check: parseCheck(o.check, file) };
+}
+
+// An example is code plus the output it prints; input is optional stdin.
+function parseCard(json: unknown, file: string, field: string): LearnCard {
+  const o = asObject(json, file, field);
+  const card: LearnCard = {
+    title: asText(o.title, file, `${field}.title`),
+    body: asText(o.body, file, `${field}.body`),
+  };
+  if (o.code === undefined) {
+    if (o.input !== undefined || o.output !== undefined) {
+      throw new ContentError(file, `${field} has input or output but no code`);
+    }
+    return card;
+  }
+  card.code = asText(o.code, file, `${field}.code`);
+  card.output = asString(o.output, file, `${field}.output`);
+  if (o.input !== undefined) {
+    card.input = asString(o.input, file, `${field}.input`);
+  }
+  return card;
+}
+
+function parseCheck(json: unknown, file: string): QuickCheck {
+  const field = 'learn.check';
+  const o = asObject(json, file, field);
+  if (
+    !Array.isArray(o.options) ||
+    o.options.length < MIN_CHECK_OPTIONS ||
+    o.options.length > MAX_CHECK_OPTIONS
+  ) {
+    throw new ContentError(
+      file,
+      `${field}.options needs ${MIN_CHECK_OPTIONS} to ${MAX_CHECK_OPTIONS} options`,
+    );
+  }
+  const options = o.options.map((opt, i) =>
+    asText(opt, file, `${field}.options[${i}]`),
+  );
+  if (new Set(options).size !== options.length) {
+    throw new ContentError(file, `${field}.options has duplicates`);
+  }
+  const check: QuickCheck = {
+    question: asText(o.question, file, `${field}.question`),
+    options,
+    answer: asIntIn(o.answer, 0, options.length - 1, file, `${field}.answer`),
+    explanation: asText(o.explanation, file, `${field}.explanation`),
+  };
+  if (o.code !== undefined) {
+    check.code = asText(o.code, file, `${field}.code`);
+  }
+  return check;
 }
 
 // Every content/duels/<language>/*.json file. The folder name must match

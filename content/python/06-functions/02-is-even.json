@@ -2,6 +2,35 @@
   "slug": "is-even",
   "title": "Return True or False",
   "position": 2,
+  "learn": {
+    "cards": [
+      {
+        "title": "True and False are values",
+        "body": "`True` and `False` are values, like numbers are. A comparison produces one of them, and you can store it.",
+        "code": "result = 10 > 3\nprint(result)\n",
+        "output": "True"
+      },
+      {
+        "title": "Returning a comparison",
+        "body": "A function can return the result of a comparison directly. No `if` needed.",
+        "code": "def is_big(n):\n    return n > 100\n\n\nprint(is_big(500))\nprint(is_big(7))\n",
+        "output": "True\nFalse"
+      },
+      {
+        "title": "Using it in an if",
+        "body": "A function that returns True or False reads nicely inside an `if`.",
+        "code": "def is_big(n):\n    return n > 100\n\n\nif is_big(250):\n    print(\"wow\")\n",
+        "output": "wow"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "def odd(n):\n    return n % 2 == 1\n\n\nprint(odd(8))\n",
+      "options": ["False", "True", "0"],
+      "answer": 0,
+      "explanation": "8 % 2 is 0, and 0 == 1 is False."
+    }
+  },
   "exercise": {
     "prompt": "Finish `is_even(n)` so it returns `True` when n is even and `False` otherwise. The code below prints `even` or `odd` based on it.",
     "starterCode": "def is_even(n):\n    # return True or False\n    pass\n\n\nn = int(input())\nif is_even(n):\n    print(\"even\")\nelse:\n    print(\"odd\")\n",

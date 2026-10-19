@@ -2,15 +2,62 @@
   "slug": "sign-of-number",
   "title": "Positive, negative or zero",
   "position": 1,
+  "learn": {
+    "cards": [
+      {
+        "title": "Comparisons",
+        "body": "`>`, `<`, `>=`, `<=`, `==` (equal) and `!=` (not equal) compare two values. The answer is `True` or `False`.",
+        "code": "print(5 > 3)\nprint(2 == 3)\n",
+        "output": "True\nFalse"
+      },
+      {
+        "title": "if runs code only when true",
+        "body": "An `if` checks a condition. The indented lines under it run only when the condition is True. The colon and the 4-space indent are required.",
+        "code": "temp = 30\nif temp > 25:\n    print(\"It's hot\")\nprint(\"Done\")\n",
+        "output": "It's hot\nDone"
+      },
+      {
+        "title": "elif and else",
+        "body": "`elif` checks another condition when the ones above were False. `else` catches everything left. Only the first matching branch runs.",
+        "code": "n = int(input())\nif n > 100:\n    print(\"big\")\nelif n > 10:\n    print(\"medium\")\nelse:\n    print(\"small\")\n",
+        "input": "42\n",
+        "output": "medium"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "x = 0\nif x > 0:\n    print(\"A\")\nelif x == 0:\n    print(\"B\")\nelse:\n    print(\"C\")\n",
+      "options": ["A", "B", "C"],
+      "answer": 1,
+      "explanation": "x > 0 is False, so Python checks x == 0 next, which is True."
+    }
+  },
   "exercise": {
     "prompt": "Read a whole number. Print `positive` if it is greater than 0, `negative` if it is less than 0, and `zero` otherwise.",
     "starterCode": "n = int(input())\n# use if / elif / else below\n",
-    "sampleTests": [{ "input": "5\n", "expectedOutput": "positive" }],
+    "sampleTests": [
+      {
+        "input": "5\n",
+        "expectedOutput": "positive"
+      }
+    ],
     "hiddenTests": [
-      { "input": "-3\n", "expectedOutput": "negative" },
-      { "input": "0\n", "expectedOutput": "zero" },
-      { "input": "1000000\n", "expectedOutput": "positive" },
-      { "input": "-1\n", "expectedOutput": "negative" }
+      {
+        "input": "-3\n",
+        "expectedOutput": "negative"
+      },
+      {
+        "input": "0\n",
+        "expectedOutput": "zero"
+      },
+      {
+        "input": "1000000\n",
+        "expectedOutput": "positive"
+      },
+      {
+        "input": "-1\n",
+        "expectedOutput": "negative"
+      }
     ]
   }
 }

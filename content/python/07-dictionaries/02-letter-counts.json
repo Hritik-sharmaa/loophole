@@ -2,6 +2,29 @@
   "slug": "letter-counts",
   "title": "Letter counts",
   "position": 2,
+  "learn": {
+    "cards": [
+      {
+        "title": "Counting with a dictionary",
+        "body": "Use each letter as a key and its count as the value. `d.get(key, 0)` gives the value, or 0 when the key is missing.",
+        "code": "counts = {}\nfor ch in \"aab\":\n    counts[ch] = counts.get(ch, 0) + 1\nprint(counts)\n",
+        "output": "{'a': 2, 'b': 1}"
+      },
+      {
+        "title": "Keys in order",
+        "body": "`sorted(d)` gives the keys in order: alphabetical for strings.",
+        "code": "d = {\"b\": 1, \"c\": 5, \"a\": 2}\nfor key in sorted(d):\n    print(key, d[key])\n",
+        "output": "a 2\nb 1\nc 5"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "counts = {}\nfor ch in \"pop\":\n    counts[ch] = counts.get(ch, 0) + 1\nprint(counts[\"p\"])\n",
+      "options": ["2", "1", "3"],
+      "answer": 0,
+      "explanation": "p appears twice in \"pop\", so its count is 2."
+    }
+  },
   "exercise": {
     "prompt": "Read a word in lowercase letters and print how many times each letter appears, one per line as `letter count`, in alphabetical order.",
     "starterCode": "word = input()\ncounts = {}\n# count each letter in counts, then print them in alphabetical order\n",

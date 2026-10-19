@@ -2,6 +2,29 @@
   "slug": "name-and-age",
   "title": "Name and age",
   "position": 6,
+  "learn": {
+    "cards": [
+      {
+        "title": "f-strings fill in values",
+        "body": "An f-string has `f` before the quote. Anything inside `{}` is replaced with its value.",
+        "code": "pet = \"Rex\"\nlegs = 4\nprint(f\"{pet} has {legs} legs.\")\n",
+        "output": "Rex has 4 legs."
+      },
+      {
+        "title": "Numbers without the fuss",
+        "body": "Joining text and a number with `+` is an error. An f-string converts the number for you, and `{}` can hold a calculation.",
+        "code": "n = 3\nprint(f\"I have {n} apples, then {n + 2}.\")\n",
+        "output": "I have 3 apples, then 5."
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "x = 5\nprint(f\"x is {x * 2}\")\n",
+      "options": ["x is 10", "x is {x * 2}", "x is 52"],
+      "answer": 0,
+      "explanation": "The braces hold a calculation, and the f-string puts its result, 10, in their place."
+    }
+  },
   "exercise": {
     "prompt": "Read a name and then an age, each on its own line, and print `<name> is <age> years old.` using an f-string. For `Ada` and `36`, print `Ada is 36 years old.`",
     "starterCode": "name = input()\nage = int(input())\n# print the sentence with an f-string\n",

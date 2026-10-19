@@ -45,16 +45,50 @@ export type CoursePath = {
   }[];
 };
 
+// One teaching card in a lesson's Learn step (docs/CONTENT_GUIDE.md §3).
+// `code`, `input` and `output` come together: an example the learner can
+// read, edit and run; `output` is what the unedited example prints.
+export type LearnCard = {
+  title: string;
+  body: string;
+  code?: string;
+  input?: string;
+  output?: string;
+};
+
+// The ungraded quick check after the cards. It pays no XP and records
+// nothing, so its answer may travel to the browser (ADR-021).
+export type QuickCheck = {
+  question: string;
+  code?: string;
+  options: string[];
+  answer: number;
+  explanation: string;
+};
+
+export type LessonLearn = { cards: LearnCard[]; check: QuickCheck };
+
 // GET /lessons/:id. Sample tests only; hidden tests never leave the server.
+// `learn` is null for a lesson without a Learn step.
 export type LessonDetail = {
   id: string;
   title: string;
+  learn: LessonLearn | null;
   exercise: {
     id: string;
     prompt: string;
     starterCode: string;
     sampleTests: TestCase[];
   };
+};
+
+// POST /runs: run code once in a lesson's language, ungraded. For the Learn
+// step's examples; nothing is stored and no XP is paid.
+export type RunRequest = { lessonId: string; code: string; input?: string };
+export type RunResponse = {
+  stdout: string;
+  stderr: string;
+  timedOut: boolean;
 };
 
 // POST /submissions body. Test cases are never sent; the server looks them up.

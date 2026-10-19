@@ -45,7 +45,7 @@ export default function DuelsPage() {
   return (
     <>
       <AppHeader />
-      <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-8">
+      <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-6 sm:px-6 sm:py-8">
         {loading || state.phase === 'connecting' ? (
           <p className="text-text-secondary">Connecting to the duel server…</p>
         ) : state.phase === 'offline' ? (

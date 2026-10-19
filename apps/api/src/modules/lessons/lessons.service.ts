@@ -72,6 +72,7 @@ export class LessonsService {
       .select({
         id: lessons.id,
         title: lessons.title,
+        learn: lessons.learn,
         courseId: units.courseId,
         exercise: {
           id: exercises.id,
@@ -87,7 +88,27 @@ export class LessonsService {
     if (!lesson) throw notFound('Lesson');
 
     await this.assertUnlocked(userId, lesson.id, lesson.courseId);
-    return { id: lesson.id, title: lesson.title, exercise: lesson.exercise };
+    return {
+      id: lesson.id,
+      title: lesson.title,
+      learn: lesson.learn,
+      exercise: lesson.exercise,
+    };
+  }
+
+  // The course language of an unlocked lesson, for POST /runs. 404 for an
+  // unknown lesson, 403 LESSON_LOCKED for one the user hasn't reached.
+  async languageOf(userId: string, lessonId: string): Promise<string> {
+    const [lesson] = await this.db.drizzle
+      .select({ courseId: courses.id, language: courses.language })
+      .from(lessons)
+      .innerJoin(units, eq(lessons.unitId, units.id))
+      .innerJoin(courses, eq(units.courseId, courses.id))
+      .where(eq(lessons.id, lessonId));
+    if (!lesson) throw notFound('Lesson');
+
+    await this.assertUnlocked(userId, lessonId, lesson.courseId);
+    return lesson.language;
   }
 
   // Throws 403 LESSON_LOCKED unless the lesson is active or completed for

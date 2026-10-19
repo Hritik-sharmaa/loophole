@@ -2,14 +2,55 @@
   "slug": "hello-world",
   "title": "Hello, world",
   "position": 1,
+  "learn": {
+    "cards": [
+      {
+        "title": "Your first line of Python",
+        "body": "A program is a list of instructions the computer follows from top to bottom. `print()` is the instruction that shows something on the screen.",
+        "code": "print(\"Hello!\")\n",
+        "output": "Hello!"
+      },
+      {
+        "title": "Text goes in quotes",
+        "body": "Text in Python is called a string. Wrap it in quotes so Python knows where it starts and ends. Each `print()` starts a new line.",
+        "code": "print(\"I am learning Python\")\nprint(\"One line at a time\")\n",
+        "output": "I am learning Python\nOne line at a time"
+      },
+      {
+        "title": "Every character counts",
+        "body": "The grader compares your output letter by letter, so capitals, commas and spaces all matter. `Hello` and `hello` are different."
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "print(\"Hi, there!\")\n",
+      "options": ["Hi, there!", "\"Hi, there!\"", "print Hi, there!"],
+      "answer": 0,
+      "explanation": "The quotes only mark where the text starts and ends. They are not printed."
+    }
+  },
   "exercise": {
     "prompt": "Every programmer starts here. Print exactly `Hello, Loophole!`",
     "starterCode": "# Print the greeting below\n",
-    "sampleTests": [{ "input": "", "expectedOutput": "Hello, Loophole!" }],
+    "sampleTests": [
+      {
+        "input": "",
+        "expectedOutput": "Hello, Loophole!"
+      }
+    ],
     "hiddenTests": [
-      { "input": "", "expectedOutput": "Hello, Loophole!" },
-      { "input": "\n", "expectedOutput": "Hello, Loophole!" },
-      { "input": "ignored\n", "expectedOutput": "Hello, Loophole!" }
+      {
+        "input": "",
+        "expectedOutput": "Hello, Loophole!"
+      },
+      {
+        "input": "\n",
+        "expectedOutput": "Hello, Loophole!"
+      },
+      {
+        "input": "ignored\n",
+        "expectedOutput": "Hello, Loophole!"
+      }
     ]
   }
 }

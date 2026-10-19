@@ -28,7 +28,7 @@ export default function LeaderboardPage() {
   return (
     <>
       <AppHeader />
-      <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-10">
+      <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-8 sm:px-6 sm:py-10">
         <h1 className="font-display text-4xl font-extrabold">Leaderboard</h1>
 
         <div

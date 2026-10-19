@@ -2,6 +2,30 @@
   "slug": "sum-of-numbers",
   "title": "Add them up",
   "position": 4,
+  "learn": {
+    "cards": [
+      {
+        "title": "Running totals",
+        "body": "Start a variable at 0 before the loop and add to it each time round. `total += x` means `total = total + x`.",
+        "code": "total = 0\nfor x in range(1, 5):\n    total += x\nprint(total)\n",
+        "output": "10"
+      },
+      {
+        "title": "Reading inside a loop",
+        "body": "Each call to `input()` reads the next line, so calling it inside a loop reads one line per round.",
+        "code": "for i in range(2):\n    word = input()\n    print(\"got\", word)\n",
+        "input": "apple\npear\n",
+        "output": "got apple\ngot pear"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "total = 0\nfor x in range(3):\n    total += 2\nprint(total)\n",
+      "options": ["6", "2", "3"],
+      "answer": 0,
+      "explanation": "The loop runs 3 times and adds 2 each time: 2 + 2 + 2 = 6."
+    }
+  },
   "exercise": {
     "prompt": "The first line is a count N; then N lines follow, each with one whole number. Print their sum.",
     "starterCode": "n = int(input())\ntotal = 0\n# read n more numbers and add each to total\nprint(total)\n",

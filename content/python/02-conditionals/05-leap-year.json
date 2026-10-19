@@ -2,6 +2,35 @@
   "slug": "leap-year",
   "title": "Leap year",
   "position": 5,
+  "learn": {
+    "cards": [
+      {
+        "title": "and, or, not",
+        "body": "`and` is True only when both sides are True. `or` is True when at least one side is. `not` flips True and False.",
+        "code": "print(True and False)\nprint(True or False)\nprint(not True)\n",
+        "output": "False\nTrue\nFalse"
+      },
+      {
+        "title": "Combining conditions",
+        "body": "Join comparisons to describe a whole rule in one condition.",
+        "code": "age = 15\nhas_ticket = True\nif age >= 12 and has_ticket:\n    print(\"come in\")\nelse:\n    print(\"sorry\")\n",
+        "output": "come in"
+      },
+      {
+        "title": "Brackets make it clear",
+        "body": "Python works out `and` before `or`. Brackets make the order obvious, to you and to Python.",
+        "code": "n = 30\nprint(n % 3 == 0 and (n % 5 == 0 or n % 7 == 0))\n",
+        "output": "True"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "y = 1900\nprint(y % 4 == 0 and y % 100 != 0)\n",
+      "options": ["True", "False"],
+      "answer": 1,
+      "explanation": "1900 divides by 4, but it also divides by 100, so y % 100 != 0 is False, and and needs both sides True."
+    }
+  },
   "exercise": {
     "prompt": "Read a year and print `leap` if it is a leap year, otherwise `common`. A year is a leap year if it divides by 4, except that years dividing by 100 are not, unless they also divide by 400.",
     "starterCode": "year = int(input())\n# print leap or common below\n",

@@ -2,6 +2,41 @@
   "slug": "phone-book",
   "title": "Phone book",
   "position": 1,
+  "learn": {
+    "cards": [
+      {
+        "title": "Dictionaries map keys to values",
+        "body": "A dictionary stores pairs in curly braces. Look a value up by its key with square brackets.",
+        "code": "ages = {\"ada\": 36, \"bo\": 7}\nprint(ages[\"ada\"])\n",
+        "output": "36"
+      },
+      {
+        "title": "Adding and replacing",
+        "body": "Assigning to a key adds it, or replaces the old value if the key is already there.",
+        "code": "ages = {}\nages[\"cy\"] = 20\nages[\"cy\"] = 21\nprint(ages)\n",
+        "output": "{'cy': 21}"
+      },
+      {
+        "title": "Is the key there?",
+        "body": "`key in d` is True when the dictionary has that key. Looking up a missing key with `[]` is an error, so check first.",
+        "code": "ages = {\"ada\": 36}\nprint(\"ada\" in ages)\nprint(\"zed\" in ages)\n",
+        "output": "True\nFalse"
+      },
+      {
+        "title": "Two values from one line",
+        "body": "`a, b = line.split()` splits a line and stores the two pieces in two variables at once.",
+        "code": "name, score = \"ada 90\".split()\nprint(score, name)\n",
+        "output": "90 ada"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "d = {\"x\": 1}\nd[\"x\"] = 5\nprint(d[\"x\"])\n",
+      "options": ["5", "1", "6"],
+      "answer": 0,
+      "explanation": "Assigning to an existing key replaces its value."
+    }
+  },
   "exercise": {
     "prompt": "The first line is a count N; then N lines of `name number`. The last line is a name: print its number, or `unknown` if it is not in the book. Store the book in a dictionary; if a name appears twice, the later number wins.",
     "starterCode": "n = int(input())\nbook = {}\n# read n lines of \"name number\" into book\n# then read one name and print its number or unknown\n",

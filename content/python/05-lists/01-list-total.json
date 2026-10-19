@@ -2,6 +2,36 @@
   "slug": "list-total",
   "title": "Total of a list",
   "position": 1,
+  "learn": {
+    "cards": [
+      {
+        "title": "Lists hold many values",
+        "body": "A list keeps values in order inside square brackets. `nums[0]` is the first item.",
+        "code": "nums = [4, 8, 15]\nprint(nums)\nprint(nums[0])\n",
+        "output": "[4, 8, 15]\n4"
+      },
+      {
+        "title": "Reading a line of numbers",
+        "body": "`input().split()` gives a list of text pieces. `map(int, ...)` turns each into a number and `list()` collects them.",
+        "code": "nums = list(map(int, input().split()))\nprint(nums)\n",
+        "input": "3 1 2\n",
+        "output": "[3, 1, 2]"
+      },
+      {
+        "title": "sum() adds a list",
+        "body": "`sum(nums)` adds up every number in the list.",
+        "code": "print(sum([10, 20, 5]))\n",
+        "output": "35"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "print(sum([1, 2]) + 3)\n",
+      "options": ["6", "33", "An error"],
+      "answer": 0,
+      "explanation": "sum([1, 2]) is 3, and 3 + 3 is 6."
+    }
+  },
   "exercise": {
     "prompt": "Read whole numbers on one line, separated by spaces, and print their total.",
     "starterCode": "nums = list(map(int, input().split()))\n# print the total of nums\n",

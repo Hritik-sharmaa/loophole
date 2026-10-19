@@ -2,15 +2,55 @@
   "slug": "last-digit",
   "title": "The last digit",
   "position": 6,
+  "learn": {
+    "cards": [
+      {
+        "title": "Remainder by 10",
+        "body": "Divide a whole number by 10 and the remainder is its last digit. `%` gives you that remainder.",
+        "code": "print(587 % 10)\n",
+        "output": "7"
+      },
+      {
+        "title": "Dropping the last digit",
+        "body": "`// 10` does the opposite: it removes the last digit.",
+        "code": "print(587 // 10)\n",
+        "output": "58"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "n = 2049\nprint(n % 10)\n",
+      "options": ["2", "9", "204"],
+      "answer": 1,
+      "explanation": "2049 divided by 10 leaves 9 over, and that is the last digit."
+    }
+  },
   "exercise": {
     "prompt": "Read a whole number (0 or more) and print its last digit. Hint: the remainder after dividing by 10 is the last digit.",
     "starterCode": "n = int(input())\n# print the last digit below\n",
-    "sampleTests": [{ "input": "1234\n", "expectedOutput": "4" }],
+    "sampleTests": [
+      {
+        "input": "1234\n",
+        "expectedOutput": "4"
+      }
+    ],
     "hiddenTests": [
-      { "input": "0\n", "expectedOutput": "0" },
-      { "input": "7\n", "expectedOutput": "7" },
-      { "input": "90\n", "expectedOutput": "0" },
-      { "input": "987654321\n", "expectedOutput": "1" }
+      {
+        "input": "0\n",
+        "expectedOutput": "0"
+      },
+      {
+        "input": "7\n",
+        "expectedOutput": "7"
+      },
+      {
+        "input": "90\n",
+        "expectedOutput": "0"
+      },
+      {
+        "input": "987654321\n",
+        "expectedOutput": "1"
+      }
     ]
   }
 }

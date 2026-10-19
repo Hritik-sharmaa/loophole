@@ -2,6 +2,29 @@
   "slug": "count-letter",
   "title": "Count a letter",
   "position": 5,
+  "learn": {
+    "cards": [
+      {
+        "title": "count() counts",
+        "body": "`text.count(x)` tells you how many times x appears in the text.",
+        "code": "print(\"mississippi\".count(\"s\"))\nprint(\"mississippi\".count(\"ss\"))\n",
+        "output": "4\n2"
+      },
+      {
+        "title": "Capitals are different letters",
+        "body": "Python treats `A` and `a` as two different characters.",
+        "code": "print(\"Anna\".count(\"a\"))\n",
+        "output": "1"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "print(\"hello world\".count(\"o\"))\n",
+      "options": ["2", "1", "0"],
+      "answer": 0,
+      "explanation": "There is one o in hello and one in world."
+    }
+  },
   "exercise": {
     "prompt": "The first line is a word, the second a single letter. Print how many times that letter appears in the word (capitals count as different letters).",
     "starterCode": "word = input()\nletter = input()\n# print how many times letter appears in word\n",

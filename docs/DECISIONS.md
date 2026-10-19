@@ -6,6 +6,18 @@ Format: **ADR-NNN · Title** — Status (Accepted / Superseded by ADR-NNN) · Da
 
 ---
 
+**ADR-022 · Installable PWA, no new dependencies** — Accepted · 2026-10-19
+
+- Decision: Loophole is a Progressive Web App: `app/manifest.ts`, PNG icons in `public/icons/` and `app/apple-icon.png` (rendered from Byte's SVG), and a hand-written `public/sw.js` registered in production only. The service worker caches Next's hashed `/_next/static/` files on first use, serves pages network-first with the last copy (or `/offline`) as fallback, and never touches the API or Supabase (other origins). `next.config.ts` serves `sw.js` uncached with a strict CSP. On phones, signed-in navigation moves to a bottom tab bar.
+- Why: the developer wants students to install it on their phones. Grading, XP and auth need the server anyway, so a full offline mode (e.g. Serwist) would add a dependency for little gain.
+- Trade-off: offline, the app only shows pages already visited (without data) or the offline page. No push notifications yet; they would need VAPID keys and a subscription table.
+
+**ADR-021 · Teach before test: the Learn step and `POST /runs`** — Accepted · 2026-10-19
+
+- Decision: every lesson opens with a Learn step (2–4 cards with runnable examples) and one multiple-choice quick check, then the graded exercise. The content lives in each lesson file's `learn` block and the nullable `lessons.learn` jsonb column. Examples run through a new `POST /runs` route (RunsModule): ungraded, nothing stored, throttled at 10/min, unlocked lessons only, language taken from the course. The quick check's answer is sent with the lesson and checked in the browser.
+- Why: lesson 1 used to open straight onto the editor, so only people who already knew Python could pass. The developer wants complete beginners to be able to learn on Loophole.
+- Trade-off: sending the check's answer looks like trusting the client (hard rule 1), but the check pays nothing and records nothing; only the exercise is graded. `/runs` adds Piston load, kept in check by its throttle and the shared queue (ADR-018). Content takes longer to write: every example must be run through Piston before committing.
+
 **ADR-020 · "Sticker Lab" visual identity and Byte the mascot** — Accepted · 2026-10-19 · Supersedes ADR-005
 
 - Decision: replace black/white/orange with "Sticker Lab": Ink #1B1433 outlines and hard shadows on a dotted lilac canvas, Orange for your move, Blue for done, Lemon for rewards and labels, Pink for rivals. Bricolage Grotesque, DM Sans and JetBrains Mono replace Baloo 2 and Nunito. The mascot is Byte, a robot with a terminal face; the logo is Byte's head plus the wordmark. Spec in `docs/DESIGN_SYSTEM.md`.

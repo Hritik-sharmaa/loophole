@@ -2,6 +2,29 @@
   "slug": "greet-default",
   "title": "Default values",
   "position": 3,
+  "learn": {
+    "cards": [
+      {
+        "title": "Default values",
+        "body": "Give a parameter a default with `=`. When the caller leaves it out, the default is used.",
+        "code": "def repeat(word, times=2):\n    return word * times\n\n\nprint(repeat(\"ha\"))\nprint(repeat(\"ha\", 4))\n",
+        "output": "haha\nhahahaha"
+      },
+      {
+        "title": "Returning text",
+        "body": "A function can build a string and return it, ready for the caller to print.",
+        "code": "def label(item, price=1):\n    return f\"{item}: {price} coin\"\n\n\nprint(label(\"apple\"))\nprint(label(\"melon\", 3))\n",
+        "output": "apple: 1 coin\nmelon: 3 coin"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "def tag(name, mark=\"*\"):\n    return mark + name + mark\n\n\nprint(tag(\"hi\", \"!\"))\n",
+      "options": ["!hi!", "*hi*", "!hi"],
+      "answer": 0,
+      "explanation": "The call passes \"!\", so it replaces the default \"*\"."
+    }
+  },
   "exercise": {
     "prompt": "Finish `greet(name, greeting=\"Hello\")` so it returns `<greeting>, <name>!`. The code below prints `greet(name)` and then `greet(name, \"Welcome\")`.",
     "starterCode": "def greet(name, greeting=\"Hello\"):\n    # return the greeting text\n    return \"\"\n\n\nname = input()\nprint(greet(name))\nprint(greet(name, \"Welcome\"))\n",

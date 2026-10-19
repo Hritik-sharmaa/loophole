@@ -2,6 +2,35 @@
   "slug": "square-function",
   "title": "Your first function",
   "position": 1,
+  "learn": {
+    "cards": [
+      {
+        "title": "Define a function",
+        "body": "`def` creates a function: a named block of code that runs whenever you call it by name. The body is indented.",
+        "code": "def say_hi():\n    print(\"hi!\")\n\n\nsay_hi()\nsay_hi()\n",
+        "output": "hi!\nhi!"
+      },
+      {
+        "title": "Parameters and return",
+        "body": "Values go in through parameters in the brackets. `return` sends a result back to whoever called the function.",
+        "code": "def double(n):\n    return n * 2\n\n\nprint(double(5))\nprint(double(21))\n",
+        "output": "10\n42"
+      },
+      {
+        "title": "return is not print",
+        "body": "`print` only shows a value. `return` hands it back, so the caller can keep using it, for example in more maths.",
+        "code": "def add_one(n):\n    return n + 1\n\n\nx = add_one(4) * 10\nprint(x)\n",
+        "output": "50"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "def f(n):\n    return n + 3\n\n\nprint(f(2) * 2)\n",
+      "options": ["10", "7", "8"],
+      "answer": 0,
+      "explanation": "f(2) returns 5, and 5 * 2 is 10."
+    }
+  },
   "exercise": {
     "prompt": "Finish the function `square(n)` so it returns `n * n`. The code below reads a number and prints `square` of it.",
     "starterCode": "def square(n):\n    # return n times n\n    pass\n\n\nn = int(input())\nprint(square(n))\n",

@@ -99,6 +99,11 @@ Loop for every slice: AI **writes** the slice → you **review** and change it �
 - [x] Disconnect forfeit after 30 s; reconnect resumes (FR-23)
 - [x] Throttles on every route (120/min per user; writes and AI 10/min) and socket event
 - [x] Script running two socket clients through 50 duels (`pnpm --filter @loophole/api soak:duels`, apps/api/README)
+- [x] "Sticker Lab" redesign, Byte the mascot, logo (ADR-020)
+- [x] Learn step before every exercise: cards, runnable examples (`POST /runs`), quick check; written for all 40 Python lessons (ADR-021)
+- [x] Responsive pass (phone tab bar) and installable PWA (ADR-022)
+- [ ] Course picker so the app can hold more than one course
+- [ ] New tracks, in order: HTML & CSS (new checker + live preview), JavaScript (Piston Node), Git & GitHub (simulated repo). Needs an ADR: PRD §3 lists more than one track as a v1 non-goal
 - [ ] Playwright e2e for J-1 and J-3; deploy step in GitHub Actions
 - [ ] Scalability, only if needed: see `ARCHITECTURE.md` §5
 - [ ] Stretch: replay (FR-27), bug of the day (FR-28), spectate (FR-29), JavaScript track (FR-30)

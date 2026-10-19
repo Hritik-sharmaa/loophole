@@ -2,6 +2,29 @@
   "slug": "inventory",
   "title": "Inventory",
   "position": 4,
+  "learn": {
+    "cards": [
+      {
+        "title": "Adding up per key",
+        "body": "To total values per key, add to what is already there. `get(key, 0)` starts a new key at 0.",
+        "code": "totals = {}\nfor line in [\"pen 2\", \"ink 1\", \"pen 4\"]:\n    item, qty = line.split()\n    totals[item] = totals.get(item, 0) + int(qty)\nprint(totals)\n",
+        "output": "{'pen': 6, 'ink': 1}"
+      },
+      {
+        "title": "Dictionaries remember order",
+        "body": "A dictionary keeps keys in the order they were first added. Updating a key later does not move it.",
+        "code": "d = {}\nd[\"b\"] = 1\nd[\"a\"] = 2\nd[\"b\"] = 3\nfor k in d:\n    print(k, d[k])\n",
+        "output": "b 3\na 2"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "d = {\"x\": 1}\nd[\"x\"] = d.get(\"x\", 0) + 2\nd[\"y\"] = d.get(\"y\", 0) + 2\nprint(d)\n",
+      "options": ["{'x': 3, 'y': 2}", "{'x': 2, 'y': 2}", "{'x': 1, 'y': 2}"],
+      "answer": 0,
+      "explanation": "x already holds 1, so it becomes 3. y is new, so get() starts it at 0 and it becomes 2."
+    }
+  },
   "exercise": {
     "prompt": "The first line is a count N; then N lines of `item quantity`, where the same item can appear more than once. Print each item once with its total, as `item total`, in the order items first appeared.",
     "starterCode": "n = int(input())\ntotals = {}\n# add up the quantities per item, then print them\n",

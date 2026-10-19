@@ -1,4 +1,4 @@
-import type { TestCase } from '@loophole/shared';
+import type { LessonLearn, TestCase } from '@loophole/shared';
 import {
   integer,
   jsonb,
@@ -48,6 +48,9 @@ export const lessons = pgTable(
     slug: text('slug').notNull(),
     title: text('title').notNull(),
     position: integer('position').notNull(),
+    // The Learn step's cards and quick check (ADR-021). Null for a lesson
+    // that goes straight to the exercise.
+    learn: jsonb('learn').$type<LessonLearn>(),
   },
   (t) => [
     unique('lessons_unit_slug').on(t.unitId, t.slug),

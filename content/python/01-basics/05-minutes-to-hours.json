@@ -2,15 +2,61 @@
   "slug": "minutes-to-hours",
   "title": "Minutes to hours",
   "position": 5,
+  "learn": {
+    "cards": [
+      {
+        "title": "Whole division with //",
+        "body": "`/` gives a decimal: `7 / 2` is `3.5`. `//` keeps only the whole part: `7 // 2` is `3`.",
+        "code": "print(7 / 2)\nprint(7 // 2)\n",
+        "output": "3.5\n3"
+      },
+      {
+        "title": "The remainder with %",
+        "body": "`%` gives what is left over after whole division. 7 split into groups of 2 leaves 1 over.",
+        "code": "print(7 % 2)\nprint(17 % 5)\n",
+        "output": "1\n2"
+      },
+      {
+        "title": "Printing several values",
+        "body": "Give `print()` several values separated by commas and it puts one space between each.",
+        "code": "days = 10 // 7\nleft = 10 % 7\nprint(days, \"week\", left, \"days\")\n",
+        "output": "1 week 3 days"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "print(100 // 60, 100 % 60)\n",
+      "options": ["1 40", "1.66 40", "40 1"],
+      "answer": 0,
+      "explanation": "100 // 60 is 1 whole hour, and 100 % 60 is the 40 minutes left over."
+    }
+  },
   "exercise": {
     "prompt": "Read a number of minutes and print it as `H h M min`. Use `//` for the whole hours and `%` for the minutes left over. For `135`, print `2 h 15 min`",
     "starterCode": "minutes = int(input())\n# work out the hours and the leftover minutes\n",
-    "sampleTests": [{ "input": "135\n", "expectedOutput": "2 h 15 min" }],
+    "sampleTests": [
+      {
+        "input": "135\n",
+        "expectedOutput": "2 h 15 min"
+      }
+    ],
     "hiddenTests": [
-      { "input": "0\n", "expectedOutput": "0 h 0 min" },
-      { "input": "59\n", "expectedOutput": "0 h 59 min" },
-      { "input": "60\n", "expectedOutput": "1 h 0 min" },
-      { "input": "1440\n", "expectedOutput": "24 h 0 min" }
+      {
+        "input": "0\n",
+        "expectedOutput": "0 h 0 min"
+      },
+      {
+        "input": "59\n",
+        "expectedOutput": "0 h 59 min"
+      },
+      {
+        "input": "60\n",
+        "expectedOutput": "1 h 0 min"
+      },
+      {
+        "input": "1440\n",
+        "expectedOutput": "24 h 0 min"
+      }
     ]
   }
 }

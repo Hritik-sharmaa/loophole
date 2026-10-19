@@ -43,6 +43,93 @@ describe('the real content/ folder', () => {
       ['dictionaries', 4],
     ]);
   });
+
+  // ADR-021: every lesson teaches before it tests.
+  it('gives every lesson a Learn step', () => {
+    for (const course of loadAllContent(REAL_CONTENT)) {
+      for (const unit of course.units) {
+        for (const lesson of unit.lessons) {
+          expect(lesson.learn, `${course.slug}/${lesson.slug}`).not.toBeNull();
+        }
+      }
+    }
+  });
+});
+
+const validLearn = {
+  cards: [
+    {
+      title: 'print()',
+      body: 'Shows a value.',
+      code: 'print("Hi")\n',
+      output: 'Hi',
+    },
+    { title: 'Quotes', body: 'Text goes in quotes.' },
+  ],
+  check: {
+    question: 'What does this print?',
+    code: 'print(1 + 1)\n',
+    options: ['2', '11'],
+    answer: 0,
+    explanation: '1 + 1 is 2.',
+  },
+};
+
+describe('parseLearn', () => {
+  const withLearn = (learn: unknown) => ({ ...validLesson, learn });
+
+  it('is optional: a lesson without one gets null', () => {
+    expect(parseLesson(validLesson, 'x.json').learn).toBeNull();
+  });
+
+  it('accepts cards with and without examples', () => {
+    const lesson = parseLesson(withLearn(validLearn), 'x.json');
+    expect(lesson.learn?.cards).toHaveLength(2);
+    expect(lesson.learn?.cards[1]).toEqual({
+      title: 'Quotes',
+      body: 'Text goes in quotes.',
+    });
+    expect(lesson.learn?.check.answer).toBe(0);
+  });
+
+  it.each([
+    ['no cards', { ...validLearn, cards: [] }, /learn\.cards needs 1 to 5/],
+    [
+      'an example without its output',
+      {
+        ...validLearn,
+        cards: [{ title: 'x', body: 'y', code: 'print(1)\n' }],
+      },
+      /learn\.cards\[0\]\.output/,
+    ],
+    [
+      'output without code',
+      { ...validLearn, cards: [{ title: 'x', body: 'y', output: '1' }] },
+      /no code/,
+    ],
+    [
+      'an answer out of range',
+      { ...validLearn, check: { ...validLearn.check, answer: 2 } },
+      /learn\.check\.answer/,
+    ],
+    [
+      'one option',
+      { ...validLearn, check: { ...validLearn.check, options: ['2'] } },
+      /2 to 4 options/,
+    ],
+    [
+      'duplicate options',
+      { ...validLearn, check: { ...validLearn.check, options: ['2', '2'] } },
+      /duplicates/,
+    ],
+  ])('rejects %s, naming the file', (_case, learn, problem) => {
+    expect(() => parseLesson(withLearn(learn), 'unit/bad.json')).toThrow(
+      problem,
+    );
+    expect(() => parseLesson(withLearn(learn), 'unit/bad.json')).toThrow(
+      /unit\/bad\.json/,
+    );
+  });
 });
 
 describe('parseLesson', () => {

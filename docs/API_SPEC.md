@@ -36,13 +36,23 @@ Base URL: `https://api.<domain>` (local: `http://localhost:3001`). All bodies ar
 
 ### Lessons — S2
 
-| Method | Path                  | Response                                                                                                                                                                    |
-| ------ | --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| GET    | `/courses`            | `[{ id, slug, title, language }]`                                                                                                                                           |
-| GET    | `/courses/:slug/path` | `{ course, units: [{ id, title, lessons: [{ id, title, state: "locked" \| "active" \| "completed" }] }] }`                                                                  |
-| GET    | `/lessons/:id`        | `{ id, title, exercise: { id, prompt, starterCode, sampleTests: [{ input, expectedOutput }] } }` — 403 `LESSON_LOCKED` if locked, 404 if unknown, 400 if `id` is not a uuid |
+| Method | Path                  | Response                                                                                                                                                                           |
+| ------ | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET    | `/courses`            | `[{ id, slug, title, language }]`                                                                                                                                                  |
+| GET    | `/courses/:slug/path` | `{ course, units: [{ id, title, lessons: [{ id, title, state: "locked" \| "active" \| "completed" }] }] }`                                                                         |
+| GET    | `/lessons/:id`        | `{ id, title, learn, exercise: { id, prompt, starterCode, sampleTests: [{ input, expectedOutput }] } }` — 403 `LESSON_LOCKED` if locked, 404 if unknown, 400 if `id` is not a uuid |
 
 `hidden_tests` must never appear in any of these responses. `test/lessons.e2e-spec.ts` searches every response body for it.
+
+`learn` is the Learn step (ADR-021), or `null` for a lesson without one: `{ cards: [{ title, body, code?, input?, output? }], check: { question, code?, options, answer, explanation } }`. The quick check's `answer` is sent on purpose: the check is ungraded, pays no XP and records nothing.
+
+### Runs — Learn step (ADR-021)
+
+| Method | Path    | Body                                                                  | Response                                                                                                                                                                |
+| ------ | ------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| POST   | `/runs` | `{ lessonId: uuid, code: string (≤ 20 KB), input?: string (≤ 1 KB) }` | 200 `{ stdout, stderr, timedOut }` — 403 `LESSON_LOCKED`, 404 unknown lesson, 400 for any extra field (e.g. `language`), 429 `RATE_LIMITED`, 502 `EXECUTOR_UNAVAILABLE` |
+
+Runs the code once in the lesson's course language (never one the client picks), for the Learn step's examples. Ungraded: nothing is stored, no XP is paid. `stdout` and `stderr` are cut to 4 KB; a time-out with no error output gets the same time-limit message as submissions. Throttle: 10 per minute per user, like submissions.
 
 ### Submissions — S3
 

@@ -124,10 +124,15 @@ async function seedCourse(
           slug: lesson.slug,
           title: lesson.title,
           position: lesson.position,
+          learn: lesson.learn,
         })
         .onConflictDoUpdate({
           target: [lessons.unitId, lessons.slug],
-          set: { title: lesson.title, position: lesson.position },
+          set: {
+            title: lesson.title,
+            position: lesson.position,
+            learn: lesson.learn,
+          },
         })
         .returning({ id: lessons.id });
 
