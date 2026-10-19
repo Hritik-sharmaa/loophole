@@ -4,6 +4,8 @@ import { Flame, Zap } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type { ReactNode } from 'react';
+import { Logo } from '@/components/logo';
+import { chip } from '@/components/ui/card';
 import { useMe } from '@/lib/queries/use-me';
 import { useCountUp } from '@/lib/use-count-up';
 import { useSession } from '@/lib/use-session';
@@ -23,28 +25,24 @@ export function AppHeader() {
   const me = useMe(!!session);
 
   return (
-    <header className="border-b border-surface bg-paper">
-      <nav className="mx-auto flex max-w-3xl items-center justify-between gap-3 px-6 py-3">
-        <Link
-          href="/learn"
-          className="font-display text-2xl font-extrabold tracking-tight"
-        >
-          loop<span className="text-orange">hole</span>
-        </Link>
+    <header className="border-b-2 border-ink bg-paper">
+      <nav className="mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-x-3 gap-y-2 px-4 py-3 sm:px-6">
+        <Logo href="/learn" size="sm" />
 
-        {/* XpBadge / StreakBadge (DESIGN_SYSTEM §6). Hidden on narrow
+        {/* StreakBadge / XpBadge (DESIGN_SYSTEM §6). Hidden on narrow
             screens, where the profile page shows the same numbers. */}
         {me.data && (
-          <div className="hidden items-center gap-3 sm:flex">
+          <div className="hidden items-center gap-2 md:flex">
             <Badge
-              icon={<Flame className="size-4" fill="currentColor" />}
+              icon={<Flame className="size-3.5" fill="currentColor" />}
               label={`${me.data.streak.current} day streak${me.data.streak.freezes > 0 ? `, ${me.data.streak.freezes} freeze${me.data.streak.freezes === 1 ? '' : 's'} saved` : ''}`}
               value={me.data.streak.current}
             />
             <Badge
-              icon={<Zap className="size-4" fill="currentColor" />}
+              icon={<Zap className="size-3.5" fill="currentColor" />}
               label={`${me.data.xp} XP`}
               value={me.data.xp}
+              suffix=" xp"
             />
           </div>
         )}
@@ -59,7 +57,7 @@ export function AppHeader() {
                 <Link
                   href={href}
                   aria-current={current ? 'page' : undefined}
-                  className={`rounded-badge px-2 py-1.5 sm:px-3 text-sm font-bold focus-visible:outline-2 focus-visible:outline-ink ${current ? 'bg-surface text-ink' : 'text-text-secondary'}`}
+                  className={`rounded-badge border-2 px-2 py-1 text-sm font-bold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink sm:px-3 ${current ? 'border-ink bg-ink text-paper' : 'border-transparent text-text-secondary hover:border-ink hover:text-ink'}`}
                 >
                   {short ? (
                     <>
@@ -79,28 +77,28 @@ export function AppHeader() {
   );
 }
 
-// Caption text in Ink, icon in Orange.
+// A Lemon reward chip: Ink text, Orange icon.
 function Badge({
   icon,
   label,
   value,
+  suffix = '',
 }: {
   icon: ReactNode;
   label: string;
   value: number;
+  suffix?: string;
 }) {
   // Counts up when XP or the streak grows (DESIGN_SYSTEM §5).
   const shown = useCountUp(value);
   return (
-    <span
-      title={label}
-      className="flex items-center gap-1 text-xs font-semibold text-ink"
-    >
-      <span className="text-orange" aria-hidden>
+    <span title={label} className={`${chip} bg-lemon text-ink`}>
+      <span className="text-orange-dark" aria-hidden>
         {icon}
       </span>
       <span aria-hidden className="tabular-nums">
         {shown}
+        {suffix}
       </span>
       <span className="sr-only">{label}</span>
     </span>

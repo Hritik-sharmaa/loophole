@@ -3,7 +3,10 @@
 import { MotionConfig } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
-import { invertedButton } from '@/components/ui/buttons';
+import { Byte } from '@/components/byte';
+import { Logo } from '@/components/logo';
+import { primaryButton } from '@/components/ui/buttons';
+import { chip } from '@/components/ui/card';
 import { NavAuthButton } from './auth-cta';
 import { DuelPreview } from './duel-preview';
 import { Features } from './features';
@@ -17,14 +20,9 @@ import { Reveal } from './reveal';
 export function LandingPage() {
   return (
     <MotionConfig reducedMotion="user">
-      <header className="sticky top-0 z-20 border-b border-surface bg-paper/90 backdrop-blur">
-        <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3">
-          <Link
-            href="/"
-            className="font-display text-2xl font-extrabold tracking-tight"
-          >
-            loop<span className="text-orange">hole</span>
-          </Link>
+      <header className="sticky top-0 z-20 border-b-2 border-ink bg-paper">
+        <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
+          <Logo href="/" />
           <NavAuthButton />
         </nav>
       </header>
@@ -33,10 +31,13 @@ export function LandingPage() {
         <Hero />
 
         {/* Lesson path */}
-        <section className="bg-surface/50">
-          <div className="mx-auto grid max-w-6xl items-center gap-12 px-6 py-20 md:grid-cols-2">
-            <Reveal className="flex flex-col gap-4">
-              <h2 className="font-display text-4xl font-extrabold">
+        <section className="border-y-2 border-ink bg-paper">
+          <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 py-20 sm:px-6 md:grid-cols-2">
+            <Reveal className="flex flex-col items-start gap-4">
+              <span className={`${chip} -rotate-2 bg-blue text-paper`}>
+                The path
+              </span>
+              <h2 className="font-display text-4xl font-extrabold text-balance">
                 A path that unlocks as you go
               </h2>
               <p className="text-lg text-text-secondary">
@@ -55,15 +56,15 @@ export function LandingPage() {
 
         {/* Duels */}
         <section id="duels" className="scroll-mt-20">
-          <div className="mx-auto grid max-w-6xl items-center gap-12 px-6 py-20 md:grid-cols-2">
+          <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 py-20 sm:px-6 md:grid-cols-2">
             <div className="order-2 flex justify-center md:order-1">
               <DuelPreview />
             </div>
-            <Reveal className="order-1 flex flex-col gap-4 md:order-2">
-              <span className="w-fit rounded-badge bg-ink px-3 py-1 text-xs font-bold tracking-wide text-paper uppercase">
+            <Reveal className="order-1 flex flex-col items-start gap-4 md:order-2">
+              <span className={`${chip} rotate-2 bg-pink text-ink`}>
                 Only on Loophole
               </span>
-              <h2 className="font-display text-4xl font-extrabold">
+              <h2 className="font-display text-4xl font-extrabold text-balance">
                 Live 1v1 debugging duels
               </h2>
               <p className="text-lg text-text-secondary">
@@ -78,15 +79,16 @@ export function LandingPage() {
         <Features />
 
         {/* Final call to action */}
-        <section className="px-6 pb-20">
-          <Reveal className="mx-auto flex max-w-6xl flex-col items-center gap-6 rounded-card bg-ink px-6 py-16 text-center text-paper">
-            <h2 className="font-display text-4xl font-extrabold sm:text-5xl">
+        <section className="px-4 pb-20 sm:px-6">
+          <Reveal className="mx-auto flex max-w-6xl flex-col items-center gap-6 rounded-card border-2 border-ink bg-lemon px-6 py-16 text-center shadow-sticker">
+            <Byte mood="happy" className="size-28" />
+            <h2 className="font-display text-4xl font-extrabold text-balance sm:text-5xl">
               Your first bug is waiting.
             </h2>
-            <p className="max-w-md text-lg text-surface">
+            <p className="max-w-md text-lg font-semibold">
               Sign up in seconds and finish your first lesson in five minutes.
             </p>
-            <Link href="/login" className={invertedButton}>
+            <Link href="/login" className={primaryButton}>
               Start learning free{' '}
               <ArrowRight className="size-4" strokeWidth={3} />
             </Link>
@@ -94,11 +96,9 @@ export function LandingPage() {
         </section>
       </main>
 
-      <footer className="border-t border-surface">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-6 py-6 text-sm text-text-secondary sm:flex-row">
-          <span className="font-display font-bold text-ink">
-            loop<span className="text-orange">hole</span>
-          </span>
+      <footer className="border-t-2 border-ink bg-paper">
+        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 py-6 text-sm text-text-secondary sm:flex-row sm:px-6">
+          <Logo href="/" size="sm" />
           <span>Learn to code, one bug at a time.</span>
         </div>
       </footer>

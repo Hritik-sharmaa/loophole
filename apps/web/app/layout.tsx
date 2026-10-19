@@ -1,20 +1,20 @@
 import type { Metadata } from 'next';
-import { Baloo_2, JetBrains_Mono, Nunito } from 'next/font/google';
+import { Bricolage_Grotesque, DM_Sans, JetBrains_Mono } from 'next/font/google';
 import { Providers } from './providers';
 import './globals.css';
 
 // Fonts from docs/DESIGN_SYSTEM.md §3, exposed as CSS variables that
 // globals.css maps to font-display, font-sans and font-mono.
-const baloo = Baloo_2({
-  variable: '--font-baloo',
+const bricolage = Bricolage_Grotesque({
+  variable: '--font-bricolage',
   subsets: ['latin'],
-  weight: ['700', '800'],
+  weight: ['600', '700', '800'],
 });
 
-const nunito = Nunito({
-  variable: '--font-nunito',
+const dmSans = DM_Sans({
+  variable: '--font-dm-sans',
   subsets: ['latin'],
-  weight: ['500', '600', '700', '800'],
+  weight: ['400', '500', '600', '700'],
 });
 
 const jetbrains = JetBrains_Mono({
@@ -33,7 +33,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
     <html
       lang="en"
-      className={`${baloo.variable} ${nunito.variable} ${jetbrains.variable} h-full antialiased`}
+      className={`${bricolage.variable} ${dmSans.variable} ${jetbrains.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col font-sans font-medium">
         <Providers>{children}</Providers>

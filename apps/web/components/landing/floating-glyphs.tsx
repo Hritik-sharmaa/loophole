@@ -24,7 +24,7 @@ export function FloatingGlyphs() {
       {GLYPHS.map((g, i) => (
         <motion.span
           key={g.char + i}
-          className={`absolute font-mono font-bold text-surface select-none ${g.size}`}
+          className={`absolute font-mono font-bold text-border-muted select-none ${g.size}`}
           style={{ left: g.left, top: g.top }}
           animate={
             reduceMotion

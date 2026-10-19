@@ -1,12 +1,10 @@
 // Button styles from docs/DESIGN_SYSTEM.md §6, shared by <button> and <Link>.
-// Text on orange is always Ink (AGENTS.md rule 8).
+// Every button is a sticker: Ink outline and a hard Ink shadow that
+// collapses on press. Text on orange is always Ink (AGENTS.md rule 8).
 
 const base =
-  'inline-flex items-center justify-center gap-2 rounded-card px-6 py-3 font-bold transition-transform duration-[50ms] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink disabled:opacity-50';
+  'inline-flex items-center justify-center gap-2 rounded-card border-2 border-ink px-6 py-3 font-bold shadow-press transition-[translate,box-shadow] duration-[50ms] active:translate-y-1 active:shadow-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink disabled:opacity-50 disabled:active:translate-y-0 disabled:active:shadow-press';
 
-export const primaryButton = `${base} bg-orange text-ink shadow-press-orange active:translate-y-1 active:shadow-none`;
+export const primaryButton = `${base} bg-orange text-ink`;
 
-export const secondaryButton = `${base} border border-border-muted bg-paper text-ink`;
-
-// Paper button for dark (Ink) backgrounds.
-export const invertedButton = `${base} bg-paper text-ink shadow-press-locked active:translate-y-1 active:shadow-none`;
+export const secondaryButton = `${base} bg-paper text-ink`;

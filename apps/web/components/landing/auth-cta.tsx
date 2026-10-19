@@ -9,11 +9,11 @@ export function NavAuthButton() {
   const { session } = useSession();
 
   return session ? (
-    <Link href="/learn" className={`${primaryButton} px-4 py-2 text-sm`}>
+    <Link href="/learn" className={`${primaryButton} px-4 py-1.5 text-sm`}>
       Open app
     </Link>
   ) : (
-    <Link href="/login" className={`${secondaryButton} px-4 py-2 text-sm`}>
+    <Link href="/login" className={`${secondaryButton} px-4 py-1.5 text-sm`}>
       Log in
     </Link>
   );

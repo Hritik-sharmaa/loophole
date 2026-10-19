@@ -8,6 +8,7 @@ import {
 } from 'framer-motion';
 import { Check, Flame, X, Zap } from 'lucide-react';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { Byte, type ByteMood } from '@/components/byte';
 
 // A looping "fix the bug" story: buggy code fails 2 of 3 tests, a "+" is
 // typed in, the tests re-run one by one, and the lesson pays +10 XP.
@@ -42,13 +43,41 @@ export function CodeDemo() {
   const fixed = shown >= 1;
   const done = shown === LAST_STEP;
 
+  const byte = BYTE_LINES[done ? 'done' : fixed ? 'testing' : 'bug'];
+
   return (
     <div ref={ref} className="relative w-full max-w-md" aria-hidden="true">
-      <div className="overflow-hidden rounded-card border-2 border-ink bg-paper shadow-press-ink">
+      {/* Byte sits on the editor and reacts to each step of the story. */}
+      <div className="absolute -top-[58px] left-5 z-10 flex items-start gap-2">
+        <Byte mood={byte.mood} className="size-16" />
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.span
+            key={byte.text}
+            initial={{ opacity: 0, y: 4, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+            className="mt-1 rounded-card border-2 border-ink bg-paper px-3 py-1 text-sm font-bold whitespace-nowrap shadow-sticker-sm"
+          >
+            {byte.text}
+          </motion.span>
+        </AnimatePresence>
+      </div>
+
+      <div className="overflow-hidden rounded-card border-2 border-ink bg-paper shadow-sticker">
         {/* Title bar */}
-        <div className="flex items-center justify-between border-b-2 border-ink px-4 py-2">
-          <span className="font-mono text-sm font-bold">sum.py</span>
-          <span className="rounded-badge bg-surface px-2 py-0.5 text-xs font-semibold text-text-secondary">
+        <div className="flex items-center justify-between gap-3 bg-ink px-4 py-2">
+          <span className="flex items-center gap-3">
+            <span className="flex gap-1.5">
+              <span className="size-2.5 rounded-full bg-orange" />
+              <span className="size-2.5 rounded-full bg-lemon" />
+              <span className="size-2.5 rounded-full bg-pink" />
+            </span>
+            <span className="font-mono text-sm font-bold text-paper">
+              sum.py
+            </span>
+          </span>
+          <span className="rounded-badge bg-lemon px-2 py-0.5 text-xs font-bold text-ink">
             Lesson 3 · Loops
           </span>
         </div>
@@ -94,7 +123,7 @@ export function CodeDemo() {
         </pre>
 
         {/* Test results */}
-        <div className="border-t-2 border-ink bg-surface/60 px-4 py-3">
+        <div className="border-t-2 border-ink bg-surface px-4 py-3">
           <div className="mb-2 flex items-center justify-between text-xs font-bold uppercase tracking-wide text-text-secondary">
             <span>Tests</span>
             <span className="font-mono normal-case">
@@ -123,7 +152,7 @@ export function CodeDemo() {
               animate={{ opacity: 1, y: -6, scale: 1 }}
               exit={{ opacity: 0, y: -24, transition: { duration: 0.25 } }}
               transition={{ type: 'spring', stiffness: 400, damping: 15 }}
-              className="absolute -top-5 right-4 flex items-center gap-1 rounded-badge bg-orange px-3 py-1 font-display text-lg font-extrabold text-ink shadow-press-orange"
+              className="absolute -top-5 right-4 flex items-center gap-1 rounded-badge border-2 border-ink bg-lemon px-3 py-1 font-display text-lg font-extrabold text-ink shadow-sticker-sm"
             >
               <Zap className="size-4" strokeWidth={3} /> +10 XP
             </motion.div>
@@ -138,10 +167,10 @@ export function CodeDemo() {
                 damping: 15,
                 delay: 0.15,
               }}
-              className="absolute -bottom-5 left-4 flex items-center gap-1 rounded-badge border-2 border-ink bg-paper px-3 py-1 text-sm font-bold"
+              className="absolute -bottom-5 left-4 flex items-center gap-1 rounded-badge border-2 border-ink bg-paper px-3 py-1 text-sm font-bold shadow-sticker-sm"
             >
-              <Flame className="size-4 text-orange" strokeWidth={3} /> 4-day
-              streak
+              <Flame className="size-4 text-orange-dark" strokeWidth={3} />{' '}
+              4-day streak
             </motion.div>
             <Sparks key="sparks" />
           </>
@@ -150,6 +179,16 @@ export function CodeDemo() {
     </div>
   );
 }
+
+// What Byte says at each stage of the story.
+const BYTE_LINES: Record<
+  'bug' | 'testing' | 'done',
+  { mood: ByteMood; text: string }
+> = {
+  bug: { mood: 'oops', text: 'psst… line 4 never adds' },
+  testing: { mood: 'thinking', text: 'running the tests…' },
+  done: { mood: 'happy', text: 'nice fix!' },
+};
 
 type RowState = 'buggy' | 'pending' | 'pass';
 
@@ -192,7 +231,7 @@ function TestRow({
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ type: 'spring', stiffness: 500, damping: 12 }}
-              className="flex size-5 items-center justify-center rounded-full bg-orange text-ink"
+              className="flex size-5 items-center justify-center rounded-full border-2 border-ink bg-blue text-paper"
             >
               <Check className="size-3.5" strokeWidth={3.5} />
             </motion.span>
@@ -226,7 +265,7 @@ function Sparks() {
         return (
           <motion.span
             key={deg}
-            className="absolute size-2 rounded-full bg-orange-tint"
+            className="absolute size-2 rounded-full bg-orange"
             initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
             animate={{
               x: Math.cos(rad) * 42,
@@ -253,7 +292,7 @@ function Line({
 }) {
   return (
     <div
-      className={`-mx-4 flex px-4 transition-colors duration-300 ${highlight ? 'bg-orange-tint/40' : ''}`}
+      className={`-mx-4 flex px-4 transition-colors duration-300 ${highlight ? 'bg-pink/30' : ''}`}
     >
       <span className="mr-4 w-4 shrink-0 select-none text-right text-text-tertiary">
         {n}

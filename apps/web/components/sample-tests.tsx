@@ -6,28 +6,30 @@ export function SampleTests({ tests }: { tests: TestCase[] }) {
   return (
     <section className="flex flex-col gap-3">
       <h2 className="font-display text-xl font-bold">Example</h2>
-      <table className="w-full overflow-hidden rounded-card bg-surface text-left font-mono text-sm">
-        <thead className="text-xs tracking-wide text-text-secondary uppercase">
-          <tr>
-            <th className="px-4 py-2 font-bold">Input</th>
-            <th className="px-4 py-2 font-bold">Expected output</th>
-          </tr>
-        </thead>
-        <tbody>
-          {tests.map((test, i) => (
-            <tr key={i} className="border-t border-border-muted align-top">
-              <td className="px-4 py-2 whitespace-pre">
-                {test.input.trimEnd() || (
-                  <span className="text-text-secondary">(no input)</span>
-                )}
-              </td>
-              <td className="px-4 py-2 whitespace-pre">
-                {test.expectedOutput}
-              </td>
+      <div className="overflow-x-auto rounded-card border-2 border-ink bg-paper">
+        <table className="w-full text-left font-mono text-sm">
+          <thead className="bg-surface text-xs tracking-wide text-text-secondary uppercase">
+            <tr>
+              <th className="px-4 py-2 font-bold">Input</th>
+              <th className="px-4 py-2 font-bold">Expected output</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {tests.map((test, i) => (
+              <tr key={i} className="border-t-2 border-ink align-top">
+                <td className="px-4 py-2 whitespace-pre">
+                  {test.input.trimEnd() || (
+                    <span className="text-text-secondary">(no input)</span>
+                  )}
+                </td>
+                <td className="px-4 py-2 whitespace-pre">
+                  {test.expectedOutput}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </section>
   );
 }

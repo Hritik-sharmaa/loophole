@@ -11,9 +11,14 @@ export function celebrate(): void {
   ) {
     return;
   }
-  // Brand colours from the design tokens, not hard-coded hex.
+  // Sticker colours from the design tokens, not hard-coded hex.
   const styles = getComputedStyle(document.documentElement);
-  const colors = ['--color-orange', '--color-orange-tint', '--color-ink']
+  const colors = [
+    '--color-orange',
+    '--color-lemon',
+    '--color-blue',
+    '--color-pink',
+  ]
     .map((token) => styles.getPropertyValue(token).trim())
     .filter(Boolean);
 

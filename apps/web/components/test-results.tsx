@@ -31,7 +31,7 @@ export function TestResults({ result }: { result: Graded }) {
           <h3 className="text-sm font-bold text-text-secondary">
             Error output
           </h3>
-          <pre className="overflow-x-auto rounded-card bg-surface px-4 py-3 font-mono text-sm leading-6 whitespace-pre-wrap">
+          <pre className="overflow-x-auto rounded-card border-2 border-ink bg-ink px-4 py-3 font-mono text-sm leading-6 whitespace-pre-wrap text-canvas">
             {stderr}
           </pre>
         </div>
@@ -40,22 +40,24 @@ export function TestResults({ result }: { result: Graded }) {
   );
 }
 
-// TestResultRow from docs/DESIGN_SYSTEM.md §6: ✓ Orange or ✕ Ink. Only
+// TestResultRow from docs/DESIGN_SYSTEM.md §6: ✓ Blue or ✕ Ink. Only
 // sample tests have details; hidden tests report pass or fail.
 function TestResultRow({ result }: { result: TestResult }) {
   const label = result.kind === 'sample' ? 'Example' : 'Hidden test';
   const showDetails = result.kind === 'sample' && !result.passed;
 
   return (
-    <li className="rounded-card bg-surface px-4 py-3">
+    <li
+      className={`rounded-card border-2 px-4 py-3 ${result.passed ? 'border-ink bg-blue-tint' : 'border-ink bg-paper'}`}
+    >
       <div className="flex items-center gap-3">
         {result.passed ? (
-          <span className="flex size-6 items-center justify-center rounded-node bg-orange text-ink">
-            <Check className="size-4" strokeWidth={3} aria-hidden />
+          <span className="flex size-6 items-center justify-center rounded-node border-2 border-ink bg-blue text-paper">
+            <Check className="size-3.5" strokeWidth={3.5} aria-hidden />
           </span>
         ) : (
-          <span className="flex size-6 items-center justify-center text-ink">
-            <X className="size-5" strokeWidth={3} aria-hidden />
+          <span className="flex size-6 items-center justify-center rounded-node border-2 border-ink text-ink">
+            <X className="size-3.5" strokeWidth={3.5} aria-hidden />
           </span>
         )}
         <span className="font-bold">{label}</span>

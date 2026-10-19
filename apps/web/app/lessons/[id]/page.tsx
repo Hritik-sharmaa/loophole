@@ -6,12 +6,14 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { AppHeader } from '@/components/app-header';
+import { Byte, ByteSays } from '@/components/byte';
 import { CodeEditor } from '@/components/code-editor';
 import { InlineCode } from '@/components/inline-code';
 import { SampleTests } from '@/components/sample-tests';
 import { TestResults } from '@/components/test-results';
 import { TutorPanel } from '@/components/tutor-panel';
 import { primaryButton, secondaryButton } from '@/components/ui/buttons';
+import { chip, stickerCard } from '@/components/ui/card';
 import { ApiError } from '@/lib/api';
 import { celebrate } from '@/lib/celebrate';
 import { useLesson } from '@/lib/queries/use-lessons';
@@ -33,7 +35,7 @@ export default function LessonPage() {
       <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-8">
         <Link
           href="/learn"
-          className="mb-6 inline-flex items-center gap-1 text-sm font-bold text-text-secondary"
+          className="mb-6 inline-flex items-center gap-1 rounded-badge text-sm font-bold text-text-secondary hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
         >
           <ArrowLeft className="size-4" strokeWidth={3} /> Back to the path
         </Link>
@@ -80,9 +82,15 @@ function Exercise({
   return (
     <article className="flex flex-col gap-6">
       <h1 className="font-display text-4xl font-extrabold">{lesson.title}</h1>
-      <p className="text-lg">
-        <InlineCode text={prompt} />
-      </p>
+      {/* Byte reads out the task (DESIGN_SYSTEM §9). */}
+      <ByteSays>
+        <p className="text-xs font-bold tracking-wide text-text-secondary uppercase">
+          Your task
+        </p>
+        <p className="text-lg">
+          <InlineCode text={prompt} />
+        </p>
+      </ByteSays>
 
       <SampleTests tests={sampleTests} />
 
@@ -109,7 +117,10 @@ function Exercise({
       </div>
 
       {submit.isError && (
-        <p role="alert" className="rounded-card bg-surface px-4 py-3 font-bold">
+        <p
+          role="alert"
+          className="rounded-card border-2 border-ink bg-surface px-4 py-3 font-bold"
+        >
           {submit.error.message}
         </p>
       )}
@@ -117,16 +128,17 @@ function Exercise({
       {completed && (
         <div
           role="status"
-          className="flex flex-wrap items-center justify-between gap-4 rounded-card border-2 border-ink px-6 py-4"
+          className={`${stickerCard} flex flex-wrap items-center justify-between gap-4 bg-lemon px-6 py-4`}
         >
-          <div>
+          <Byte mood="happy" className="size-16 shrink-0" />
+          <div className="mr-auto">
             <p className="flex flex-wrap items-center gap-3 font-display text-2xl font-extrabold">
               Lesson complete!
               {result && result.xpAwarded > 0 && (
                 <XpGain amount={result.xpAwarded} />
               )}
             </p>
-            <p className="text-text-secondary">
+            <p className="font-semibold">
               {result?.certificateSlug
                 ? 'You finished the whole course. Your certificate is ready.'
                 : 'Your next lesson is waiting on the path.'}
@@ -161,7 +173,7 @@ function Exercise({
 function XpGain({ amount }: { amount: number }) {
   const shown = useCountUp(amount, { from: 0 });
   return (
-    <span className="flex items-center gap-1 rounded-badge bg-orange px-2 py-0.5 text-base text-ink tabular-nums">
+    <span className={`${chip} bg-paper text-base text-ink tabular-nums`}>
       <Zap className="size-4" fill="currentColor" aria-hidden />+{shown} XP
       <span className="sr-only">(+{amount} XP)</span>
     </span>
@@ -174,9 +186,13 @@ function LessonError({ error }: { error: Error }) {
   return (
     <div
       role="alert"
-      className="flex flex-col items-center gap-4 rounded-card bg-surface px-6 py-12 text-center"
+      className={`${stickerCard} flex flex-col items-center gap-4 px-6 py-12 text-center`}
     >
-      {locked && <Lock className="size-8" strokeWidth={2.5} />}
+      {locked ? (
+        <Lock className="size-8" strokeWidth={2.5} />
+      ) : (
+        <Byte mood="oops" className="size-20" />
+      )}
       <p className="font-display text-2xl font-extrabold">
         {locked ? 'Finish the previous lesson first' : 'Lesson not available'}
       </p>

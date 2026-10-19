@@ -4,7 +4,8 @@ import { python } from '@codemirror/lang-python';
 import CodeMirror, { EditorView } from '@uiw/react-codemirror';
 
 // EditorPanel from docs/DESIGN_SYSTEM.md §6: CodeMirror, light theme,
-// JetBrains Mono 14 / 1.6. The focus ring is drawn on the wrapper instead.
+// JetBrains Mono 14 / 1.6, in a sticker card with an Ink title bar.
+// The focus ring is drawn on the wrapper instead.
 const extensions = [
   python(),
   EditorView.theme({
@@ -30,10 +31,15 @@ export function CodeEditor({
   fileName: string;
 }) {
   return (
-    <section className="overflow-hidden rounded-card border-2 border-ink focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-ink">
-      <h2 className="border-b-2 border-ink px-4 py-2 font-mono text-sm font-bold">
-        {fileName}
-      </h2>
+    <section className="overflow-hidden rounded-card border-2 border-ink bg-paper shadow-sticker focus-within:outline-2 focus-within:outline-offset-4 focus-within:outline-ink">
+      <div className="flex items-center gap-3 bg-ink px-4 py-2">
+        <span aria-hidden className="flex gap-1.5">
+          <span className="size-2.5 rounded-full bg-orange" />
+          <span className="size-2.5 rounded-full bg-lemon" />
+          <span className="size-2.5 rounded-full bg-pink" />
+        </span>
+        <h2 className="font-mono text-sm font-bold text-paper">{fileName}</h2>
+      </div>
       <CodeMirror
         value={value}
         onChange={onChange}

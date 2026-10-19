@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { AppHeader } from '@/components/app-header';
+import { Byte } from '@/components/byte';
 import { CodeEditor } from '@/components/code-editor';
 import { DuelCountdown } from '@/components/duel-countdown';
 import { InlineCode } from '@/components/inline-code';
@@ -13,6 +14,7 @@ import { ProgressBar } from '@/components/progress-bar';
 import { SampleTests } from '@/components/sample-tests';
 import { TestResults } from '@/components/test-results';
 import { primaryButton, secondaryButton } from '@/components/ui/buttons';
+import { chip, stickerCard } from '@/components/ui/card';
 import { celebrate } from '@/lib/celebrate';
 import { useMe } from '@/lib/queries/use-me';
 import { useDuelSocket, type DuelState } from '@/lib/use-duel-socket';
@@ -84,8 +86,16 @@ function Lobby({
   const queued = state.phase === 'queued';
 
   return (
-    <section className="flex flex-col items-center gap-6 rounded-card bg-surface px-6 py-12 text-center">
-      <Swords className="size-10" strokeWidth={2.5} aria-hidden />
+    <section
+      className={`${stickerCard} flex flex-col items-center gap-6 px-6 py-12 text-center`}
+    >
+      <div className="flex items-end gap-4">
+        <Byte mood={queued ? 'thinking' : 'idle'} className="size-20" />
+        <span className="flex size-14 -rotate-6 items-center justify-center rounded-card border-2 border-ink bg-pink shadow-sticker-sm">
+          <Swords className="size-7" strokeWidth={2.5} aria-hidden />
+        </span>
+      </div>
+      <span className={`${chip} bg-pink text-ink`}>Live 1v1</span>
       <h1 className="font-display text-4xl font-extrabold">Debugging duels</h1>
       <p className="max-w-md text-lg">
         You and an opponent get the same buggy program and five minutes. The
@@ -155,11 +165,11 @@ function Room({
     <article className="flex flex-col gap-6">
       {/* DuelHeader (DESIGN_SYSTEM §6): Ink band, Orange countdown and
           opponent progress. The opponent's code is never sent (FR-20). */}
-      <header className="flex flex-wrap items-center justify-between gap-4 rounded-card bg-ink px-5 py-4 text-paper">
+      <header className="flex flex-wrap items-center justify-between gap-4 rounded-card border-2 border-ink bg-ink px-5 py-4 text-paper shadow-sticker">
         <div className="flex min-w-48 flex-1 flex-col gap-2" aria-live="polite">
           <p className="text-sm font-bold">
             vs {opponent?.username ?? 'opponent'}
-            <span className="font-medium text-surface">
+            <span className="font-medium text-border-muted">
               {' '}
               · {theirs
                 ? `${theirs.testsPassed} / ${theirs.totalTests}`
@@ -171,6 +181,7 @@ function Room({
             value={theirs?.testsPassed ?? 0}
             max={total || 1}
             label="Opponent progress"
+            tone="pink"
           />
         </div>
         {end ? (
@@ -231,7 +242,10 @@ function Room({
       )}
 
       {state.error && !end && (
-        <p role="alert" className="rounded-card bg-surface px-4 py-3 font-bold">
+        <p
+          role="alert"
+          className="rounded-card border-2 border-ink bg-surface px-4 py-3 font-bold"
+        >
           {state.error.message}
         </p>
       )}
@@ -270,11 +284,17 @@ function Outcome({
   return (
     <section
       role="status"
-      className="flex flex-wrap items-center justify-between gap-4 rounded-card border-2 border-ink px-6 py-4"
+      className={`${stickerCard} flex flex-wrap items-center justify-between gap-4 px-6 py-4 ${won ? 'bg-lemon' : ''}`}
     >
-      <div>
+      <Byte
+        mood={won ? 'happy' : end.result === 'draw' ? 'idle' : 'oops'}
+        className="size-16 shrink-0"
+      />
+      <div className="mr-auto">
         <p className="font-display text-3xl font-extrabold">{title}</p>
-        <p className="text-text-secondary">{detail}</p>
+        <p className={won ? 'font-semibold' : 'text-text-secondary'}>
+          {detail}
+        </p>
         <p className="font-bold">
           {change === 0
             ? 'Rating unchanged'
@@ -304,7 +324,10 @@ function OpponentAway({ since }: { since: number }) {
   const left = Math.max(0, Math.ceil((since + 30_000 - now) / 1000));
 
   return (
-    <p role="status" className="rounded-card bg-surface px-4 py-3 font-bold">
+    <p
+      role="status"
+      className="rounded-card border-2 border-ink bg-surface px-4 py-3 font-bold"
+    >
       Your opponent disconnected. If they are not back in {left} s, you win.
     </p>
   );
@@ -314,8 +337,9 @@ function Offline({ message }: { message?: string }) {
   return (
     <div
       role="alert"
-      className="flex flex-col items-center gap-4 rounded-card bg-surface px-6 py-12 text-center"
+      className={`${stickerCard} flex flex-col items-center gap-4 px-6 py-12 text-center`}
     >
+      <Byte mood="oops" className="size-20" />
       <p className="font-display text-2xl font-extrabold">
         Can&apos;t reach the duel server
       </p>

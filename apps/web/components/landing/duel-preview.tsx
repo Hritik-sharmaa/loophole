@@ -45,13 +45,13 @@ export function DuelPreview() {
   return (
     <div
       ref={ref}
-      className="w-full max-w-md overflow-hidden rounded-card border-2 border-ink bg-paper shadow-press-ink"
+      className="w-full max-w-md -rotate-1 overflow-hidden rounded-card border-2 border-ink bg-paper shadow-sticker"
       aria-hidden="true"
     >
       {/* DuelHeader: Ink band, white text, Orange countdown */}
-      <div className="flex items-center justify-between bg-ink px-5 py-3 text-paper">
+      <div className="flex items-center justify-between border-b-2 border-ink bg-ink px-5 py-3 text-paper">
         <span className="flex items-center gap-2 font-display text-lg font-extrabold">
-          <Swords className="size-5 text-orange" strokeWidth={2.5} /> Live duel
+          <Swords className="size-5 text-pink" strokeWidth={2.5} /> Live duel
         </span>
         <span className="flex items-center gap-1.5 font-mono text-lg font-bold text-orange">
           <Timer className="size-4" strokeWidth={2.5} />
@@ -61,7 +61,7 @@ export function DuelPreview() {
 
       <div className="flex flex-col gap-5 px-5 py-5">
         <PlayerBar name="you" passed={shown.you} highlight />
-        <PlayerBar name="rival_42" passed={shown.rival} />
+        <PlayerBar name="rival_42" passed={shown.rival} rival />
 
         <div className="relative h-12">
           <AnimatePresence mode="wait">
@@ -72,7 +72,7 @@ export function DuelPreview() {
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 15 }}
-                className="absolute inset-0 flex items-center justify-center gap-2 rounded-card bg-orange font-display text-xl font-extrabold text-ink"
+                className="absolute inset-0 flex items-center justify-center gap-2 rounded-card border-2 border-ink bg-lemon font-display text-xl font-extrabold text-ink"
               >
                 You win! <span className="text-base">+16 rating</span>
               </motion.div>
@@ -98,10 +98,12 @@ function PlayerBar({
   name,
   passed,
   highlight = false,
+  rival = false,
 }: {
   name: string;
   passed: number;
   highlight?: boolean;
+  rival?: boolean;
 }) {
   return (
     <div className="flex flex-col gap-1.5">
@@ -113,10 +115,10 @@ function PlayerBar({
           {passed}/{TOTAL_TESTS} passing
         </span>
       </div>
-      {/* ProgressBar: Surface track, Orange fill, ease-out width */}
-      <div className="h-4 overflow-hidden rounded-full bg-surface">
+      {/* ProgressBar: Orange for you, Pink for the rival, ease-out width */}
+      <div className="h-4 overflow-hidden rounded-full border-2 border-ink bg-surface">
         <motion.div
-          className="h-full rounded-full bg-orange"
+          className={`h-full rounded-full ${rival ? 'bg-pink' : 'bg-orange'}`}
           initial={false}
           animate={{ width: `${(passed / TOTAL_TESTS) * 100}%` }}
           transition={{ duration: 0.45, ease: 'easeOut' }}

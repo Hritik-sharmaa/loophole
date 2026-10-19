@@ -6,6 +6,12 @@ Format: **ADR-NNN · Title** — Status (Accepted / Superseded by ADR-NNN) · Da
 
 ---
 
+**ADR-020 · "Sticker Lab" visual identity and Byte the mascot** — Accepted · 2026-10-19 · Supersedes ADR-005
+
+- Decision: replace black/white/orange with "Sticker Lab": Ink #1B1433 outlines and hard shadows on a dotted lilac canvas, Orange for your move, Blue for done, Lemon for rewards and labels, Pink for rivals. Bricolage Grotesque, DM Sans and JetBrains Mono replace Baloo 2 and Nunito. The mascot is Byte, a robot with a terminal face; the logo is Byte's head plus the wordmark. Spec in `docs/DESIGN_SYSTEM.md`.
+- Why: the developer felt the old look was dull and too close to Duolingo. Picked from three directions (Night Shift, Sticker Lab, Blueprint) and three mascots (Loopy, Glitch, Byte) on 2026-10-19.
+- Trade-off: four accent colours instead of one, so each needs a fixed meaning (DESIGN_SYSTEM §1) to stay readable. Every page was restyled at once rather than one at a time.
+
 **ADR-019 · Streak freeze rules** — Accepted · 2026-10-19
 
 - Decision: a freeze is earned on every 7th day of a streak (7, 14, 21, …), at most 2 in hand. When the next new lesson comes after missed days, each missed day spends one freeze and the streak continues. If there are fewer freezes than missed days, the streak restarts at 1 and the freezes are kept. The streak shown stays alive while the freezes in hand cover every missed day so far.
@@ -87,7 +93,7 @@ Format: **ADR-NNN · Title** — Status (Accepted / Superseded by ADR-NNN) · Da
 - Decision: run Piston ourselves rather than the public endpoint.
 - Why: the public Piston API now requires approval from its maintainer; self-hosting gives control over limits and languages.
 
-**ADR-005 · Black, white and orange visual identity** — Accepted · 2026-10-02
+**ADR-005 · Black, white and orange visual identity** — Superseded by ADR-020 · 2026-10-02
 
 - Decision: Ink #171717, Paper #FFFFFF, Orange #FF6A00 as the only accent; Baloo 2 and Nunito.
 - Why: keeps the Duolingo-style feel while being clearly its own brand; three colours map to three states.

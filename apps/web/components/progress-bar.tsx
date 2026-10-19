@@ -1,13 +1,15 @@
-// ProgressBar from docs/DESIGN_SYSTEM.md §6: Surface track, Orange fill,
-// ease-out width change.
+// ProgressBar from docs/DESIGN_SYSTEM.md §6: Ink-outlined Surface track,
+// ease-out width change. Orange for your own progress, Pink for a rival's.
 export function ProgressBar({
   value,
   max,
   label,
+  tone = 'orange',
 }: {
   value: number;
   max: number;
   label: string;
+  tone?: 'orange' | 'pink';
 }) {
   const percent = max > 0 ? Math.round((value / max) * 100) : 0;
 
@@ -18,10 +20,10 @@ export function ProgressBar({
       aria-valuemin={0}
       aria-valuemax={max}
       aria-valuenow={value}
-      className="h-3 w-full overflow-hidden rounded-node bg-surface"
+      className="h-4 w-full overflow-hidden rounded-node border-2 border-ink bg-surface"
     >
       <div
-        className="h-full rounded-node bg-orange transition-[width] duration-300 ease-out motion-reduce:transition-none"
+        className={`h-full rounded-node transition-[width] duration-300 ease-out motion-reduce:transition-none ${tone === 'pink' ? 'bg-pink' : 'bg-orange'}`}
         style={{ width: `${percent}%` }}
       />
     </div>

@@ -38,7 +38,7 @@ It is a solo portfolio project. Its second purpose is to teach the developer sys
 5. **One file per outside system.** Only `integrations/piston.client.ts` talks to Piston, only `integrations/gemini.client.ts` imports `@google/genai`, and only `integrations/supabase-auth.client.ts` calls Supabase Auth. Services use the shared `DbService` for Drizzle; there are no repository classes, interfaces or DI tokens in v1.
 6. **Test the logic that is easy to get wrong:** grading, streaks, ELO, the duel winner, and that no response contains hidden tests.
 7. **Idempotent rewards.** The same completion never pays XP twice; a duel never has two winners.
-8. **Text on orange is Ink (#171717), never white** (white fails contrast).
+8. **Text on orange is Ink (#1B1433), never white** (white fails contrast).
 
 ## 4. Stack (decided — do not swap without an entry in `docs/DECISIONS.md`)
 

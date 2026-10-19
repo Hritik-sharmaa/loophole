@@ -7,7 +7,7 @@ export function InlineCode({ text }: { text: string }) {
         i % 2 === 1 ? (
           <code
             key={i}
-            className="rounded-badge bg-surface px-1.5 py-0.5 font-mono text-[0.9em]"
+            className="rounded-badge border border-border-muted bg-surface px-1.5 py-0.5 font-mono text-[0.9em]"
           >
             {part}
           </code>

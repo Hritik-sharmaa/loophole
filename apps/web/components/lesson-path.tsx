@@ -3,7 +3,10 @@
 import type { CoursePath, LessonState } from '@loophole/shared';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
+import { Byte } from '@/components/byte';
 import { LessonNode } from '@/components/lesson-node';
+import { ProgressBar } from '@/components/progress-bar';
+import { chip, stickerCard } from '@/components/ui/card';
 import {
   PATH_WIDTH,
   donePointCount,
@@ -22,7 +25,7 @@ const STATE_LABEL: Record<LessonState, string> = {
 };
 
 // The hand-built lesson path (DESIGN_SYSTEM §6 LessonPath): nodes zig-zag
-// down the page on a 6 px Surface track; the part already walked is Ink.
+// down the page on a dotted track; the part already walked is solid Blue.
 // Lessons whose state moved forward since the last visit play the unlock
 // pop once; a normal page load stays still (DESIGN_SYSTEM §1).
 export function LessonPath({
@@ -48,27 +51,55 @@ export function LessonPath({
   const firstIndex = path.units.map((_, u) =>
     path.units.slice(0, u).reduce((n, unit) => n + unit.lessons.length, 0),
   );
+  const lessons = path.units.flatMap((u) => u.lessons);
+  const completed = lessons.filter((l) => l.state === 'completed').length;
 
   return (
     <div className="flex flex-col gap-12">
-      <h1 className="font-display text-4xl font-extrabold">
-        {path.course.title}
-      </h1>
+      <header className={`${stickerCard} flex items-center gap-5 px-5 py-5`}>
+        <div className="flex min-w-0 flex-1 flex-col gap-3">
+          <h1 className="font-display text-3xl font-extrabold sm:text-4xl">
+            {path.course.title}
+          </h1>
+          <ProgressBar
+            value={completed}
+            max={lessons.length}
+            label="Course progress"
+          />
+          <p className="text-sm font-bold text-text-secondary">
+            {completed} of {lessons.length} lessons done
+          </p>
+        </div>
+        <Byte
+          mood={completed === lessons.length ? 'happy' : 'idle'}
+          className="hidden size-20 shrink-0 sm:block"
+        />
+      </header>
 
       {path.units.map((unit, u) => {
         const points = layoutNodes(unit.lessons.length, firstIndex[u]);
         const done = donePointCount(unit.lessons.map((l) => l.state));
         const height = pathHeight(unit.lessons.length);
+        const unitDone = unit.lessons.filter(
+          (l) => l.state === 'completed',
+        ).length;
 
         return (
           <section key={unit.id} className="flex flex-col items-center gap-8">
-            <div className="w-full rounded-card bg-ink px-5 py-4 text-paper">
-              <p className="text-xs font-bold tracking-wide text-surface uppercase">
-                Unit {u + 1}
-              </p>
-              <h2 className="font-display text-2xl font-extrabold">
-                {unit.title}
-              </h2>
+            <div
+              className={`${stickerCard} flex w-full flex-wrap items-center justify-between gap-3 px-5 py-4`}
+            >
+              <div className="flex flex-col items-start gap-1">
+                <span className={`${chip} bg-lemon text-ink`}>
+                  Unit {u + 1}
+                </span>
+                <h2 className="font-display text-2xl font-extrabold">
+                  {unit.title}
+                </h2>
+              </div>
+              <span className="text-sm font-bold text-text-secondary tabular-nums">
+                {unitDone} / {unit.lessons.length}
+              </span>
             </div>
 
             <div className="relative" style={{ width: PATH_WIDTH, height }}>
@@ -82,14 +113,15 @@ export function LessonPath({
               >
                 <path
                   d={pathThrough(points)}
-                  className="stroke-surface"
+                  className="stroke-border-muted"
                   strokeWidth={6}
                   strokeLinecap="round"
+                  strokeDasharray="0 14"
                 />
                 {done >= 2 && (
                   <path
                     d={pathThrough(points.slice(0, done))}
-                    className="stroke-ink"
+                    className="stroke-blue"
                     strokeWidth={6}
                     strokeLinecap="round"
                   />
@@ -105,7 +137,7 @@ export function LessonPath({
                         pop={popping.has(lesson.id)}
                       />
                       <span
-                        className={`rounded-badge bg-paper px-1 text-center text-sm leading-tight font-bold ${lesson.state === 'locked' ? 'text-text-tertiary' : 'text-ink'}`}
+                        className={`rounded-badge bg-canvas px-1 text-center text-sm leading-tight font-bold ${lesson.state === 'locked' ? 'text-text-secondary' : 'text-ink'}`}
                       >
                         {lesson.title}
                         <span className="sr-only">

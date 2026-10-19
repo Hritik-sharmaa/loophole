@@ -3,6 +3,7 @@
 import type { SubmissionResult } from '@loophole/shared';
 import { Lightbulb, MessageCircleQuestion } from 'lucide-react';
 import { useState } from 'react';
+import { Byte } from '@/components/byte';
 import { InlineCode } from '@/components/inline-code';
 import { secondaryButton } from '@/components/ui/buttons';
 import { useExplain, useHint } from '@/lib/queries/use-ai';
@@ -14,8 +15,9 @@ type Answer = {
   remainingToday: number;
 };
 
-// The AI tutor (J-2): "Hint" for the code in the editor, and "Explain my
-// error" once a run has failed. Secondary buttons: Run keeps the orange.
+// The AI tutor (J-2), voiced by Byte: "Hint" for the code in the editor,
+// and "Explain my error" once a run has failed. Secondary buttons: Run
+// keeps the orange.
 export function TutorPanel({
   exerciseId,
   code,
@@ -58,9 +60,12 @@ export function TutorPanel({
   }
 
   return (
-    <section className="flex flex-col gap-3 rounded-card bg-surface px-5 py-4">
+    <section className="flex flex-col gap-4 rounded-card border-2 border-ink bg-surface px-5 py-4">
       <div className="flex flex-wrap items-center gap-3">
-        <h2 className="font-display text-xl font-bold">Stuck?</h2>
+        <Byte mood={pending ? 'thinking' : 'idle'} className="size-12" />
+        <h2 className="mr-auto font-display text-xl font-bold">
+          Stuck? Ask Byte
+        </h2>
         <button
           type="button"
           onClick={askHint}
@@ -92,7 +97,7 @@ export function TutorPanel({
       {answer && !error && (
         <div
           aria-live="polite"
-          className="flex flex-col gap-2 rounded-card border-2 border-ink bg-paper px-4 py-3"
+          className="flex flex-col gap-2 rounded-card border-2 border-ink bg-paper px-4 py-3 shadow-sticker-sm"
         >
           <p className="text-xs font-bold tracking-wide text-text-secondary uppercase">
             {answer.kind === 'hint' ? 'Hint' : 'What went wrong'}

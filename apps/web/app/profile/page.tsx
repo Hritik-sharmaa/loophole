@@ -6,6 +6,7 @@ import { Award } from 'lucide-react';
 import Link from 'next/link';
 import { useState, type FormEvent, type ReactNode } from 'react';
 import { AppHeader } from '@/components/app-header';
+import { Byte } from '@/components/byte';
 import { secondaryButton } from '@/components/ui/buttons';
 import { ApiError } from '@/lib/api';
 import { useMyCertificates } from '@/lib/queries/use-certificates';
@@ -38,7 +39,8 @@ export default function ProfilePage() {
 function Profile({ me }: { me: MeResponse }) {
   return (
     <Centered>
-      <h1 className="font-display text-3xl font-extrabold">
+      <Byte mood="happy" className="size-24" />
+      <h1 className="font-display text-3xl font-extrabold break-all">
         Hi, {me.username}
       </h1>
       <dl className="grid w-full grid-cols-2 gap-3 text-center">
@@ -77,9 +79,9 @@ function Certificates() {
           <li key={c.slug}>
             <Link
               href={`/c/${c.slug}`}
-              className="flex items-center gap-3 rounded-card border-2 border-ink px-4 py-3 font-bold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+              className="flex items-center gap-3 rounded-card border-2 border-ink bg-lemon px-4 py-3 font-bold shadow-sticker-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
             >
-              <Award className="size-5 text-orange" aria-hidden />
+              <Award className="size-5 text-ink" aria-hidden />
               {c.courseTitle}
             </Link>
           </li>
@@ -116,7 +118,7 @@ function UsernameForm({ current }: { current: string }) {
           id="username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          className="min-w-0 flex-1 rounded-card border-2 border-border-muted px-4 py-2 font-medium focus:border-ink focus:outline-none"
+          className="min-w-0 flex-1 rounded-card border-2 border-ink bg-paper px-4 py-2 font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
         />
         <button
           type="submit"
@@ -149,7 +151,7 @@ function LogoutButton() {
     <button
       type="button"
       onClick={logOut}
-      className="text-sm font-semibold text-text-secondary underline"
+      className="rounded-badge text-sm font-semibold text-text-secondary underline hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
     >
       Log out
     </button>
@@ -167,7 +169,7 @@ function Stat({
   note?: string;
 }) {
   return (
-    <div className="rounded-card bg-surface p-4">
+    <div className="rounded-card border-2 border-ink bg-paper p-4 shadow-sticker-sm">
       <dt className="text-xs font-semibold text-text-secondary">{label}</dt>
       <dd className="font-display text-2xl font-extrabold">{value}</dd>
       {note && (

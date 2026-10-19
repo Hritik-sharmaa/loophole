@@ -4,6 +4,7 @@ import type { RatingLeaderboard, WeeklyLeaderboard } from '@loophole/shared';
 import { Swords, Zap } from 'lucide-react';
 import { useState, type ReactNode } from 'react';
 import { AppHeader } from '@/components/app-header';
+import { Byte } from '@/components/byte';
 import {
   useRatingLeaderboard,
   useWeeklyLeaderboard,
@@ -33,7 +34,7 @@ export default function LeaderboardPage() {
         <div
           role="tablist"
           aria-label="Leaderboard"
-          className="mt-4 flex gap-2"
+          className="mt-4 inline-flex gap-1 rounded-card border-2 border-ink bg-paper p-1"
         >
           <TabButton active={tab === 'weekly'} onClick={() => setTab('weekly')}>
             This week
@@ -74,7 +75,7 @@ function TabButton({
       role="tab"
       aria-selected={active}
       onClick={onClick}
-      className={`rounded-badge px-4 py-2 text-sm font-bold focus-visible:outline-2 focus-visible:outline-ink ${active ? 'bg-ink text-paper' : 'bg-surface text-text-secondary'}`}
+      className={`rounded-badge px-4 py-2 text-sm font-bold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink ${active ? 'bg-ink text-paper' : 'text-text-secondary hover:text-ink'}`}
     >
       {children}
     </button>
@@ -91,7 +92,11 @@ function WeeklyBoard({
   const { entries, me, weekStart } = board;
   const xp = (value: number) => (
     <>
-      <Zap className="size-4 text-orange" fill="currentColor" aria-hidden />
+      <Zap
+        className="size-4 text-orange-dark"
+        fill="currentColor"
+        aria-hidden
+      />
       {value} XP
     </>
   );
@@ -129,7 +134,7 @@ function RatingBoard({
   const { entries, me } = board;
   const elo = (value: number) => (
     <>
-      <Swords className="size-4 text-orange" aria-hidden />
+      <Swords className="size-4 text-ink" aria-hidden />
       {value}
     </>
   );
@@ -172,9 +177,10 @@ function Rows({
 }) {
   if (entries.length === 0) {
     return (
-      <p className="rounded-card bg-surface px-6 py-10 text-center font-bold">
-        {empty}
-      </p>
+      <div className="flex flex-col items-center gap-3 rounded-card border-2 border-ink bg-paper px-6 py-10 text-center font-bold">
+        <Byte mood="thinking" className="size-16" />
+        <p>{empty}</p>
+      </div>
     );
   }
   return (
@@ -185,9 +191,11 @@ function Rows({
           <li
             key={e.userId}
             aria-current={mine ? 'true' : undefined}
-            className={`flex items-center gap-4 rounded-card px-5 py-3 ${mine ? 'border-2 border-ink bg-paper' : 'bg-surface'}`}
+            className={`flex items-center gap-4 rounded-card border-2 border-ink px-5 py-3 ${mine ? 'bg-orange-tint shadow-sticker-sm' : 'bg-paper'}`}
           >
-            <span className="w-8 font-display text-xl font-extrabold">
+            <span
+              className={`flex size-9 shrink-0 items-center justify-center rounded-node border-2 border-ink font-display text-lg font-extrabold ${e.rank <= 3 ? 'bg-lemon' : 'bg-surface'}`}
+            >
               {e.rank}
             </span>
             <span className="flex-1 truncate font-bold">
@@ -204,7 +212,7 @@ function Rows({
 
 function MyRank({ children }: { children: ReactNode }) {
   return (
-    <p className="rounded-card border-2 border-ink px-5 py-3 font-bold">
+    <p className="rounded-card border-2 border-ink bg-orange-tint px-5 py-3 font-bold">
       {children}
     </p>
   );

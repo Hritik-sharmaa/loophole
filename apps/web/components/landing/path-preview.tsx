@@ -7,7 +7,7 @@ import { pathThrough } from '@/lib/path-geometry';
 import { LessonNode } from '../lesson-node';
 
 // A small version of the lesson path (DESIGN_SYSTEM §6 LessonPath). When it
-// scrolls into view, the completed part of the path draws in Ink and the
+// scrolls into view, the completed part of the path draws in Blue and the
 // nodes pop in one after another.
 
 const NODES: { x: number; y: number; state: LessonState; label: string }[] = [
@@ -49,13 +49,14 @@ export function PathPreview() {
       >
         <path
           d={FULL_PATH}
-          className="stroke-surface"
+          className="stroke-border-muted"
           strokeWidth={6}
           strokeLinecap="round"
+          strokeDasharray="0 14"
         />
         <motion.path
           d={DONE_PATH}
-          className="stroke-ink"
+          className="stroke-blue"
           strokeWidth={6}
           strokeLinecap="round"
           initial={{ pathLength: reduceMotion ? 1 : 0 }}
@@ -80,7 +81,7 @@ export function PathPreview() {
         >
           <LessonNode state={node.state} />
           <span
-            className={`relative z-10 rounded-badge bg-paper px-2 py-0.5 text-xs font-bold whitespace-nowrap ${node.state === 'locked' ? 'text-text-tertiary' : 'text-ink'}`}
+            className={`relative z-10 rounded-badge bg-paper px-2 py-0.5 text-xs font-bold whitespace-nowrap ${node.state === 'locked' ? 'text-text-secondary' : 'text-ink'}`}
           >
             {node.label}
           </span>
