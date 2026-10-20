@@ -12,6 +12,15 @@
       {
         "title": "This is a practice terminal",
         "body": "Nothing here touches your computer: Loophole simulates the folder and Git for you, so you can try anything. Words with spaces go in quotes."
+      },
+      {
+        "title": "Spot the bug",
+        "body": "Git will not use the email set here. Tap the wrong line.",
+        "code": "git config --global user.name \"Asha Rao\"\ngit config --global user.mail asha@example.com\n",
+        "bug": {
+          "line": 2,
+          "fix": "The setting is called `user.email`, not `user.mail`."
+        }
       }
     ],
     "check": {

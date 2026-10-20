@@ -23,6 +23,15 @@
         "body": "`+`, `-`, `*` and `/` add, subtract, multiply and divide. As in school maths, `*` and `/` happen first; brackets change the order.",
         "code": "console.log(2 + 3 * 4);\nconsole.log((2 + 3) * 4);\n",
         "output": "14\n20"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "Type 2 and 3 and it prints `23` instead of `5`. Which line is wrong?",
+        "code": "const a = Number(prompt());\nconst b = prompt();\nconsole.log(a + b);\n",
+        "bug": {
+          "line": 2,
+          "fix": "`prompt()` gives text, and `+` with text joins instead of adding. Line 2 needs `Number(prompt())`."
+        }
       }
     ],
     "check": {

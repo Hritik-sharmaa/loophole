@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Byte } from '@/components/byte';
+import { Guide } from '@/components/guide';
 import { Logo } from '@/components/logo';
 import { stickerCard } from '@/components/ui/card';
 import { RetryButton } from './retry-button';
@@ -15,7 +15,7 @@ export default function OfflinePage() {
       <section
         className={`${stickerCard} flex flex-col items-center gap-4 px-6 py-10`}
       >
-        <Byte mood="oops" className="size-24" />
+        <Guide guide="priya" mood="oops" className="h-32 w-24" />
         <h1 className="font-display text-3xl font-extrabold">
           You&apos;re offline
         </h1>

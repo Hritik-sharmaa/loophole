@@ -13,6 +13,15 @@
         "title": "Always write alt text",
         "body": "`alt` describes the picture for people who can't see it, and shows when the picture fails to load.",
         "code": "<img src=\"missing.png\" alt=\"A cat asleep on a laptop\">"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "The picture shows, but the page breaks a rule from this lesson. Which line?",
+        "code": "<h1>My cat</h1>\n<img src=\"cat.jpg\">\n",
+        "bug": {
+          "line": 2,
+          "fix": "Every image needs `alt` text for people who can't see it, like `<img src=\"cat.jpg\" alt=\"My cat asleep on a chair\">`."
+        }
       }
     ],
     "check": {

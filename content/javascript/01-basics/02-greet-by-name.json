@@ -23,6 +23,15 @@
         "code": "const name = prompt();\nconsole.log(`Hello, ${name}.`);\n",
         "input": "Grace\n",
         "output": "Hello, Grace."
+      },
+      {
+        "title": "Spot the bug",
+        "body": "Type `Asha` and it prints `Hi, ${name}!` instead of `Hi, Asha!`. Which line is wrong?",
+        "code": "const name = prompt();\nconsole.log(\"Hi, ${name}!\");\n",
+        "bug": {
+          "line": 2,
+          "fix": "Only backtick strings fill in `${name}`. Line 2 uses double quotes, so it prints the letters exactly as typed."
+        }
       }
     ],
     "check": {

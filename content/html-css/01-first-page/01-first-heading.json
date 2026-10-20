@@ -17,6 +17,15 @@
       {
         "title": "Close what you open",
         "body": "Every opening tag like `<h1>` needs its closing tag `</h1>`, with a slash. Browsers try to fix mistakes, but don't rely on it."
+      },
+      {
+        "title": "Spot the bug",
+        "body": "The second heading never ends, so everything after it grows big. Tap the broken line.",
+        "code": "<h1>My first page</h1>\n<h2>About me<h2>\n<h3>My hobbies</h3>\n",
+        "bug": {
+          "line": 2,
+          "fix": "Line 2 opens `<h2>` a second time instead of closing it. The end tag needs a slash: `</h2>`."
+        }
       }
     ],
     "check": {

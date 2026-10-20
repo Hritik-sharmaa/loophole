@@ -25,7 +25,7 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Loophole — learn to code, one bug at a time',
+  title: 'Loophole — learn to code, then out-code your friends',
   description:
     'Bite-sized coding lessons with real code, instant grading, AI hints, streaks, and live 1v1 debugging duels.',
   applicationName: 'Loophole',

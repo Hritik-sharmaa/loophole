@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Byte } from '@/components/byte';
+import { Guide } from '@/components/guide';
 import { Logo } from '@/components/logo';
 import { primaryButton, secondaryButton } from '@/components/ui/buttons';
 import { stickerCard } from '@/components/ui/card';
@@ -73,7 +73,9 @@ export default function LoginPage() {
       <Logo href="/" />
       <div className={`${stickerCard} flex flex-col gap-6 px-6 py-8`}>
         <div className="flex items-center gap-4">
-          <Byte
+          <Guide
+            guide="priya"
+            crop="bust"
             mood={mode === 'login' ? 'happy' : 'idle'}
             className="size-16 shrink-0"
           />

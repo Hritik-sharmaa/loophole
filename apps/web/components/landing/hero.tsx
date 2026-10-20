@@ -3,14 +3,31 @@
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import { LanguageTile } from '@/components/language-logo';
 import { primaryButton, secondaryButton } from '@/components/ui/buttons';
 import { chip } from '@/components/ui/card';
 import { CodeDemo } from './code-demo';
 import { FloatingGlyphs } from './floating-glyphs';
 
-const HEADLINE = ['Learn', 'to', 'code.', 'One', 'bug', 'at', 'a', 'time.'];
-// The word stuck on as a Pink sticker.
-const ACCENT = new Set(['bug']);
+const HEADLINE = [
+  'Learn',
+  'to',
+  'code.',
+  'Then',
+  'out-code',
+  'your',
+  'friends.',
+];
+// The word stuck on as a Pink sticker: Pink is the rival (DESIGN_SYSTEM §2).
+const ACCENT = new Set(['out-code']);
+
+// The live courses, by language, for the strip under the buttons.
+const COURSES = [
+  { language: 'python', name: 'Python' },
+  { language: 'javascript', name: 'JavaScript' },
+  { language: 'html', name: 'HTML & CSS' },
+  { language: 'git', name: 'Git' },
+];
 
 export function Hero() {
   return (
@@ -25,7 +42,7 @@ export function Hero() {
             transition={{ duration: 0.4 }}
             className={`${chip} bg-lemon text-sm text-ink`}
           >
-            Python, web and Git · free
+            4 courses · free
           </motion.span>
 
           <h1 className="font-display text-5xl leading-[1.05] font-extrabold tracking-tight sm:text-6xl">
@@ -76,6 +93,24 @@ export function Hero() {
               See a duel
             </a>
           </motion.div>
+
+          <motion.ul
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.9 }}
+            aria-label="Courses"
+            className="flex flex-wrap gap-x-4 gap-y-2"
+          >
+            {COURSES.map((course) => (
+              <li
+                key={course.language}
+                className="flex items-center gap-2 text-sm font-bold"
+              >
+                <LanguageTile language={course.language} size="sm" />
+                {course.name}
+              </li>
+            ))}
+          </motion.ul>
         </div>
 
         <motion.div

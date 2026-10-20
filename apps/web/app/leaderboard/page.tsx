@@ -4,7 +4,7 @@ import type { RatingLeaderboard, WeeklyLeaderboard } from '@loophole/shared';
 import { Swords, Zap } from 'lucide-react';
 import { useState, type ReactNode } from 'react';
 import { AppHeader } from '@/components/app-header';
-import { Byte } from '@/components/byte';
+import { Guide } from '@/components/guide';
 import {
   useRatingLeaderboard,
   useWeeklyLeaderboard,
@@ -178,7 +178,7 @@ function Rows({
   if (entries.length === 0) {
     return (
       <div className="flex flex-col items-center gap-3 rounded-card border-2 border-ink bg-paper px-6 py-10 text-center font-bold">
-        <Byte mood="thinking" className="size-16" />
+        <Guide guide="priya" mood="thinking" className="h-24 w-[68px]" />
         <p>{empty}</p>
       </div>
     );

@@ -9,11 +9,14 @@ import type {
   GitScenario,
   LessonDetail,
   LessonState,
+  UnitBugHunt,
+  UnitCheatSheet,
 } from '@loophole/shared';
 import { and, asc, count, eq, inArray, max } from 'drizzle-orm';
 import { exerciseKind } from '../../common/exercise-kind.js';
 import { DbService } from '../../db/db.service.js';
 import {
+  certificates,
   courses,
   exercises,
   lessons,
@@ -84,12 +87,29 @@ export class LessonsService {
     const rows = await this.orderedLessons(course.id);
     const states = await this.statesFor(userId, rows);
 
+    // Each unit's bug cards: the length of its Bug hunt (ADR-031).
+    const learnRows = await this.db.drizzle
+      .select({ unitId: lessons.unitId, learn: lessons.learn })
+      .from(lessons)
+      .innerJoin(units, eq(lessons.unitId, units.id))
+      .where(eq(units.courseId, course.id));
+    const bugsByUnit = new Map<string, number>();
+    for (const { unitId, learn } of learnRows) {
+      const bugs = (learn?.cards ?? []).filter((c) => c.bug).length;
+      bugsByUnit.set(unitId, (bugsByUnit.get(unitId) ?? 0) + bugs);
+    }
+
     // Group the flat, ordered rows into units, keeping their order.
     const unitsById = new Map<string, CoursePath['units'][number]>();
     for (const row of rows) {
       let unit = unitsById.get(row.unitId);
       if (!unit) {
-        unit = { id: row.unitId, title: row.unitTitle, lessons: [] };
+        unit = {
+          id: row.unitId,
+          title: row.unitTitle,
+          lessons: [],
+          bugs: bugsByUnit.get(row.unitId) ?? 0,
+        };
         unitsById.set(row.unitId, unit);
       }
       unit.lessons.push({
@@ -98,7 +118,83 @@ export class LessonsService {
         state: states.get(row.lessonId) ?? 'locked',
       });
     }
-    return { course, units: [...unitsById.values()] };
+
+    // The path ends at the certificate once it's earned (ADR-030).
+    const [certificate] = await this.db.drizzle
+      .select({ slug: certificates.publicSlug })
+      .from(certificates)
+      .where(
+        and(
+          eq(certificates.userId, userId),
+          eq(certificates.courseId, course.id),
+        ),
+      );
+    return {
+      course,
+      units: [...unitsById.values()],
+      certificateSlug: certificate?.slug ?? null,
+    };
+  }
+
+  // A unit's cheat sheet (ADR-030): every lesson's Learn cards, in path
+  // order. Open for every unit, locked ones included, like a guidebook:
+  // cards only teach, so nothing graded or secret is in them.
+  async getCheatSheet(
+    courseSlug: string,
+    unitId: string,
+  ): Promise<UnitCheatSheet> {
+    const rows = await this.unitLessons(courseSlug, unitId);
+    return {
+      unitId,
+      title: rows[0].unitTitle,
+      lessons: rows.map((row) => ({
+        title: row.lessonTitle,
+        // Teaching cards only: a bug card belongs to the Bug hunt
+        // (ADR-031). Examples keep their code; input and output are for
+        // running.
+        cards: (row.learn?.cards ?? [])
+          .filter((card) => !card.bug)
+          .map(({ title, body, code }) =>
+            code === undefined ? { title, body } : { title, body, code },
+          ),
+      })),
+    };
+  }
+
+  // A unit's Bug hunt (ADR-031): every spot-the-bug card in it, in path
+  // order, for an ungraded review. Answers may travel to the browser: like
+  // the quick check, nothing here pays XP.
+  async getBugHunt(courseSlug: string, unitId: string): Promise<UnitBugHunt> {
+    const rows = await this.unitLessons(courseSlug, unitId);
+    return {
+      unitId,
+      title: rows[0].unitTitle,
+      bugs: rows.flatMap((row) =>
+        (row.learn?.cards ?? []).flatMap(({ title, body, code, bug }) =>
+          bug && code !== undefined
+            ? [{ lesson: row.lessonTitle, title, body, code, bug }]
+            : [],
+        ),
+      ),
+    };
+  }
+
+  // A unit's lessons with their Learn step, in path order. 404 unless the
+  // unit belongs to that course.
+  private async unitLessons(courseSlug: string, unitId: string) {
+    const rows = await this.db.drizzle
+      .select({
+        unitTitle: units.title,
+        lessonTitle: lessons.title,
+        learn: lessons.learn,
+      })
+      .from(units)
+      .innerJoin(courses, eq(units.courseId, courses.id))
+      .innerJoin(lessons, eq(lessons.unitId, units.id))
+      .where(and(eq(courses.slug, courseSlug), eq(units.id, unitId)))
+      .orderBy(asc(lessons.position));
+    if (rows.length === 0) throw notFound('Unit');
+    return rows;
   }
 
   async getLesson(userId: string, lessonId: string): Promise<LessonDetail> {

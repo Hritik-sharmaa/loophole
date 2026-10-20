@@ -3,7 +3,7 @@
 import { MotionConfig } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
-import { Byte } from '@/components/byte';
+import { CrewLineup } from '@/components/guide';
 import { Logo } from '@/components/logo';
 import { primaryButton } from '@/components/ui/buttons';
 import { chip } from '@/components/ui/card';
@@ -84,9 +84,9 @@ export function LandingPage() {
         {/* Final call to action */}
         <section className="px-4 pb-20 sm:px-6">
           <Reveal className="mx-auto flex max-w-6xl flex-col items-center gap-6 rounded-card border-2 border-ink bg-lemon px-6 py-16 text-center shadow-sticker">
-            <Byte mood="happy" className="size-28" />
+            <CrewLineup mood="happy" size="lg" />
             <h2 className="font-display text-4xl font-extrabold text-balance sm:text-5xl">
-              Your first bug is waiting.
+              Your first lesson is waiting.
             </h2>
             <p className="max-w-md text-lg font-semibold">
               Sign up in seconds and finish your first lesson in five minutes.
@@ -102,7 +102,7 @@ export function LandingPage() {
       <footer className="border-t-2 border-ink bg-paper">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 py-6 text-sm text-text-secondary sm:flex-row sm:px-6">
           <Logo href="/" size="sm" />
-          <span>Learn to code, one bug at a time.</span>
+          <span>Learn to code. Then out-code your friends.</span>
         </div>
       </footer>
     </MotionConfig>

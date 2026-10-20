@@ -13,6 +13,15 @@
         "title": "Attributes",
         "body": "Attributes add details to a tag. They go inside the opening tag as `name=\"value\"`. One tag can have several.",
         "code": "<a href=\"https://example.com\" title=\"An example site\">Example</a>"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "The link shows up, but clicking it goes nowhere. Tap the bug.",
+        "code": "<p>My favourite site:</p>\n<a link=\"https://example.com\">Example</a>\n",
+        "bug": {
+          "line": 2,
+          "fix": "A link's address goes in the `href` attribute, not `link`: `<a href=\"https://example.com\">`."
+        }
       }
     ],
     "check": {

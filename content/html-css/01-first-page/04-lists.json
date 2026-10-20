@@ -13,6 +13,15 @@
         "title": "Numbered lists",
         "body": "Swap `<ul>` for `<ol>` and the items get numbers instead of bullets.",
         "code": "<ol>\n  <li>Wake up</li>\n  <li>Code</li>\n  <li>Sleep</li>\n</ol>"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "One item does not show as a bullet point. Which line?",
+        "code": "<ul>\n  <li>Milk</li>\n  <p>Bread</p>\n  <li>Eggs</li>\n</ul>\n",
+        "bug": {
+          "line": 3,
+          "fix": "Everything inside `<ul>` should be a list item. Line 3 should be `<li>Bread</li>`."
+        }
       }
     ],
     "check": {

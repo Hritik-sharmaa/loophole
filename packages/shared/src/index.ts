@@ -52,6 +52,37 @@ export type CoursePath = {
     id: string;
     title: string;
     lessons: { id: string; title: string; state: LessonState }[];
+    // How many bug cards the unit has: its Bug hunt's length (ADR-031).
+    bugs: number;
+  }[];
+  // The user's certificate for this course (/c/<slug>), once earned:
+  // the path's last stop links to it (ADR-030).
+  certificateSlug: string | null;
+};
+
+// GET /courses/:slug/units/:unitId/cheatsheet (ADR-030): a unit's Learn
+// cards gathered into one page, lesson by lesson. Only the teaching cards:
+// no quick checks, no exercises.
+// GET /courses/:slug/units/:unitId/bug-hunt (ADR-031): every bug card in
+// a unit, for the review at the end of the unit. Ungraded; no XP.
+export type UnitBugHunt = {
+  unitId: string;
+  title: string;
+  bugs: {
+    lesson: string;
+    title: string;
+    body: string;
+    code: string;
+    bug: { line: number; fix: string };
+  }[];
+};
+
+export type UnitCheatSheet = {
+  unitId: string;
+  title: string;
+  lessons: {
+    title: string;
+    cards: { title: string; body: string; code?: string }[];
   }[];
 };
 
@@ -64,6 +95,10 @@ export type LearnCard = {
   code?: string;
   input?: string;
   output?: string;
+  // A spot-the-bug card (ADR-031): `code` has one wrong line (1-based)
+  // for the learner to tap; `fix` says what's wrong. Never run, so it
+  // has no input or output. Ungraded, like the quick check.
+  bug?: { line: number; fix: string };
 };
 
 // The ungraded quick check after the cards. It pays no XP and records

@@ -13,6 +13,15 @@
         "title": "Looking around",
         "body": "`ls` lists what is in the folder you are in, `pwd` shows where you are, and `cd` moves into a folder (`cd ..` goes back out).",
         "code": "mkdir demo\ncd demo\npwd\ntouch index.html\nls"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "One command here is not a Git command at all. Tap it.",
+        "code": "mkdir notes\ncd notes\ngit int\n",
+        "bug": {
+          "line": 3,
+          "fix": "There is no `git int`. To start a repository, type `git init`."
+        }
       }
     ],
     "check": {

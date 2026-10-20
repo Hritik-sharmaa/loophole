@@ -8,7 +8,7 @@ import {
 } from 'framer-motion';
 import { Check, Flame, X, Zap } from 'lucide-react';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { Byte, type ByteMood } from '@/components/byte';
+import { Guide, type GuideMood } from '@/components/guide';
 
 // A looping "fix the bug" story: buggy code fails 2 of 3 tests, a "+" is
 // typed in, the tests re-run one by one, and the lesson pays +10 XP.
@@ -43,23 +43,24 @@ export function CodeDemo() {
   const fixed = shown >= 1;
   const done = shown === LAST_STEP;
 
-  const byte = BYTE_LINES[done ? 'done' : fixed ? 'testing' : 'bug'];
+  const line = GUIDE_LINES[done ? 'done' : fixed ? 'testing' : 'bug'];
 
   return (
     <div ref={ref} className="relative w-full max-w-md" aria-hidden="true">
-      {/* Byte sits on the editor and reacts to each step of the story. */}
+      {/* Priya, the Python guide, sits on the editor and reacts to each
+          step of the story. */}
       <div className="absolute -top-[58px] left-5 z-10 flex items-start gap-2">
-        <Byte mood={byte.mood} className="size-16" />
+        <Guide guide="priya" crop="bust" mood={line.mood} className="size-16" />
         <AnimatePresence mode="wait" initial={false}>
           <motion.span
-            key={byte.text}
+            key={line.text}
             initial={{ opacity: 0, y: 4, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -4 }}
             transition={{ type: 'spring', stiffness: 400, damping: 20 }}
             className="mt-1 rounded-card border-2 border-ink bg-paper px-3 py-1 text-sm font-bold whitespace-nowrap shadow-sticker-sm"
           >
-            {byte.text}
+            {line.text}
           </motion.span>
         </AnimatePresence>
       </div>
@@ -180,10 +181,10 @@ export function CodeDemo() {
   );
 }
 
-// What Byte says at each stage of the story.
-const BYTE_LINES: Record<
+// What Priya says at each stage of the story.
+const GUIDE_LINES: Record<
   'bug' | 'testing' | 'done',
-  { mood: ByteMood; text: string }
+  { mood: GuideMood; text: string }
 > = {
   bug: { mood: 'oops', text: 'psst… line 4 never adds' },
   testing: { mood: 'thinking', text: 'running the tests…' },

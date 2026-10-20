@@ -129,6 +129,15 @@ describe('Certificates (e2e, FR-15)', () => {
     expect(last.status).toBe('passed');
     expect(last.certificateSlug).toMatch(/^[a-z2-9]{10}$/);
 
+    // The path's last stop now links to it (ADR-030).
+    const path = (
+      await http()
+        .get('/courses/python/path')
+        .set('Authorization', 'Bearer grad')
+        .expect(200)
+    ).body as CoursePath;
+    expect(path.certificateSlug).toBe(last.certificateSlug);
+
     // Solving any lesson again issues nothing new.
     expect((await solve('grad', lessonIds.at(-1)!)).certificateSlug).toBeNull();
     const [{ n }] = await db

@@ -6,7 +6,7 @@ import { Award } from 'lucide-react';
 import Link from 'next/link';
 import { useState, type FormEvent, type ReactNode } from 'react';
 import { AppHeader } from '@/components/app-header';
-import { Byte } from '@/components/byte';
+import { CrewLineup } from '@/components/guide';
 import { secondaryButton } from '@/components/ui/buttons';
 import { ApiError } from '@/lib/api';
 import { useMyCertificates } from '@/lib/queries/use-certificates';
@@ -39,7 +39,7 @@ export default function ProfilePage() {
 function Profile({ me }: { me: MeResponse }) {
   return (
     <Centered>
-      <Byte mood="happy" className="size-24" />
+      <CrewLineup mood="happy" />
       <h1 className="font-display text-3xl font-extrabold break-all">
         Hi, {me.username}
       </h1>

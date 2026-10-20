@@ -406,6 +406,7 @@ function parseCard(
     title: asText(o.title, file, `${field}.title`),
     body: asText(o.body, file, `${field}.body`),
   };
+  if (o.bug !== undefined) return parseBugCard(o, card, file, field);
   if (o.code === undefined || kind !== 'program') {
     if (o.input !== undefined || o.output !== undefined) {
       throw new ContentError(
@@ -424,6 +425,31 @@ function parseCard(
     card.input = asString(o.input, file, `${field}.input`);
   }
   return card;
+}
+
+// A spot-the-bug card (ADR-031): code with exactly one wrong line, which
+// the learner taps. It is never run, so it has no input or output, in any
+// course language.
+function parseBugCard(
+  o: Record<string, unknown>,
+  card: LearnCard,
+  file: string,
+  field: string,
+): LearnCard {
+  if (o.input !== undefined || o.output !== undefined) {
+    throw new ContentError(file, `${field}: a bug card has no input or output`);
+  }
+  const code = asText(o.code, file, `${field}.code`);
+  const bug = asObject(o.bug, file, `${field}.bug`);
+  const lines = code.trimEnd().split('\n').length;
+  return {
+    ...card,
+    code,
+    bug: {
+      line: asIntIn(bug.line, 1, lines, file, `${field}.bug.line`),
+      fix: asText(bug.fix, file, `${field}.bug.fix`),
+    },
+  };
 }
 
 function parseCheck(json: unknown, file: string): QuickCheck {

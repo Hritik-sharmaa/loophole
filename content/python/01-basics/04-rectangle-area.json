@@ -21,6 +21,15 @@
         "body": "Store numbers in variables, then calculate with their names.",
         "code": "price = 4\ncount = 3\ntotal = price * count\nprint(total)\n",
         "output": "12"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "Give it 3 and 4 and it prints 7 instead of 12. Which line is wrong?",
+        "code": "width = int(input())\nheight = int(input())\narea = width + height\nprint(area)\n",
+        "bug": {
+          "line": 3,
+          "fix": "Area is width times height. Line 3 should multiply with `*`, not add with `+`."
+        }
       }
     ],
     "check": {

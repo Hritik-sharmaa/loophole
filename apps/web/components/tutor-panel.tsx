@@ -3,7 +3,7 @@
 import type { SubmissionResult } from '@loophole/shared';
 import { Lightbulb, MessageCircleQuestion } from 'lucide-react';
 import { useState } from 'react';
-import { Byte } from '@/components/byte';
+import { GUIDES, Guide, type GuideId } from '@/components/guide';
 import { InlineCode } from '@/components/inline-code';
 import { secondaryButton } from '@/components/ui/buttons';
 import { useExplain, useHint } from '@/lib/queries/use-ai';
@@ -15,14 +15,16 @@ type Answer = {
   remainingToday: number;
 };
 
-// The AI tutor (J-2), voiced by Byte: "Hint" for the code in the editor,
+// The AI tutor (J-2), voiced by the course's guide (ADR-028): "Hint" for the code in the editor,
 // and "Explain my error" once a run has failed. Secondary buttons: Run
 // keeps the orange.
 export function TutorPanel({
+  guide,
   exerciseId,
   code,
   submission,
 }: {
+  guide: GuideId;
   exerciseId: string;
   code: string;
   submission: SubmissionResult | undefined;
@@ -62,9 +64,14 @@ export function TutorPanel({
   return (
     <section className="flex flex-col gap-4 rounded-card border-2 border-ink bg-surface px-5 py-4">
       <div className="flex flex-wrap items-center gap-3">
-        <Byte mood={pending ? 'thinking' : 'idle'} className="size-12" />
+        <Guide
+          guide={guide}
+          crop="bust"
+          mood={pending ? 'thinking' : failed ? 'oops' : 'idle'}
+          className="size-14"
+        />
         <h2 className="mr-auto font-display text-xl font-bold">
-          Stuck? Ask Byte
+          Stuck? Ask {GUIDES[guide].name}
         </h2>
         <button
           type="button"

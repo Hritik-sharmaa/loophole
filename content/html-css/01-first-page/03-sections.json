@@ -12,6 +12,15 @@
       {
         "title": "Pick by meaning, not size",
         "body": "Screen readers and search engines use your headings to understand the page. Choose the level for what the heading is, and change its size later with CSS."
+      },
+      {
+        "title": "Spot the bug",
+        "body": "This page breaks the heading rule. Tap the line to fix.",
+        "code": "<h1>My trip</h1>\n<h2>Day one</h2>\n<h1>Day two</h1>\n",
+        "bug": {
+          "line": 3,
+          "fix": "A page has just one `<h1>`. Day two is a section like day one, so it is an `<h2>`."
+        }
       }
     ],
     "check": {

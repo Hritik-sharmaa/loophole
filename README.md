@@ -1,8 +1,8 @@
 # Loophole
 
-**Learn to code, one bug at a time.** Loophole is a Duolingo-style web app for learning Python. You follow a lesson path, write real code in the browser, get graded in a sandbox on the server, and earn XP, streaks and a weekly rank. When you're stuck, an AI tutor explains your error or gives a hint, never the answer.
+**Learn to code. Then out-code your friends.** Loophole is a web app for learning to code, with four courses: Python, JavaScript, HTML & CSS, and Git & GitHub. You follow a lesson path, learn each idea from short cards, write real code in the browser, get graded on the server, and earn XP, streaks and a weekly rank. When you're stuck, an AI tutor explains your error or gives a hint, never the answer.
 
-Coming next: **live 1v1 debugging duels.** Two players get the same buggy program and race to fix it, and the server decides the winner.
+Then test yourself in **live 1v1 debugging duels**: two players get the same buggy program and race to fix it, and the server decides the winner.
 
 **Demo:** <https://loophole-psi.vercel.app>
 

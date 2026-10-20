@@ -1,5 +1,10 @@
-import { Controller, Get, Param } from '@nestjs/common';
-import type { CourseOverview, CoursePath } from '@loophole/shared';
+import { Controller, Get, Param, ParseUUIDPipe } from '@nestjs/common';
+import type {
+  CourseOverview,
+  CoursePath,
+  UnitBugHunt,
+  UnitCheatSheet,
+} from '@loophole/shared';
 import type { AuthUser } from '../../integrations/supabase-auth.client.js';
 import { CurrentUser } from '../auth/current-user.decorator.js';
 import { LessonsService } from './lessons.service.js';
@@ -21,5 +26,23 @@ export class CoursesController {
     @Param('slug') slug: string,
   ): Promise<CoursePath> {
     return this.lessons.getPath(user.id, slug);
+  }
+
+  // One unit's Learn cards on a single page (ADR-030).
+  @Get(':slug/units/:unitId/cheatsheet')
+  cheatSheet(
+    @Param('slug') slug: string,
+    @Param('unitId', new ParseUUIDPipe()) unitId: string,
+  ): Promise<UnitCheatSheet> {
+    return this.lessons.getCheatSheet(slug, unitId);
+  }
+
+  // One unit's spot-the-bug cards, for its Bug hunt review (ADR-031).
+  @Get(':slug/units/:unitId/bug-hunt')
+  bugHunt(
+    @Param('slug') slug: string,
+    @Param('unitId', new ParseUUIDPipe()) unitId: string,
+  ): Promise<UnitBugHunt> {
+    return this.lessons.getBugHunt(slug, unitId);
   }
 }

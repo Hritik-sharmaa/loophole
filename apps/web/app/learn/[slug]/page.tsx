@@ -4,7 +4,7 @@ import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { AppHeader } from '@/components/app-header';
-import { Byte } from '@/components/byte';
+import { Guide } from '@/components/guide';
 import { LessonPath } from '@/components/lesson-path';
 import { secondaryButton } from '@/components/ui/buttons';
 import { stickerCard } from '@/components/ui/card';
@@ -36,7 +36,7 @@ export default function CoursePage() {
             role="alert"
             className={`${stickerCard} flex flex-col items-center gap-4 px-6 py-12 text-center`}
           >
-            <Byte mood="oops" className="size-20" />
+            <Guide guide="priya" mood="oops" className="h-32 w-24" />
             <p className="font-display text-2xl font-extrabold">
               {path.error instanceof ApiError && path.error.status === 404
                 ? 'No course here'

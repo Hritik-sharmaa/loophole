@@ -5,7 +5,7 @@ import { Award, Check, Link2 } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
-import { Byte } from '@/components/byte';
+import { CrewLineup, Guide } from '@/components/guide';
 import { Logo } from '@/components/logo';
 import { primaryButton, secondaryButton } from '@/components/ui/buttons';
 import { usePublicCertificate } from '@/lib/queries/use-certificates';
@@ -28,7 +28,7 @@ export default function CertificatePage() {
           className="flex flex-col items-center gap-4 text-center"
         >
           <title>Certificate not found · Loophole</title>
-          <Byte mood="oops" className="size-20" />
+          <Guide guide="priya" mood="oops" className="h-28 w-20" />
           <p className="font-display text-2xl font-extrabold">
             Certificate not found
           </p>
@@ -70,7 +70,7 @@ function Certificate({ cert }: { cert: PublicCertificate }) {
       <title>{`${cert.username} · ${cert.courseTitle} · Loophole`}</title>
       <article className="relative flex w-full flex-col items-center gap-4 rounded-card border-4 border-ink bg-paper px-6 py-12 text-center shadow-sticker">
         <div className="flex items-end gap-3">
-          <Byte mood="happy" className="size-20" />
+          <CrewLineup mood="happy" size="sm" />
           <span className="flex size-14 rotate-6 items-center justify-center rounded-node border-2 border-ink bg-lemon text-ink shadow-sticker-sm">
             <Award className="size-8" strokeWidth={2.5} aria-hidden />
           </span>

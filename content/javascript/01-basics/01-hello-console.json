@@ -19,6 +19,15 @@
       {
         "title": "Every character counts",
         "body": "The grader compares your output letter by letter, so capitals, commas and spaces all matter. `Hello` and `hello` are different."
+      },
+      {
+        "title": "Spot the bug",
+        "body": "One of these lines crashes with a `TypeError`. Tap it.",
+        "code": "console.log(\"Hello!\");\nconsole.Log(\"One line each\");\nconsole.log(\"Every character counts\");\n",
+        "bug": {
+          "line": 2,
+          "fix": "JavaScript cares about capitals: it is `console.log`, not `console.Log`."
+        }
       }
     ],
     "check": {

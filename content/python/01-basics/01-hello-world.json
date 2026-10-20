@@ -19,6 +19,15 @@
       {
         "title": "Every character counts",
         "body": "The grader compares your output letter by letter, so capitals, commas and spaces all matter. `Hello` and `hello` are different."
+      },
+      {
+        "title": "Spot the bug",
+        "body": "This should print three lines, but one of them is broken. Tap it.",
+        "code": "print(\"Hello!\")\nprint(\"I am learning Python)\nprint(\"One line at a time\")\n",
+        "bug": {
+          "line": 2,
+          "fix": "The text on line 2 has no closing quote, so Python can't tell where it ends. It needs a `\"` before the `)`."
+        }
       }
     ],
     "check": {

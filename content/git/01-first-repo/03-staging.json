@@ -13,6 +13,15 @@
         "title": "Staging with git add",
         "body": "`git add <file>` puts a file in the staging area, the list of changes for your next commit. `git add .` stages everything.",
         "code": "git init\ntouch index.html notes.txt\ngit add index.html\ngit status"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "`git status` still shows the file as not staged. Tap the bug.",
+        "code": "git init\ntouch notes.txt\ngit add notes\ngit status\n",
+        "bug": {
+          "line": 3,
+          "fix": "The file is called `notes.txt`, and `git add` needs its full name: `git add notes.txt`."
+        }
       }
     ],
     "check": {

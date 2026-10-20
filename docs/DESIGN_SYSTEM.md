@@ -1,13 +1,13 @@
 # Loophole — Design System
 
-**Sticker Lab** (ADR-020). Bright stickers on a dotted cutting mat: thick Ink outlines, hard offset shadows, and a small set of loud colours that each mean one thing. The mascot is Byte, a robot with a terminal for a face.
+**Sticker Lab** (ADR-020). Bright stickers on a dotted cutting mat: thick Ink outlines, hard offset shadows, and a small set of loud colours that each mean one thing. The characters are the crew (ADR-028): four young Indian learners, one guide per course, drawn flat in a friendly cartoon style. Byte, a robot with a terminal for a face, is the logo.
 
 ## 1. Principles
 
-1. **One colour, one meaning.** Orange = your move now. Blue = done. Lemon = rewards and labels. Pink = your rival. Ink = text and outlines. A new colour needs a new meaning first.
+1. **One colour, one meaning.** Orange = your move now. Blue = done. Lemon = rewards and labels. Pink = your rival. Ink = text and outlines. A new colour needs a new meaning first. The one exception (ADR-027): language logos keep their own colours, and each course banner uses a tint of its language's colour; neither colour is ever used for buttons, text or state.
 2. **Motion answers an action.** Unlocks, XP gains and duel wins animate; nothing animates on page load. Exceptions: the active node's pulse ("start here"), Byte's blinking cursor (Byte's idle sign of life), and the public landing page (`/`), where the hero, demos and section reveals animate on load and scroll to show the product in motion.
-3. **Everything is a sticker.** Pressable things and main cards have a 2 px Ink outline and a hard Ink shadow with no blur. Buttons and nodes drop 4 px on press and lose the shadow.
-4. **Not Duolingo.** No green, no rounded-blob cartoon style, no owl. Keep the game feel (path, XP, streaks), never its look.
+3. **Everything is a sticker.** Pressable things and main cards have a 2 px Ink outline and a hard Ink shadow with no blur. Buttons and nodes drop 4 px on press and lose the shadow. The one exception is the crew (§9): characters are illustrations, drawn flat with no outlines.
+4. **Duolingo's feel, our own look.** The developer asked for Duolingo-style characters and lessons (ADR-028, ADR-029): flat friendly people, one idea per screen, a fixed Continue bar, a finish screen. Still no green, no owl, and never their assets or characters.
 
 ## 2. Colour tokens
 
@@ -74,28 +74,38 @@ Wrap all motion in a `useReducedMotion()` check; with reduced motion, swap anima
 
 Shared class strings live in `components/ui/buttons.ts` (`primaryButton`, `secondaryButton`) and `components/ui/card.ts` (`stickerCard`, `flatCard`, `chip`).
 
-| Component             | Spec                                                                                                                                                                                                             |
-| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| PrimaryButton         | Orange fill, Ink text, Ink outline, `press` shadow                                                                                                                                                               |
-| SecondaryButton       | Paper fill, Ink text, Ink outline, `press` shadow                                                                                                                                                                |
-| StickerCard           | Paper, radius 16, Ink outline, `sticker` shadow. One per screen region                                                                                                                                           |
-| Chip                  | Caption text, Ink outline, radius 8. Lemon for labels and rewards, Pink for duels, Blue for "the path"                                                                                                           |
-| LessonNode            | 64 px circle, 3 px Ink outline. Locked: Paper / dashed border-muted / lock icon. Active: Orange / pulse / Lemon "Start here" chip. Done: Blue / white check                                                      |
-| LessonPath            | Hand-built SVG; nodes zig-zag down the page on a dotted border-muted track; the walked part is solid Blue. Course header card with a progress bar and Byte                                                       |
-| XpBadge / StreakBadge | Lemon chip, Orange-dark icon (lightning / flame), Ink numbers                                                                                                                                                    |
-| ProgressBar           | Surface track with an Ink outline; Orange fill for you, Pink for a rival; `ease-out` width change                                                                                                                |
-| TestResultRow         | Passed: Blue-tint row, Blue ✓. Failed: Paper row, Ink ✕, input / expected / actual for sample tests. Error output is an Ink "terminal" block                                                                     |
-| DuelHeader            | Ink band with `sticker` shadow, white text, Orange countdown, Pink opponent bar                                                                                                                                  |
-| EditorPanel           | Sticker card; Ink title bar with three dots (Orange, Lemon, Pink) and the file name; CodeMirror light theme, JetBrains Mono 14                                                                                   |
-| ByteSays              | Byte beside a Paper speech bubble with a tail; used for the lesson task                                                                                                                                          |
-| LessonStepper         | Learn · Check · Practice as three outlined tabs. Current: Ink; passed: Blue with a check; ahead: Paper. Any step can be opened (ADR-021)                                                                         |
-| LearnCards            | Sticker card, one card at a time: Lemon "Card n of m" chip, progress dots (walked Blue, current Orange pill), title, body, RunnableExample; Back / Next                                                          |
-| RunnableExample       | Compact EditorPanel (no shadow), secondary "Run it" button, Ink console labelled "Prints" (the content's output) until run, then "Output" (stderr in Pink)                                                       |
-| QuickCheck            | Sticker card with Byte (thinking → oops → happy), Lemon chip, Ink code block, A–D options with press shadows. Right: Blue-tint ✓; wrong: struck through ✕                                                        |
-| AppHeader (phone)     | Below `sm`: the top bar keeps the logo and streak/XP chips; links move to a fixed bottom tab bar (icon + short label, current tab Ink); page bottom padded                                                       |
-| WebPreview            | Outlined Paper panel, Surface "Live preview" bar with a Blue dot, white `<iframe sandbox="">`; redraws 300 ms after typing stops (ADR-024)                                                                       |
-| Checklist             | Web exercises: "Your page must", one outlined row per check. Before checking: dashed empty circle; then Blue-tint ✓ or Paper ✕. CSS errors in an Ink block                                                       |
-| Terminal              | Git exercises (ADR-026): Ink sticker card, "Terminal · practice mode" bar; `$ command` lines (Orange `$`), output in border-muted, Orange prompt `you@loophole:~/folder$`. ↑/↓ recall, `clear` clears the screen |
+| Component             | Spec                                                                                                                                                                                                                                                                                                                                         |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| PrimaryButton         | Orange fill, Ink text, Ink outline, `press` shadow                                                                                                                                                                                                                                                                                           |
+| SecondaryButton       | Paper fill, Ink text, Ink outline, `press` shadow                                                                                                                                                                                                                                                                                            |
+| StickerCard           | Paper, radius 16, Ink outline, `sticker` shadow. One per screen region                                                                                                                                                                                                                                                                       |
+| Chip                  | Caption text, Ink outline, radius 8. Lemon for labels and rewards, Pink for duels, Blue for "the path"                                                                                                                                                                                                                                       |
+| LessonNode            | 64 px circle, 3 px Ink outline. Locked: Paper / dashed border-muted / lock icon. Active: Orange / pulse / Lemon "Start here" chip. Done: Blue / white check                                                                                                                                                                                  |
+| LessonPath            | Hand-built SVG; nodes zig-zag down the page on a dotted border-muted track; the walked part is solid Blue. Course header card: CourseBanner, progress bar, "Badges n/m" row and the course's guide. Each unit header: UnitBadge, Lemon "Unit n · done/total" chip, title, Cheat sheet button. Ends at the CertificateStop                    |
+| XpBadge / StreakBadge | Lemon chip, Orange-dark icon (lightning / flame), Ink numbers                                                                                                                                                                                                                                                                                |
+| ProgressBar           | Surface track with an Ink outline; Orange fill for you, Pink for a rival; `ease-out` width change                                                                                                                                                                                                                                            |
+| TestResultRow         | Passed: Blue-tint row, Blue ✓. Failed: Paper row, Ink ✕, input / expected / actual for sample tests. Error output is an Ink "terminal" block                                                                                                                                                                                                 |
+| DuelHeader            | Ink band with `sticker` shadow, white text, Orange countdown, Pink opponent bar                                                                                                                                                                                                                                                              |
+| EditorPanel           | Sticker card; Ink title bar with three dots (Orange, Lemon, Pink) and the file name; CodeMirror light theme, JetBrains Mono 14                                                                                                                                                                                                               |
+| GuideSays             | A guide (full body, 80 × 112, 103 × 144 from `sm`) beside a Paper speech bubble with a tail: Learn cards, the quick check, the task                                                                                                                                                                                                          |
+| LessonTopBar          | The lesson's only header (ADR-029): ✕ back to the path, the course's LanguageTile, one ProgressBar (one notch per card, one for the check, one for practice), "Skip to practice" while learning                                                                                                                                              |
+| ActionBar             | Fixed to the screen's foot during Learn cards and the quick check (ADR-029); the page pads `pb-44`. Paper; Blue-tint after a right answer; Surface after a wrong one. Back as a text link on the left, the uppercase PrimaryButton on the right                                                                                              |
+| LearnCards            | One card at a time: the guide says the title and body in a GuideSays bubble, then the RunnableExample (one flat block, no card around it). Continue / Back in the ActionBar; the last card's button is "Quick check"                                                                                                                         |
+| RunnableExample       | Compact EditorPanel (no shadow), secondary "Run it" button, Ink console labelled "Prints" (the content's output) until run, then "Output" (stderr in Pink)                                                                                                                                                                                   |
+| QuickCheck            | The guide asks in a bubble (thinking → oops → happy) with a Lemon "Quick check" chip; Ink code block; A–D options with press shadows. Right: Blue-tint ✓; wrong: struck through ✕. The ActionBar gives the verdict and "Start the exercise"                                                                                                  |
+| LessonComplete        | Finish screen (ADR-029): sticker card, the guide cheering on their tint, "Lesson complete!", the guide's cheer, two stat boxes (Lemon "XP earned" counting up, Blue "Streak"), uppercase Continue, "Back to my code" link. Confetti only when XP was paid                                                                                    |
+| UnitBadge             | Hexagon with the unit number (ADR-030). Earned (every lesson done): Lemon, Ink outline, Orange-dark star. Not yet: Paper with a dashed border-muted outline                                                                                                                                                                                  |
+| CheatSheet            | Native `<dialog>` (ADR-030): Lemon header with the unit title and ✕, then each lesson's cards as outlined Canvas rows (title, body, Ink code block). Esc or the backdrop closes                                                                                                                                                              |
+| CertificateStop       | The path's last stop (ADR-030), on a dotted track: an 80 px circle with an award icon. Earned: Lemon, press shadow, links to `/c/<slug>`. Not yet: dashed, "Finish all n lessons to earn it"                                                                                                                                                 |
+| SpotTheBug            | Bug card (ADR-031): the guide asks in a bubble with a Pink "Spot the bug" chip (the duel colour: same skill); the code as an Ink block of line buttons (number, code). Wrong tap: that line struck through with ✕ in text-tertiary. Found or shown: Blue-tint line with a bug icon. Verdict and fix in the ActionBar; "Show me" after a miss |
+| BugHuntStop           | The last stop of a unit that has bug cards (ADR-031): a 56 px circle with a bug icon, "Bug hunt", "n bugs to find". Open (unit badge earned): Pink, press shadow, links to the hunt. Not yet: dashed, "Finish the unit to unlock"                                                                                                            |
+| Bug hunt page         | `/learn/[slug]/bug-hunt/[unitId]`: full screen like a lesson (LessonTopBar, SpotTheBug one bug at a time), then a finish screen like LessonComplete with "found n of m on the first try", Continue and "Hunt again". No XP                                                                                                                   |
+| AppHeader (phone)     | Below `sm`: the top bar keeps the logo and streak/XP chips; links move to a fixed bottom tab bar (icon + short label, current tab Ink); page bottom padded                                                                                                                                                                                   |
+| WebPreview            | Outlined Paper panel, Surface "Live preview" bar with a Blue dot, white `<iframe sandbox="">`; redraws 300 ms after typing stops (ADR-024)                                                                                                                                                                                                   |
+| Checklist             | Web exercises: "Your page must", one outlined row per check. Before checking: dashed empty circle; then Blue-tint ✓ or Paper ✕. CSS errors in an Ink block                                                                                                                                                                                   |
+| LanguageLogo / Tile   | A language's real logo in its own colours (Simple Icons paths, ADR-027). `LanguageTile` sticks it on a Paper square with an Ink outline: `sm` 28 px flat (lesson back link, landing strip), `md` 44 px and `lg` 64 px with `sticker-sm`. Unknown languages show their first letters in mono                                                  |
+| CourseBanner          | Hand-drawn SVG, 640 × 180, `xMaxYMid slice` so phones crop from the left: language tint, dotted track, four tilted code stickers (Paper, Lemon, Blue-tint, Pink with hard Ink shadows) and the logo on a big tilted Paper sticker. Tops each catalog card (112 px) and the course path header (128 / 160 px)                                 |
+| Terminal              | Git exercises (ADR-026): Ink sticker card, "Terminal · practice mode" bar; `$ command` lines (Orange `$`), output in border-muted, Orange prompt `you@loophole:~/folder$`. ↑/↓ recall, `clear` clears the screen                                                                                                                             |
 
 **Web lessons** use a `max-w-5xl` page with the editor and WebPreview side by side from `lg` (stacked below), while Learn cards and the quick check keep a `max-w-3xl` reading width. Code never shows font ligatures (`font-variant-ligatures: none`), so `<!--` and `>=` read as typed.
 
@@ -111,20 +121,31 @@ Tailwind v4 has no `tailwind.config.ts`; tokens are CSS variables in `@theme` bl
 
 - Do use Orange for one thing per screen region. Don't put three orange buttons side by side.
 - Do give a region one sticker card; nested blocks use `flatCard` or a Surface panel.
-- Do draw the lesson path and Byte by hand in SVG. Don't use a diagram library or an icon pack for them.
-- Don't copy Duolingo's or Coddy's assets, mascot, green palette or rounded-blob style.
+- Do draw the lesson path, the crew and Byte by hand in SVG. Don't use a diagram library or an icon pack for them.
+- Don't copy Duolingo's or Coddy's assets, characters, mascot or green palette.
 
-## 9. Brand: Byte and the logo
+## 9. Brand: the crew, Byte and the logo
 
-**Byte** is a small robot whose head is a terminal (`components/byte.tsx`). Antenna with an Orange ball, Ink head, `screen`-coloured display, two Ink feet. Its face is drawn on the screen:
+**The crew** (ADR-028, `components/guide.tsx`) are four young Indian learners, one guide per course. Each wears their course's colour and stands on its banner tint:
 
-| Mood       | Face                          | Use                                                        |
-| ---------- | ----------------------------- | ---------------------------------------------------------- |
-| `idle`     | `>` and a blinking `_` cursor | Default; course header, tutor panel at rest                |
-| `happy`    | `^ ^` with Pink cheeks        | Lesson complete, duel won, certificate, profile, final CTA |
-| `thinking` | three Lemon dots              | Tutor working, waiting in the duel queue, empty boards     |
-| `oops`     | `> <`                         | Errors, lost duels, the bug in the landing demo            |
+| Guide    | Course       | Look                                                                               | Cheer        |
+| -------- | ------------ | ---------------------------------------------------------------------------------- | ------------ |
+| Priya    | Python       | Braid over the shoulder, centre parting, gold jhumkas, blue kurti with yellow trim | Shabaash!    |
+| Arjun    | JavaScript   | Wavy black hair, round glasses, yellow hoodie                                      | Badhiya!     |
+| Meera    | HTML & CSS   | High ponytail, bindi, orange kurta with an embroidered neckline                    | Wah!         |
+| Harpreet | Git & GitHub | Orange turban, full beard and moustache, navy hoodie                               | Balle balle! |
 
-Byte voices the AI tutor ("Stuck? Ask Byte") and reads out each lesson's task in a `ByteSays` bubble. Pass `label` only when Byte carries meaning on its own; otherwise it is decorative and hidden from screen readers.
+`guideFor(language)` picks the guide; pages with no course (duels, login, errors) use Priya, and `CrewLineup` shows all four (profile, certificate, landing). Style: flat shapes, no outlines, a darker shade for hair and clothes, big white eyes, round tube limbs; `crop="bust"` for small spots. The mood is a face and a pose:
+
+| Mood       | Face and pose                                   | Use                                                      |
+| ---------- | ----------------------------------------------- | -------------------------------------------------------- |
+| `idle`     | Smile, arms down                                | Default; Learn cards, the task, the course header        |
+| `happy`    | ^ ^ eyes, open laugh, pink cheeks, both arms up | Right answer, lesson complete, profile, certificate, CTA |
+| `thinking` | Eyes up, hand on chin, three Lemon thought dots | Quick check, tutor working, duel queue, empty boards     |
+| `oops`     | Wide eyes, "o" mouth, a shrug, a sweat drop     | Wrong answer, errors, lost duels, the landing demo's bug |
+
+The guide voices the AI tutor ("Stuck? Ask Priya") and reads out each lesson's task. Pass `label` only when the guide carries meaning on their own; otherwise they are decorative and hidden from screen readers.
+
+**Byte** (`components/byte.tsx`) is a small robot whose head is a terminal: Ink head, `screen`-coloured display with an Orange `>_` prompt and a blinking cursor. Since ADR-028 Byte is only the logo mark and app icon.
 
 **Logo** (`components/logo.tsx`): Byte's head (`variant="mark"`, no feet) followed by the wordmark "loophole" in Bricolage Grotesque 800, all lowercase, Ink. **App icon** (`apps/web/app/icon.svg`): Byte's screen alone on an Ink rounded square, sized for a browser tab.

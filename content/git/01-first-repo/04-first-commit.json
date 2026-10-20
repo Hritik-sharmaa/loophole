@@ -12,6 +12,15 @@
       {
         "title": "Good messages",
         "body": "Write messages that finish the sentence \"This commit will…\": `Add home page`, `Fix the menu link`. Short and specific beats \"stuff\"."
+      },
+      {
+        "title": "Spot the bug",
+        "body": "Git refuses this commit. Which line is wrong?",
+        "code": "git init\ntouch index.html\ngit add index.html\ngit commit \"Add home page\"\n",
+        "bug": {
+          "line": 4,
+          "fix": "The message goes after `-m`: `git commit -m \"Add home page\"`."
+        }
       }
     ],
     "check": {

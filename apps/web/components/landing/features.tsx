@@ -12,14 +12,14 @@ const FEATURES = [
     tile: 'bg-blue-tint',
     tilt: '-rotate-1',
     title: 'Real code, real grading',
-    body: 'Write Python in the browser. A sandbox runs it against tests in seconds and shows exactly what passed.',
+    body: 'Write real code in the browser. A sandbox runs it against tests in seconds and shows exactly what passed.',
   },
   {
     icon: Lightbulb,
     tile: 'bg-pink',
     tilt: 'rotate-1',
     title: 'Hints that don’t spoil it',
-    body: 'Stuck? Byte, the AI tutor, explains your error and nudges you forward, without ever handing you the answer.',
+    body: 'Stuck? Your course guide, the AI tutor, explains your error and nudges you forward, without ever handing you the answer.',
   },
   {
     icon: Flame,

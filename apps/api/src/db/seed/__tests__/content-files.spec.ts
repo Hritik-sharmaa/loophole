@@ -6,6 +6,7 @@ import {
   loadAllContent,
   loadDuelProblems,
   parseDuelProblem,
+  parseLearn,
   parseLesson,
 } from '../content-files.js';
 import { gradeGit } from '../../../modules/git/git-checks.js';
@@ -118,6 +119,16 @@ describe('the real content/ folder', () => {
     }
   });
 
+  // ADR-031: every first-unit lesson ends its cards with a bug to spot.
+  it('gives every first-unit lesson a spot-the-bug card', () => {
+    for (const course of loadAllContent(REAL_CONTENT)) {
+      for (const lesson of course.units[0].lessons) {
+        const bugs = lesson.learn?.cards.filter((c) => c.bug) ?? [];
+        expect(bugs, `${course.slug}/${lesson.slug}`).toHaveLength(1);
+      }
+    }
+  });
+
   // ADR-021: every lesson teaches before it tests.
   it('gives every lesson a Learn step', () => {
     for (const course of loadAllContent(REAL_CONTENT)) {
@@ -166,8 +177,64 @@ describe('parseLearn', () => {
     expect(lesson.learn?.check.answer).toBe(0);
   });
 
+  it('accepts a spot-the-bug card in any course language', () => {
+    const bugCard = {
+      title: 'Spot the bug',
+      body: 'Tap the wrong line.',
+      code: 'a = 1\nprint(b)\n',
+      bug: { line: 2, fix: 'There is no `b`.' },
+    };
+    for (const kind of ['program', 'web', 'git'] as const) {
+      const learn = parseLearn(
+        { ...validLearn, cards: [bugCard] },
+        'x.json',
+        kind,
+      );
+      expect(learn.cards[0]).toEqual(bugCard);
+    }
+  });
+
   it.each([
     ['no cards', { ...validLearn, cards: [] }, /learn\.cards needs 1 to 5/],
+    [
+      'a bug line past the end of the code',
+      {
+        ...validLearn,
+        cards: [
+          {
+            title: 'x',
+            body: 'y',
+            code: 'a = 1\nb = 2\n',
+            bug: { line: 3, fix: 'z' },
+          },
+        ],
+      },
+      /learn\.cards\[0\]\.bug\.line must be a whole number from 1 to 2/,
+    ],
+    [
+      'a bug card that tries to run',
+      {
+        ...validLearn,
+        cards: [
+          {
+            title: 'x',
+            body: 'y',
+            code: 'print(1)\n',
+            output: '1',
+            bug: { line: 1, fix: 'z' },
+          },
+        ],
+      },
+      /a bug card has no input or output/,
+    ],
+    [
+      'a bug card without a fix',
+      {
+        ...validLearn,
+        cards: [{ title: 'x', body: 'y', code: 'a\n', bug: { line: 1 } }],
+      },
+      /bug\.fix/,
+    ],
     [
       'an example without its output',
       {

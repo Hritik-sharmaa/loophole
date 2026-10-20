@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { AppHeader } from '@/components/app-header';
-import { Byte } from '@/components/byte';
+import { Guide } from '@/components/guide';
 import { CodeEditor } from '@/components/code-editor';
 import { DuelCountdown } from '@/components/duel-countdown';
 import { InlineCode } from '@/components/inline-code';
@@ -90,7 +90,12 @@ function Lobby({
       className={`${stickerCard} flex flex-col items-center gap-6 px-6 py-12 text-center`}
     >
       <div className="flex items-end gap-4">
-        <Byte mood={queued ? 'thinking' : 'idle'} className="size-20" />
+        {/* Duels are Python (content/duels/python), so Priya hosts them. */}
+        <Guide
+          guide="priya"
+          mood={queued ? 'thinking' : 'idle'}
+          className="h-28 w-20"
+        />
         <span className="flex size-14 -rotate-6 items-center justify-center rounded-card border-2 border-ink bg-pink shadow-sticker-sm">
           <Swords className="size-7" strokeWidth={2.5} aria-hidden />
         </span>
@@ -286,9 +291,10 @@ function Outcome({
       role="status"
       className={`${stickerOutline} flex flex-wrap items-center justify-between gap-4 px-6 py-4 ${won ? 'bg-lemon' : 'bg-paper'}`}
     >
-      <Byte
+      <Guide
+        guide="priya"
         mood={won ? 'happy' : end.result === 'draw' ? 'idle' : 'oops'}
-        className="size-16 shrink-0"
+        className="h-24 w-[68px] shrink-0"
       />
       <div className="mr-auto">
         <p className="font-display text-3xl font-extrabold">{title}</p>
@@ -339,7 +345,7 @@ function Offline({ message }: { message?: string }) {
       role="alert"
       className={`${stickerCard} flex flex-col items-center gap-4 px-6 py-12 text-center`}
     >
-      <Byte mood="oops" className="size-20" />
+      <Guide guide="priya" mood="oops" className="h-28 w-20" />
       <p className="font-display text-2xl font-extrabold">
         Can&apos;t reach the duel server
       </p>

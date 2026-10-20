@@ -23,6 +23,15 @@
         "code": "name = input()\nprint(\"Hello, \" + name + \".\")\n",
         "input": "Grace\n",
         "output": "Hello, Grace."
+      },
+      {
+        "title": "Spot the bug",
+        "body": "It should greet the name you type in, but Python stops with a `NameError`. Which line is wrong?",
+        "code": "name = input()\ngreeting = \"Hi, \" + name\nprint(greting)\n",
+        "bug": {
+          "line": 3,
+          "fix": "Line 3 asks for `greting`, but the variable is called `greeting`. Python only knows the names you have made."
+        }
       }
     ],
     "check": {

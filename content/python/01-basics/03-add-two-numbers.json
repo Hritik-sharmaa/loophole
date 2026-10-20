@@ -23,6 +23,15 @@
         "body": "`print()` works with numbers and with whole calculations.",
         "code": "print(7 + 1)\nprint(10 - 3)\n",
         "output": "8\n7"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "It should add two numbers, but it crashes. The error points at line 3: tap the line that really causes it.",
+        "code": "a = int(input())\nb = input()\nprint(a + b)\n",
+        "bug": {
+          "line": 2,
+          "fix": "`input()` gives text, so `b` is text and `a + b` can't add it to a number. Line 2 needs `int(input())`, like line 1."
+        }
       }
     ],
     "check": {

@@ -4,6 +4,8 @@ import type {
   CourseOverview,
   CoursePath,
   LessonDetail,
+  UnitBugHunt,
+  UnitCheatSheet,
 } from '@loophole/shared';
 import { count } from 'drizzle-orm';
 import request from 'supertest';
@@ -128,6 +130,81 @@ describe('Lessons (e2e)', () => {
     expect(states[0]).toBe('active');
     expect(states.slice(1).every((s) => s === 'locked')).toBe(true);
     expect(path.units[0].lessons[0].title).toBe('Hello, world');
+    // No certificate yet (ADR-030).
+    expect(path.certificateSlug).toBeNull();
+  });
+
+  it('GET /courses/:slug/units/:unitId/cheatsheet gathers a unit’s Learn cards', async () => {
+    // Unit 2 is still locked for this user: cheat sheets are open anyway.
+    const unit = path.units[1];
+    const sheet = (await get(
+      `/courses/python/units/${unit.id}/cheatsheet`,
+      200,
+    )) as UnitCheatSheet;
+
+    expect(sheet.unitId).toBe(unit.id);
+    expect(sheet.title).toBe('Making decisions');
+    expect(sheet.lessons.map((l) => l.title)).toEqual(
+      unit.lessons.map((l) => l.title),
+    );
+    const first = (
+      (await get(
+        `/courses/python/units/${path.units[0].id}/cheatsheet`,
+        200,
+      )) as UnitCheatSheet
+    ).lessons[0];
+    expect(first.title).toBe('Hello, world');
+    expect(first.cards[0]).toEqual({
+      title: 'Your first line of Python',
+      body: expect.stringContaining('print()') as string,
+      code: 'print("Hello!")\n',
+    });
+    // Teaching cards only: no outputs to run, no quick checks.
+    expect(findKeys(sheet, /^(output|input|check|answer)$/)).toEqual([]);
+  });
+
+  it('GET /courses/:slug/units/:unitId/bug-hunt lists the unit’s bug cards (ADR-031)', async () => {
+    // The path says how long each unit's Bug hunt is.
+    expect(path.units[0].bugs).toBe(6);
+    expect(path.units[1].bugs).toBe(0);
+
+    const hunt = (await get(
+      `/courses/python/units/${path.units[0].id}/bug-hunt`,
+      200,
+    )) as UnitBugHunt;
+    expect(hunt.title).toBe('The basics');
+    expect(hunt.bugs).toHaveLength(6);
+    expect(hunt.bugs[0]).toMatchObject({
+      lesson: 'Hello, world',
+      title: 'Spot the bug',
+      bug: { line: 2 },
+    });
+    // Every bug points at a real line of its code.
+    for (const { code, bug } of hunt.bugs) {
+      expect(bug.line).toBeLessThanOrEqual(code.trimEnd().split('\n').length);
+    }
+
+    // Cheat sheets keep to the teaching cards.
+    const sheet = (await get(
+      `/courses/python/units/${path.units[0].id}/cheatsheet`,
+      200,
+    )) as UnitCheatSheet;
+    expect(sheet.lessons[0].cards.map((c) => c.title)).not.toContain(
+      'Spot the bug',
+    );
+    expect(findKeys(sheet, /^bug$/)).toEqual([]);
+
+    await get(`/courses/javascript/units/${path.units[0].id}/bug-hunt`, 404);
+  });
+
+  it('a cheat sheet 404s for a unit of another course, 400 for a bad id', async () => {
+    const pythonUnit = path.units[0].id;
+    const body = await get(
+      `/courses/javascript/units/${pythonUnit}/cheatsheet`,
+      404,
+    );
+    expect(body).toMatchObject({ error: { code: 'NOT_FOUND' } });
+    await get('/courses/python/units/not-a-uuid/cheatsheet', 400);
   });
 
   it('GET /lessons/:id returns the active lesson with sample tests', async () => {

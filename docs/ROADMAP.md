@@ -107,6 +107,12 @@ Loop for every slice: AI **writes** the slice → you **review** and change it �
 - [x] JavaScript track: 20 lessons, Node 20 in Piston, `prompt()` for input (ADR-025)
 - [ ] Re-test Node run times on the VPS (Docker Desktop stalls some Node starts past 3 s; ADR-025)
 - [x] Git & GitHub track: 15 lessons in a simulated terminal and repository (ADR-026)
+- [x] Language logos, a banner per course, new tagline (ADR-027)
+- [x] The crew: four Indian guides, one per course; Byte becomes the logo (ADR-028)
+- [x] Full-screen lessons with a fixed Continue bar and a finish screen (ADR-029)
+- [x] Unit badges, cheat sheets and a certificate stop on the course page (ADR-030)
+- [x] Spot-the-bug cards in every first-unit lesson, and a Bug hunt review per unit (ADR-031)
+- [ ] Spot-the-bug cards for the remaining units (CONTENT_GUIDE "Spot-the-bug cards")
 - [ ] Playwright e2e for J-1 and J-3; deploy step in GitHub Actions
 - [ ] Scalability, only if needed: see `ARCHITECTURE.md` §5
 - [ ] Stretch: replay (FR-27), bug of the day (FR-28), spectate (FR-29), JavaScript track (FR-30)

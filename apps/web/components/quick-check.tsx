@@ -1,45 +1,53 @@
 'use client';
 
 import type { QuickCheck as QuickCheckData } from '@loophole/shared';
-import { ArrowRight, Check, X } from 'lucide-react';
+import { Check, X } from 'lucide-react';
 import { useState } from 'react';
-import { Byte } from '@/components/byte';
+import { ActionBar } from '@/components/action-bar';
+import { GuideSays, type GuideId } from '@/components/guide';
 import { InlineCode } from '@/components/inline-code';
 import { primaryButton } from '@/components/ui/buttons';
-import { chip, stickerCard } from '@/components/ui/card';
+import { chip } from '@/components/ui/card';
 
 // The Learn step's one question (ADR-021). Ungraded and unrecorded: the
 // answer is checked here in the browser, and a wrong pick just says try
-// again. Passed answers use Blue (done), wrong ones Ink ✕ (DESIGN_SYSTEM §2).
+// again. The verdict shows in the bottom bar (ADR-029): Blue-tint when
+// right, Surface when wrong (DESIGN_SYSTEM §2: no red).
 export function QuickCheck({
+  guide,
   check,
   onDone,
 }: {
+  guide: GuideId;
   check: QuickCheckData;
   onDone: () => void;
 }) {
   const [wrong, setWrong] = useState<Set<number>>(new Set());
   const [solved, setSolved] = useState(false);
+  // The most recent pick: the bar answers that one.
+  const [lastWrong, setLastWrong] = useState(false);
 
   function pick(i: number) {
     if (solved) return;
-    if (i === check.answer) setSolved(true);
-    else setWrong((w) => new Set(w).add(i));
+    if (i === check.answer) {
+      setSolved(true);
+      setLastWrong(false);
+    } else {
+      setWrong((w) => new Set(w).add(i));
+      setLastWrong(true);
+    }
   }
 
-  const mood = solved ? 'happy' : wrong.size > 0 ? 'oops' : 'thinking';
+  const mood = solved ? 'happy' : lastWrong ? 'oops' : 'thinking';
 
   return (
-    <section className={`${stickerCard} flex flex-col gap-5 p-5 sm:p-6`}>
-      <div className="flex items-center gap-3">
-        <Byte mood={mood} className="size-14 shrink-0" />
-        <div className="flex flex-col items-start gap-1">
-          <span className={`${chip} bg-lemon text-ink`}>Quick check</span>
-          <h2 className="font-display text-2xl font-extrabold">
-            {check.question}
-          </h2>
-        </div>
-      </div>
+    <section className="flex flex-col gap-6">
+      <GuideSays guide={guide} mood={mood}>
+        <span className={`${chip} bg-lemon text-ink`}>Quick check</span>
+        <h2 className="mt-2 font-display text-xl font-extrabold sm:text-2xl">
+          {check.question}
+        </h2>
+      </GuideSays>
 
       {check.code && (
         <pre className="overflow-x-auto rounded-card border-2 border-ink bg-ink px-4 py-3 font-mono text-sm leading-6 text-canvas">
@@ -47,7 +55,7 @@ export function QuickCheck({
         </pre>
       )}
 
-      <ul className="grid gap-2 sm:grid-cols-2">
+      <ul className="grid gap-3 sm:grid-cols-2">
         {check.options.map((option, i) => {
           const isAnswer = solved && i === check.answer;
           const isWrong = wrong.has(i);
@@ -82,30 +90,33 @@ export function QuickCheck({
         })}
       </ul>
 
-      <div aria-live="polite">
-        {solved ? (
-          <div className="flex flex-col gap-4">
-            <p className="rounded-card border-2 border-ink bg-blue-tint px-4 py-3">
-              <span className="font-bold">That&apos;s it! </span>
+      <ActionBar tone={solved ? 'right' : lastWrong ? 'wrong' : 'plain'}>
+        <div aria-live="polite" className="min-w-0 flex-1 basis-60">
+          {solved ? (
+            <p>
+              <span className="flex items-center gap-1 font-display text-lg font-extrabold">
+                <Check className="size-5 text-blue" strokeWidth={3.5} />
+                That&apos;s it!
+              </span>
               <InlineCode text={check.explanation} />
             </p>
-            <button
-              type="button"
-              onClick={onDone}
-              className={`${primaryButton} self-start`}
-            >
-              Start the exercise
-              <ArrowRight className="size-4" strokeWidth={3} aria-hidden />
-            </button>
-          </div>
-        ) : (
-          wrong.size > 0 && (
+          ) : lastWrong ? (
             <p className="font-bold">
               Not quite. Look at the code again and try another answer.
             </p>
-          )
-        )}
-      </div>
+          ) : (
+            <p className="font-bold text-text-secondary">Pick an answer.</p>
+          )}
+        </div>
+        <button
+          type="button"
+          onClick={onDone}
+          disabled={!solved}
+          className={`${primaryButton} min-w-40 uppercase sm:min-w-52`}
+        >
+          Start the exercise
+        </button>
+      </ActionBar>
     </section>
   );
 }

@@ -1,7 +1,6 @@
-import type { ReactNode } from 'react';
-
-// Byte, Loophole's mascot (docs/DESIGN_SYSTEM.md §9): a small robot whose
-// face is a terminal. Its eyes are a `>_` prompt; the mood changes the
+// Byte (docs/DESIGN_SYSTEM.md §9): a small robot whose face is a
+// terminal. Since the crew arrived (ADR-028) Byte is the logo and app icon
+// only. Its eyes are a `>_` prompt; the mood changes the
 // screen. Hand-drawn SVG, coloured from the design tokens.
 
 export type ByteMood = 'idle' | 'happy' | 'thinking' | 'oops';
@@ -135,30 +134,5 @@ export function Byte({
         </>
       )}
     </svg>
-  );
-}
-
-// Byte with a speech bubble beside it: how Byte talks to the learner.
-export function ByteSays({
-  mood = 'idle',
-  children,
-  className = '',
-}: {
-  mood?: ByteMood;
-  children: ReactNode;
-  className?: string;
-}) {
-  return (
-    <div className={`flex items-end gap-3 ${className}`}>
-      <Byte mood={mood} className="size-16 shrink-0" />
-      <div className="relative min-w-0 flex-1 rounded-card border-2 border-ink bg-paper px-4 py-3 shadow-sticker-sm">
-        {/* The bubble's tail, pointing at Byte. */}
-        <span
-          aria-hidden
-          className="absolute bottom-4 -left-[9px] size-4 rotate-45 border-b-2 border-l-2 border-ink bg-paper"
-        />
-        <div className="relative">{children}</div>
-      </div>
-    </div>
   );
 }

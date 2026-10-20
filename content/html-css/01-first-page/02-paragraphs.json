@@ -13,6 +13,15 @@
         "title": "Spaces get squashed",
         "body": "HTML turns extra spaces and line breaks into a single space. To start a new paragraph, use a new `<p>`.",
         "code": "<p>This    has     lots\nof    spaces.</p>"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "One line uses a tag that does not exist. Tap it.",
+        "code": "<h1>Pancakes</h1>\n<p>Mix the flour and milk.</p>\n<h>Cook for two minutes.</h>\n",
+        "bug": {
+          "line": 3,
+          "fix": "There is no `<h>` tag. A paragraph is `<p>`, so line 3 should be `<p>Cook for two minutes.</p>`."
+        }
       }
     ],
     "check": {

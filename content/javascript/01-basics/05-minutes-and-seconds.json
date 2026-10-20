@@ -21,6 +21,15 @@
         "body": "Give `console.log()` several values separated by commas and it prints them with one space between each.",
         "code": "const weeks = Math.floor(10 / 7);\nconst days = 10 % 7;\nconsole.log(weeks, \"week\", days, \"days\");\n",
         "output": "1 week 3 days"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "For 150 seconds it should print `2 30`, but it prints `2.5 30`. Tap the bug.",
+        "code": "const total = Number(prompt());\nconst minutes = total / 60;\nconst seconds = total % 60;\nconsole.log(minutes, seconds);\n",
+        "bug": {
+          "line": 2,
+          "fix": "`total / 60` keeps the decimals. Round down with `Math.floor(total / 60)`."
+        }
       }
     ],
     "check": {

@@ -19,6 +19,15 @@
       {
         "title": "const protects values",
         "body": "Assigning to a `const` again is an error. Use `const` for values you never mean to change, and `let` only when you do."
+      },
+      {
+        "title": "Spot the bug",
+        "body": "It stops with `TypeError: Assignment to constant variable.` Which line needs to change?",
+        "code": "const score = 0;\nscore = score + 10;\nconsole.log(score);\n",
+        "bug": {
+          "line": 1,
+          "fix": "A `const` can never get a new value, and line 2 changes `score`. Line 1 should use `let`."
+        }
       }
     ],
     "check": {

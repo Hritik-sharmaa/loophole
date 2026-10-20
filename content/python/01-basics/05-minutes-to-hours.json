@@ -21,6 +21,15 @@
         "body": "Give `print()` several values separated by commas and it puts one space between each.",
         "code": "days = 10 // 7\nleft = 10 % 7\nprint(days, \"week\", left, \"days\")\n",
         "output": "1 week 3 days"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "For 150 minutes it should print `2 30`, but it prints `2.5 30`. Which line is wrong?",
+        "code": "minutes = int(input())\nhours = minutes / 60\nleft = minutes % 60\nprint(hours, left)\n",
+        "bug": {
+          "line": 2,
+          "fix": "`/` gives a decimal like `2.5`. Whole hours need floor division: `minutes // 60`."
+        }
       }
     ],
     "check": {

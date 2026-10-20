@@ -4,10 +4,12 @@ import type { CourseOverview } from '@loophole/shared';
 import { ArrowRight, Lock } from 'lucide-react';
 import Link from 'next/link';
 import { AppHeader } from '@/components/app-header';
-import { ByteSays } from '@/components/byte';
+import { CourseBanner } from '@/components/course-banner';
+import { GUIDES, Guide, GuideSays, guideFor } from '@/components/guide';
+import { LanguageTile } from '@/components/language-logo';
 import { ProgressBar } from '@/components/progress-bar';
 import { primaryButton, secondaryButton } from '@/components/ui/buttons';
-import { chip, stickerCard, stickerOutline } from '@/components/ui/card';
+import { chip, stickerOutline } from '@/components/ui/card';
 import { useCourses } from '@/lib/queries/use-lessons';
 import { useMe } from '@/lib/queries/use-me';
 import { useRequireSession } from '@/lib/use-require-session';
@@ -15,15 +17,8 @@ import { useRequireSession } from '@/lib/use-require-session';
 // Tracks announced but not seeded yet (ADR-023), shown so learners can see
 // what is coming. Every agreed track is live now; add an entry here when a
 // new one is planned, and delete it once its course is seeded.
-const COMING_SOON: { title: string; mark: string; description: string }[] = [];
-
-// The short mark on each course's tile, by course language.
-const MARKS: Record<string, string> = {
-  python: 'py',
-  html: '</>',
-  javascript: 'js',
-  git: 'git',
-};
+const COMING_SOON: { title: string; language: string; description: string }[] =
+  [];
 
 // The signed-in home (ADR-023): continue the current course, or pick one.
 export default function LearnPage() {
@@ -41,12 +36,12 @@ export default function LearnPage() {
     <>
       <AppHeader />
       <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-10 px-4 py-8 sm:px-6 sm:py-10">
-        <ByteSays mood="happy">
+        <GuideSays guide={guideFor(current?.language)} mood="happy">
           <p className="font-display text-xl font-extrabold sm:text-2xl">
             {me.data ? `Hi, ${me.data.username}!` : 'Hi!'}{' '}
             {current ? 'Ready to keep going?' : 'What do you want to learn?'}
           </p>
-        </ByteSays>
+        </GuideSays>
 
         {loading || courses.isPending ? (
           <p className="text-center text-text-secondary">
@@ -90,7 +85,7 @@ function ContinueCard({ course }: { course: CourseOverview }) {
     <section
       className={`${stickerOutline} flex flex-col gap-4 bg-lemon p-5 sm:flex-row sm:items-center sm:p-6`}
     >
-      <CourseMark mark={MARKS[course.language] ?? course.language} />
+      <LanguageTile language={course.language} size="lg" />
       <div className="flex min-w-0 flex-1 flex-col gap-2">
         <p className="text-xs font-bold tracking-wide uppercase">
           Continue where you left off
@@ -119,37 +114,57 @@ function CourseCard({ course }: { course: CourseOverview }) {
   const done = course.completedCount;
   const finished = course.lessonCount > 0 && done >= course.lessonCount;
   const action = finished ? 'Review' : done > 0 ? 'Continue' : 'Start';
+  const guide = guideFor(course.language);
 
   return (
     <article
-      className={`${stickerCard} flex h-full flex-col gap-4 p-5`}
+      className={`${stickerOutline} flex h-full flex-col overflow-hidden bg-paper`}
       aria-label={course.title}
     >
-      <div className="flex items-center gap-3">
-        <CourseMark mark={MARKS[course.language] ?? course.language} small />
-        <h3 className="font-display text-xl font-extrabold">{course.title}</h3>
-      </div>
-      {course.description && (
-        <p className="text-text-secondary">{course.description}</p>
-      )}
-      <div className="mt-auto flex flex-col gap-2">
-        <ProgressBar
-          value={done}
-          max={course.lessonCount}
-          label={`${course.title} progress`}
-        />
-        <p className="text-sm font-bold text-text-secondary">
-          {finished
-            ? `All ${course.lessonCount} lessons done`
-            : `${done} of ${course.lessonCount} lessons done`}
+      {/* Each course's own banner, like a land on a map (ADR-027). */}
+      <CourseBanner
+        language={course.language}
+        className="h-28 border-b-2 border-ink"
+      />
+      <div className="flex flex-1 flex-col gap-4 p-5">
+        <div className="flex items-center gap-3">
+          <LanguageTile language={course.language} />
+          <h3 className="font-display text-xl font-extrabold">
+            {course.title}
+          </h3>
+        </div>
+        {course.description && (
+          <p className="text-text-secondary">{course.description}</p>
+        )}
+        <p className="flex items-center gap-2 text-sm font-bold">
+          <Guide
+            guide={guide}
+            crop="bust"
+            className="size-9 rounded-node border-2 border-ink"
+            // The tint behind the face, like their course banner.
+            style={{ backgroundColor: GUIDES[guide].tint }}
+          />
+          Taught by {GUIDES[guide].name}
         </p>
+        <div className="mt-auto flex flex-col gap-2">
+          <ProgressBar
+            value={done}
+            max={course.lessonCount}
+            label={`${course.title} progress`}
+          />
+          <p className="text-sm font-bold text-text-secondary">
+            {finished
+              ? `All ${course.lessonCount} lessons done`
+              : `${done} of ${course.lessonCount} lessons done`}
+          </p>
+        </div>
+        <Link
+          href={`/learn/${course.slug}`}
+          className={`${secondaryButton} self-start`}
+        >
+          {action} <ArrowRight className="size-4" strokeWidth={3} />
+        </Link>
       </div>
-      <Link
-        href={`/learn/${course.slug}`}
-        className={`${secondaryButton} self-start`}
-      >
-        {action} <ArrowRight className="size-4" strokeWidth={3} />
-      </Link>
     </article>
   );
 }
@@ -157,11 +172,11 @@ function CourseCard({ course }: { course: CourseOverview }) {
 // Not a sticker yet: dashed outline, like a locked lesson node.
 function ComingSoonCard({
   title,
-  mark,
+  language,
   description,
 }: {
   title: string;
-  mark: string;
+  language: string;
   description: string;
 }) {
   return (
@@ -170,7 +185,9 @@ function ComingSoonCard({
       aria-label={`${title}, coming soon`}
     >
       <div className="flex items-center gap-3">
-        <CourseMark mark={mark} small muted />
+        <span className="opacity-50">
+          <LanguageTile language={language} />
+        </span>
         <h3 className="font-display text-xl font-extrabold text-text-secondary">
           {title}
         </h3>
@@ -180,25 +197,5 @@ function ComingSoonCard({
         <Lock className="size-3" strokeWidth={3} aria-hidden /> Coming soon
       </span>
     </article>
-  );
-}
-
-// A course's tile: its short mark in Byte's screen colours.
-function CourseMark({
-  mark,
-  small = false,
-  muted = false,
-}: {
-  mark: string;
-  small?: boolean;
-  muted?: boolean;
-}) {
-  return (
-    <span
-      aria-hidden
-      className={`flex shrink-0 items-center justify-center rounded-card border-2 font-mono font-bold ${small ? 'size-11 text-sm' : 'size-16 text-xl'} ${muted ? 'border-border-muted bg-surface text-text-secondary' : 'border-ink bg-ink text-orange'}`}
-    >
-      {mark}
-    </span>
   );
 }

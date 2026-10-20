@@ -12,6 +12,15 @@
       {
         "title": "Keep secrets out",
         "body": "Passwords and keys must never be committed: once a commit is shared, everyone can read it, forever."
+      },
+      {
+        "title": "Spot the bug",
+        "body": "This should take `secret.txt` back out of staging, but it does not. Tap the bug.",
+        "code": "git init\ntouch index.html secret.txt\ngit add .\ngit restore secret.txt\ngit status\n",
+        "bug": {
+          "line": 4,
+          "fix": "To unstage a file, add `--staged`: `git restore --staged secret.txt`."
+        }
       }
     ],
     "check": {

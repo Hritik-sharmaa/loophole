@@ -5,7 +5,7 @@ import type { MetadataRoute } from 'next';
 // status bar so it matches the app header.
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Loophole — learn to code, one bug at a time',
+    name: 'Loophole — learn to code, then out-code your friends',
     short_name: 'Loophole',
     description:
       'Bite-sized coding lessons with real code, instant grading, AI hints, streaks, and live 1v1 debugging duels.',

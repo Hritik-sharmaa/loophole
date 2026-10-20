@@ -92,6 +92,27 @@ Every lesson teaches before it tests. Put a `learn` block between `position` and
 - **Check before committing:** run every example and the check through Piston, and confirm each `output` (and the right option) matches exactly. The Python track's 133 programs were checked this way.
 - `content-files.spec.ts` checks the shape in CI and that every lesson has a `learn` block.
 
+### Spot-the-bug cards (ADR-031)
+
+A card with a `bug` is a spot-the-bug card: short code with exactly one wrong line, which the learner taps. It works in every course language, is never run (so no `input` or `output`), pays nothing and is checked in the browser like the quick check.
+
+```json
+{
+  "title": "Spot the bug",
+  "body": "Give it 3 and 4 and it prints 7 instead of 12. Which line is wrong?",
+  "code": "width = int(input())\nheight = int(input())\narea = width + height\nprint(area)\n",
+  "bug": {
+    "line": 3,
+    "fix": "Area is width times height. Line 3 should multiply with `*`, not add with `+`."
+  }
+}
+```
+
+- `line` is 1-based and must be a line of `code`; `fix` says what is wrong and how to fix it, in one or two sentences.
+- **One bug only**, using only what the lesson (or earlier ones) taught. The body says the symptom ("prints 7 instead of 12", "stops with a `NameError`") so the learner reasons from it; when the error points at a different line than the cause, say so.
+- Put it last, after the teaching cards, so it practises what they just taught. It counts toward the 1–5 cards.
+- Bug cards stay out of the unit's cheat sheet and make up its **Bug hunt**, the review at the end of the unit. Every lesson of each course's first unit has one; `content-files.spec.ts` checks that.
+
 ### Grading rule
 
 Each test runs the program with `input` as stdin. It passes when **trimmed stdout equals trimmed `expectedOutput`** (trailing whitespace and a final newline ignored). Exact match, not "contains".
