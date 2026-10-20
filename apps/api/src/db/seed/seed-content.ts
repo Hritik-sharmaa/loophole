@@ -76,10 +76,15 @@ async function seedCourse(
       slug: course.slug,
       title: course.title,
       language: course.language,
+      description: course.description,
     })
     .onConflictDoUpdate({
       target: courses.slug,
-      set: { title: course.title, language: course.language },
+      set: {
+        title: course.title,
+        language: course.language,
+        description: course.description,
+      },
     })
     .returning({ id: courses.id });
   summary.courses++;

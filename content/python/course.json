@@ -1,1 +1,6 @@
-{ "slug": "python", "title": "Python Basics", "language": "python" }
+{
+  "slug": "python",
+  "title": "Python Basics",
+  "language": "python",
+  "description": "Start from zero: print, variables, decisions, loops, text, lists, functions and dictionaries, in 40 bite-sized lessons."
+}

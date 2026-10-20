@@ -21,7 +21,7 @@ A Duolingo-style platform for learning to code, with live 1v1 debugging duels as
 
 ## 3. Non-goals for v1
 
-More than one language track · non-coding spaces · teacher portal · payments · native mobile apps · analytics dashboards.
+Non-coding spaces · teacher portal · payments · native mobile apps (the installable PWA covers phones, ADR-022) · analytics dashboards. ~~More than one language track~~: lifted by ADR-023; tracks are added one at a time (HTML & CSS, JavaScript, Git & GitHub).
 
 ## 4. Personas
 
@@ -58,6 +58,7 @@ More than one language track · non-coding spaces · teacher portal · payments 
 | FR-04 | Lesson path shows locked / active / completed nodes; only the next node unlocks | Must     | Opening a locked lesson returns 403                           |
 | FR-05 | Exercise page shows prompt, starter code, editor, sample tests                  | Must     | Sample tests visible; hidden tests never in any response      |
 | FR-16 | Content loaded from seed files, re-runnable without duplicates                  | Must     | Running the seed twice leaves the same row count              |
+| FR-31 | Course catalog: every course with the user's progress; continue the latest one  | Must     | `GET /courses` returns counts per user; started courses first |
 
 ### 6.3 Submissions and grading
 

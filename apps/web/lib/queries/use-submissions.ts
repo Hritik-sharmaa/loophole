@@ -35,8 +35,10 @@ export function useSubmit() {
         queryKey: ['submissions', exerciseId],
       });
       if (result.lessonCompleted) {
-        // The path (next node unlocked) and /me (lessons, XP, streak) changed.
+        // The path (next node unlocked), the catalog's progress and /me
+        // (lessons, XP, streak) changed.
         void queryClient.invalidateQueries({ queryKey: ['course-path'] });
+        void queryClient.invalidateQueries({ queryKey: ['courses'] });
         void queryClient.invalidateQueries({ queryKey: ['me'] });
       }
       if (result.certificateSlug) {

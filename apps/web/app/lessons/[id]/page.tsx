@@ -15,7 +15,7 @@ import { SampleTests } from '@/components/sample-tests';
 import { TestResults } from '@/components/test-results';
 import { TutorPanel } from '@/components/tutor-panel';
 import { primaryButton, secondaryButton } from '@/components/ui/buttons';
-import { chip, stickerCard } from '@/components/ui/card';
+import { chip, stickerCard, stickerOutline } from '@/components/ui/card';
 import { ApiError } from '@/lib/api';
 import { celebrate } from '@/lib/celebrate';
 import { useLesson } from '@/lib/queries/use-lessons';
@@ -37,10 +37,11 @@ export default function LessonPage() {
       <AppHeader />
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-6 sm:px-6 sm:py-8">
         <Link
-          href="/learn"
+          href={lesson.data ? `/learn/${lesson.data.course.slug}` : '/learn'}
           className="mb-6 inline-flex items-center gap-1 rounded-badge text-sm font-bold text-text-secondary hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
         >
-          <ArrowLeft className="size-4" strokeWidth={3} /> Back to the path
+          <ArrowLeft className="size-4" strokeWidth={3} />{' '}
+          {lesson.data ? lesson.data.course.title : 'All courses'}
         </Link>
 
         {loading || lesson.isPending ? (
@@ -231,7 +232,7 @@ function Exercise({
       {completed && (
         <div
           role="status"
-          className={`${stickerCard} flex flex-wrap items-center justify-between gap-4 bg-lemon px-6 py-4`}
+          className={`${stickerOutline} flex flex-wrap items-center justify-between gap-4 bg-lemon px-6 py-4`}
         >
           <Byte mood="happy" className="size-16 shrink-0" />
           <div className="mr-auto">
@@ -255,7 +256,10 @@ function Exercise({
               View certificate
             </Link>
           ) : (
-            <Link href="/learn" className={primaryButton}>
+            <Link
+              href={`/learn/${lesson.course.slug}`}
+              className={primaryButton}
+            >
               Continue
             </Link>
           )}
@@ -301,7 +305,7 @@ function LessonError({ error }: { error: Error }) {
       </p>
       {!locked && <p className="text-text-secondary">{error.message}</p>}
       <Link href="/learn" className={locked ? primaryButton : secondaryButton}>
-        Back to the path
+        Back to your courses
       </Link>
     </div>
   );

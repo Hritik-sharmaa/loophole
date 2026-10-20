@@ -25,8 +25,15 @@ content/
 
 ```json
 // content/python/course.json
-{ "slug": "python", "title": "Python Basics", "language": "python" }
+{
+  "slug": "python",
+  "title": "Python Basics",
+  "language": "python",
+  "description": "Start from zero: print, variables, decisions, loops, text, lists, functions and dictionaries, in 40 bite-sized lessons."
+}
 ```
+
+`description` is optional and shows on the course's card in the catalog at `/learn` (ADR-023). Keep it to one or two sentences.
 
 ```json
 // content/python/01-basics/unit.json

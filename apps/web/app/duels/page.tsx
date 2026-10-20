@@ -14,7 +14,7 @@ import { ProgressBar } from '@/components/progress-bar';
 import { SampleTests } from '@/components/sample-tests';
 import { TestResults } from '@/components/test-results';
 import { primaryButton, secondaryButton } from '@/components/ui/buttons';
-import { chip, stickerCard } from '@/components/ui/card';
+import { chip, stickerCard, stickerOutline } from '@/components/ui/card';
 import { celebrate } from '@/lib/celebrate';
 import { useMe } from '@/lib/queries/use-me';
 import { useDuelSocket, type DuelState } from '@/lib/use-duel-socket';
@@ -284,7 +284,7 @@ function Outcome({
   return (
     <section
       role="status"
-      className={`${stickerCard} flex flex-wrap items-center justify-between gap-4 px-6 py-4 ${won ? 'bg-lemon' : ''}`}
+      className={`${stickerOutline} flex flex-wrap items-center justify-between gap-4 px-6 py-4 ${won ? 'bg-lemon' : 'bg-paper'}`}
     >
       <Byte
         mood={won ? 'happy' : end.result === 'draw' ? 'idle' : 'oops'}

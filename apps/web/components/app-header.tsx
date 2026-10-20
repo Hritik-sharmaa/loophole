@@ -39,7 +39,9 @@ export function AppHeader() {
   const { session } = useSession();
   const me = useMe(!!session);
   const isCurrent = (href: string) =>
-    pathname === href || (href === '/learn' && pathname.startsWith('/lessons'));
+    pathname === href ||
+    (href === '/learn' &&
+      (pathname.startsWith('/learn/') || pathname.startsWith('/lessons')));
 
   return (
     <>

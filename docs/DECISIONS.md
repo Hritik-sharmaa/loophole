@@ -6,6 +6,12 @@ Format: **ADR-NNN · Title** — Status (Accepted / Superseded by ADR-NNN) · Da
 
 ---
 
+**ADR-023 · More than one track: the course catalog** — Accepted · 2026-10-20 · Amends PRD §3
+
+- Decision: lift the v1 non-goal "more than one language track". `/learn` becomes a course catalog: a "continue where you left off" card for the latest started course, then every course with the user's progress, then the agreed upcoming tracks (HTML & CSS, JavaScript, Git & GitHub) as "Coming soon" cards hard-coded in the web app. Each course's path moves to `/learn/[slug]`. `GET /courses` returns per-user counts (`lessonCount`, `completedCount`, `lastActivityAt`), ordered by `orderCourses()` (unit-tested). `courses.description` comes from `course.json`. `GET /lessons/:id` names its course so the lesson page links back to the right path.
+- Why: the developer wants a Frontend Developer path and Git & GitHub after Python, and the old `/learn` always opened the first course.
+- Trade-off: one extra click from `/learn` to a path. The "Coming soon" list lives in the web app (`app/learn/page.tsx`) and must be trimmed as each course is seeded. Duels stay Python-only for now.
+
 **ADR-022 · Installable PWA, no new dependencies** — Accepted · 2026-10-19
 
 - Decision: Loophole is a Progressive Web App: `app/manifest.ts`, PNG icons in `public/icons/` and `app/apple-icon.png` (rendered from Byte's SVG), and a hand-written `public/sw.js` registered in production only. The service worker caches Next's hashed `/_next/static/` files on first use, serves pages network-first with the last copy (or `/offline`) as fallback, and never touches the API or Supabase (other origins). `next.config.ts` serves `sw.js` uncached with a strict CSP. On phones, signed-in navigation moves to a bottom tab bar.

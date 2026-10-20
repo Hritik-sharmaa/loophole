@@ -4,12 +4,12 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import type {
+  CourseOverview,
   CoursePath,
-  CourseSummary,
   LessonDetail,
   LessonState,
 } from '@loophole/shared';
-import { and, asc, eq, inArray } from 'drizzle-orm';
+import { and, asc, count, eq, inArray, max } from 'drizzle-orm';
 import { DbService } from '../../db/db.service.js';
 import {
   courses,
@@ -18,6 +18,7 @@ import {
   units,
   userProgress,
 } from '../../db/schema/index.js';
+import { orderCourses } from './course-order.js';
 import { lessonStates } from './lesson-states.js';
 
 // The columns a course summary exposes, reused by every query below.
@@ -32,11 +33,43 @@ const COURSE_COLUMNS = {
 export class LessonsService {
   constructor(private readonly db: DbService) {}
 
-  listCourses(): Promise<CourseSummary[]> {
-    return this.db.drizzle
-      .select(COURSE_COLUMNS)
+  // The course catalog (ADR-023): every course with its lesson count and
+  // this user's progress in it, ordered by orderCourses().
+  async listCourses(userId: string): Promise<CourseOverview[]> {
+    const catalog = await this.db.drizzle
+      .select({
+        ...COURSE_COLUMNS,
+        description: courses.description,
+        lessonCount: count(lessons.id),
+      })
       .from(courses)
-      .orderBy(asc(courses.title));
+      .leftJoin(units, eq(units.courseId, courses.id))
+      .leftJoin(lessons, eq(lessons.unitId, units.id))
+      .groupBy(courses.id);
+
+    const progress = await this.db.drizzle
+      .select({
+        courseId: units.courseId,
+        completedCount: count(),
+        lastActivityAt: max(userProgress.completedAt),
+      })
+      .from(userProgress)
+      .innerJoin(lessons, eq(userProgress.lessonId, lessons.id))
+      .innerJoin(units, eq(lessons.unitId, units.id))
+      .where(eq(userProgress.userId, userId))
+      .groupBy(units.courseId);
+    const byCourse = new Map(progress.map((p) => [p.courseId, p]));
+
+    return orderCourses(
+      catalog.map((c) => {
+        const mine = byCourse.get(c.id);
+        return {
+          ...c,
+          completedCount: mine?.completedCount ?? 0,
+          lastActivityAt: mine?.lastActivityAt?.toISOString() ?? null,
+        };
+      }),
+    );
   }
 
   async getPath(userId: string, courseSlug: string): Promise<CoursePath> {
@@ -74,6 +107,7 @@ export class LessonsService {
         title: lessons.title,
         learn: lessons.learn,
         courseId: units.courseId,
+        course: { slug: courses.slug, title: courses.title },
         exercise: {
           id: exercises.id,
           prompt: exercises.prompt,
@@ -83,6 +117,7 @@ export class LessonsService {
       })
       .from(lessons)
       .innerJoin(units, eq(lessons.unitId, units.id))
+      .innerJoin(courses, eq(units.courseId, courses.id))
       .innerJoin(exercises, eq(exercises.lessonId, lessons.id))
       .where(eq(lessons.id, lessonId));
     if (!lesson) throw notFound('Lesson');
@@ -91,6 +126,7 @@ export class LessonsService {
     return {
       id: lesson.id,
       title: lesson.title,
+      course: lesson.course,
       learn: lesson.learn,
       exercise: lesson.exercise,
     };

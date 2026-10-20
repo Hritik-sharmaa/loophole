@@ -1,6 +1,10 @@
 import type { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import type { CoursePath, CourseSummary, LessonDetail } from '@loophole/shared';
+import type {
+  CourseOverview,
+  CoursePath,
+  LessonDetail,
+} from '@loophole/shared';
 import { count } from 'drizzle-orm';
 import request from 'supertest';
 import type { App } from 'supertest/types.js';
@@ -72,11 +76,18 @@ describe('Lessons (e2e)', () => {
     await testDb.close();
   });
 
-  it('GET /courses lists the Python course', async () => {
-    const body = (await get('/courses', 200)) as CourseSummary[];
+  it('GET /courses lists the Python course with no progress yet', async () => {
+    const body = (await get('/courses', 200)) as CourseOverview[];
     expect(body).toEqual([
-      expect.objectContaining({ slug: 'python', language: 'python' }),
+      expect.objectContaining({
+        slug: 'python',
+        language: 'python',
+        lessonCount: 40,
+        completedCount: 0,
+        lastActivityAt: null,
+      }),
     ]);
+    expect(body[0].description).toContain('40 bite-sized lessons');
   });
 
   it('a new user has lesson 1 active and every other lesson locked', async () => {
@@ -103,6 +114,7 @@ describe('Lessons (e2e)', () => {
     const body = (await get(`/lessons/${first}`, 200)) as LessonDetail;
 
     expect(body.title).toBe('Hello, world');
+    expect(body.course).toEqual({ slug: 'python', title: 'Python Basics' });
     expect(body.exercise.prompt).toContain('Hello, Loophole!');
     expect(body.exercise.sampleTests).toEqual([
       { input: '', expectedOutput: 'Hello, Loophole!' },
@@ -137,6 +149,11 @@ describe('Lessons (e2e)', () => {
     ]);
     await get(`/lessons/${first}`, 200); // completed lessons stay open
     await get(`/lessons/${second}`, 200);
+
+    // The catalog counts it, with when it happened (ADR-023).
+    const [python] = (await get('/courses', 200)) as CourseOverview[];
+    expect(python.completedCount).toBe(1);
+    expect(python.lastActivityAt).not.toBeNull();
   });
 
   it('returns 404 for an unknown lesson or course, 400 for a bad id', async () => {

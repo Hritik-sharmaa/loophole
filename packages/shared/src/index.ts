@@ -33,6 +33,16 @@ export type CourseSummary = {
   language: string;
 };
 
+// GET /courses: one catalog card per course, with the user's progress.
+// Courses the user has started come first, most recent first (ADR-023).
+export type CourseOverview = CourseSummary & {
+  description: string;
+  lessonCount: number;
+  completedCount: number;
+  // When the user last completed a lesson in it; null if never.
+  lastActivityAt: string | null;
+};
+
 export type LessonState = 'locked' | 'active' | 'completed';
 
 // GET /courses/:slug/path
@@ -73,6 +83,8 @@ export type LessonLearn = { cards: LearnCard[]; check: QuickCheck };
 export type LessonDetail = {
   id: string;
   title: string;
+  // The course it belongs to, for the way back to its path.
+  course: { slug: string; title: string };
   learn: LessonLearn | null;
   exercise: {
     id: string;

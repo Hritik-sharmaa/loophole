@@ -17,12 +17,13 @@ Conventions: `uuid` primary keys (`gen_random_uuid()`), `timestamptz` in UTC, sn
 
 ### courses — S2
 
-| Column   | Type    | Notes                               |
-| -------- | ------- | ----------------------------------- |
-| id       | uuid PK |                                     |
-| slug     | text    | unique, e.g. `python`               |
-| language | text    | Piston language name, e.g. `python` |
-| title    | text    |                                     |
+| Column      | Type               | Notes                                                 |
+| ----------- | ------------------ | ----------------------------------------------------- |
+| id          | uuid PK            |                                                       |
+| slug        | text               | unique, e.g. `python`                                 |
+| language    | text               | Piston language name, e.g. `python`                   |
+| title       | text               |                                                       |
+| description | text, default `''` | one or two sentences for the course catalog (ADR-023) |
 
 ### units — S2
 

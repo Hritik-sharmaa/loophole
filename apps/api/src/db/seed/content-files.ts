@@ -34,6 +34,7 @@ export type CourseContent = {
   slug: string;
   title: string;
   language: string;
+  description: string;
   units: UnitContent[];
 };
 
@@ -116,6 +117,11 @@ export function parseCourse(
     slug: asSlug(o.slug, file, 'slug'),
     title: asText(o.title, file, 'title'),
     language: asText(o.language, file, 'language'),
+    // Optional: a course without one shows only its title in the catalog.
+    description:
+      o.description === undefined
+        ? ''
+        : asText(o.description, file, 'description'),
   };
 }
 

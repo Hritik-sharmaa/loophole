@@ -1,5 +1,5 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import type { CoursePath, CourseSummary } from '@loophole/shared';
+import type { CourseOverview, CoursePath } from '@loophole/shared';
 import type { AuthUser } from '../../integrations/supabase-auth.client.js';
 import { CurrentUser } from '../auth/current-user.decorator.js';
 import { LessonsService } from './lessons.service.js';
@@ -8,9 +8,10 @@ import { LessonsService } from './lessons.service.js';
 export class CoursesController {
   constructor(private readonly lessons: LessonsService) {}
 
+  // The course catalog with the signed-in user's progress (ADR-023).
   @Get()
-  list(): Promise<CourseSummary[]> {
-    return this.lessons.listCourses();
+  list(@CurrentUser() user: AuthUser): Promise<CourseOverview[]> {
+    return this.lessons.listCourses(user.id);
   }
 
   // The lesson path with each lesson's state for the signed-in user.

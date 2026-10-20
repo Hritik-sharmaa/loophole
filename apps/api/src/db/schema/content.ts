@@ -19,6 +19,8 @@ export const courses = pgTable('courses', {
   // Piston language name, e.g. "python".
   language: text('language').notNull(),
   title: text('title').notNull(),
+  // One or two sentences for the course catalog (ADR-023).
+  description: text('description').notNull().default(''),
 }).enableRLS();
 
 export const units = pgTable(

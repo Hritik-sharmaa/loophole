@@ -102,8 +102,8 @@ Loop for every slice: AI **writes** the slice → you **review** and change it �
 - [x] "Sticker Lab" redesign, Byte the mascot, logo (ADR-020)
 - [x] Learn step before every exercise: cards, runnable examples (`POST /runs`), quick check; written for all 40 Python lessons (ADR-021)
 - [x] Responsive pass (phone tab bar) and installable PWA (ADR-022)
-- [ ] Course picker so the app can hold more than one course
-- [ ] New tracks, in order: HTML & CSS (new checker + live preview), JavaScript (Piston Node), Git & GitHub (simulated repo). Needs an ADR: PRD §3 lists more than one track as a v1 non-goal
+- [x] Course catalog at `/learn`, one path per course at `/learn/[slug]` (ADR-023, FR-31)
+- [ ] New tracks, in order: HTML & CSS (new checker + live preview), JavaScript (Piston Node), Git & GitHub (simulated repo)
 - [ ] Playwright e2e for J-1 and J-3; deploy step in GitHub Actions
 - [ ] Scalability, only if needed: see `ARCHITECTURE.md` §5
 - [ ] Stretch: replay (FR-27), bug of the day (FR-28), spectate (FR-29), JavaScript track (FR-30)
