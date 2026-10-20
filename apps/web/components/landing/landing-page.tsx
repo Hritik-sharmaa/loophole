@@ -46,6 +46,7 @@ export function LandingPage() {
               </p>
               <ul className="flex flex-col gap-2 font-semibold">
                 <li>✓ Python from print() to functions</li>
+                <li>✓ HTML & CSS with a live preview</li>
                 <li>✓ Instant feedback on every run</li>
                 <li>✓ Hidden tests, so no shortcuts</li>
               </ul>

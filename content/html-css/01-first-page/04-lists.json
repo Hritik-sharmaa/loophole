@@ -1,0 +1,43 @@
+{
+  "slug": "lists",
+  "title": "Lists",
+  "position": 4,
+  "learn": {
+    "cards": [
+      {
+        "title": "Bulleted lists",
+        "body": "`<ul>` makes a bulleted list. Each item goes in its own `<li>`.",
+        "code": "<ul>\n  <li>Milk</li>\n  <li>Eggs</li>\n</ul>"
+      },
+      {
+        "title": "Numbered lists",
+        "body": "Swap `<ul>` for `<ol>` and the items get numbers instead of bullets.",
+        "code": "<ol>\n  <li>Wake up</li>\n  <li>Code</li>\n  <li>Sleep</li>\n</ol>"
+      }
+    ],
+    "check": {
+      "question": "Which tag holds one item of a list?",
+      "options": ["<li>", "<ul>", "<item>"],
+      "answer": 0,
+      "explanation": "`<li>` is one list item. `<ul>` holds the whole list, and `<item>` is not an HTML tag."
+    }
+  },
+  "exercise": {
+    "prompt": "Make a heading `Shopping list` and a bulleted list with at least three items.",
+    "starterCode": "<!-- a heading, then a ul with three li items -->\n",
+    "checks": [
+      {
+        "type": "element",
+        "label": "The `<h1>` says `Shopping list`",
+        "selector": "h1",
+        "text": "Shopping list"
+      },
+      {
+        "type": "element",
+        "label": "A `<ul>` holds at least three `<li>` items",
+        "selector": "ul > li",
+        "min": 3
+      }
+    ]
+  }
+}

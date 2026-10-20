@@ -1,0 +1,47 @@
+{
+  "slug": "first-style",
+  "title": "Your first style",
+  "position": 1,
+  "learn": {
+    "cards": [
+      {
+        "title": "CSS styles your page",
+        "body": "CSS sets how things look. Put it in a `<style>` tag. A rule names what to style, then sets properties inside `{ }`.",
+        "code": "<style>\n  p { color: blue; }\n</style>\n<p>I am blue.</p>"
+      },
+      {
+        "title": "property: value;",
+        "body": "Each line inside the braces is `property: value;`. Don't forget the colon and the semicolon.",
+        "code": "<style>\n  h1 { color: purple; background-color: yellow; }\n</style>\n<h1>Loud heading</h1>"
+      }
+    ],
+    "check": {
+      "question": "Which rule makes paragraphs red?",
+      "options": [
+        "p { color: red; }",
+        "p ( color = red )",
+        "<p color=\"red\">"
+      ],
+      "answer": 0,
+      "explanation": "A CSS rule is a selector, then `property: value;` inside curly braces."
+    }
+  },
+  "exercise": {
+    "prompt": "Add a `<style>` tag and make the `<h1>` orange with the `color` property.",
+    "starterCode": "<h1>Welcome</h1>\n<!-- add a style tag that makes the h1 orange -->\n",
+    "checks": [
+      {
+        "type": "element",
+        "label": "There is a `<style>` tag",
+        "selector": "style"
+      },
+      {
+        "type": "style",
+        "label": "The `<h1>` has `color: orange`",
+        "selector": "h1",
+        "property": "color",
+        "value": ["orange", "#ffa500"]
+      }
+    ]
+  }
+}

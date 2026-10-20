@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import type { RunResponse } from '@loophole/shared';
+import { exerciseKind } from '../../common/exercise-kind.js';
 import { PistonClient } from '../../integrations/piston.client.js';
 import { LessonsService } from '../lessons/lessons.service.js';
 import { STDERR_MAX, TIMEOUT_MESSAGE } from '../submissions/grading.js';
@@ -20,6 +21,13 @@ export class RunsService {
     { lessonId, code, input }: RunCodeDto,
   ): Promise<RunResponse> {
     const language = await this.lessons.languageOf(userId, lessonId);
+    // Web examples render in the browser's preview; there is nothing to run.
+    if (exerciseKind(language) === 'web') {
+      throw new BadRequestException({
+        code: 'NOT_RUNNABLE',
+        message: 'This lesson shows a live preview instead of running code.',
+      });
+    }
     const run = await this.piston.run(language, code, input ?? '');
 
     return {

@@ -8,6 +8,10 @@ import {
   parseDuelProblem,
   parseLesson,
 } from '../content-files.js';
+import {
+  checkPage,
+  gradeChecks,
+} from '../../../modules/submissions/web-checks.js';
 
 const REAL_CONTENT = resolve(import.meta.dirname, '../../../../../../content');
 
@@ -29,9 +33,14 @@ const validLesson = {
 
 describe('the real content/ folder', () => {
   // Runs in CI, so a broken lesson file fails the build, not the seed.
+  const course = (slug: string) => {
+    const found = loadAllContent(REAL_CONTENT).find((c) => c.slug === slug);
+    if (!found) throw new Error(`no course ${slug}`);
+    return found;
+  };
+
   it('loads without errors', () => {
-    const [python] = loadAllContent(REAL_CONTENT);
-    expect(python.slug).toBe('python');
+    const python = course('python');
     // The full v1 track (docs/CONTENT_GUIDE.md §4, goal G-1): 40 lessons.
     expect(python.units.map((u) => [u.slug, u.lessons.length])).toEqual([
       ['basics', 6],
@@ -42,6 +51,34 @@ describe('the real content/ folder', () => {
       ['functions', 5],
       ['dictionaries', 4],
     ]);
+  });
+
+  // ADR-024: the HTML & CSS track, graded by checks instead of tests.
+  it('loads the HTML & CSS course as web exercises', () => {
+    const html = course('html-css');
+    expect(html.language).toBe('html');
+    expect(html.units.map((u) => [u.slug, u.lessons.length])).toEqual([
+      ['first-page', 6],
+      ['page-structure', 4],
+      ['css-basics', 5],
+    ]);
+    for (const lesson of html.units.flatMap((u) => u.lessons)) {
+      expect(lesson.exercise.checks?.length, lesson.slug).toBeGreaterThan(0);
+      expect(lesson.exercise.sampleTests).toEqual([]);
+      // No web example has an output: the live preview is the output.
+      for (const card of lesson.learn?.cards ?? []) {
+        expect(card.output, lesson.slug).toBeUndefined();
+      }
+    }
+  });
+
+  // An exercise whose starter code already passes would pay XP for nothing.
+  it('no web exercise is passed by its starter code', () => {
+    for (const lesson of course('html-css').units.flatMap((u) => u.lessons)) {
+      const { starterCode, checks } = lesson.exercise;
+      const grade = gradeChecks(checkPage(starterCode, checks ?? []));
+      expect(grade.status, lesson.slug).toBe('failed');
+    }
   });
 
   // ADR-021: every lesson teaches before it tests.
@@ -167,6 +204,92 @@ describe('parseLesson', () => {
     expect(() => parseLesson(json, 'unit/bad.json')).toThrow(ContentError);
     expect(() => parseLesson(json, 'unit/bad.json')).toThrow(problem);
     expect(() => parseLesson(json, 'unit/bad.json')).toThrow(/unit\/bad\.json/);
+  });
+});
+
+describe('parseLesson for web exercises (ADR-024)', () => {
+  const webLesson = {
+    slug: 'first-heading',
+    title: 'First heading',
+    position: 1,
+    learn: {
+      cards: [
+        { title: 'Tags', body: 'Tags wrap content.', code: '<h1>Hi</h1>' },
+      ],
+      check: {
+        question: 'Which is a heading?',
+        options: ['<h1>', '<p>'],
+        answer: 0,
+        explanation: 'h1 is a heading.',
+      },
+    },
+    exercise: {
+      prompt: 'Write a heading.',
+      starterCode: '',
+      checks: [
+        { type: 'element', label: 'Has an h1', selector: 'h1' },
+        {
+          type: 'style',
+          label: 'Orange',
+          selector: 'h1',
+          property: 'color',
+          value: 'orange',
+        },
+      ],
+    },
+  };
+
+  it('accepts checks, normalizing a single style value to a list', () => {
+    const lesson = parseLesson(webLesson, 'x.json', 'web');
+    expect(lesson.exercise.checks?.[1]).toMatchObject({ value: ['orange'] });
+    expect(lesson.exercise.hiddenTests).toEqual([]);
+    expect(lesson.learn?.cards[0].code).toBe('<h1>Hi</h1>');
+  });
+
+  it.each([
+    [
+      'a bad selector',
+      { checks: [{ type: 'element', label: 'x', selector: 'h1[' }] },
+      /selector "h1\[" is not valid/,
+    ],
+    [
+      'an unknown check type',
+      { checks: [{ type: 'magic', label: 'x', selector: 'h1' }] },
+      /must be element, attribute or style/,
+    ],
+    ['no checks', { checks: [] }, /checks needs at least 1/],
+    [
+      'tests instead of checks',
+      { checks: undefined, sampleTests: [{ input: '', expectedOutput: '' }] },
+      /a web exercise has checks/,
+    ],
+  ])('rejects %s', (_case, patch, problem) => {
+    const json = {
+      ...webLesson,
+      exercise: { ...webLesson.exercise, ...patch },
+    };
+    expect(() => parseLesson(json, 'x.json', 'web')).toThrow(problem);
+  });
+
+  it('rejects an example with output in a web course', () => {
+    const json = {
+      ...webLesson,
+      learn: {
+        ...webLesson.learn,
+        cards: [{ title: 'x', body: 'y', code: '<p>Hi</p>', output: 'Hi' }],
+      },
+    };
+    expect(() => parseLesson(json, 'x.json', 'web')).toThrow(
+      /no input or output/,
+    );
+  });
+
+  it('rejects checks in a program course', () => {
+    const json = {
+      ...validLesson,
+      exercise: { ...validLesson.exercise, checks: [] },
+    };
+    expect(() => parseLesson(json, 'x.json')).toThrow(/only web exercises/);
   });
 });
 

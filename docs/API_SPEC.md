@@ -36,11 +36,11 @@ Base URL: `https://api.<domain>` (local: `http://localhost:3001`). All bodies ar
 
 ### Lessons — S2
 
-| Method | Path                  | Response                                                                                                                                                                                                    |
-| ------ | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| GET    | `/courses`            | `[{ id, slug, title, language, description, lessonCount, completedCount, lastActivityAt }]` — the catalog with the user's progress; started courses first, most recent first, then by title (ADR-023)       |
-| GET    | `/courses/:slug/path` | `{ course, units: [{ id, title, lessons: [{ id, title, state: "locked" \| "active" \| "completed" }] }] }`                                                                                                  |
-| GET    | `/lessons/:id`        | `{ id, title, course: { slug, title }, learn, exercise: { id, prompt, starterCode, sampleTests: [{ input, expectedOutput }] } }` — 403 `LESSON_LOCKED` if locked, 404 if unknown, 400 if `id` is not a uuid |
+| Method | Path                  | Response                                                                                                                                                                                                                           |
+| ------ | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET    | `/courses`            | `[{ id, slug, title, language, description, lessonCount, completedCount, lastActivityAt }]` — the catalog with the user's progress; started courses first, most recent first, then by title (ADR-023)                              |
+| GET    | `/courses/:slug/path` | `{ course, units: [{ id, title, lessons: [{ id, title, state: "locked" \| "active" \| "completed" }] }] }`                                                                                                                         |
+| GET    | `/lessons/:id`        | `{ id, title, course: { slug, title }, learn, exercise: { id, kind, prompt, starterCode, sampleTests: [{ input, expectedOutput }], checks: [label] } }` — 403 `LESSON_LOCKED` if locked, 404 if unknown, 400 if `id` is not a uuid |
 
 `hidden_tests` must never appear in any of these responses. `test/lessons.e2e-spec.ts` searches every response body for it.
 
@@ -48,9 +48,9 @@ Base URL: `https://api.<domain>` (local: `http://localhost:3001`). All bodies ar
 
 ### Runs — Learn step (ADR-021)
 
-| Method | Path    | Body                                                                  | Response                                                                                                                                                                |
-| ------ | ------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| POST   | `/runs` | `{ lessonId: uuid, code: string (≤ 20 KB), input?: string (≤ 1 KB) }` | 200 `{ stdout, stderr, timedOut }` — 403 `LESSON_LOCKED`, 404 unknown lesson, 400 for any extra field (e.g. `language`), 429 `RATE_LIMITED`, 502 `EXECUTOR_UNAVAILABLE` |
+| Method | Path    | Body                                                                  | Response                                                                                                                                                                                                                                           |
+| ------ | ------- | --------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| POST   | `/runs` | `{ lessonId: uuid, code: string (≤ 20 KB), input?: string (≤ 1 KB) }` | 200 `{ stdout, stderr, timedOut }` — 400 `NOT_RUNNABLE` for a web lesson (its examples preview in the browser), 403 `LESSON_LOCKED`, 404 unknown lesson, 400 for any extra field (e.g. `language`), 429 `RATE_LIMITED`, 502 `EXECUTOR_UNAVAILABLE` |
 
 Runs the code once in the lesson's course language (never one the client picks), for the Learn step's examples. Ungraded: nothing is stored, no XP is paid. `stdout` and `stderr` are cut to 4 KB; a time-out with no error output gets the same time-limit message as submissions. Throttle: 10 per minute per user, like submissions.
 
@@ -84,6 +84,8 @@ Runs the code once in the lesson's course language (never one the client picks),
 ```
 
 Hidden test results show only `passed`, never input or expected output. Throttle: 10 per minute per user.
+
+**Web exercises (ADR-024).** When `exercise.kind` is `"web"`, `sampleTests` is empty and `checks` lists the labels of the page's rules, all visible. A submission's `code` is the whole page (HTML with its CSS in `<style>`); it is parsed and checked, never run, so Piston is not involved and `EXECUTOR_UNAVAILABLE` cannot happen. Each result is `{ "kind": "check", "passed": true, "label": "The <h1> says Hello, web!" }`; `status` is `passed` or `failed` (never `error`), and `stderr` holds CSS syntax errors, if any (`CSS error: Unclosed block (line 1 of your <style>)`). XP, streaks, progress and certificates work exactly as for programs.
 
 - `status`: `passed` (every test passed), `error` (some test crashed or ran out of time), otherwise `failed`.
 - `expected` and `actual` are the trimmed strings that were compared (ADR-011).

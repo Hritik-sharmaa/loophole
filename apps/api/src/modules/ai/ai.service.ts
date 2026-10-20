@@ -78,6 +78,9 @@ export class AiService {
     }
 
     const failing = row.results.find((r) => r.kind === 'sample' && !r.passed);
+    const failingCheck = row.results.find(
+      (r) => r.kind === 'check' && !r.passed,
+    );
     return this.withDailyCap(user.id, async (remainingToday) => {
       const out = await this.gemini.explainError({
         language: row.language,
@@ -91,6 +94,8 @@ export class AiService {
                 actualOutput: failing.actual,
               }
             : null,
+        failingCheck:
+          failingCheck?.kind === 'check' ? failingCheck.label : undefined,
         stderr: row.stderr,
       });
       return {

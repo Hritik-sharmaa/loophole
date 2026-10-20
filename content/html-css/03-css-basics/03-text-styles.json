@@ -1,0 +1,45 @@
+{
+  "slug": "text-styles",
+  "title": "Fonts and text",
+  "position": 3,
+  "learn": {
+    "cards": [
+      {
+        "title": "Size and font",
+        "body": "`font-size` sets how big text is, often in `px`. `font-family` picks the font, with a backup after a comma.",
+        "code": "<style>\n  p { font-size: 20px; font-family: Georgia, serif; }\n</style>\n<p>Bigger, fancier text.</p>"
+      },
+      {
+        "title": "Lining text up",
+        "body": "`text-align` lines text up: `left`, `center` or `right`.",
+        "code": "<style>\n  h1 { text-align: center; }\n</style>\n<h1>Centered</h1>"
+      }
+    ],
+    "check": {
+      "question": "Which property makes text bigger?",
+      "options": ["font-size", "text-size", "font-big"],
+      "answer": 0,
+      "explanation": "`font-size` is the real property; the others do not exist."
+    }
+  },
+  "exercise": {
+    "prompt": "Center the `<h1>` with `text-align`, and give paragraphs a `font-size` of `18px`.",
+    "starterCode": "<h1>My article</h1>\n<p>Some text to style.</p>\n",
+    "checks": [
+      {
+        "type": "style",
+        "label": "The `<h1>` has `text-align: center`",
+        "selector": "h1",
+        "property": "text-align",
+        "value": "center"
+      },
+      {
+        "type": "style",
+        "label": "Paragraphs have `font-size: 18px`",
+        "selector": "p",
+        "property": "font-size",
+        "value": "18px"
+      }
+    ]
+  }
+}

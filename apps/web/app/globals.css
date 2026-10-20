@@ -78,6 +78,14 @@ body {
   color: var(--color-ink);
 }
 
+/* Code reads exactly as typed everywhere (consoles, quick checks, inline
+   code): JetBrains Mono's ligatures would turn `<!--` or `>=` into symbols. */
+.font-mono,
+code,
+pre {
+  font-variant-ligatures: none;
+}
+
 /* Room under the page for the phone tab bar (AppHeader), plus the phone's
    home-indicator area. The bar is hidden from `sm` (40rem) up. */
 @media (width < 40rem) {

@@ -105,6 +105,31 @@ Each test runs the program with `input` as stdin. It passes when **trimmed stdou
 - Write the reference solution during authoring and check it passes every test before committing. Keep it out of `content/`: it goes in `content-solutions/<course>/<unit-folder>/<lesson-file>.py`, which is git-ignored.
 - `content-files.spec.ts` in the API parses the real `content/` folder in CI, so a malformed lesson file fails the build, not the seed.
 
+### Web exercises: the HTML & CSS track (ADR-024)
+
+A course whose `language` is `html` has web exercises: the learner writes one page (HTML, with CSS in a `<style>` tag) beside a live preview, and the API checks it against rules. Instead of `sampleTests` and `hiddenTests`, the exercise has `checks`:
+
+```json
+"exercise": {
+  "prompt": "Add a `<style>` tag and make the `<h1>` orange with the `color` property.",
+  "starterCode": "<h1>Welcome</h1>\n",
+  "checks": [
+    { "type": "element", "label": "There is a `<style>` tag", "selector": "style" },
+    { "type": "element", "label": "The `<h1>` says `Welcome`", "selector": "h1", "text": "Welcome" },
+    { "type": "element", "label": "A `<ul>` holds at least three items", "selector": "ul > li", "min": 3 },
+    { "type": "attribute", "label": "A link goes to `https://example.com`", "selector": "a", "name": "href", "value": "https://example.com" },
+    { "type": "style", "label": "The `<h1>` has `color: orange`", "selector": "h1", "property": "color", "value": ["orange", "#ffa500"] }
+  ]
+}
+```
+
+- **element:** at least `min` (default 1) elements match the CSS `selector`; with `text`, only those whose text (whitespace collapsed) is exactly that count.
+- **attribute:** some matching element has the attribute; with `value`, exactly that value (trimmed).
+- **style:** every matching element (at least one) ends up with one of the accepted values for `property`. The checker applies the cascade (`!important`, specificity, order, `style=""`) but no inheritance or browser defaults, so check the element the prompt tells the learner to style, and the property it names (`padding`, not `padding-top`). List every common spelling of a value (`yellow`, `#ffff00`, `#ff0`). Values compare in lower case with quotes and extra spaces removed.
+- **Labels** are the checklist the learner sees, all of it, from the start; use `backticks` for code. There are no hidden checks: meeting the checks is the exercise.
+- Learn examples in a web course have `code` only (no `input` or `output`): they show in a live preview.
+- CI checks that every selector parses and that no starter code already passes every check. Keep a reference solution in `content-solutions/<course>/<unit-folder>/<lesson-file>.html` and check it passes before committing.
+
 ## 4. v1 Python track (40 exercises, complete)
 
 | Unit           | Topics                                    | Lessons |

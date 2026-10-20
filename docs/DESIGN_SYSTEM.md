@@ -93,6 +93,10 @@ Shared class strings live in `components/ui/buttons.ts` (`primaryButton`, `secon
 | RunnableExample       | Compact EditorPanel (no shadow), secondary "Run it" button, Ink console labelled "Prints" (the content's output) until run, then "Output" (stderr in Pink)  |
 | QuickCheck            | Sticker card with Byte (thinking → oops → happy), Lemon chip, Ink code block, A–D options with press shadows. Right: Blue-tint ✓; wrong: struck through ✕   |
 | AppHeader (phone)     | Below `sm`: the top bar keeps the logo and streak/XP chips; links move to a fixed bottom tab bar (icon + short label, current tab Ink); page bottom padded  |
+| WebPreview            | Outlined Paper panel, Surface "Live preview" bar with a Blue dot, white `<iframe sandbox="">`; redraws 300 ms after typing stops (ADR-024)                  |
+| Checklist             | Web exercises: "Your page must", one outlined row per check. Before checking: dashed empty circle; then Blue-tint ✓ or Paper ✕. CSS errors in an Ink block  |
+
+**Web lessons** use a `max-w-5xl` page with the editor and WebPreview side by side from `lg` (stacked below), while Learn cards and the quick check keep a `max-w-3xl` reading width. Code never shows font ligatures (`font-variant-ligatures: none`), so `<!--` and `>=` read as typed.
 
 **Responsive rules:** design at 390 px first. Page gutters are 16 px on phones and 24 px from `sm`. Fixed and sticky bars pad themselves with `env(safe-area-inset-*)`; the viewport uses `viewport-fit=cover` for the installed PWA (ADR-022).
 

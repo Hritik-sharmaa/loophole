@@ -1,21 +1,24 @@
 'use client';
 
-import type { LearnCard } from '@loophole/shared';
+import type { ExerciseKind, LearnCard } from '@loophole/shared';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { useState } from 'react';
 import { InlineCode } from '@/components/inline-code';
-import { RunnableExample } from '@/components/runnable-example';
+import { LearnExample } from '@/components/learn-example';
 import { primaryButton, secondaryButton } from '@/components/ui/buttons';
 import { chip, stickerCard } from '@/components/ui/card';
 
 // The Learn step's teaching cards (ADR-021), one at a time: an idea, then
-// an example to read, run and change. The last card leads to the check.
+// an example to read, run (or preview, for web courses) and change. The
+// last card leads to the check.
 export function LearnCards({
   lessonId,
+  kind,
   cards,
   onDone,
 }: {
   lessonId: string;
+  kind: ExerciseKind;
   cards: LearnCard[];
   onDone: () => void;
 }) {
@@ -53,7 +56,8 @@ export function LearnCards({
           <InlineCode text={card.body} />
         </p>
         {card.code && (
-          <RunnableExample
+          <LearnExample
+            kind={kind}
             lessonId={lessonId}
             code={card.code}
             input={card.input}

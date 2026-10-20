@@ -1,0 +1,45 @@
+{
+  "slug": "links",
+  "title": "Links",
+  "position": 5,
+  "learn": {
+    "cards": [
+      {
+        "title": "Links with <a>",
+        "body": "`<a>` makes a link. Its `href` says where the link goes, and the text between the tags is what people click.",
+        "code": "<a href=\"https://developer.mozilla.org\">Read the docs</a>"
+      },
+      {
+        "title": "Attributes",
+        "body": "Attributes add details to a tag. They go inside the opening tag as `name=\"value\"`. One tag can have several.",
+        "code": "<a href=\"https://example.com\" title=\"An example site\">Example</a>"
+      }
+    ],
+    "check": {
+      "question": "What will people see on the page?",
+      "code": "<a href=\"/about\">About us</a>",
+      "options": ["About us", "/about", "href"],
+      "answer": 0,
+      "explanation": "The text between `<a>` and `</a>` is what shows. The `href` is where it goes."
+    }
+  },
+  "exercise": {
+    "prompt": "Add a link that goes to `https://example.com` and says `Visit Example`.",
+    "starterCode": "<h1>Links</h1>\n<!-- add your link below -->\n",
+    "checks": [
+      {
+        "type": "attribute",
+        "label": "A link goes to `https://example.com`",
+        "selector": "a",
+        "name": "href",
+        "value": "https://example.com"
+      },
+      {
+        "type": "element",
+        "label": "The link says `Visit Example`",
+        "selector": "a",
+        "text": "Visit Example"
+      }
+    ]
+  }
+}

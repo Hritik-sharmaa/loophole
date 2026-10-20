@@ -1,15 +1,52 @@
 'use client';
 
+import type { ExerciseKind } from '@loophole/shared';
 import { Play, RotateCcw } from 'lucide-react';
 import { useState } from 'react';
 import { CodeEditor } from '@/components/code-editor';
 import { secondaryButton } from '@/components/ui/buttons';
+import { WebPreview } from '@/components/web-preview';
 import { useRun } from '@/lib/queries/use-run';
 
-// A Learn example: code the learner can edit and run (POST /runs, ungraded).
+// A Learn example. Program courses: code the learner can edit and run
+// (POST /runs, ungraded). Web courses (ADR-024): HTML that redraws in a
+// live preview as the learner edits it; nothing is sent to the server.
+export function LearnExample(props: {
+  kind: ExerciseKind;
+  lessonId: string;
+  code: string;
+  input?: string;
+  output?: string;
+}) {
+  return props.kind === 'web' ? (
+    <WebExample code={props.code} />
+  ) : (
+    <RunnableExample {...props} />
+  );
+}
+
+function WebExample({ code: original }: { code: string }) {
+  const start = original.trimEnd();
+  const [code, setCode] = useState(start);
+
+  return (
+    <div className="flex flex-col gap-3">
+      <CodeEditor
+        value={code}
+        onChange={setCode}
+        fileName="example.html"
+        language="html"
+        compact
+      />
+      <WebPreview html={code} className="h-40" />
+      {code !== start && <UndoButton onClick={() => setCode(start)} />}
+    </div>
+  );
+}
+
 // Before any run it shows what the unedited code prints, so the card
 // teaches even when the code runner is down.
-export function RunnableExample({
+function RunnableExample({
   lessonId,
   code: original,
   input,
@@ -55,17 +92,12 @@ export function RunnableExample({
           {run.isPending ? 'Running…' : 'Run it'}
         </button>
         {code !== start && (
-          <button
-            type="button"
+          <UndoButton
             onClick={() => {
               setCode(start);
               run.reset();
             }}
-            className="inline-flex items-center gap-1 rounded-badge px-2 py-1 text-sm font-bold text-text-secondary hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
-          >
-            <RotateCcw className="size-3.5" strokeWidth={3} aria-hidden /> Undo
-            my changes
-          </button>
+          />
         )}
       </div>
 
@@ -110,5 +142,18 @@ function Console({
         {stderr && <span className="block text-pink">{stderr.trimEnd()}</span>}
       </pre>
     </div>
+  );
+}
+
+function UndoButton({ onClick }: { onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="inline-flex items-center gap-1 self-start rounded-badge px-2 py-1 text-sm font-bold text-text-secondary hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+    >
+      <RotateCcw className="size-3.5" strokeWidth={3} aria-hidden /> Undo my
+      changes
+    </button>
   );
 }

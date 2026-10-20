@@ -141,6 +141,7 @@ async function seedCourse(
         })
         .returning({ id: lessons.id });
 
+      // For a web exercise (ADR-024) the tests are empty and checks is set.
       await tx
         .insert(exercises)
         .values({ lessonId, ...lesson.exercise })

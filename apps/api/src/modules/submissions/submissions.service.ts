@@ -17,8 +17,10 @@ import { GamificationService } from '../gamification/gamification.service.js';
 import { LessonsService } from '../lessons/lessons.service.js';
 import { UsersService } from '../users/users.service.js';
 import type { CreateSubmissionDto } from './dto/create-submission.dto.js';
+import { exerciseKind } from '../../common/exercise-kind.js';
 import { grade } from './grading.js';
 import { runTests } from './run-tests.js';
+import { checkPage, gradeChecks } from './web-checks.js';
 
 // How many past submissions GET /submissions returns.
 const HISTORY_LIMIT = 10;
@@ -47,6 +49,7 @@ export class SubmissionsService {
         language: courses.language,
         sampleTests: exercises.sampleTests,
         hiddenTests: exercises.hiddenTests,
+        checks: exercises.checks,
       })
       .from(exercises)
       .innerJoin(lessons, eq(exercises.lessonId, lessons.id))
@@ -68,14 +71,20 @@ export class SubmissionsService {
     // The rows below point at profiles; a brand-new user may not have one yet.
     await this.users.ensureProfile(user);
 
-    const runs = await runTests(
-      this.piston,
-      exercise.language,
-      code,
-      exercise.sampleTests,
-      exercise.hiddenTests,
-    );
-    const result = grade(runs);
+    // A web page is parsed and checked against rules, never run (ADR-024);
+    // a program runs in Piston against its tests.
+    const result =
+      exerciseKind(exercise.language) === 'web'
+        ? gradeChecks(checkPage(code, exercise.checks ?? []))
+        : grade(
+            await runTests(
+              this.piston,
+              exercise.language,
+              code,
+              exercise.sampleTests,
+              exercise.hiddenTests,
+            ),
+          );
 
     const [row] = await this.db.drizzle
       .insert(submissions)

@@ -93,6 +93,8 @@ Explain what went wrong and where. Point to the line if you can.
 
 Response schema: `{ explanation: string, line: integer | null }`
 
+For a web exercise (ADR-024) the `Failing test` line becomes `Failing check: {{label}}`, the first check the page failed, as the learner saw it in the checklist; `language` is `html` and `Error output` holds any CSS syntax errors.
+
 ### Hint
 
 ```

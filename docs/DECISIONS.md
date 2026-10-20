@@ -6,6 +6,12 @@ Format: **ADR-NNN · Title** — Status (Accepted / Superseded by ADR-NNN) · Da
 
 ---
 
+**ADR-024 · HTML & CSS track: pages checked by rules on the server** — Accepted · 2026-10-20
+
+- Decision: a course with `language: "html"` has web exercises. The learner edits one page with a live preview (an `<iframe sandbox="">` with `srcDoc`, so nothing in it can run scripts or reach the app). On submit, the API parses the page with `htmlparser2`, matches elements with `css-select` (selectors parsed with `css-what`), reads `<style>` blocks with `postcss`, and checks it against the exercise's rules (`element`, `attribute`, `style`) in `modules/submissions/web-checks.ts`. Results reuse the submission shape (`kind: "check"`), so XP, streaks, progress and certificates are unchanged. All checks are visible. `exercises.checks` stores them; `exerciseKind()` picks the grader from the course language. `POST /runs` refuses web lessons. The first course has 15 lessons in 3 units.
+- Why: HTML and CSS print nothing for stdout grading. Of the options offered (parse on the server, render in headless Chromium, check in the browser), the developer left the choice to the AI; parsing is fast, runs no learner code, and keeps grading on the server (hard rule 1).
+- Trade-off: CSS is checked as declared, not computed: no inheritance, browser defaults or layout ("is it centred on screen?" can't be checked), so prompts must name the element and property. Adds six small dependencies to the API (`htmlparser2`, `css-select`, `css-what`, `domutils`, `domhandler`, `postcss`) and `@codemirror/lang-html` to the web app.
+
 **ADR-023 · More than one track: the course catalog** — Accepted · 2026-10-20 · Amends PRD §3
 
 - Decision: lift the v1 non-goal "more than one language track". `/learn` becomes a course catalog: a "continue where you left off" card for the latest started course, then every course with the user's progress, then the agreed upcoming tracks (HTML & CSS, JavaScript, Git & GitHub) as "Coming soon" cards hard-coded in the web app. Each course's path moves to `/learn/[slug]`. `GET /courses` returns per-user counts (`lessonCount`, `completedCount`, `lastActivityAt`), ordered by `orderCourses()` (unit-tested). `courses.description` comes from `course.json`. `GET /lessons/:id` names its course so the lesson page links back to the right path.

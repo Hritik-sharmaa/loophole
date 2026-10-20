@@ -1,15 +1,21 @@
 import type {
+  ExerciseKind,
   LearnCard,
   LessonLearn,
   QuickCheck,
   TestCase,
+  WebCheck,
 } from '@loophole/shared';
+import { parse as parseSelector } from 'css-what';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
+import { exerciseKind } from '../../common/exercise-kind.js';
 
 // Reads and checks the content/ folder (docs/CONTENT_GUIDE.md) without
 // touching the database, so a broken file fails fast with its path.
 
+// A program exercise has tests and no checks; a web exercise (ADR-024) has
+// checks and empty test lists.
 export type LessonContent = {
   slug: string;
   title: string;
@@ -20,6 +26,7 @@ export type LessonContent = {
     starterCode: string;
     sampleTests: TestCase[];
     hiddenTests: TestCase[];
+    checks: WebCheck[] | null;
   };
 };
 
@@ -64,6 +71,7 @@ const MIN_HIDDEN_TESTS = 3;
 const MAX_LEARN_CARDS = 5;
 const MIN_CHECK_OPTIONS = 2;
 const MAX_CHECK_OPTIONS = 4;
+const MIN_WEB_CHECKS = 1;
 
 // Every folder in contentDir that has a course.json is one course.
 // Other folders (e.g. duels/) are skipped.
@@ -81,17 +89,22 @@ export function loadCourse(courseDir: string, root = courseDir): CourseContent {
     label(courseFile, root),
   );
 
+  const kind = exerciseKind(course.language);
   const units = readdirSync(courseDir)
     .map((name) => join(courseDir, name))
     .filter((dir) => statSync(dir).isDirectory())
-    .map((dir) => loadUnit(dir, root));
+    .map((dir) => loadUnit(dir, root, kind));
 
   assertUnique(units, 'slug', label(courseDir, root), 'unit');
   assertUnique(units, 'position', label(courseDir, root), 'unit');
   return { ...course, units: sortByPosition(units) };
 }
 
-function loadUnit(unitDir: string, root: string): UnitContent {
+function loadUnit(
+  unitDir: string,
+  root: string,
+  kind: ExerciseKind,
+): UnitContent {
   const unitFile = join(unitDir, 'unit.json');
   if (!existsSync(unitFile)) {
     throw new ContentError(label(unitDir, root), 'missing unit.json');
@@ -101,7 +114,7 @@ function loadUnit(unitDir: string, root: string): UnitContent {
   const lessons = readdirSync(unitDir)
     .filter((name) => name.endsWith('.json') && name !== 'unit.json')
     .map((name) => join(unitDir, name))
-    .map((file) => parseLesson(readJson(file, root), label(file, root)));
+    .map((file) => parseLesson(readJson(file, root), label(file, root), kind));
 
   assertUnique(lessons, 'slug', label(unitDir, root), 'lesson');
   assertUnique(lessons, 'position', label(unitDir, root), 'lesson');
@@ -137,17 +150,38 @@ export function parseUnit(
   };
 }
 
-export function parseLesson(json: unknown, file: string): LessonContent {
+export function parseLesson(
+  json: unknown,
+  file: string,
+  kind: ExerciseKind = 'program',
+): LessonContent {
   const o = asObject(json, file);
   const ex = asObject(o.exercise, file, 'exercise');
-  return {
-    slug: asSlug(o.slug, file, 'slug'),
-    title: asText(o.title, file, 'title'),
-    position: asPosition(o.position, file),
-    learn: o.learn === undefined ? null : parseLearn(o.learn, file),
-    exercise: {
-      prompt: asText(ex.prompt, file, 'exercise.prompt'),
-      starterCode: asString(ex.starterCode, file, 'exercise.starterCode'),
+  const prompt = asText(ex.prompt, file, 'exercise.prompt');
+  const starterCode = asString(ex.starterCode, file, 'exercise.starterCode');
+
+  let exercise: LessonContent['exercise'];
+  if (kind === 'web') {
+    if (ex.sampleTests !== undefined || ex.hiddenTests !== undefined) {
+      throw new ContentError(
+        file,
+        'a web exercise has checks, not sampleTests or hiddenTests',
+      );
+    }
+    exercise = {
+      prompt,
+      starterCode,
+      sampleTests: [],
+      hiddenTests: [],
+      checks: asWebChecks(ex.checks, file),
+    };
+  } else {
+    if (ex.checks !== undefined) {
+      throw new ContentError(file, 'only web exercises have checks');
+    }
+    exercise = {
+      prompt,
+      starterCode,
       sampleTests: asTests(
         ex.sampleTests,
         file,
@@ -160,11 +194,87 @@ export function parseLesson(json: unknown, file: string): LessonContent {
         'exercise.hiddenTests',
         MIN_HIDDEN_TESTS,
       ),
-    },
+      checks: null,
+    };
+  }
+
+  return {
+    slug: asSlug(o.slug, file, 'slug'),
+    title: asText(o.title, file, 'title'),
+    position: asPosition(o.position, file),
+    learn: o.learn === undefined ? null : parseLearn(o.learn, file, kind),
+    exercise,
   };
 }
 
-export function parseLearn(json: unknown, file: string): LessonLearn {
+// ADR-024. Selectors are parsed here so a typo fails CI, not a learner.
+function asWebChecks(value: unknown, file: string): WebCheck[] {
+  const field = 'exercise.checks';
+  if (!Array.isArray(value) || value.length < MIN_WEB_CHECKS) {
+    throw new ContentError(
+      file,
+      `${field} needs at least ${MIN_WEB_CHECKS} check(s)`,
+    );
+  }
+  return value.map((json, i): WebCheck => {
+    const at = `${field}[${i}]`;
+    const o = asObject(json, file, at);
+    const label = asText(o.label, file, `${at}.label`);
+    const selector = asText(o.selector, file, `${at}.selector`);
+    try {
+      parseSelector(selector);
+    } catch {
+      throw new ContentError(file, `${at}.selector "${selector}" is not valid`);
+    }
+
+    switch (o.type) {
+      case 'element': {
+        const check: WebCheck = { type: 'element', label, selector };
+        if (o.min !== undefined)
+          check.min = asIntIn(o.min, 1, 100, file, `${at}.min`);
+        if (o.text !== undefined)
+          check.text = asText(o.text, file, `${at}.text`);
+        return check;
+      }
+      case 'attribute': {
+        const check: WebCheck = {
+          type: 'attribute',
+          label,
+          selector,
+          name: asText(o.name, file, `${at}.name`),
+        };
+        if (o.value !== undefined) {
+          check.value = asString(o.value, file, `${at}.value`);
+        }
+        return check;
+      }
+      case 'style': {
+        const values = [o.value].flat();
+        if (values.length === 0) {
+          throw new ContentError(file, `${at}.value needs a value`);
+        }
+        return {
+          type: 'style',
+          label,
+          selector,
+          property: asText(o.property, file, `${at}.property`),
+          value: values.map((v, j) => asText(v, file, `${at}.value[${j}]`)),
+        };
+      }
+      default:
+        throw new ContentError(
+          file,
+          `${at}.type must be element, attribute or style`,
+        );
+    }
+  });
+}
+
+export function parseLearn(
+  json: unknown,
+  file: string,
+  kind: ExerciseKind = 'program',
+): LessonLearn {
   const o = asObject(json, file, 'learn');
   if (
     !Array.isArray(o.cards) ||
@@ -176,21 +286,36 @@ export function parseLearn(json: unknown, file: string): LessonLearn {
       `learn.cards needs 1 to ${MAX_LEARN_CARDS} cards`,
     );
   }
-  const cards = o.cards.map((c, i) => parseCard(c, file, `learn.cards[${i}]`));
+  const cards = o.cards.map((c, i) =>
+    parseCard(c, file, `learn.cards[${i}]`, kind),
+  );
   return { cards, check: parseCheck(o.check, file) };
 }
 
 // An example is code plus the output it prints; input is optional stdin.
-function parseCard(json: unknown, file: string, field: string): LearnCard {
+// A web example (ADR-024) is HTML shown in a live preview, so it has no
+// input or output.
+function parseCard(
+  json: unknown,
+  file: string,
+  field: string,
+  kind: ExerciseKind,
+): LearnCard {
   const o = asObject(json, file, field);
   const card: LearnCard = {
     title: asText(o.title, file, `${field}.title`),
     body: asText(o.body, file, `${field}.body`),
   };
-  if (o.code === undefined) {
+  if (o.code === undefined || kind === 'web') {
     if (o.input !== undefined || o.output !== undefined) {
-      throw new ContentError(file, `${field} has input or output but no code`);
+      throw new ContentError(
+        file,
+        kind === 'web'
+          ? `${field}: web examples show a preview, so no input or output`
+          : `${field} has input or output but no code`,
+      );
     }
+    if (o.code !== undefined) card.code = asText(o.code, file, `${field}.code`);
     return card;
   }
   card.code = asText(o.code, file, `${field}.code`);

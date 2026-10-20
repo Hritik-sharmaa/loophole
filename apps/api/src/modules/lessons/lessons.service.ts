@@ -10,6 +10,7 @@ import type {
   LessonState,
 } from '@loophole/shared';
 import { and, asc, count, eq, inArray, max } from 'drizzle-orm';
+import { exerciseKind } from '../../common/exercise-kind.js';
 import { DbService } from '../../db/db.service.js';
 import {
   courses,
@@ -108,6 +109,9 @@ export class LessonsService {
         learn: lessons.learn,
         courseId: units.courseId,
         course: { slug: courses.slug, title: courses.title },
+        language: courses.language,
+        // Checks are all shown to the learner; only their labels are sent.
+        checks: exercises.checks,
         exercise: {
           id: exercises.id,
           prompt: exercises.prompt,
@@ -128,7 +132,11 @@ export class LessonsService {
       title: lesson.title,
       course: lesson.course,
       learn: lesson.learn,
-      exercise: lesson.exercise,
+      exercise: {
+        ...lesson.exercise,
+        kind: exerciseKind(lesson.language),
+        checks: (lesson.checks ?? []).map((c) => c.label),
+      },
     };
   }
 

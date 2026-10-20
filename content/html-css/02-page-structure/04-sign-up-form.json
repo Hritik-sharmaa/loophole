@@ -1,0 +1,65 @@
+{
+  "slug": "sign-up-form",
+  "title": "A sign-up form",
+  "position": 4,
+  "learn": {
+    "cards": [
+      {
+        "title": "Inputs",
+        "body": "`<input>` is a box people type into. Its `type` sets the kind: `text`, `email`, `password` and more.",
+        "code": "<input type=\"text\" placeholder=\"Your name\">\n<input type=\"email\" placeholder=\"you@example.com\">"
+      },
+      {
+        "title": "Labels",
+        "body": "`<label>` names an input. Give the input an `id` and the label the same `for`, and clicking the label jumps into the box.",
+        "code": "<label for=\"name\">Name</label>\n<input id=\"name\" type=\"text\">"
+      },
+      {
+        "title": "Buttons",
+        "body": "`<button>` makes a button. Inside a `<form>`, a `type=\"submit\"` button sends the form.",
+        "code": "<form>\n  <input type=\"text\">\n  <button type=\"submit\">Send</button>\n</form>"
+      }
+    ],
+    "check": {
+      "question": "Which input is best for an email address?",
+      "options": [
+        "<input type=\"email\">",
+        "<input type=\"text\">",
+        "<input type=\"mail\">"
+      ],
+      "answer": 0,
+      "explanation": "`type=\"email\"` checks the address and shows the right keyboard on phones. `mail` is not a real type."
+    }
+  },
+  "exercise": {
+    "prompt": "Make a sign-up `<form>` with a `<label>`, an email `<input>`, and a submit button that says `Sign up`.",
+    "starterCode": "<h1>Join us</h1>\n<!-- a form with a label, an email input and a submit button -->\n",
+    "checks": [
+      {
+        "type": "element",
+        "label": "There is a `<form>` with a `<label>`",
+        "selector": "form label"
+      },
+      {
+        "type": "attribute",
+        "label": "The form has an `<input>` with `type=\"email\"`",
+        "selector": "form input",
+        "name": "type",
+        "value": "email"
+      },
+      {
+        "type": "attribute",
+        "label": "The form has a button with `type=\"submit\"`",
+        "selector": "form button",
+        "name": "type",
+        "value": "submit"
+      },
+      {
+        "type": "element",
+        "label": "The button says `Sign up`",
+        "selector": "form button",
+        "text": "Sign up"
+      }
+    ]
+  }
+}

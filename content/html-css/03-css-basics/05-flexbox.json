@@ -1,0 +1,55 @@
+{
+  "slug": "flexbox",
+  "title": "Side by side with flexbox",
+  "position": 5,
+  "learn": {
+    "cards": [
+      {
+        "title": "display: flex",
+        "body": "Boxes normally stack on top of each other. Give the box that holds them `display: flex` and they line up in a row.",
+        "code": "<style>\n  .row { display: flex; }\n  .row div { background-color: pink; padding: 10px; }\n</style>\n<div class=\"row\">\n  <div>One</div>\n  <div>Two</div>\n  <div>Three</div>\n</div>"
+      },
+      {
+        "title": "gap",
+        "body": "`gap` adds space between the boxes in a flex row.",
+        "code": "<style>\n  .row { display: flex; gap: 12px; }\n  .row div { background-color: pink; padding: 10px; }\n</style>\n<div class=\"row\">\n  <div>One</div>\n  <div>Two</div>\n  <div>Three</div>\n</div>"
+      }
+    ],
+    "check": {
+      "question": "Where does `display: flex` go to line up three boxes in a row?",
+      "options": [
+        "On the box that holds them",
+        "On each of the three boxes",
+        "On the <style> tag"
+      ],
+      "answer": 0,
+      "explanation": "Flexbox is set on the parent. Its children then line up."
+    }
+  },
+  "exercise": {
+    "prompt": "Put the three `.item` boxes in a row: give `.row` `display: flex` and a `gap` of `16px`.",
+    "starterCode": "<div class=\"row\">\n  <div class=\"item\">A</div>\n  <div class=\"item\">B</div>\n  <div class=\"item\">C</div>\n</div>\n",
+    "checks": [
+      {
+        "type": "element",
+        "label": "`.row` still holds three `.item` boxes",
+        "selector": ".row > .item",
+        "min": 3
+      },
+      {
+        "type": "style",
+        "label": "`.row` has `display: flex`",
+        "selector": ".row",
+        "property": "display",
+        "value": "flex"
+      },
+      {
+        "type": "style",
+        "label": "`.row` has `gap: 16px`",
+        "selector": ".row",
+        "property": "gap",
+        "value": "16px"
+      }
+    ]
+  }
+}

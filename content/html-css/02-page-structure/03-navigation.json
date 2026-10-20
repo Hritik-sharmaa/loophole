@@ -1,0 +1,54 @@
+{
+  "slug": "navigation",
+  "title": "A navigation bar",
+  "position": 3,
+  "learn": {
+    "cards": [
+      {
+        "title": "Navigation with <nav>",
+        "body": "`<nav>` wraps the main links of a site, like its menu.",
+        "code": "<nav>\n  <a href=\"/\">Home</a>\n  <a href=\"/blog\">Blog</a>\n</nav>"
+      },
+      {
+        "title": "Links inside your site",
+        "body": "An `href` that starts with `/` goes to another page on the same site, like `/about`."
+      }
+    ],
+    "check": {
+      "question": "Where should a site's main menu links go?",
+      "options": ["<nav>", "<footer>", "<title>"],
+      "answer": 0,
+      "explanation": "`<nav>` is made for the main navigation links."
+    }
+  },
+  "exercise": {
+    "prompt": "Make a `<nav>` with three links that say `Home`, `Blog` and `About`.",
+    "starterCode": "<!-- a nav with three links -->\n",
+    "checks": [
+      {
+        "type": "element",
+        "label": "The `<nav>` has at least three links",
+        "selector": "nav a",
+        "min": 3
+      },
+      {
+        "type": "element",
+        "label": "One link says `Home`",
+        "selector": "nav a",
+        "text": "Home"
+      },
+      {
+        "type": "element",
+        "label": "One link says `Blog`",
+        "selector": "nav a",
+        "text": "Blog"
+      },
+      {
+        "type": "element",
+        "label": "One link says `About`",
+        "selector": "nav a",
+        "text": "About"
+      }
+    ]
+  }
+}

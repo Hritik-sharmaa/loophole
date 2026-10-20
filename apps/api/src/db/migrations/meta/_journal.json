@@ -71,6 +71,13 @@
       "when": 1792474485700,
       "tag": "0009_course_description",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1792478656467,
+      "tag": "0010_web_checks",
+      "breakpoints": true
     }
   ]
 }

@@ -1,4 +1,4 @@
-import type { LessonLearn, TestCase } from '@loophole/shared';
+import type { LessonLearn, TestCase, WebCheck } from '@loophole/shared';
 import {
   integer,
   jsonb,
@@ -72,4 +72,7 @@ export const exercises = pgTable('exercises', {
   starterCode: text('starter_code').notNull(),
   sampleTests: jsonb('sample_tests').$type<TestCase[]>().notNull(),
   hiddenTests: jsonb('hidden_tests').$type<TestCase[]>().notNull(),
+  // Web exercises only (ADR-024): the page's rules, all shown to the
+  // learner. Null for program exercises, whose tests are above.
+  checks: jsonb('checks').$type<WebCheck[]>(),
 }).enableRLS();

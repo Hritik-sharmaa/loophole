@@ -11,6 +11,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@codemirror/lang-html": "^6.4.12",
     "@codemirror/lang-python": "^6.2.1",
     "@hookform/resolvers": "^5.9.1",
     "@loophole/shared": "workspace:*",

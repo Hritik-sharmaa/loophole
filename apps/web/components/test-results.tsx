@@ -43,7 +43,12 @@ export function TestResults({ result }: { result: Graded }) {
 // TestResultRow from docs/DESIGN_SYSTEM.md §6: ✓ Blue or ✕ Ink. Only
 // sample tests have details; hidden tests report pass or fail.
 function TestResultRow({ result }: { result: TestResult }) {
-  const label = result.kind === 'sample' ? 'Example' : 'Hidden test';
+  const label =
+    result.kind === 'sample'
+      ? 'Example'
+      : result.kind === 'check'
+        ? result.label
+        : 'Hidden test';
   const showDetails = result.kind === 'sample' && !result.passed;
 
   return (

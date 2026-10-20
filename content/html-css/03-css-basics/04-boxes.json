@@ -1,0 +1,50 @@
+{
+  "slug": "boxes",
+  "title": "Space and boxes",
+  "position": 4,
+  "learn": {
+    "cards": [
+      {
+        "title": "Every element is a box",
+        "body": "`padding` is the space inside a box, around its content. `margin` is the space outside it.",
+        "code": "<style>\n  .box { background-color: lightgreen; padding: 20px; margin: 10px; }\n</style>\n<div class=\"box\">I have padding.</div>"
+      },
+      {
+        "title": "Borders and corners",
+        "body": "`border` draws an edge, like `2px solid black`. `border-radius` rounds the corners.",
+        "code": "<style>\n  .box { border: 2px solid black; border-radius: 12px; padding: 12px; }\n</style>\n<div class=\"box\">Rounded box</div>"
+      }
+    ],
+    "check": {
+      "question": "Which property adds space inside a box, around its content?",
+      "options": ["padding", "margin", "border"],
+      "answer": 0,
+      "explanation": "`padding` is inside the edge. `margin` is outside it, and `border` is the edge itself."
+    }
+  },
+  "exercise": {
+    "prompt": "Style the `.card` box: a `padding` of `16px` and a `border-radius` of `8px`.",
+    "starterCode": "<div class=\"card\">\n  <h2>Card title</h2>\n  <p>Card text.</p>\n</div>\n",
+    "checks": [
+      {
+        "type": "element",
+        "label": "The `.card` box is still there",
+        "selector": ".card"
+      },
+      {
+        "type": "style",
+        "label": "`.card` has `padding: 16px`",
+        "selector": ".card",
+        "property": "padding",
+        "value": "16px"
+      },
+      {
+        "type": "style",
+        "label": "`.card` has `border-radius: 8px`",
+        "selector": ".card",
+        "property": "border-radius",
+        "value": "8px"
+      }
+    ]
+  }
+}

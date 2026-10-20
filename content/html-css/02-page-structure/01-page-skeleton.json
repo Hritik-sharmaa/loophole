@@ -1,0 +1,41 @@
+{
+  "slug": "page-skeleton",
+  "title": "The shape of a page",
+  "position": 1,
+  "learn": {
+    "cards": [
+      {
+        "title": "Head and body",
+        "body": "A full page starts with `<!DOCTYPE html>`, then `<html>` holding a `<head>` (facts about the page) and a `<body>` (what you see).",
+        "code": "<!DOCTYPE html>\n<html>\n  <head>\n    <title>Tab title</title>\n  </head>\n  <body>\n    <h1>On the page</h1>\n  </body>\n</html>"
+      },
+      {
+        "title": "The title",
+        "body": "`<title>` goes in the `<head>`. It doesn't show on the page: it is the name on the browser tab and in search results."
+      }
+    ],
+    "check": {
+      "question": "Where does `<title>` go?",
+      "options": ["Inside <head>", "Inside <body>", "After </html>"],
+      "answer": 0,
+      "explanation": "The title is information about the page, so it goes in the `<head>`."
+    }
+  },
+  "exercise": {
+    "prompt": "Write a full page: a `<head>` with the title `My Page`, and a `<body>` with an `<h1>`.",
+    "starterCode": "<!DOCTYPE html>\n<html>\n  <!-- add a head with a title, and a body with an h1 -->\n</html>\n",
+    "checks": [
+      {
+        "type": "element",
+        "label": "The `<head>` has a `<title>` that says `My Page`",
+        "selector": "head > title",
+        "text": "My Page"
+      },
+      {
+        "type": "element",
+        "label": "The `<body>` has an `<h1>`",
+        "selector": "body h1"
+      }
+    ]
+  }
+}

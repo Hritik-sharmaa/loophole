@@ -7,6 +7,7 @@ import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { AppHeader } from '@/components/app-header';
 import { Byte, ByteSays } from '@/components/byte';
+import { Checklist } from '@/components/checklist';
 import { CodeEditor } from '@/components/code-editor';
 import { InlineCode } from '@/components/inline-code';
 import { LearnCards } from '@/components/learn-cards';
@@ -16,6 +17,7 @@ import { TestResults } from '@/components/test-results';
 import { TutorPanel } from '@/components/tutor-panel';
 import { primaryButton, secondaryButton } from '@/components/ui/buttons';
 import { chip, stickerCard, stickerOutline } from '@/components/ui/card';
+import { WebPreview } from '@/components/web-preview';
 import { ApiError } from '@/lib/api';
 import { celebrate } from '@/lib/celebrate';
 import { useLesson } from '@/lib/queries/use-lessons';
@@ -35,7 +37,10 @@ export default function LessonPage() {
   return (
     <>
       <AppHeader />
-      <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-6 sm:px-6 sm:py-8">
+      {/* Web lessons are wider: editor and live preview sit side by side. */}
+      <main
+        className={`mx-auto w-full flex-1 px-4 py-6 sm:px-6 sm:py-8 ${lesson.data?.exercise.kind === 'web' ? 'max-w-5xl' : 'max-w-3xl'}`}
+      >
         <Link
           href={lesson.data ? `/learn/${lesson.data.course.slug}` : '/learn'}
           className="mb-6 inline-flex items-center gap-1 rounded-badge text-sm font-bold text-text-secondary hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
@@ -104,14 +109,16 @@ function Lesson({
       {learn && (
         <>
           <Stepper current={step} onPick={go} />
-          <div hidden={step !== 'learn'}>
+          {/* Cards keep a reading width even on a wide web lesson. */}
+          <div hidden={step !== 'learn'} className="w-full max-w-3xl">
             <LearnCards
               lessonId={lesson.id}
+              kind={lesson.exercise.kind}
               cards={learn.cards}
               onDone={() => go('check')}
             />
           </div>
-          <div hidden={step !== 'check'}>
+          <div hidden={step !== 'check'} className="w-full max-w-3xl">
             <QuickCheck check={learn.check} onDone={() => go('practice')} />
           </div>
         </>
@@ -173,7 +180,16 @@ function Exercise({
   lesson: LessonDetail;
   initialCode: string;
 }) {
-  const { id: exerciseId, prompt, starterCode, sampleTests } = lesson.exercise;
+  const {
+    id: exerciseId,
+    kind,
+    prompt,
+    starterCode,
+    sampleTests,
+    checks,
+  } = lesson.exercise;
+  // Web exercises (ADR-024): a page checked by rules, with a live preview.
+  const web = kind === 'web';
   const [code, setCode] = useState(initialCode);
   const submit = useSubmit();
   const result = submit.data;
@@ -196,9 +212,22 @@ function Exercise({
         </p>
       </ByteSays>
 
-      <SampleTests tests={sampleTests} />
-
-      <CodeEditor value={code} onChange={setCode} fileName="main.py" />
+      {web ? (
+        <div className="grid gap-4 lg:grid-cols-2">
+          <CodeEditor
+            value={code}
+            onChange={setCode}
+            fileName="index.html"
+            language="html"
+          />
+          <WebPreview html={code} className="h-72 lg:h-full lg:min-h-72" />
+        </div>
+      ) : (
+        <>
+          <SampleTests tests={sampleTests} />
+          <CodeEditor value={code} onChange={setCode} fileName="main.py" />
+        </>
+      )}
 
       <div className="flex flex-wrap items-center gap-3">
         {/* One orange button per region: Continue takes over once passed. */}
@@ -208,7 +237,13 @@ function Exercise({
           disabled={submit.isPending}
           className={completed ? secondaryButton : primaryButton}
         >
-          {submit.isPending ? 'Running…' : 'Run'}
+          {web
+            ? submit.isPending
+              ? 'Checking…'
+              : 'Check my page'
+            : submit.isPending
+              ? 'Running…'
+              : 'Run'}
         </button>
         <button
           type="button"
@@ -266,7 +301,12 @@ function Exercise({
         </div>
       )}
 
-      {result && <TestResults result={result} />}
+      {/* Web: the checklist is always shown, ticked after each check. */}
+      {web ? (
+        <Checklist checks={checks} result={result} />
+      ) : (
+        result && <TestResults result={result} />
+      )}
 
       {/* After the results, so Explain sits under the error it explains. */}
       {!completed && (

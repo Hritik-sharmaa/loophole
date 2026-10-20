@@ -25,7 +25,7 @@ export function Hero() {
             transition={{ duration: 0.4 }}
             className={`${chip} bg-lemon text-sm text-ink`}
           >
-            Python track · free
+            Python + HTML & CSS · free
           </motion.span>
 
           <h1 className="font-display text-5xl leading-[1.05] font-extrabold tracking-tight sm:text-6xl">

@@ -1,0 +1,47 @@
+{
+  "slug": "images",
+  "title": "Images",
+  "position": 6,
+  "learn": {
+    "cards": [
+      {
+        "title": "Images with <img>",
+        "body": "`<img>` shows a picture. `src` is the address of the picture. It has no closing tag.",
+        "code": "<img src=\"https://picsum.photos/240/140\" alt=\"A random photo\">"
+      },
+      {
+        "title": "Always write alt text",
+        "body": "`alt` describes the picture for people who can't see it, and shows when the picture fails to load.",
+        "code": "<img src=\"missing.png\" alt=\"A cat asleep on a laptop\">"
+      }
+    ],
+    "check": {
+      "question": "What is `alt` for?",
+      "options": [
+        "Describing the picture for people who can't see it",
+        "Making the picture bigger",
+        "Choosing a second picture"
+      ],
+      "answer": 0,
+      "explanation": "Screen readers read the `alt` text aloud, and browsers show it when the picture is missing."
+    }
+  },
+  "exercise": {
+    "prompt": "Add an image with any `src`, and an `alt` that describes it.",
+    "starterCode": "<h1>My pet</h1>\n<!-- add an img with src and alt -->\n",
+    "checks": [
+      {
+        "type": "attribute",
+        "label": "An `<img>` has a `src`",
+        "selector": "img",
+        "name": "src"
+      },
+      {
+        "type": "attribute",
+        "label": "The `<img>` has `alt` text",
+        "selector": "img",
+        "name": "alt"
+      }
+    ]
+  }
+}

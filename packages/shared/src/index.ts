@@ -78,6 +78,40 @@ export type QuickCheck = {
 
 export type LessonLearn = { cards: LearnCard[]; check: QuickCheck };
 
+// How an exercise is graded (ADR-024). "program": run in Piston, stdout
+// compared with tests. "web": an HTML page (with its CSS in <style>) that
+// the API parses and checks against rules; nothing is run.
+export type ExerciseKind = 'program' | 'web';
+
+// One rule a web exercise's page must meet. `label` is what the learner
+// sees in the checklist. Selectors are CSS selectors.
+export type WebCheck =
+  | {
+      type: 'element';
+      label: string;
+      selector: string;
+      // At least this many matches (default 1).
+      min?: number;
+      // Only count elements whose text, whitespace collapsed, is exactly this.
+      text?: string;
+    }
+  | {
+      type: 'attribute';
+      label: string;
+      selector: string;
+      name: string;
+      // Any value when left out.
+      value?: string;
+    }
+  | {
+      type: 'style';
+      label: string;
+      selector: string;
+      property: string;
+      // Accepted values, e.g. ["orange", "#ffa500"].
+      value: string | string[];
+    };
+
 // GET /lessons/:id. Sample tests only; hidden tests never leave the server.
 // `learn` is null for a lesson without a Learn step.
 export type LessonDetail = {
@@ -88,9 +122,13 @@ export type LessonDetail = {
   learn: LessonLearn | null;
   exercise: {
     id: string;
+    kind: ExerciseKind;
     prompt: string;
     starterCode: string;
+    // Program exercises: the examples. Empty for web exercises.
     sampleTests: TestCase[];
+    // Web exercises: the checklist, all visible. Empty for programs.
+    checks: string[];
   };
 };
 
@@ -117,7 +155,9 @@ export type TestResult =
       expected: string;
       actual: string;
     }
-  | { kind: 'hidden'; passed: boolean };
+  | { kind: 'hidden'; passed: boolean }
+  // A web exercise's rule (ADR-024); its label is already public.
+  | { kind: 'check'; passed: boolean; label: string };
 
 // POST /submissions response
 export type SubmissionResult = {

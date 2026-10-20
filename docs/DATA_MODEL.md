@@ -48,14 +48,15 @@ Conventions: `uuid` primary keys (`gen_random_uuid()`), `timestamptz` in UTC, sn
 
 ### exercises — S2
 
-| Column       | Type              | Notes                                                         |
-| ------------ | ----------------- | ------------------------------------------------------------- |
-| id           | uuid PK           |                                                               |
-| lesson_id    | uuid FK → lessons | one exercise per lesson in v1                                 |
-| prompt       | text              | Markdown                                                      |
-| starter_code | text              |                                                               |
-| sample_tests | jsonb             | `[{ input, expectedOutput }]` — shown to learner              |
-| hidden_tests | jsonb             | `[{ input, expectedOutput }]` — **never returned by the API** |
+| Column       | Type              | Notes                                                                                                         |
+| ------------ | ----------------- | ------------------------------------------------------------------------------------------------------------- |
+| id           | uuid PK           |                                                                                                               |
+| lesson_id    | uuid FK → lessons | one exercise per lesson in v1                                                                                 |
+| prompt       | text              | Markdown                                                                                                      |
+| starter_code | text              |                                                                                                               |
+| sample_tests | jsonb             | `[{ input, expectedOutput }]` — shown to learner                                                              |
+| hidden_tests | jsonb             | `[{ input, expectedOutput }]` — **never returned by the API**                                                 |
+| checks       | jsonb, nullable   | web exercises only (ADR-024): `[{ type, label, selector, … }]`; tests are `[]` then. Only labels are returned |
 
 ### user_progress — S2
 

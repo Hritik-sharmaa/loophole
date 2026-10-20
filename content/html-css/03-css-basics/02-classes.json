@@ -1,0 +1,42 @@
+{
+  "slug": "classes",
+  "title": "Classes",
+  "position": 2,
+  "learn": {
+    "cards": [
+      {
+        "title": "Classes pick some elements",
+        "body": "Give elements a `class`, then style that class with a dot, like `.note`. Only elements with the class change.",
+        "code": "<style>\n  .note { background-color: lightblue; }\n</style>\n<p>A plain paragraph.</p>\n<p class=\"note\">A paragraph with a class.</p>"
+      },
+      {
+        "title": "One class, many elements",
+        "body": "Many elements can share a class, so one rule styles all of them at once."
+      }
+    ],
+    "check": {
+      "question": "Which selector styles elements with `class=\"tip\"`?",
+      "options": [".tip", "#tip", "tip"],
+      "answer": 0,
+      "explanation": "A dot means a class. `#tip` would mean an id, and `tip` would mean a `<tip>` tag."
+    }
+  },
+  "exercise": {
+    "prompt": "Give the second paragraph the class `highlight`, and make `.highlight` have a yellow `background-color`.",
+    "starterCode": "<p>Normal text.</p>\n<p>Important text.</p>\n",
+    "checks": [
+      {
+        "type": "element",
+        "label": "A paragraph has the class `highlight`",
+        "selector": "p.highlight"
+      },
+      {
+        "type": "style",
+        "label": "`.highlight` has a yellow `background-color`",
+        "selector": "p.highlight",
+        "property": "background-color",
+        "value": ["yellow", "#ffff00", "#ff0"]
+      }
+    ]
+  }
+}

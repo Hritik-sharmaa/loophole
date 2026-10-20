@@ -1,0 +1,50 @@
+{
+  "slug": "first-heading",
+  "title": "Your first heading",
+  "position": 1,
+  "learn": {
+    "cards": [
+      {
+        "title": "Pages are made of tags",
+        "body": "A web page is written in HTML. Tags in angle brackets wrap your content: `<h1>` starts a heading and `</h1>` ends it. Edit the example and watch the preview change.",
+        "code": "<h1>My first page</h1>"
+      },
+      {
+        "title": "Bigger and smaller headings",
+        "body": "There are six heading levels, from `<h1>` (biggest) to `<h6>` (smallest). Try changing the numbers.",
+        "code": "<h1>Big news</h1>\n<h2>Smaller news</h2>\n<h3>Even smaller</h3>"
+      },
+      {
+        "title": "Close what you open",
+        "body": "Every opening tag like `<h1>` needs its closing tag `</h1>`, with a slash. Browsers try to fix mistakes, but don't rely on it."
+      }
+    ],
+    "check": {
+      "question": "Which line makes a heading?",
+      "options": [
+        "<h1>Hello</h1>",
+        "<head>Hello</head>",
+        "<heading>Hello</heading>"
+      ],
+      "answer": 0,
+      "explanation": "`<h1>` is a heading. `<head>` is a different part of a page, and `<heading>` is not an HTML tag."
+    }
+  },
+  "exercise": {
+    "prompt": "Make a page with one main heading that says exactly `Hello, web!`",
+    "starterCode": "<!-- Write your heading below -->\n",
+    "checks": [
+      {
+        "type": "element",
+        "label": "There is an `<h1>` heading",
+        "selector": "h1"
+      },
+      {
+        "type": "element",
+        "label": "The `<h1>` says `Hello, web!`",
+        "selector": "h1",
+        "text": "Hello, web!"
+      }
+    ]
+  }
+}

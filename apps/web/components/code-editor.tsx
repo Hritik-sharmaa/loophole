@@ -1,23 +1,36 @@
 'use client';
 
+import { html } from '@codemirror/lang-html';
 import { python } from '@codemirror/lang-python';
 import CodeMirror, { EditorView } from '@uiw/react-codemirror';
 
 // EditorPanel from docs/DESIGN_SYSTEM.md §6: CodeMirror, light theme,
 // JetBrains Mono 14 / 1.6, in a sticker card with an Ink title bar.
 // The focus ring is drawn on the wrapper instead.
-const extensions = [
-  python(),
+const shared = [
   EditorView.theme({
     '&': { fontSize: '14px' },
     '&.cm-focused': { outline: 'none' },
     '.cm-scroller': {
       fontFamily: 'var(--font-jetbrains), monospace',
       lineHeight: '1.6',
+      // Show code exactly as typed: no ligature turning `<!--` or `->`
+      // into an arrow, which confuses beginners.
+      fontVariantLigatures: 'none',
     },
   }),
   EditorView.contentAttributes.of({ 'aria-label': 'Code editor' }),
 ];
+
+// Syntax highlighting by language. Built once: CodeMirror reconfigures
+// the editor whenever the extensions array changes identity.
+const EXTENSIONS = {
+  python: [python(), ...shared],
+  // HTML mode also highlights the CSS inside <style> (ADR-024).
+  html: [html(), ...shared],
+};
+
+export type EditorLanguage = keyof typeof EXTENSIONS;
 
 // Tab indents inside the editor; Esc then Tab moves focus out (CodeMirror's
 // built-in escape hatch), so it stays keyboard-reachable both ways.
@@ -28,11 +41,13 @@ export function CodeEditor({
   onChange,
   fileName,
   compact = false,
+  language = 'python',
 }: {
   value: string;
   onChange: (value: string) => void;
   fileName: string;
   compact?: boolean;
+  language?: EditorLanguage;
 }) {
   return (
     <section
@@ -49,7 +64,7 @@ export function CodeEditor({
       <CodeMirror
         value={value}
         onChange={onChange}
-        extensions={extensions}
+        extensions={EXTENSIONS[language]}
         theme="light"
         minHeight={compact ? '4rem' : '12rem'}
         basicSetup={{ foldGutter: false }}

@@ -44,6 +44,9 @@ export type ExplainInput = {
     expectedOutput: string;
     actualOutput: string;
   } | null;
+  // Web exercises (ADR-024): the first check the page fails, as the
+  // learner saw it in their checklist.
+  failingCheck?: string;
   stderr: string;
 };
 
@@ -154,11 +157,13 @@ export function explainPrompt(input: ExplainInput): string {
     `Exercise: ${input.exercisePrompt}`,
     "Learner's code (line numbers added):",
     withLineNumbers(input.code),
-    failingTest
-      ? `Failing test: input=${JSON.stringify(failingTest.input)} expected=${JSON.stringify(failingTest.expectedOutput)} got=${JSON.stringify(failingTest.actualOutput)}`
-      : // Every example passed, so the failure is on inputs the learner
-        // hasn't seen; say only that, never what they were.
-        'Failing test: the shown example passes, but the program gives wrong results for other inputs.',
+    input.failingCheck
+      ? `Failing check: ${input.failingCheck}`
+      : failingTest
+        ? `Failing test: input=${JSON.stringify(failingTest.input)} expected=${JSON.stringify(failingTest.expectedOutput)} got=${JSON.stringify(failingTest.actualOutput)}`
+        : // Every example passed, so the failure is on inputs the learner
+          // hasn't seen; say only that, never what they were.
+          'Failing test: the shown example passes, but the program gives wrong results for other inputs.',
     `Error output: ${input.stderr.trim() || '(none)'}`,
     '',
     'Explain what went wrong and where. Point to the line if you can.',
