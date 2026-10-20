@@ -366,6 +366,71 @@ export type DuelEnd = {
 export type DuelOpponentStatus = { userId: string; connected: boolean };
 export type SocketError = { code: string; message: string };
 
+// ---- Bug of the day (FR-28, ADR-035) ----
+
+// The caller's play of today's bug. The clock starts on their first
+// GET /bug-of-the-day of the IST day; `timeMs` is set once solved.
+export type DailyBugPlay = {
+  openedAt: string;
+  solvedAt: string | null;
+  timeMs: number | null;
+  attempts: number;
+};
+
+// GET /bug-of-the-day. Sample tests only; hidden tests never leave the
+// server (hard rule 2).
+export type DailyBugToday = {
+  // The IST day, "YYYY-MM-DD"; a new bug starts at 00:00 IST.
+  day: string;
+  problem: {
+    title: string;
+    description: string;
+    buggyCode: string;
+    sampleTests: TestCase[];
+  };
+  me: DailyBugPlay;
+};
+
+// GET /bug-of-the-day/board: today's fastest solves, plus the caller's.
+// Opening the board does not start the caller's clock.
+export type DailyBugBoard = {
+  day: string;
+  title: string;
+  // How many learners have solved today's bug.
+  solvers: number;
+  entries: {
+    rank: number;
+    userId: string;
+    username: string;
+    timeMs: number;
+    attempts: number;
+  }[];
+  // null until the caller solves it.
+  me: { rank: number; timeMs: number } | null;
+  // Whether the caller has opened today's bug (their clock is running).
+  started: boolean;
+};
+
+// POST /bug-of-the-day/submissions
+export type DailyBugSubmitRequest = { code: string };
+
+// The graded attempt; hidden tests report only pass/fail.
+export type DailyBugResult = {
+  status: SubmissionStatus;
+  testsPassed: number;
+  totalTests: number;
+  results: TestResult[];
+  stderr: string;
+  // True once today's bug is solved, by this attempt or an earlier one.
+  solved: boolean;
+  // 20 for the first solve of the day, 0 after.
+  xpAwarded: number;
+  timeMs: number | null;
+  // Place on today's board; null until solved.
+  rank: number | null;
+  solvers: number;
+};
+
 // ---- Certificates (FR-15) ----
 
 // GET /certificates — the signed-in user's own.

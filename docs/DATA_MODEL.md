@@ -183,6 +183,21 @@ Conventions: `uuid` primary keys (`gen_random_uuid()`), `timestamptz` in UTC, sn
 | issued_at   | timestamptz        |                             |
 |             |                    | unique (user_id, course_id) |
 
+### daily_bug_plays — Phase 3 (FR-28, ADR-035)
+
+| Column     | Type                    | Notes                                                           |
+| ---------- | ----------------------- | --------------------------------------------------------------- |
+| id         | uuid PK                 | also the `xp_events.source_id` for the day's XP                 |
+| user_id    | uuid FK → profiles      |                                                                 |
+| day        | date                    | the IST day                                                     |
+| problem_id | uuid FK → duel_problems | the bug this learner opened that day                            |
+| opened_at  | timestamptz             | first `GET /bug-of-the-day` of the day: the clock starts        |
+| solved_at  | timestamptz             | nullable; first passing submission, set by a conditional update |
+| attempts   | int                     | graded submissions, failed ones included                        |
+|            |                         | unique (user_id, day); index (day, solved_at) for the board     |
+
+`xp_events.source` is `lesson` or `daily-bug` (migration 0013 adds the table; the source column is plain text).
+
 ## Relationships
 
 ```
@@ -193,6 +208,7 @@ profiles 1─* xp_events
 profiles 1─1 streaks, ratings
 duel_problems 1─* duels *─2 profiles
 duels 1─* duel_submissions
+profiles 1─* daily_bug_plays *─1 duel_problems
 ```
 
 ## Rules that live in the database
@@ -204,6 +220,8 @@ duels 1─* duel_submissions
 | One winner per duel                 | conditional update `where winner_id is null`     |
 | A player cannot duel themselves     | check constraint on duels                        |
 | One certificate per course per user | unique on certificates                           |
+| One bug-of-the-day play a day       | unique (user_id, day) on daily_bug_plays         |
+| One solve time per play             | conditional update `where solved_at is null`     |
 
 ## Row-level security
 

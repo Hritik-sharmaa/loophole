@@ -107,7 +107,7 @@ Non-coding spaces · teacher portal · payments · native mobile apps (the insta
 
 ### 6.8 Stretch (Could)
 
-FR-27 replay a finished duel · FR-28 daily "bug of the day" bracket · FR-29 spectate a live duel · FR-30 JavaScript track.
+FR-27 replay a finished duel · FR-28 daily "bug of the day" bracket (built as a daily board of fastest solves, ADR-035) · FR-29 spectate a live duel · FR-30 JavaScript track.
 
 ## 7. Non-functional requirements
 

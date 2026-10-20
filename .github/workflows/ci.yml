@@ -39,3 +39,34 @@ jobs:
       - run: pnpm test
       # API e2e tests run on PGlite (in-memory Postgres), so CI needs no database.
       - run: pnpm --filter @loophole/api test:e2e
+
+  # Playwright journeys (ADR-034): the production web build in Chromium,
+  # against the mock backend in apps/web/e2e, so CI needs no database or
+  # Supabase. Separate from `check` so the two run side by side.
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # Chromium plus the system libraries it needs on Ubuntu.
+      - run: pnpm --filter @loophole/web exec playwright install --with-deps chromium
+
+      - run: pnpm --filter @loophole/web test:e2e
+
+      # The HTML report (with traces of failed tests) to see what broke.
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: apps/web/playwright-report/
+          retention-days: 7

@@ -22,8 +22,9 @@ export const xpEvents = pgTable(
       .notNull()
       .references(() => profiles.id, { onDelete: 'cascade' }),
     amount: integer('amount').notNull(),
-    // 'lesson' in v1; source_id is then the lesson id.
-    source: text('source').$type<'lesson'>().notNull(),
+    // 'lesson' (source_id: the lesson id) or 'daily-bug' (source_id: the
+    // daily_bug_plays row, ADR-035).
+    source: text('source').$type<'lesson' | 'daily-bug'>().notNull(),
     sourceId: uuid('source_id').notNull(),
     createdAt: timestamp('created_at', { withTimezone: true })
       .notNull()

@@ -67,6 +67,20 @@ export default function DuelsPage() {
             onPlayAgain={findDuel}
           />
         )}
+        {/* Out of a duel, or the server is away: the solo daily bug
+            (ADR-035) trains the same skill. */}
+        {(state.phase === 'offline' ||
+          state.phase === 'idle' ||
+          state.phase === 'queued') && (
+          <p className="mt-6 text-center">
+            <Link
+              href="/bug-of-the-day"
+              className="rounded-badge text-sm font-bold text-text-secondary underline hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+            >
+              No one around? Warm up with today&apos;s bug of the day
+            </Link>
+          </p>
+        )}
       </main>
     </>
   );

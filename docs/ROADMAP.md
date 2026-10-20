@@ -112,7 +112,8 @@ Loop for every slice: AI **writes** the slice → you **review** and change it �
 - [x] Full-screen lessons with a fixed Continue bar and a finish screen (ADR-029)
 - [x] Unit badges, cheat sheets and a certificate stop on the course page (ADR-030)
 - [x] Spot-the-bug cards in every lesson, and a Bug hunt review per unit (ADR-031)
-- [ ] Playwright e2e for J-1 and J-3; deploy step in GitHub Actions
+- [x] Playwright e2e for the PRD journeys J-1 to J-4 (ADR-034)
+- [ ] Deploy step in GitHub Actions
 - [ ] Scalability, only if needed: see `ARCHITECTURE.md` §5
 - [ ] Stretch: replay (FR-27), bug of the day (FR-28), spectate (FR-29), JavaScript track (FR-30)
 
@@ -123,14 +124,14 @@ Ideas from comparing Duolingo, Coddy and Codédex, kept here so none get lost. B
 **1. Finish what we started**
 
 - [x] Spot-the-bug cards for every lesson after the first unit, so every unit has a Bug hunt (M, content)
-- [ ] Playwright e2e: sign in → lesson → finish screen (M)
+- [x] Playwright e2e: sign in → lesson → finish screen (M, ADR-034)
 - [ ] Re-test Node run times on the VPS (S, ADR-025)
 
 **2. Bring learners back every day**
 
 - [x] First-run welcome: pick a course and a daily goal (5 / 10 / 15 minutes); the guide says hello (M, ADR-033)
 - [x] Daily goal ring in the header and a streak calendar on the profile (M, ADR-033)
-- [ ] Bug of the day: one buggy program a day for everyone, with a small board (M, FR-28)
+- [x] Bug of the day: one buggy program a day for everyone, with a small board (M, FR-28, ADR-035)
 - [ ] Weekly leagues of ~20 learners with promotion and demotion (L; new tables and a weekly job)
 
 **3. More ways to learn in a lesson**

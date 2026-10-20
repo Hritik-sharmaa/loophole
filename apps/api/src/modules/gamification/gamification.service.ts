@@ -23,6 +23,11 @@ import {
 // ADR-012: 10 XP per lesson.
 export const LESSON_XP = 10;
 
+// ADR-035: the bug of the day pays like two lessons. A duel problem hides
+// one to three bugs in a whole program, so it takes longer than a lesson,
+// and it comes only once a day.
+export const DAILY_BUG_XP = 20;
+
 @Injectable()
 export class GamificationService {
   constructor(private readonly db: DbService) {}
@@ -65,6 +70,29 @@ export class GamificationService {
         .onConflictDoUpdate({ target: streaks.userId, set: values });
       return LESSON_XP;
     });
+  }
+
+  // Pays the bug of the day's XP (ADR-035), once per play: the xp_events
+  // unique constraint turns a repeat into a no-op that returns 0. It counts
+  // toward the weekly board and the daily goal, but not the streak, which
+  // stays "one new lesson a day" (FR-10).
+  async awardDailyBug(
+    userId: string,
+    playId: string,
+    now = new Date(),
+  ): Promise<number> {
+    const [paid] = await this.db.drizzle
+      .insert(xpEvents)
+      .values({
+        userId,
+        amount: DAILY_BUG_XP,
+        source: 'daily-bug',
+        sourceId: playId,
+        createdAt: now,
+      })
+      .onConflictDoNothing()
+      .returning({ id: xpEvents.id });
+    return paid ? DAILY_BUG_XP : 0;
   }
 
   // Total XP and the streak as GET /me shows it.

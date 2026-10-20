@@ -143,6 +143,19 @@ The server loads the exercise, failing test and stderr itself; the client sends 
 
 - Issued automatically by the `POST /submissions` that completes the last lesson of a course; that response carries `certificateSlug` (otherwise `null`). One per user per course. Slugs are 10 random characters from `a–z` and `2–9` without look-alikes; anything else is 404. The web page is `/c/:slug`, public.
 
+### Bug of the day — Phase 3 (FR-28, ADR-035)
+
+| Method | Path                          | Body       | Response                                                                                                                                                                           |
+| ------ | ----------------------------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET    | `/bug-of-the-day`             | —          | `{ day, problem: { title, description, buggyCode, sampleTests }, me: { openedAt, solvedAt, timeMs, attempts } }` — the first call of the IST day starts the caller's clock         |
+| GET    | `/bug-of-the-day/board`       | —          | `{ day, title, solvers, entries: [{ rank, userId, username, timeMs, attempts }], me: { rank, timeMs } \| null, started }` — today's 10 fastest solves; never starts the clock      |
+| POST   | `/bug-of-the-day/submissions` | `{ code }` | `{ status, testsPassed, totalTests, results, stderr, solved, xpAwarded, timeMs, rank, solvers }` — 409 `NOT_STARTED` if the caller hasn't opened today's bug; 10 a minute per user |
+
+- Everyone gets the same bug on the same IST day: the Python duel problems in slug order, one per day, wrapping round (`dailyPick`). A play keeps the bug it opened even if the pool changes that day.
+- The time is `solved_at − opened_at`, both server times: from the first `GET /bug-of-the-day` of the day to the first passing submission. Later passes change nothing.
+- The first solve pays 20 XP (`xp_events` source `daily-bug`, once per play). It counts toward the weekly board and the daily goal, not the streak.
+- Graded like a duel submission; hidden tests report only `passed` and never appear in any response.
+
 ## Socket.io — duels (S7)
 
 Namespace: `/duels`. Connect with `auth: { token: <supabase access token> }`; the server rejects bad tokens on connect.

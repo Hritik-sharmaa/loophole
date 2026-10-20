@@ -13,6 +13,10 @@ const eslintConfig = defineConfig([
     'out/**',
     'build/**',
     'next-env.d.ts',
+    // The e2e build and Playwright's reports (ADR-034).
+    '.next-e2e/**',
+    'playwright-report/**',
+    'test-results/**',
   ]),
   // Turns off style rules that would fight Prettier; keep this last.
   prettier,

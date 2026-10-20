@@ -46,7 +46,10 @@ pnpm dev                                     # web :3000, API :3001
 pnpm format:check && pnpm lint && pnpm typecheck
 pnpm test                                    # unit tests
 pnpm --filter @loophole/api test:e2e         # API end-to-end tests on PGlite
+pnpm --filter @loophole/web test:e2e         # Playwright journeys in Chromium (mock backend)
 ```
+
+The first Playwright run needs a browser: `pnpm --filter @loophole/web exec playwright install chromium`. It builds the app into `apps/web/.next-e2e` (your `.next` is left alone) and serves it on port 4020, with the mock backend on 4010. `E2E_REUSE=1` reuses servers that are already running.
 
 CI runs all of these on every push.
 

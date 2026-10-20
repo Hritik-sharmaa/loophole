@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { AppHeader } from '@/components/app-header';
 import { CourseBanner } from '@/components/course-banner';
+import { DailyBugCard } from '@/components/daily-bug-card';
 import { GUIDES, Guide, GuideSays, guideFor } from '@/components/guide';
 import { LanguageTile } from '@/components/language-logo';
 import { ProgressBar } from '@/components/progress-bar';
@@ -63,6 +64,8 @@ export default function LearnPage() {
         ) : (
           <>
             {current && <ContinueCard course={current} />}
+            {/* Bug of the day (ADR-035): reads only the board. */}
+            <DailyBugCard enabled={!loading} />
 
             <section className="flex flex-col gap-4">
               <h2 className="font-display text-2xl font-extrabold">

@@ -8,3 +8,4 @@ export * from './ai-usage.js';
 export * from './duels.js';
 export * from './ratings.js';
 export * from './certificates.js';
+export * from './daily-bug.js';

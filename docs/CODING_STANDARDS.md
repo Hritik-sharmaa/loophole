@@ -44,14 +44,16 @@ Conventions every file follows. AI assistants should apply these without being a
 
 Test the logic that is easy to get wrong; skip tests for plain wiring.
 
-| What                                                             | Tool                 | Rule                                                                |
-| ---------------------------------------------------------------- | -------------------- | ------------------------------------------------------------------- |
-| Pure logic (output comparison, streak, ELO, duel winner/timeout) | Vitest               | Table-driven tests for every branch                                 |
-| Services with logic worth testing                                | Vitest               | Stub clients with `overrideProvider(...).useValue({ ... vi.fn() })` |
-| Hidden-test leaks                                                | Vitest e2e           | No lesson or submission response contains `hiddenTests`             |
-| End to end                                                       | Playwright (Phase 3) | J-1 first lesson, J-3 duel                                          |
+| What                                                             | Tool       | Rule                                                                |
+| ---------------------------------------------------------------- | ---------- | ------------------------------------------------------------------- |
+| Pure logic (output comparison, streak, ELO, duel winner/timeout) | Vitest     | Table-driven tests for every branch                                 |
+| Services with logic worth testing                                | Vitest     | Stub clients with `overrideProvider(...).useValue({ ... vi.fn() })` |
+| Hidden-test leaks                                                | Vitest e2e | No lesson or submission response contains `hiddenTests`             |
+| End to end                                                       | Playwright | The PRD journeys (J-1 to J-4) in the real web build (ADR-034)       |
 
 A slice is not done until its tests pass in CI.
+
+**Playwright (ADR-034).** `apps/web/e2e/*.e2e.ts` drive the production web build in Chromium against `e2e/mock-backend.mts` (Supabase Auth, every REST route and the `/duels` socket, typed with `@loophole/shared`, reading the real `content/`). Each test signs up its own user, so tests run in parallel without sharing state. Prefer role and text selectors (`getByRole`, `getByText`) to CSS. A new API route the web app calls needs a matching mock route, or the page sees a 404. The API itself is tested by its own e2e suite on PGlite; Playwright tests the web app's flows.
 
 ## 6. Git
 
