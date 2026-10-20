@@ -1,0 +1,56 @@
+{
+  "slug": "clone",
+  "title": "Clone a repository",
+  "position": 3,
+  "learn": {
+    "cards": [
+      {
+        "title": "git clone",
+        "body": "`git clone <url>` downloads a whole repository from GitHub into a new folder named after it, with `origin` already set up."
+      },
+      {
+        "title": "Then go inside",
+        "body": "The clone is a folder like any other: `cd` into it to start working."
+      }
+    ],
+    "check": {
+      "question": "You run `git clone https://github.com/ada/notes.git`. Which folder appears?",
+      "options": ["notes", "ada", "github"],
+      "answer": 0,
+      "explanation": "The folder takes the repository's name, without `.git`."
+    }
+  },
+  "exercise": {
+    "prompt": "Clone `https://github.com/loophole/demo.git`, then go into its folder.",
+    "starterCode": "",
+    "setup": [
+      "@github https://github.com/loophole/demo.git",
+      "mkdir seed",
+      "cd seed",
+      "git init",
+      "echo \"# Demo\" > README.md",
+      "git add .",
+      "git commit -m \"Initial commit\"",
+      "git remote add origin https://github.com/loophole/demo.git",
+      "git push -u origin main",
+      "cd ..",
+      "rm -r seed"
+    ],
+    "checks": [
+      {
+        "type": "folder",
+        "label": "You are inside the `demo` folder",
+        "path": "demo"
+      },
+      {
+        "type": "repo",
+        "label": "`demo` is a Git repository"
+      },
+      {
+        "type": "file",
+        "label": "`README.md` came down with it",
+        "path": "README.md"
+      }
+    ]
+  }
+}

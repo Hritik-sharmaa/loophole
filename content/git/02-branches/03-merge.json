@@ -1,0 +1,57 @@
+{
+  "slug": "merge",
+  "title": "Merge a branch",
+  "position": 3,
+  "learn": {
+    "cards": [
+      {
+        "title": "Bringing work back",
+        "body": "To bring a branch's commits into `main`, switch to `main`, then run `git merge <branch>`.",
+        "code": "git init\ntouch index.html\ngit add .\ngit commit -m \"Start\"\ngit switch -c footer\ntouch footer.html\ngit add .\ngit commit -m \"Add footer\"\ngit switch main\ngit merge footer\nls"
+      },
+      {
+        "title": "Fast-forward",
+        "body": "If `main` hasn't moved since the branch started, Git simply moves `main` forward to the branch's latest commit. That is a fast-forward."
+      }
+    ],
+    "check": {
+      "question": "You are on `footer` and want its work in `main`. What do you run first?",
+      "options": ["git switch main", "git merge main", "git branch -d footer"],
+      "answer": 0,
+      "explanation": "Merging brings work INTO the branch you are on, so go to `main` first."
+    }
+  },
+  "exercise": {
+    "prompt": "The `footer` branch has a finished footer. Merge it into `main`.",
+    "starterCode": "",
+    "setup": [
+      "git init",
+      "echo '<h1>My site</h1>' > index.html",
+      "git add .",
+      "git commit -m \"Add home page\"",
+      "git switch -c footer",
+      "echo '<footer>Bye</footer>' > footer.html",
+      "git add .",
+      "git commit -m \"Add footer\""
+    ],
+    "checks": [
+      {
+        "type": "current-branch",
+        "label": "You are on `main`",
+        "name": "main"
+      },
+      {
+        "type": "merged",
+        "label": "`footer` is merged into `main`",
+        "branch": "footer",
+        "into": "main"
+      },
+      {
+        "type": "committed-file",
+        "label": "`main` has `footer.html`",
+        "path": "footer.html",
+        "branch": "main"
+      }
+    ]
+  }
+}

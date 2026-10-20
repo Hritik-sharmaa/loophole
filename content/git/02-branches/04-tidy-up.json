@@ -1,0 +1,58 @@
+{
+  "slug": "tidy-up",
+  "title": "Tidy up branches",
+  "position": 4,
+  "learn": {
+    "cards": [
+      {
+        "title": "Deleting a merged branch",
+        "body": "Once a branch is merged, `git branch -d <name>` deletes it. Its commits stay safe in `main`.",
+        "code": "git init\ntouch a.txt\ngit add .\ngit commit -m \"Start\"\ngit switch -c extra\ntouch b.txt\ngit add .\ngit commit -m \"Add b\"\ngit switch main\ngit merge extra\ngit branch -d extra\ngit branch"
+      },
+      {
+        "title": "Git protects unmerged work",
+        "body": "`-d` refuses to delete a branch whose commits aren't merged yet, so you can't lose work by accident."
+      }
+    ],
+    "check": {
+      "question": "`git branch -d footer` says the branch is \"not fully merged\". What does that mean?",
+      "options": [
+        "Its commits are not in your current branch yet",
+        "The branch is empty",
+        "You spelled it wrong"
+      ],
+      "answer": 0,
+      "explanation": "Deleting it now would lose those commits, so Git stops you."
+    }
+  },
+  "exercise": {
+    "prompt": "`footer` is already merged into `main`. Delete the `footer` branch.",
+    "starterCode": "",
+    "setup": [
+      "git init",
+      "echo '<h1>My site</h1>' > index.html",
+      "git add .",
+      "git commit -m \"Add home page\"",
+      "git switch -c footer",
+      "echo '<footer>Bye</footer>' > footer.html",
+      "git add .",
+      "git commit -m \"Add footer\"",
+      "git switch main",
+      "git merge footer"
+    ],
+    "checks": [
+      {
+        "type": "branch",
+        "label": "The `footer` branch is gone",
+        "name": "footer",
+        "exists": false
+      },
+      {
+        "type": "committed-file",
+        "label": "`main` still has `footer.html`",
+        "path": "footer.html",
+        "branch": "main"
+      }
+    ]
+  }
+}

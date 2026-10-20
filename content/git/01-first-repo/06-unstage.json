@@ -1,0 +1,56 @@
+{
+  "slug": "unstage",
+  "title": "Oops: unstage a file",
+  "position": 6,
+  "learn": {
+    "cards": [
+      {
+        "title": "Taking a file back out",
+        "body": "Staged something by mistake? `git restore --staged <file>` takes it out of the staging area. The file itself stays as it is.",
+        "code": "git init\ntouch index.html secret.txt\ngit add .\ngit restore --staged secret.txt\ngit status"
+      },
+      {
+        "title": "Keep secrets out",
+        "body": "Passwords and keys must never be committed: once a commit is shared, everyone can read it, forever."
+      }
+    ],
+    "check": {
+      "question": "What does `git restore --staged secret.txt` do?",
+      "options": [
+        "Takes secret.txt out of the staging area",
+        "Deletes secret.txt",
+        "Commits secret.txt"
+      ],
+      "answer": 0,
+      "explanation": "It only unstages the file. The file and its contents are untouched."
+    }
+  },
+  "exercise": {
+    "prompt": "Both files are staged, but `passwords.txt` must not be committed. Unstage it, then commit `index.html` with the message `Add home page`.",
+    "starterCode": "",
+    "setup": [
+      "git init",
+      "echo '<h1>Hi</h1>' > index.html",
+      "echo 'hunter2' > passwords.txt",
+      "git add ."
+    ],
+    "checks": [
+      {
+        "type": "commit-message",
+        "label": "A commit says `Add home page`",
+        "text": "Add home page"
+      },
+      {
+        "type": "committed-file",
+        "label": "`index.html` is committed",
+        "path": "index.html"
+      },
+      {
+        "type": "committed-file",
+        "label": "`passwords.txt` is not committed",
+        "path": "passwords.txt",
+        "present": false
+      }
+    ]
+  }
+}

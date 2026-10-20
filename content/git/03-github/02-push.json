@@ -1,0 +1,43 @@
+{
+  "slug": "push",
+  "title": "Push to GitHub",
+  "position": 2,
+  "learn": {
+    "cards": [
+      {
+        "title": "git push",
+        "body": "`git push` uploads your commits to the remote. The first time, `git push -u origin main` also remembers where `main` goes."
+      },
+      {
+        "title": "Next time, just push",
+        "body": "After that first `-u`, `git status` tells you when you are ahead of GitHub, and a plain `git push` sends your new commits."
+      }
+    ],
+    "check": {
+      "question": "After `git push -u origin main` once, what can you type next time?",
+      "options": ["git push", "git push -u origin main main", "git upload"],
+      "answer": 0,
+      "explanation": "`-u` saved `origin main` as the upstream, so `git push` knows where to go."
+    }
+  },
+  "exercise": {
+    "prompt": "Your repo is connected to GitHub as `origin`. Push `main` and set its upstream.",
+    "starterCode": "",
+    "setup": [
+      "@github https://github.com/you/site.git",
+      "git init",
+      "echo '<h1>My site</h1>' > index.html",
+      "git add .",
+      "git commit -m \"Add home page\"",
+      "git remote add origin https://github.com/you/site.git"
+    ],
+    "checks": [
+      {
+        "type": "pushed",
+        "label": "GitHub has your `main`",
+        "remote": "origin",
+        "branch": "main"
+      }
+    ]
+  }
+}

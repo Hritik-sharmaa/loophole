@@ -1,0 +1,55 @@
+{
+  "slug": "work-on-a-branch",
+  "title": "Work on a branch",
+  "position": 2,
+  "learn": {
+    "cards": [
+      {
+        "title": "Commits stay on their branch",
+        "body": "A commit on a branch exists only there until you merge it, so `main` stays exactly as it was. Watch `header.html` disappear when we switch back.",
+        "code": "git init\ntouch index.html\ngit add .\ngit commit -m \"Start\"\ngit switch -c header\ntouch header.html\ngit add .\ngit commit -m \"Add header\"\ngit switch main\nls"
+      }
+    ],
+    "check": {
+      "question": "You commit header.html on the `header` branch, then `git switch main`. Is header.html there?",
+      "options": [
+        "No, it lives on the header branch",
+        "Yes, every branch gets it",
+        "It is deleted for good"
+      ],
+      "answer": 0,
+      "explanation": "Each branch has its own commits. Switch back to `header` and the file returns."
+    }
+  },
+  "exercise": {
+    "prompt": "Create a branch `header`, add a file `header.html` on it, and commit it with the message `Add header`. Leave `main` without it.",
+    "starterCode": "",
+    "setup": [
+      "git init",
+      "echo '<h1>My site</h1>' > index.html",
+      "git add .",
+      "git commit -m \"Add home page\""
+    ],
+    "checks": [
+      {
+        "type": "committed-file",
+        "label": "`header.html` is committed on `header`",
+        "path": "header.html",
+        "branch": "header"
+      },
+      {
+        "type": "commit-message",
+        "label": "A commit on `header` says `Add header`",
+        "text": "Add header",
+        "branch": "header"
+      },
+      {
+        "type": "committed-file",
+        "label": "`main` does not have `header.html`",
+        "path": "header.html",
+        "branch": "main",
+        "present": false
+      }
+    ]
+  }
+}

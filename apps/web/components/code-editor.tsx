@@ -28,6 +28,8 @@ const shared = [
 const EXTENSIONS = {
   python: [python(), ...shared],
   javascript: [javascript(), ...shared],
+  // Terminal commands (git lessons): no highlighting.
+  plain: shared,
   // HTML mode also highlights the CSS inside <style> (ADR-024).
   html: [html(), ...shared],
 };

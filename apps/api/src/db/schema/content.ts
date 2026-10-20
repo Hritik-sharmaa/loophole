@@ -1,4 +1,9 @@
-import type { LessonLearn, TestCase, WebCheck } from '@loophole/shared';
+import type {
+  GitScenario,
+  LessonLearn,
+  TestCase,
+  WebCheck,
+} from '@loophole/shared';
 import {
   integer,
   jsonb,
@@ -75,4 +80,7 @@ export const exercises = pgTable('exercises', {
   // Web exercises only (ADR-024): the page's rules, all shown to the
   // learner. Null for program exercises, whose tests are above.
   checks: jsonb('checks').$type<WebCheck[]>(),
+  // Git exercises only (ADR-026): hidden setup commands and the checks on
+  // the simulated repository. Null for every other kind.
+  gitScenario: jsonb('git_scenario').$type<GitScenario>(),
 }).enableRLS();

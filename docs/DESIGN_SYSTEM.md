@@ -74,27 +74,28 @@ Wrap all motion in a `useReducedMotion()` check; with reduced motion, swap anima
 
 Shared class strings live in `components/ui/buttons.ts` (`primaryButton`, `secondaryButton`) and `components/ui/card.ts` (`stickerCard`, `flatCard`, `chip`).
 
-| Component             | Spec                                                                                                                                                        |
-| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| PrimaryButton         | Orange fill, Ink text, Ink outline, `press` shadow                                                                                                          |
-| SecondaryButton       | Paper fill, Ink text, Ink outline, `press` shadow                                                                                                           |
-| StickerCard           | Paper, radius 16, Ink outline, `sticker` shadow. One per screen region                                                                                      |
-| Chip                  | Caption text, Ink outline, radius 8. Lemon for labels and rewards, Pink for duels, Blue for "the path"                                                      |
-| LessonNode            | 64 px circle, 3 px Ink outline. Locked: Paper / dashed border-muted / lock icon. Active: Orange / pulse / Lemon "Start here" chip. Done: Blue / white check |
-| LessonPath            | Hand-built SVG; nodes zig-zag down the page on a dotted border-muted track; the walked part is solid Blue. Course header card with a progress bar and Byte  |
-| XpBadge / StreakBadge | Lemon chip, Orange-dark icon (lightning / flame), Ink numbers                                                                                               |
-| ProgressBar           | Surface track with an Ink outline; Orange fill for you, Pink for a rival; `ease-out` width change                                                           |
-| TestResultRow         | Passed: Blue-tint row, Blue ✓. Failed: Paper row, Ink ✕, input / expected / actual for sample tests. Error output is an Ink "terminal" block                |
-| DuelHeader            | Ink band with `sticker` shadow, white text, Orange countdown, Pink opponent bar                                                                             |
-| EditorPanel           | Sticker card; Ink title bar with three dots (Orange, Lemon, Pink) and the file name; CodeMirror light theme, JetBrains Mono 14                              |
-| ByteSays              | Byte beside a Paper speech bubble with a tail; used for the lesson task                                                                                     |
-| LessonStepper         | Learn · Check · Practice as three outlined tabs. Current: Ink; passed: Blue with a check; ahead: Paper. Any step can be opened (ADR-021)                    |
-| LearnCards            | Sticker card, one card at a time: Lemon "Card n of m" chip, progress dots (walked Blue, current Orange pill), title, body, RunnableExample; Back / Next     |
-| RunnableExample       | Compact EditorPanel (no shadow), secondary "Run it" button, Ink console labelled "Prints" (the content's output) until run, then "Output" (stderr in Pink)  |
-| QuickCheck            | Sticker card with Byte (thinking → oops → happy), Lemon chip, Ink code block, A–D options with press shadows. Right: Blue-tint ✓; wrong: struck through ✕   |
-| AppHeader (phone)     | Below `sm`: the top bar keeps the logo and streak/XP chips; links move to a fixed bottom tab bar (icon + short label, current tab Ink); page bottom padded  |
-| WebPreview            | Outlined Paper panel, Surface "Live preview" bar with a Blue dot, white `<iframe sandbox="">`; redraws 300 ms after typing stops (ADR-024)                  |
-| Checklist             | Web exercises: "Your page must", one outlined row per check. Before checking: dashed empty circle; then Blue-tint ✓ or Paper ✕. CSS errors in an Ink block  |
+| Component             | Spec                                                                                                                                                                                                             |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| PrimaryButton         | Orange fill, Ink text, Ink outline, `press` shadow                                                                                                                                                               |
+| SecondaryButton       | Paper fill, Ink text, Ink outline, `press` shadow                                                                                                                                                                |
+| StickerCard           | Paper, radius 16, Ink outline, `sticker` shadow. One per screen region                                                                                                                                           |
+| Chip                  | Caption text, Ink outline, radius 8. Lemon for labels and rewards, Pink for duels, Blue for "the path"                                                                                                           |
+| LessonNode            | 64 px circle, 3 px Ink outline. Locked: Paper / dashed border-muted / lock icon. Active: Orange / pulse / Lemon "Start here" chip. Done: Blue / white check                                                      |
+| LessonPath            | Hand-built SVG; nodes zig-zag down the page on a dotted border-muted track; the walked part is solid Blue. Course header card with a progress bar and Byte                                                       |
+| XpBadge / StreakBadge | Lemon chip, Orange-dark icon (lightning / flame), Ink numbers                                                                                                                                                    |
+| ProgressBar           | Surface track with an Ink outline; Orange fill for you, Pink for a rival; `ease-out` width change                                                                                                                |
+| TestResultRow         | Passed: Blue-tint row, Blue ✓. Failed: Paper row, Ink ✕, input / expected / actual for sample tests. Error output is an Ink "terminal" block                                                                     |
+| DuelHeader            | Ink band with `sticker` shadow, white text, Orange countdown, Pink opponent bar                                                                                                                                  |
+| EditorPanel           | Sticker card; Ink title bar with three dots (Orange, Lemon, Pink) and the file name; CodeMirror light theme, JetBrains Mono 14                                                                                   |
+| ByteSays              | Byte beside a Paper speech bubble with a tail; used for the lesson task                                                                                                                                          |
+| LessonStepper         | Learn · Check · Practice as three outlined tabs. Current: Ink; passed: Blue with a check; ahead: Paper. Any step can be opened (ADR-021)                                                                         |
+| LearnCards            | Sticker card, one card at a time: Lemon "Card n of m" chip, progress dots (walked Blue, current Orange pill), title, body, RunnableExample; Back / Next                                                          |
+| RunnableExample       | Compact EditorPanel (no shadow), secondary "Run it" button, Ink console labelled "Prints" (the content's output) until run, then "Output" (stderr in Pink)                                                       |
+| QuickCheck            | Sticker card with Byte (thinking → oops → happy), Lemon chip, Ink code block, A–D options with press shadows. Right: Blue-tint ✓; wrong: struck through ✕                                                        |
+| AppHeader (phone)     | Below `sm`: the top bar keeps the logo and streak/XP chips; links move to a fixed bottom tab bar (icon + short label, current tab Ink); page bottom padded                                                       |
+| WebPreview            | Outlined Paper panel, Surface "Live preview" bar with a Blue dot, white `<iframe sandbox="">`; redraws 300 ms after typing stops (ADR-024)                                                                       |
+| Checklist             | Web exercises: "Your page must", one outlined row per check. Before checking: dashed empty circle; then Blue-tint ✓ or Paper ✕. CSS errors in an Ink block                                                       |
+| Terminal              | Git exercises (ADR-026): Ink sticker card, "Terminal · practice mode" bar; `$ command` lines (Orange `$`), output in border-muted, Orange prompt `you@loophole:~/folder$`. ↑/↓ recall, `clear` clears the screen |
 
 **Web lessons** use a `max-w-5xl` page with the editor and WebPreview side by side from `lg` (stacked below), while Learn cards and the quick check keep a `max-w-3xl` reading width. Code never shows font ligatures (`font-variant-ligatures: none`), so `<!--` and `>=` read as typed.
 

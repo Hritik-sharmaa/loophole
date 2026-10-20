@@ -1,0 +1,51 @@
+{
+  "slug": "make-a-branch",
+  "title": "Make a branch",
+  "position": 1,
+  "learn": {
+    "cards": [
+      {
+        "title": "Branches are parallel versions",
+        "body": "A branch lets you try something without touching `main`. `git branch` lists branches; the one with `*` is where you are.",
+        "code": "git init\ntouch a.txt\ngit add .\ngit commit -m \"Start\"\ngit branch idea\ngit branch"
+      },
+      {
+        "title": "Switching",
+        "body": "`git switch <name>` moves you to a branch. `git switch -c <name>` creates one and moves you there in one step.",
+        "code": "git init\ntouch a.txt\ngit add .\ngit commit -m \"Start\"\ngit switch -c idea\ngit branch"
+      }
+    ],
+    "check": {
+      "question": "Which command creates a branch called `dark-mode` and switches to it?",
+      "options": [
+        "git switch -c dark-mode",
+        "git branch -d dark-mode",
+        "git commit dark-mode"
+      ],
+      "answer": 0,
+      "explanation": "`-c` means create. `git branch -d` would delete a branch instead."
+    }
+  },
+  "exercise": {
+    "prompt": "Create a branch called `dark-mode` and switch to it.",
+    "starterCode": "",
+    "setup": [
+      "git init",
+      "echo '<h1>My site</h1>' > index.html",
+      "git add .",
+      "git commit -m \"Add home page\""
+    ],
+    "checks": [
+      {
+        "type": "branch",
+        "label": "The `dark-mode` branch exists",
+        "name": "dark-mode"
+      },
+      {
+        "type": "current-branch",
+        "label": "You are on `dark-mode`",
+        "name": "dark-mode"
+      }
+    ]
+  }
+}

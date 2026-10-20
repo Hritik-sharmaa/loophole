@@ -20,6 +20,7 @@ import type { CreateSubmissionDto } from './dto/create-submission.dto.js';
 import { exerciseKind } from '../../common/exercise-kind.js';
 import { grade } from './grading.js';
 import { runTests } from './run-tests.js';
+import { gradeGit } from '../git/git-checks.js';
 import { checkPage, gradeChecks } from './web-checks.js';
 
 // How many past submissions GET /submissions returns.
@@ -50,6 +51,7 @@ export class SubmissionsService {
         sampleTests: exercises.sampleTests,
         hiddenTests: exercises.hiddenTests,
         checks: exercises.checks,
+        gitScenario: exercises.gitScenario,
       })
       .from(exercises)
       .innerJoin(lessons, eq(exercises.lessonId, lessons.id))
@@ -72,19 +74,23 @@ export class SubmissionsService {
     await this.users.ensureProfile(user);
 
     // A web page is parsed and checked against rules, never run (ADR-024);
-    // a program runs in Piston against its tests.
+    // git commands are replayed on a simulated repository (ADR-026); a
+    // program runs in Piston against its tests.
+    const kind = exerciseKind(exercise.language);
     const result =
-      exerciseKind(exercise.language) === 'web'
+      kind === 'web'
         ? gradeChecks(checkPage(code, exercise.checks ?? []))
-        : grade(
-            await runTests(
-              this.piston,
-              exercise.language,
-              code,
-              exercise.sampleTests,
-              exercise.hiddenTests,
-            ),
-          );
+        : kind === 'git'
+          ? gradeGit(exercise.gitScenario ?? { setup: [], checks: [] }, code)
+          : grade(
+              await runTests(
+                this.piston,
+                exercise.language,
+                code,
+                exercise.sampleTests,
+                exercise.hiddenTests,
+              ),
+            );
 
     const [row] = await this.db.drizzle
       .insert(submissions)

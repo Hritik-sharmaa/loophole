@@ -1,0 +1,55 @@
+{
+  "slug": "history",
+  "title": "Your project's history",
+  "position": 5,
+  "learn": {
+    "cards": [
+      {
+        "title": "git log",
+        "body": "`git log` lists commits, newest first. `git log --oneline` shows one short line per commit.",
+        "code": "git init\ntouch a.txt\ngit add .\ngit commit -m \"First\"\ntouch b.txt\ngit add .\ngit commit -m \"Second\"\ngit log --oneline"
+      },
+      {
+        "title": "The edit, add, commit loop",
+        "body": "Working with Git is a loop: change files, `git add` them, `git commit`. Each round adds a snapshot you can come back to."
+      }
+    ],
+    "check": {
+      "question": "Which command shows one short line per commit?",
+      "options": ["git log --oneline", "git status", "git show --short"],
+      "answer": 0,
+      "explanation": "`git log --oneline` prints each commit as a short id and its message."
+    }
+  },
+  "exercise": {
+    "prompt": "This repo already has one commit. Create `about.html` with `touch about.html`, then stage it and commit it with the message `Add about page`.",
+    "starterCode": "",
+    "setup": [
+      "git init",
+      "echo '<h1>My site</h1>' > index.html",
+      "git add .",
+      "git commit -m \"Add home page\""
+    ],
+    "checks": [
+      {
+        "type": "commits",
+        "label": "There are at least two commits",
+        "min": 2
+      },
+      {
+        "type": "committed-file",
+        "label": "`about.html` is committed",
+        "path": "about.html"
+      },
+      {
+        "type": "commit-message",
+        "label": "A commit says `Add about page`",
+        "text": "Add about page"
+      },
+      {
+        "type": "clean",
+        "label": "Nothing is left to commit"
+      }
+    ]
+  }
+}

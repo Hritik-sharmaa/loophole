@@ -78,6 +78,13 @@
       "when": 1792478656467,
       "tag": "0010_web_checks",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1792485867260,
+      "tag": "0011_git_scenario",
+      "breakpoints": true
     }
   ]
 }

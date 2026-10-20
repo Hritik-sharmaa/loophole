@@ -6,6 +6,12 @@ Format: **ADR-NNN · Title** — Status (Accepted / Superseded by ADR-NNN) · Da
 
 ---
 
+**ADR-026 · Git & GitHub track: a simulated terminal and repository** — Accepted · 2026-10-20
+
+- Decision: a course with `language: "git"` has git exercises. A pure, deterministic simulator in the API (`modules/git/git-sim.ts`) models a home folder with one level of folders, files, and per-folder repositories (index, commits, branches, merges, remotes) plus a pretend GitHub, and prints output modelled on real git. Each exercise stores a hidden `setup` (commands, including setup-only `@github` and `@config-reset`) and checks on the final state, in `exercises.git_scenario`. The browser's terminal sends every command typed so far to `POST /git/run` (stateless replay, 60/min); "Check my work" submits them through `POST /submissions`, graded by `gradeGit()`, with `kind: "check"` results. The first course has 15 lessons in 3 units (first repository, branches, GitHub).
+- Why: the last agreed track (ADR-023). Real `git` in Piston would need a shell runtime, network-free remotes and a way to inspect repository state; a simulator is safe, instant, needs no new infrastructure, and makes GitHub (push, pull, clone) possible without a network.
+- Trade-off: it is not real git: only the commands and flags listed in CONTENT_GUIDE work, merge conflicts are refused rather than simulated, and there is no `diff`, `stash`, `rebase` or `reset`. The simulator is about 1,100 lines that must be kept honest; 40 unit tests compare its behaviour and messages with real git. Every keystroke-Enter replays the whole session (cheap: pure computation, at most 200 commands).
+
 **ADR-025 · JavaScript track: Node in Piston, with prompt() for input** — Accepted · 2026-10-20
 
 - Decision: a course with `language: "javascript"` runs in Piston's Node 20.11.1 (package `node`, installed by `infra/install-runtimes.sh`) and is graded like Python: stdin in, trimmed stdout compared. `withProgramHelpers()` (`src/common/program-helpers.ts`) appends a `prompt()` function after the learner's code before every Piston run (submissions, duels, `/runs`): it returns the next stdin line, or `null` at the end, like the browser's `prompt()`. It is a hoisted function declaration placed last, so it works from line 1 and error line numbers stay correct. The first course has 20 lessons in 5 units, with Learn steps, all checked in Piston. The web editor picks highlighting and file names (`main.js`) from the lesson's course language, now part of `GET /lessons/:id`.

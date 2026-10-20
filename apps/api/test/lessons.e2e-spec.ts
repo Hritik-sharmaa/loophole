@@ -80,6 +80,13 @@ describe('Lessons (e2e)', () => {
     const body = (await get('/courses', 200)) as CourseOverview[];
     expect(body).toEqual([
       expect.objectContaining({
+        slug: 'git-github',
+        language: 'git',
+        lessonCount: 15,
+        completedCount: 0,
+        lastActivityAt: null,
+      }),
+      expect.objectContaining({
         slug: 'html-css',
         language: 'html',
         lessonCount: 15,
@@ -101,7 +108,7 @@ describe('Lessons (e2e)', () => {
         lastActivityAt: null,
       }),
     ]);
-    expect(body[2].description).toContain('40 bite-sized lessons');
+    expect(body[3].description).toContain('40 bite-sized lessons');
   });
 
   it('a new user has lesson 1 active and every other lesson locked', async () => {
@@ -195,8 +202,9 @@ describe('Lessons (e2e)', () => {
     const summary = await seedContent(db, CONTENT_DIR);
 
     expect(await counts()).toEqual(before);
-    // Python 7 units / 40 lessons, HTML & CSS 3 / 15, JavaScript 5 / 20.
-    expect(before).toEqual({ units: 15, lessons: 75, exercises: 75 });
+    // Python 7 units / 40 lessons, HTML & CSS 3 / 15, JavaScript 5 / 20,
+    // Git & GitHub 3 / 15.
+    expect(before).toEqual({ units: 18, lessons: 90, exercises: 90 });
     expect(summary.stale).toEqual([]);
     // Progress survives a re-seed because lesson ids are kept.
     const [{ n }] = await db.select({ n: count() }).from(userProgress);

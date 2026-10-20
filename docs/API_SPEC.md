@@ -54,6 +54,16 @@ Base URL: `https://api.<domain>` (local: `http://localhost:3001`). All bodies ar
 
 Runs the code once in the lesson's course language (never one the client picks), for the Learn step's examples. Ungraded: nothing is stored, no XP is paid. `stdout` and `stderr` are cut to 4 KB; a time-out with no error output gets the same time-limit message as submissions. Throttle: 10 per minute per user, like submissions.
 
+### Git terminal (ADR-026)
+
+| Method | Path       | Body                                                              | Response                                                                                                                               |
+| ------ | ---------- | ----------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| POST   | `/git/run` | `{ lessonId: uuid, commands: string (≤ 20 KB), fresh?: boolean }` | 200 `{ transcript: [{ command, output }], cwd }` — 400 `NOT_A_GIT_LESSON`, 403 `LESSON_LOCKED`, 404 unknown lesson, 429 `RATE_LIMITED` |
+
+Replays a git lesson's simulated terminal: the lesson's hidden setup, then `commands` (one per line, at most 200; blank and `#` lines skipped), each with its output. `fresh: true` skips the setup (Learn examples). Nothing real runs and nothing is stored; the simulator is deterministic, so the same commands always give the same output and commit ids. Learner commands can never use the setup-only `@` commands. Throttle: 60 per minute per user (no Piston involved).
+
+A git exercise (`exercise.kind: "git"`) is submitted through `POST /submissions` with the commands as `code`. Results are `kind: "check"` rows, as for web exercises; `stderr` is empty.
+
 ### Submissions — S3
 
 | Method | Path                       | Body                                           | Response                                                                                                                                              |

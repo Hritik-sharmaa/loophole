@@ -5,5 +5,7 @@ import type { ExerciseKind } from '@loophole/shared';
 const WEB_LANGUAGES = new Set(['html']);
 
 export function exerciseKind(language: string): ExerciseKind {
+  // "git" lessons run in the simulated terminal (ADR-026).
+  if (language === 'git') return 'git';
   return WEB_LANGUAGES.has(language) ? 'web' : 'program';
 }

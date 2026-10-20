@@ -6,6 +6,7 @@ import {
 import type {
   CourseOverview,
   CoursePath,
+  GitScenario,
   LessonDetail,
   LessonState,
 } from '@loophole/shared';
@@ -116,6 +117,7 @@ export class LessonsService {
         language: courses.language,
         // Checks are all shown to the learner; only their labels are sent.
         checks: exercises.checks,
+        gitScenario: exercises.gitScenario,
         exercise: {
           id: exercises.id,
           prompt: exercises.prompt,
@@ -139,7 +141,9 @@ export class LessonsService {
       exercise: {
         ...lesson.exercise,
         kind: exerciseKind(lesson.language),
-        checks: (lesson.checks ?? []).map((c) => c.label),
+        checks: (lesson.checks ?? lesson.gitScenario?.checks ?? []).map(
+          (c) => c.label,
+        ),
       },
     };
   }
@@ -157,6 +161,29 @@ export class LessonsService {
 
     await this.assertUnlocked(userId, lessonId, lesson.courseId);
     return lesson.language;
+  }
+
+  // The course language and git scenario of an unlocked lesson, for
+  // POST /git/run (ADR-026). Same 404 / 403 as languageOf.
+  async gitLessonOf(
+    userId: string,
+    lessonId: string,
+  ): Promise<{ language: string; scenario: GitScenario | null }> {
+    const [lesson] = await this.db.drizzle
+      .select({
+        courseId: courses.id,
+        language: courses.language,
+        scenario: exercises.gitScenario,
+      })
+      .from(lessons)
+      .innerJoin(units, eq(lessons.unitId, units.id))
+      .innerJoin(courses, eq(units.courseId, courses.id))
+      .innerJoin(exercises, eq(exercises.lessonId, lessons.id))
+      .where(eq(lessons.id, lessonId));
+    if (!lesson) throw notFound('Lesson');
+
+    await this.assertUnlocked(userId, lessonId, lesson.courseId);
+    return { language: lesson.language, scenario: lesson.scenario };
   }
 
   // Throws 403 LESSON_LOCKED unless the lesson is active or completed for

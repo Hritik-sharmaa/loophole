@@ -1,5 +1,7 @@
 import type {
   ExerciseKind,
+  GitCheck,
+  GitScenario,
   LearnCard,
   LessonLearn,
   QuickCheck,
@@ -10,6 +12,7 @@ import { parse as parseSelector } from 'css-what';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { exerciseKind } from '../../common/exercise-kind.js';
+import { newWorld, runCommands } from '../../modules/git/git-sim.js';
 
 // Reads and checks the content/ folder (docs/CONTENT_GUIDE.md) without
 // touching the database, so a broken file fails fast with its path.
@@ -27,6 +30,7 @@ export type LessonContent = {
     sampleTests: TestCase[];
     hiddenTests: TestCase[];
     checks: WebCheck[] | null;
+    gitScenario: GitScenario | null;
   };
 };
 
@@ -161,7 +165,25 @@ export function parseLesson(
   const starterCode = asString(ex.starterCode, file, 'exercise.starterCode');
 
   let exercise: LessonContent['exercise'];
-  if (kind === 'web') {
+  if (kind === 'git') {
+    if (ex.sampleTests !== undefined || ex.hiddenTests !== undefined) {
+      throw new ContentError(
+        file,
+        'a git exercise has setup and checks, not sampleTests or hiddenTests',
+      );
+    }
+    exercise = {
+      prompt,
+      starterCode,
+      sampleTests: [],
+      hiddenTests: [],
+      checks: null,
+      gitScenario: {
+        setup: asSetup(ex.setup, file),
+        checks: asGitChecks(ex.checks, file),
+      },
+    };
+  } else if (kind === 'web') {
     if (ex.sampleTests !== undefined || ex.hiddenTests !== undefined) {
       throw new ContentError(
         file,
@@ -174,10 +196,11 @@ export function parseLesson(
       sampleTests: [],
       hiddenTests: [],
       checks: asWebChecks(ex.checks, file),
+      gitScenario: null,
     };
   } else {
-    if (ex.checks !== undefined) {
-      throw new ContentError(file, 'only web exercises have checks');
+    if (ex.checks !== undefined || ex.setup !== undefined) {
+      throw new ContentError(file, 'only web and git exercises have checks');
     }
     exercise = {
       prompt,
@@ -195,6 +218,7 @@ export function parseLesson(
         MIN_HIDDEN_TESTS,
       ),
       checks: null,
+      gitScenario: null,
     };
   }
 
@@ -205,6 +229,82 @@ export function parseLesson(
     learn: o.learn === undefined ? null : parseLearn(o.learn, file, kind),
     exercise,
   };
+}
+
+// ADR-026. The setup is replayed here, so a broken one fails CI: any
+// command that prints an error stops the load.
+function asSetup(value: unknown, file: string): string[] {
+  if (value === undefined) return [];
+  if (!Array.isArray(value)) {
+    throw new ContentError(file, 'exercise.setup must be a list of commands');
+  }
+  const setup = value.map((c, i) => asText(c, file, `exercise.setup[${i}]`));
+  const world = newWorld();
+  for (const step of runCommands(world, setup.join('\n'), true)) {
+    if (
+      /^(fatal|error)|command not found|unknown setup|Unclosed quote|CONFLICT/m.test(
+        step.output,
+      )
+    ) {
+      throw new ContentError(
+        file,
+        `exercise.setup: "${step.command}" failed: ${step.output.split('\n')[0]}`,
+      );
+    }
+  }
+  return setup;
+}
+
+const GIT_CHECK_FIELDS: Record<GitCheck['type'], string[]> = {
+  repo: [],
+  config: ['key'],
+  file: ['path'],
+  folder: ['path'],
+  staged: ['path'],
+  clean: [],
+  commits: ['min'],
+  'commit-message': ['text'],
+  'committed-file': ['path'],
+  branch: ['name'],
+  'current-branch': ['name'],
+  merged: ['branch', 'into'],
+  remote: ['name'],
+  pushed: ['remote', 'branch'],
+};
+
+// ADR-026. Checks the type and its required fields; optional fields keep
+// the types the shared GitCheck type gives them.
+function asGitChecks(value: unknown, file: string): GitCheck[] {
+  const field = 'exercise.checks';
+  if (!Array.isArray(value) || value.length === 0) {
+    throw new ContentError(file, `${field} needs at least 1 check`);
+  }
+  return value.map((json, i) => {
+    const at = `${field}[${i}]`;
+    const o = asObject(json, file, at);
+    asText(o.label, file, `${at}.label`);
+    const required = GIT_CHECK_FIELDS[o.type as GitCheck['type']];
+    if (!required) {
+      throw new ContentError(
+        file,
+        `${at}.type must be one of ${Object.keys(GIT_CHECK_FIELDS).join(', ')}`,
+      );
+    }
+    for (const key of required) {
+      if (o[key] === undefined || o[key] === '') {
+        throw new ContentError(file, `${at}.${key} is required`);
+      }
+    }
+    if (
+      o.type === 'config' &&
+      o.key !== 'user.name' &&
+      o.key !== 'user.email'
+    ) {
+      throw new ContentError(file, `${at}.key must be user.name or user.email`);
+    }
+    if (o.type === 'commits') asIntIn(o.min, 1, 100, file, `${at}.min`);
+    return o as GitCheck;
+  });
 }
 
 // ADR-024. Selectors are parsed here so a typo fails CI, not a learner.
@@ -306,12 +406,12 @@ function parseCard(
     title: asText(o.title, file, `${field}.title`),
     body: asText(o.body, file, `${field}.body`),
   };
-  if (o.code === undefined || kind === 'web') {
+  if (o.code === undefined || kind !== 'program') {
     if (o.input !== undefined || o.output !== undefined) {
       throw new ContentError(
         file,
-        kind === 'web'
-          ? `${field}: web examples show a preview, so no input or output`
+        kind !== 'program'
+          ? `${field}: ${kind} examples have no input or output`
           : `${field} has input or output but no code`,
       );
     }

@@ -11,6 +11,7 @@ import { AuthModule } from './modules/auth/auth.module.js';
 import { CertificatesModule } from './modules/certificates/certificates.module.js';
 import { DuelsModule } from './modules/duels/duels.module.js';
 import { GamificationModule } from './modules/gamification/gamification.module.js';
+import { GitModule } from './modules/git/git.module.js';
 import { HealthModule } from './modules/health/health.module.js';
 import { LessonsModule } from './modules/lessons/lessons.module.js';
 import { RatingsModule } from './modules/ratings/ratings.module.js';
@@ -40,6 +41,7 @@ import { UsersModule } from './modules/users/users.module.js';
     LessonsModule,
     SubmissionsModule,
     RunsModule,
+    GitModule,
     GamificationModule,
     AiModule,
     DuelsModule,

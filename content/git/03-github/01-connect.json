@@ -1,0 +1,47 @@
+{
+  "slug": "connect",
+  "title": "Connect to GitHub",
+  "position": 1,
+  "learn": {
+    "cards": [
+      {
+        "title": "Remotes",
+        "body": "GitHub keeps a copy of your repository online. A remote is Git's name for that copy; the usual name is `origin`.",
+        "code": "git init\ngit remote add origin https://github.com/you/demo.git\ngit remote -v"
+      },
+      {
+        "title": "Creating the GitHub side",
+        "body": "On github.com you create an empty repository and copy its URL. In these lessons, that repository already exists for you."
+      }
+    ],
+    "check": {
+      "question": "What is `origin` in `git remote add origin <url>`?",
+      "options": [
+        "A short name for the GitHub URL",
+        "A branch",
+        "Your username"
+      ],
+      "answer": 0,
+      "explanation": "After this, `origin` stands for the URL in every command."
+    }
+  },
+  "exercise": {
+    "prompt": "An empty repository is waiting at `https://github.com/you/site.git`. Add it as a remote called `origin`.",
+    "starterCode": "",
+    "setup": [
+      "@github https://github.com/you/site.git",
+      "git init",
+      "echo '<h1>My site</h1>' > index.html",
+      "git add .",
+      "git commit -m \"Add home page\""
+    ],
+    "checks": [
+      {
+        "type": "remote",
+        "label": "`origin` points to `https://github.com/you/site.git`",
+        "name": "origin",
+        "url": "https://github.com/you/site.git"
+      }
+    ]
+  }
+}

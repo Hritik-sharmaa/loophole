@@ -1,0 +1,45 @@
+{
+  "slug": "who-are-you",
+  "title": "Tell Git who you are",
+  "position": 1,
+  "learn": {
+    "cards": [
+      {
+        "title": "Git remembers who did what",
+        "body": "Git saves snapshots of your project, called commits, and records who made each one. So first, tell Git your name and email. Type a command and press Enter.",
+        "code": "git config --global user.name \"Ada Lovelace\"\ngit config --global user.email ada@example.com\ngit config user.name"
+      },
+      {
+        "title": "This is a practice terminal",
+        "body": "Nothing here touches your computer: Loophole simulates the folder and Git for you, so you can try anything. Words with spaces go in quotes."
+      }
+    ],
+    "check": {
+      "question": "Why does \"Ada Lovelace\" need quotes?",
+      "options": [
+        "So Git reads the name as one value",
+        "Quotes make the name bold",
+        "Git needs quotes around every word"
+      ],
+      "answer": 0,
+      "explanation": "Without quotes, the space would split it into two separate words."
+    }
+  },
+  "exercise": {
+    "prompt": "Git doesn't know who you are yet. Set your `user.name` and `user.email` with `git config --global` (any name and email you like).",
+    "starterCode": "",
+    "setup": ["@config-reset"],
+    "checks": [
+      {
+        "type": "config",
+        "label": "`user.name` is set",
+        "key": "user.name"
+      },
+      {
+        "type": "config",
+        "label": "`user.email` is set",
+        "key": "user.email"
+      }
+    ]
+  }
+}

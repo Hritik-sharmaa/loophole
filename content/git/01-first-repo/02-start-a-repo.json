@@ -1,0 +1,46 @@
+{
+  "slug": "start-a-repo",
+  "title": "Start a repository",
+  "position": 2,
+  "learn": {
+    "cards": [
+      {
+        "title": "A repository",
+        "body": "A repository (repo) is a project folder that Git keeps track of. `git init` turns the folder you are in into one.",
+        "code": "mkdir site\ncd site\ngit init"
+      },
+      {
+        "title": "Looking around",
+        "body": "`ls` lists what is in the folder you are in, `pwd` shows where you are, and `cd` moves into a folder (`cd ..` goes back out).",
+        "code": "mkdir demo\ncd demo\npwd\ntouch index.html\nls"
+      }
+    ],
+    "check": {
+      "question": "Which command turns the current folder into a Git repository?",
+      "options": ["git init", "git start", "git new"],
+      "answer": 0,
+      "explanation": "`git init` creates the hidden `.git` folder where Git keeps its history."
+    }
+  },
+  "exercise": {
+    "prompt": "Your website's files are in the folder `site`. Go into it with `cd`, then turn it into a Git repository.",
+    "starterCode": "",
+    "setup": [
+      "mkdir site",
+      "cd site",
+      "echo '<h1>My site</h1>' > index.html",
+      "cd .."
+    ],
+    "checks": [
+      {
+        "type": "folder",
+        "label": "You are inside the `site` folder",
+        "path": "site"
+      },
+      {
+        "type": "repo",
+        "label": "`site` is a Git repository"
+      }
+    ]
+  }
+}

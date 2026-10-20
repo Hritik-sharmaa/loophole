@@ -1,0 +1,49 @@
+{
+  "slug": "first-commit",
+  "title": "Your first commit",
+  "position": 4,
+  "learn": {
+    "cards": [
+      {
+        "title": "A commit is a snapshot",
+        "body": "`git commit -m \"message\"` saves everything staged as a commit. The message says what changed.",
+        "code": "git init\ntouch index.html\ngit add index.html\ngit commit -m \"Add home page\""
+      },
+      {
+        "title": "Good messages",
+        "body": "Write messages that finish the sentence \"This commit will…\": `Add home page`, `Fix the menu link`. Short and specific beats \"stuff\"."
+      }
+    ],
+    "check": {
+      "question": "You run `git commit -m \"Add logo\"` with nothing staged. What happens?",
+      "options": [
+        "Git says there is nothing to commit",
+        "Git commits every file anyway",
+        "Git deletes your changes"
+      ],
+      "answer": 0,
+      "explanation": "A commit only saves what is staged. With nothing staged, there is nothing to save."
+    }
+  },
+  "exercise": {
+    "prompt": "Stage `index.html` and commit it with the message `Add home page`.",
+    "starterCode": "",
+    "setup": ["git init", "echo '<h1>Hi</h1>' > index.html"],
+    "checks": [
+      {
+        "type": "commit-message",
+        "label": "A commit says `Add home page`",
+        "text": "Add home page"
+      },
+      {
+        "type": "committed-file",
+        "label": "`index.html` is in the commit",
+        "path": "index.html"
+      },
+      {
+        "type": "clean",
+        "label": "Nothing is left to commit"
+      }
+    ]
+  }
+}

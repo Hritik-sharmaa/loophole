@@ -105,6 +105,37 @@ Each test runs the program with `input` as stdin. It passes when **trimmed stdou
 - Write the reference solution during authoring and check it passes every test before committing. Keep it out of `content/`: it goes in `content-solutions/<course>/<unit-folder>/<lesson-file>.py`, which is git-ignored.
 - `content-files.spec.ts` in the API parses the real `content/` folder in CI, so a malformed lesson file fails the build, not the seed.
 
+### Git exercises (ADR-026)
+
+A course with `language: "git"` has git exercises: the learner types commands into a simulated terminal, and the API replays them on a simulated repository and checks the result. Nothing real runs. The exercise has a hidden `setup` (commands that build the starting state) and `checks` instead of tests:
+
+```json
+"exercise": {
+  "prompt": "The `footer` branch has a finished footer. Merge it into `main`.",
+  "starterCode": "",
+  "setup": [
+    "git init",
+    "echo '<h1>My site</h1>' > index.html",
+    "git add .",
+    "git commit -m \"Add home page\"",
+    "git switch -c footer",
+    "touch footer.html",
+    "git add .",
+    "git commit -m \"Add footer\""
+  ],
+  "checks": [
+    { "type": "current-branch", "label": "You are on `main`", "name": "main" },
+    { "type": "merged", "label": "`footer` is merged into `main`", "branch": "footer", "into": "main" }
+  ]
+}
+```
+
+- **The terminal knows:** `ls`, `pwd`, `cd`, `mkdir` (one level of folders), `touch`, `cat`, `echo … > file` / `>> file`, `rm`, and `git init, config, status, add, restore [--staged], commit [-a] -m, log [--oneline], branch [-d], switch [-c], checkout [-b], merge, remote [add|-v|remove], push [-u], pull, fetch, clone`. Merges that would conflict are refused; don't write lessons that need one.
+- **Setup-only commands:** `@github <url>` creates an empty repository on the pretend GitHub; `@config-reset` clears `user.name` and `user.email` (they default to `Learner`). To put commits on GitHub, build them in a throwaway folder, push, then `rm -r` the folder (see `content/git/03-github`). Learners can never run `@` commands.
+- **Checks** look at the folder the learner ends in: `repo`, `config` (`key`), `file` (`path`, `content?`), `folder` (`path`), `staged` (`path`, `staged?`), `clean`, `commits` (`min`, `branch?`), `commit-message` (`text`, `branch?`), `committed-file` (`path`, `content?`, `present?`, `branch?`), `branch` (`name`, `exists?`), `current-branch` (`name`), `merged` (`branch`, `into`), `remote` (`name`, `url?`), `pushed` (`remote`, `branch`). `branch` defaults to the current one.
+- Learn examples have `code` only (commands); they run from an empty folder with no setup, so they can't use GitHub. Explain remote commands in text cards.
+- The seed loader replays every setup and refuses one where any command prints an error. CI checks that an empty answer never passes. Keep a reference solution in `content-solutions/git/<unit-folder>/<lesson-file>.sh` and check it with `gradeGit()` before committing.
+
 ### JavaScript programs (ADR-025)
 
 A course with `language: "javascript"` is graded exactly like Python (stdin in, trimmed stdout compared), in Piston's Node 20.11.1. JavaScript has no simple way to read stdin, so Loophole appends a `prompt()` helper after the learner's code: each call returns the next line of input as text (or `null` when there is none), like the browser's `prompt()`. Line numbers in errors are unchanged.

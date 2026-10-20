@@ -22,11 +22,12 @@ export class RunsService {
     { lessonId, code, input }: RunCodeDto,
   ): Promise<RunResponse> {
     const language = await this.lessons.languageOf(userId, lessonId);
-    // Web examples render in the browser's preview; there is nothing to run.
-    if (exerciseKind(language) === 'web') {
+    // Web examples render in the browser's preview and git examples run in
+    // the simulated terminal (POST /git/run); only programs run here.
+    if (exerciseKind(language) !== 'program') {
       throw new BadRequestException({
         code: 'NOT_RUNNABLE',
-        message: 'This lesson shows a live preview instead of running code.',
+        message: 'This lesson runs in its own preview or terminal, not here.',
       });
     }
     const run = await this.piston.run(

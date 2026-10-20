@@ -12,21 +12,17 @@ import { useCourses } from '@/lib/queries/use-lessons';
 import { useMe } from '@/lib/queries/use-me';
 import { useRequireSession } from '@/lib/use-require-session';
 
-// The tracks agreed for after Python (ADR-023), shown so learners can see
-// what is coming. Delete an entry once its course is seeded.
-const COMING_SOON = [
-  {
-    title: 'Git & GitHub',
-    mark: 'git',
-    description: 'Save your work, branch, merge and share it like a pro.',
-  },
-];
+// Tracks announced but not seeded yet (ADR-023), shown so learners can see
+// what is coming. Every agreed track is live now; add an entry here when a
+// new one is planned, and delete it once its course is seeded.
+const COMING_SOON: { title: string; mark: string; description: string }[] = [];
 
 // The short mark on each course's tile, by course language.
 const MARKS: Record<string, string> = {
   python: 'py',
   html: '</>',
   javascript: 'js',
+  git: 'git',
 };
 
 // The signed-in home (ADR-023): continue the current course, or pick one.

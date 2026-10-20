@@ -1,0 +1,51 @@
+{
+  "slug": "staging",
+  "title": "Stage your changes",
+  "position": 3,
+  "learn": {
+    "cards": [
+      {
+        "title": "git status",
+        "body": "`git status` tells you what Git sees: untracked files (new to Git), changes, and what is staged.",
+        "code": "git init\ntouch index.html\ngit status"
+      },
+      {
+        "title": "Staging with git add",
+        "body": "`git add <file>` puts a file in the staging area, the list of changes for your next commit. `git add .` stages everything.",
+        "code": "git init\ntouch index.html notes.txt\ngit add index.html\ngit status"
+      }
+    ],
+    "check": {
+      "question": "After `git add index.html`, where is index.html?",
+      "options": [
+        "In the staging area, ready to commit",
+        "Saved in a commit",
+        "Uploaded to GitHub"
+      ],
+      "answer": 0,
+      "explanation": "Staging only marks it for the next commit. Nothing is saved or uploaded yet."
+    }
+  },
+  "exercise": {
+    "prompt": "This repository has two new files. Stage only `index.html`, and leave `notes.txt` unstaged.",
+    "starterCode": "",
+    "setup": [
+      "git init",
+      "echo '<h1>Hi</h1>' > index.html",
+      "echo 'ideas for later' > notes.txt"
+    ],
+    "checks": [
+      {
+        "type": "staged",
+        "label": "`index.html` is staged",
+        "path": "index.html"
+      },
+      {
+        "type": "staged",
+        "label": "`notes.txt` is not staged",
+        "path": "notes.txt",
+        "staged": false
+      }
+    ]
+  }
+}

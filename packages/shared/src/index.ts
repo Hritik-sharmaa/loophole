@@ -81,7 +81,53 @@ export type LessonLearn = { cards: LearnCard[]; check: QuickCheck };
 // How an exercise is graded (ADR-024). "program": run in Piston, stdout
 // compared with tests. "web": an HTML page (with its CSS in <style>) that
 // the API parses and checks against rules; nothing is run.
-export type ExerciseKind = 'program' | 'web';
+// "git" (ADR-026): commands typed into a simulated terminal, replayed on a
+// simulated repository, then checked against rules about its state.
+export type ExerciseKind = 'program' | 'web' | 'git';
+
+// One rule about the simulated repository at the end of a git exercise
+// (ADR-026). It looks at the folder the learner ends in. `branch` defaults
+// to the current one. `label` is what the learner sees.
+export type GitCheck =
+  | { type: 'repo'; label: string }
+  | { type: 'config'; label: string; key: 'user.name' | 'user.email' }
+  | { type: 'file'; label: string; path: string; content?: string }
+  | { type: 'folder'; label: string; path: string }
+  | { type: 'staged'; label: string; path: string; staged?: boolean }
+  | { type: 'clean'; label: string }
+  | { type: 'commits'; label: string; min: number; branch?: string }
+  | { type: 'commit-message'; label: string; text: string; branch?: string }
+  | {
+      type: 'committed-file';
+      label: string;
+      path: string;
+      content?: string;
+      present?: boolean;
+      branch?: string;
+    }
+  | { type: 'branch'; label: string; name: string; exists?: boolean }
+  | { type: 'current-branch'; label: string; name: string }
+  | { type: 'merged'; label: string; branch: string; into: string }
+  | { type: 'remote'; label: string; name: string; url?: string }
+  | { type: 'pushed'; label: string; remote: string; branch: string };
+
+// A git exercise: hidden setup commands that build the starting state,
+// then the checks.
+export type GitScenario = { setup: string[]; checks: GitCheck[] };
+
+// POST /git/run: replay a git lesson's terminal. `fresh` starts from an
+// empty folder (a Learn example) instead of the exercise's setup.
+export type GitRunRequest = {
+  lessonId: string;
+  commands: string;
+  fresh?: boolean;
+};
+export type GitTranscriptLine = { command: string; output: string };
+export type GitRunResponse = {
+  transcript: GitTranscriptLine[];
+  // The folder the terminal ends in, for its prompt ("" is home).
+  cwd: string;
+};
 
 // One rule a web exercise's page must meet. `label` is what the learner
 // sees in the checklist. Selectors are CSS selectors.

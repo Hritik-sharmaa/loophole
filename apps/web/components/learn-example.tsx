@@ -7,6 +7,7 @@ import { CodeEditor } from '@/components/code-editor';
 import { secondaryButton } from '@/components/ui/buttons';
 import { WebPreview } from '@/components/web-preview';
 import { languageInfo } from '@/lib/languages';
+import { useGitRun } from '@/lib/queries/use-git-run';
 import { useRun } from '@/lib/queries/use-run';
 
 // A Learn example. Program courses: code the learner can edit and run
@@ -21,10 +22,89 @@ export function LearnExample(props: {
   input?: string;
   output?: string;
 }) {
+  if (props.kind === 'git') {
+    return <GitExample lessonId={props.lessonId} code={props.code} />;
+  }
   return props.kind === 'web' ? (
     <WebExample code={props.code} />
   ) : (
     <RunnableExample {...props} />
+  );
+}
+
+// Git (ADR-026): commands, one per line, replayed in the simulated
+// terminal from an empty folder (POST /git/run with fresh: true).
+function GitExample({
+  lessonId,
+  code: original,
+}: {
+  lessonId: string;
+  code: string;
+}) {
+  const start = original.trimEnd();
+  const [code, setCode] = useState(start);
+  const run = useGitRun();
+
+  return (
+    <div className="flex flex-col gap-3">
+      <CodeEditor
+        value={code}
+        onChange={setCode}
+        fileName="commands"
+        language="plain"
+        compact
+      />
+      <div className="flex flex-wrap items-center gap-2">
+        <button
+          type="button"
+          onClick={() => run.mutate({ lessonId, commands: code, fresh: true })}
+          disabled={run.isPending}
+          className={`${secondaryButton} px-4 py-2 text-sm`}
+        >
+          <Play className="size-4" strokeWidth={3} aria-hidden />
+          {run.isPending ? 'Running…' : 'Run it'}
+        </button>
+        {code !== start && (
+          <UndoButton
+            onClick={() => {
+              setCode(start);
+              run.reset();
+            }}
+          />
+        )}
+      </div>
+      <div aria-live="polite">
+        {run.isError && (
+          <p role="alert" className="text-sm font-bold">
+            {run.error.message}
+          </p>
+        )}
+        {run.data && (
+          <div className="overflow-hidden rounded-card border-2 border-ink bg-ink">
+            <p className="border-b border-screen px-4 py-1.5 text-xs font-bold tracking-wide text-border-muted uppercase">
+              Terminal
+            </p>
+            <div className="flex flex-col gap-1 overflow-x-auto px-4 py-3 font-mono text-sm leading-6 text-canvas">
+              {run.data.transcript.map((step, i) => (
+                <div key={i}>
+                  <p>
+                    <span className="text-orange" aria-hidden>
+                      ${' '}
+                    </span>
+                    {step.command}
+                  </p>
+                  {step.output && (
+                    <pre className="whitespace-pre-wrap text-border-muted">
+                      {step.output}
+                    </pre>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
 

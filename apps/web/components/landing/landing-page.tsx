@@ -48,6 +48,7 @@ export function LandingPage() {
                 <li>✓ Python from print() to functions</li>
                 <li>✓ HTML & CSS with a live preview</li>
                 <li>✓ JavaScript from console.log() to objects</li>
+                <li>✓ Git & GitHub in a safe practice terminal</li>
                 <li>✓ Instant feedback on every run</li>
                 <li>✓ Hidden tests, so no shortcuts</li>
               </ul>

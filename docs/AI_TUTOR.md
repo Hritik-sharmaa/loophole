@@ -93,7 +93,7 @@ Explain what went wrong and where. Point to the line if you can.
 
 Response schema: `{ explanation: string, line: integer | null }`
 
-For a web exercise (ADR-024) the `Failing test` line becomes `Failing check: {{label}}`, the first check the page failed, as the learner saw it in the checklist; `language` is `html` and `Error output` holds any CSS syntax errors.
+For a web exercise (ADR-024) the `Failing test` line becomes `Failing check: {{label}}`, the first check the page failed, as the learner saw it in the checklist; `language` is `html` and `Error output` holds any CSS syntax errors. A git exercise (ADR-026) works the same way with `language` `git`: the "code" is the learner's terminal commands, one per line, and the lesson's hidden setup is never sent.
 
 ### Hint
 

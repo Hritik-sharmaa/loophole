@@ -106,7 +106,7 @@ Loop for every slice: AI **writes** the slice → you **review** and change it �
 - [x] HTML & CSS track: 15 lessons, live preview, pages checked by rules on the server (ADR-024)
 - [x] JavaScript track: 20 lessons, Node 20 in Piston, `prompt()` for input (ADR-025)
 - [ ] Re-test Node run times on the VPS (Docker Desktop stalls some Node starts past 3 s; ADR-025)
-- [ ] Git & GitHub track (simulated repo)
+- [x] Git & GitHub track: 15 lessons in a simulated terminal and repository (ADR-026)
 - [ ] Playwright e2e for J-1 and J-3; deploy step in GitHub Actions
 - [ ] Scalability, only if needed: see `ARCHITECTURE.md` §5
 - [ ] Stretch: replay (FR-27), bug of the day (FR-28), spectate (FR-29), JavaScript track (FR-30)

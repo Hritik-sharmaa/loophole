@@ -9,6 +9,7 @@ const LANGUAGES: Record<
   python: { editor: 'python', file: 'main.py', example: 'example.py' },
   javascript: { editor: 'javascript', file: 'main.js', example: 'example.js' },
   html: { editor: 'html', file: 'index.html', example: 'example.html' },
+  git: { editor: 'plain', file: 'terminal', example: 'commands' },
 };
 
 export function languageInfo(language: string) {

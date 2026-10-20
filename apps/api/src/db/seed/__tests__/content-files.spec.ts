@@ -8,6 +8,7 @@ import {
   parseDuelProblem,
   parseLesson,
 } from '../content-files.js';
+import { gradeGit } from '../../../modules/git/git-checks.js';
 import {
   checkPage,
   gradeChecks,
@@ -54,6 +55,25 @@ describe('the real content/ folder', () => {
   });
 
   // ADR-024: the HTML & CSS track, graded by checks instead of tests.
+  // ADR-026: replayed on the simulated repository, checked by rules.
+  it('loads the Git & GitHub course as git exercises nobody passes by doing nothing', () => {
+    const git = course('git-github');
+    expect(git.language).toBe('git');
+    expect(git.units.map((u) => [u.slug, u.lessons.length])).toEqual([
+      ['first-repo', 6],
+      ['branches', 4],
+      ['github', 5],
+    ]);
+    for (const lesson of git.units.flatMap((u) => u.lessons)) {
+      const scenario = lesson.exercise.gitScenario;
+      expect(scenario?.checks.length, lesson.slug).toBeGreaterThan(0);
+      expect(
+        gradeGit(scenario!, lesson.exercise.starterCode).status,
+        lesson.slug,
+      ).toBe('failed');
+    }
+  });
+
   // ADR-025: graded like Python, in Piston's Node runtime.
   it('loads the JavaScript course as program exercises', () => {
     const js = course('javascript');
@@ -224,6 +244,52 @@ describe('parseLesson', () => {
   });
 });
 
+describe('parseLesson for git exercises (ADR-026)', () => {
+  const gitLesson = (exercise: object) => ({
+    slug: 'first-commit',
+    title: 'First commit',
+    position: 1,
+    exercise: { prompt: 'Commit it.', starterCode: '', ...exercise },
+  });
+  const checks = [{ type: 'repo', label: 'There is a repository' }];
+
+  it('accepts a setup and checks', () => {
+    const lesson = parseLesson(
+      gitLesson({ setup: ['git init', 'touch a.txt'], checks }),
+      'x.json',
+      'git',
+    );
+    expect(lesson.exercise.gitScenario).toEqual({
+      setup: ['git init', 'touch a.txt'],
+      checks,
+    });
+    expect(lesson.exercise.checks).toBeNull();
+  });
+
+  it.each([
+    [
+      'a setup command that fails',
+      { setup: ['git commit -m "x"'], checks },
+      /exercise\.setup: "git commit -m "x"" failed: fatal: not a git repository/,
+    ],
+    [
+      'an unknown check type',
+      { checks: [{ type: 'magic', label: 'x' }] },
+      /type must be one of repo, config/,
+    ],
+    [
+      'a check without its required field',
+      { checks: [{ type: 'branch', label: 'x' }] },
+      /checks\[0\]\.name is required/,
+    ],
+    ['no checks', { checks: [] }, /needs at least 1 check/],
+  ])('rejects %s', (_case, exercise, problem) => {
+    expect(() => parseLesson(gitLesson(exercise), 'x.json', 'git')).toThrow(
+      problem,
+    );
+  });
+});
+
 describe('parseLesson for web exercises (ADR-024)', () => {
   const webLesson = {
     slug: 'first-heading',
@@ -306,7 +372,9 @@ describe('parseLesson for web exercises (ADR-024)', () => {
       ...validLesson,
       exercise: { ...validLesson.exercise, checks: [] },
     };
-    expect(() => parseLesson(json, 'x.json')).toThrow(/only web exercises/);
+    expect(() => parseLesson(json, 'x.json')).toThrow(
+      /only web and git exercises/,
+    );
   });
 });
 

@@ -4,7 +4,7 @@ import type { LessonDetail } from '@loophole/shared';
 import { ArrowLeft, Check, Lock, RotateCcw, Zap } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { AppHeader } from '@/components/app-header';
 import { Byte, ByteSays } from '@/components/byte';
 import { Checklist } from '@/components/checklist';
@@ -13,6 +13,7 @@ import { InlineCode } from '@/components/inline-code';
 import { LearnCards } from '@/components/learn-cards';
 import { QuickCheck } from '@/components/quick-check';
 import { SampleTests } from '@/components/sample-tests';
+import { Terminal } from '@/components/terminal';
 import { TestResults } from '@/components/test-results';
 import { TutorPanel } from '@/components/tutor-panel';
 import { primaryButton, secondaryButton } from '@/components/ui/buttons';
@@ -192,7 +193,19 @@ function Exercise({
   } = lesson.exercise;
   // Web exercises (ADR-024): a page checked by rules, with a live preview.
   const web = kind === 'web';
+  // Git exercises (ADR-026): `code` is the terminal's commands, one per
+  // line, so submitting and the latest attempt work as for any exercise.
+  const git = kind === 'git';
   const [code, setCode] = useState(initialCode);
+  // Memoised: the terminal replays whenever this array changes identity.
+  const commands = useMemo(
+    () =>
+      code
+        .split('\n')
+        .map((l) => l.trim())
+        .filter(Boolean),
+    [code],
+  );
   const submit = useSubmit();
   const result = submit.data;
 
@@ -214,7 +227,13 @@ function Exercise({
         </p>
       </ByteSays>
 
-      {web ? (
+      {git ? (
+        <Terminal
+          lessonId={lesson.id}
+          commands={commands}
+          onCommandsChange={(next) => setCode(next.join('\n'))}
+        />
+      ) : web ? (
         <div className="grid gap-4 lg:grid-cols-2">
           <CodeEditor
             value={code}
@@ -244,13 +263,15 @@ function Exercise({
           disabled={submit.isPending}
           className={completed ? secondaryButton : primaryButton}
         >
-          {web
-            ? submit.isPending
+          {submit.isPending
+            ? web || git
               ? 'Checking…'
-              : 'Check my page'
-            : submit.isPending
-              ? 'Running…'
-              : 'Run'}
+              : 'Running…'
+            : git
+              ? 'Check my work'
+              : web
+                ? 'Check my page'
+                : 'Run'}
         </button>
         <button
           type="button"
@@ -258,7 +279,8 @@ function Exercise({
           disabled={submit.isPending || code === starterCode}
           className={secondaryButton}
         >
-          <RotateCcw className="size-4" strokeWidth={3} /> Reset code
+          <RotateCcw className="size-4" strokeWidth={3} />{' '}
+          {git ? 'Start over' : 'Reset code'}
         </button>
       </div>
 
@@ -308,8 +330,9 @@ function Exercise({
         </div>
       )}
 
-      {/* Web: the checklist is always shown, ticked after each check. */}
-      {web ? (
+      {/* Web and git: the checklist is always shown, ticked after each
+          check. */}
+      {web || git ? (
         <Checklist checks={checks} result={result} />
       ) : (
         result && <TestResults result={result} />

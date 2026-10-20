@@ -1,0 +1,66 @@
+{
+  "slug": "pull",
+  "title": "Pull new work",
+  "position": 4,
+  "learn": {
+    "cards": [
+      {
+        "title": "git pull",
+        "body": "When someone else pushes to GitHub, your copy falls behind. `git pull` downloads their commits and merges them into your branch."
+      },
+      {
+        "title": "Pull before you push",
+        "body": "If GitHub has work you don't, Git rejects your push until you pull it first."
+      }
+    ],
+    "check": {
+      "question": "Git rejected your push with \"fetch first\". What do you do?",
+      "options": [
+        "git pull, then push again",
+        "Delete the repository",
+        "Never push again"
+      ],
+      "answer": 0,
+      "explanation": "Pulling brings in the other commits; then your push goes through."
+    }
+  },
+  "exercise": {
+    "prompt": "A teammate pushed a new commit to GitHub. You are in your copy, `notes`. Pull their work.",
+    "starterCode": "",
+    "setup": [
+      "@github https://github.com/you/notes.git",
+      "mkdir seed",
+      "cd seed",
+      "git init",
+      "echo \"# Notes\" > README.md",
+      "git add .",
+      "git commit -m \"Initial commit\"",
+      "git remote add origin https://github.com/you/notes.git",
+      "git push -u origin main",
+      "cd ..",
+      "rm -r seed",
+      "git clone https://github.com/you/notes.git notes",
+      "git clone https://github.com/you/notes.git teammate",
+      "cd teammate",
+      "echo \"- buy milk\" >> README.md",
+      "git commit -am \"Add a shopping list\"",
+      "git push",
+      "cd ..",
+      "rm -r teammate",
+      "cd notes"
+    ],
+    "checks": [
+      {
+        "type": "commit-message",
+        "label": "You have your teammate's `Add a shopping list` commit",
+        "text": "Add a shopping list"
+      },
+      {
+        "type": "file",
+        "label": "`README.md` has the shopping list",
+        "path": "README.md",
+        "content": "# Notes\n- buy milk"
+      }
+    ]
+  }
+}

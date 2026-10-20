@@ -1,0 +1,57 @@
+{
+  "slug": "everyday-loop",
+  "title": "The everyday loop",
+  "position": 5,
+  "learn": {
+    "cards": [
+      {
+        "title": "Pull, change, add, commit, push",
+        "body": "Most days with Git look the same: pull, change files, `git add`, `git commit`, `git push`. Here is the middle of the loop.",
+        "code": "git init\necho \"hello\" > notes.txt\ngit add notes.txt\ngit commit -m \"Add notes\"\ngit log --oneline"
+      }
+    ],
+    "check": {
+      "question": "In the everyday loop, what comes right after editing your files?",
+      "options": ["git add", "git push", "git clone"],
+      "answer": 0,
+      "explanation": "Stage your changes first, then commit, then push."
+    }
+  },
+  "exercise": {
+    "prompt": "You are in your clone of `blog`. Create `post.md` with `echo \"# My first post\" > post.md`, commit it with the message `Add first post`, and push it to GitHub.",
+    "starterCode": "",
+    "setup": [
+      "@github https://github.com/you/blog.git",
+      "mkdir seed",
+      "cd seed",
+      "git init",
+      "echo \"# Blog\" > README.md",
+      "git add .",
+      "git commit -m \"Initial commit\"",
+      "git remote add origin https://github.com/you/blog.git",
+      "git push -u origin main",
+      "cd ..",
+      "rm -r seed",
+      "git clone https://github.com/you/blog.git",
+      "cd blog"
+    ],
+    "checks": [
+      {
+        "type": "committed-file",
+        "label": "`post.md` is committed",
+        "path": "post.md"
+      },
+      {
+        "type": "commit-message",
+        "label": "A commit says `Add first post`",
+        "text": "Add first post"
+      },
+      {
+        "type": "pushed",
+        "label": "GitHub has your new commit",
+        "remote": "origin",
+        "branch": "main"
+      }
+    ]
+  }
+}
