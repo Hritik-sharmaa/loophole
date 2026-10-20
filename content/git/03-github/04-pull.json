@@ -11,6 +11,15 @@
       {
         "title": "Pull before you push",
         "body": "If GitHub has work you don't, Git rejects your push until you pull it first."
+      },
+      {
+        "title": "Spot the bug",
+        "body": "A teammate pushed first, so GitHub rejects this push. Tap the line that needs a step before it.",
+        "code": "git add notes.txt\ngit commit -m \"Fix typo\"\ngit push\n",
+        "bug": {
+          "line": 3,
+          "fix": "When GitHub has work you do not, pull first: `git pull`, then `git push`."
+        }
       }
     ],
     "check": {

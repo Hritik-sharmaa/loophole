@@ -15,6 +15,15 @@
         "body": "In an f-string, `{value:.2f}` shows a number with exactly two digits after the point.",
         "code": "x = 7 / 3\nprint(x)\nprint(f\"{x:.2f}\")\n",
         "output": "2.3333333333333335\n2.33"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "It should print `2.33`, but prints `2.333333`. Tap the bug.",
+        "code": "price = 7 / 3\nprint(f\"{price:2f}\")\n",
+        "bug": {
+          "line": 2,
+          "fix": "Two decimal places is `:.2f`, with a dot. Without the dot, `2` sets a width, not the number of decimals."
+        }
       }
     ],
     "check": {

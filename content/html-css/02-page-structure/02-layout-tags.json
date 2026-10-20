@@ -12,6 +12,15 @@
       {
         "title": "Tags inside tags",
         "body": "Tags can hold other tags. Indent the inner ones so you can see the structure at a glance."
+      },
+      {
+        "title": "Spot the bug",
+        "body": "One part of this page is closed with the wrong tag. Which line?",
+        "code": "<header><h1>My blog</h1></header>\n<main><p>Today I learned CSS.</p></header>\n<footer><p>Made by me</p></footer>\n",
+        "bug": {
+          "line": 2,
+          "fix": "Line 2 opens `<main>` but closes `</header>`. Close what you open: `</main>`."
+        }
       }
     ],
     "check": {

@@ -15,6 +15,15 @@
         "body": "`range(3)` counts 0, 1, 2: it stops before the stop number. `range(2, 5)` counts 2, 3, 4.",
         "code": "for i in range(2, 5):\n    print(i)\n",
         "output": "2\n3\n4"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "Python stops with an `IndentationError`. Which line is wrong?",
+        "code": "for i in range(3):\nprint(\"hip hip\")\nprint(\"hooray!\")\n",
+        "bug": {
+          "line": 2,
+          "fix": "The lines a loop repeats are indented. Line 2 needs 4 spaces in front so it belongs to the loop."
+        }
       }
     ],
     "check": {

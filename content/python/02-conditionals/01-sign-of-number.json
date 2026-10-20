@@ -22,6 +22,15 @@
         "code": "n = int(input())\nif n > 100:\n    print(\"big\")\nelif n > 10:\n    print(\"medium\")\nelse:\n    print(\"small\")\n",
         "input": "42\n",
         "output": "medium"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "Python stops with a `SyntaxError` before running anything. Which line is wrong?",
+        "code": "temp = int(input())\nif temp > 30:\n    print(\"hot\")\nelif temp > 15\n    print(\"warm\")\nelse:\n    print(\"cold\")\n",
+        "bug": {
+          "line": 4,
+          "fix": "Every `if`, `elif` and `else` line ends with a colon. Line 4 needs `elif temp > 15:`."
+        }
       }
     ],
     "check": {

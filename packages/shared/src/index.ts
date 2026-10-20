@@ -5,6 +5,10 @@ export type ApiErrorBody = {
   error: { code: string; message: string };
 };
 
+// XP a day the learner aims for (ADR-033): 10, 20 or 30, about one, two
+// or three lessons (5, 10 or 15 minutes).
+export type DailyGoal = 10 | 20 | 30;
+
 // GET /me and PATCH /me
 export type MeResponse = {
   id: string;
@@ -14,12 +18,26 @@ export type MeResponse = {
   streak: { current: number; longest: number; freezes: number };
   rating: number;
   lessonsCompleted: number;
+  // null until the learner picks one in the welcome (ADR-033).
+  dailyGoal: DailyGoal | null;
+  // XP earned since 00:00 IST today.
+  todayXp: number;
 };
 
 // PATCH /me body
 export type UpdateMeRequest = {
   username?: string;
   avatarUrl?: string;
+  dailyGoal?: DailyGoal;
+};
+
+// GET /me/activity (ADR-033): XP per IST day for the streak calendar, the
+// five weeks from `from` (a Monday) to `today`. Days without XP are left
+// out.
+export type ActivityResponse = {
+  from: string;
+  today: string;
+  days: { date: string; xp: number }[];
 };
 
 // One stdin → expected stdout pair (docs/CONTENT_GUIDE.md "Grading rule").

@@ -15,6 +15,15 @@
         "body": "`sorted(d)` gives the keys in order: alphabetical for strings.",
         "code": "d = {\"b\": 1, \"c\": 5, \"a\": 2}\nfor key in sorted(d):\n    print(key, d[key])\n",
         "output": "a 2\nb 1\nc 5"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "It should count each letter, but crashes with a `KeyError` on the very first one. Which line is wrong?",
+        "code": "counts = {}\nfor ch in \"banana\":\n    counts[ch] = counts[ch] + 1\nprint(counts)\n",
+        "bug": {
+          "line": 3,
+          "fix": "A new letter is not in the dictionary yet. `counts.get(ch, 0) + 1` starts it at 0."
+        }
       }
     ],
     "check": {

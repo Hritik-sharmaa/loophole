@@ -16,6 +16,15 @@
         "code": "for (let i = 0; i < 2; i++) {\n  const word = prompt();\n  console.log(\"got\", word);\n}\n",
         "input": "apple\npear\n",
         "output": "got apple\ngot pear"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "It should print 10, but crashes with `ReferenceError: total is not defined`. Which line is wrong?",
+        "code": "for (let i = 1; i <= 4; i++) {\n  let total = 0;\n  total += i;\n}\nconsole.log(total);\n",
+        "bug": {
+          "line": 2,
+          "fix": "Line 2 makes a new `total` inside the loop every round, and it is gone after the loop. Declare it once, before the loop."
+        }
       }
     ],
     "check": {

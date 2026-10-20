@@ -59,7 +59,7 @@ export function LearnCards({
     >
       {/* key: each card starts with its own fresh example. */}
       <div key={index} className="flex flex-col gap-6">
-        <GuideSays guide={guide}>
+        <GuideSays guide={guide} speak={`${card.title}. ${card.body}`}>
           <h2 className="font-display text-xl font-extrabold text-balance sm:text-2xl">
             {card.title}
           </h2>

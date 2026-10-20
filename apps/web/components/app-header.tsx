@@ -12,6 +12,7 @@ import {
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type { ReactNode } from 'react';
+import { GoalRing } from '@/components/daily-goal';
 import { Logo } from '@/components/logo';
 import { chip } from '@/components/ui/card';
 import { useMe } from '@/lib/queries/use-me';
@@ -54,6 +55,27 @@ export function AppHeader() {
               narrow for both, and the profile page shows the numbers. */}
           {me.data && (
             <div className="flex items-center gap-2 sm:hidden md:flex">
+              {/* The daily goal (ADR-033): a ring that fills as XP comes in. */}
+              {me.data.dailyGoal !== null && (
+                <span
+                  title={`Daily goal: ${me.data.todayXp} of ${me.data.dailyGoal} XP today`}
+                  className={`${chip} bg-paper text-ink tabular-nums`}
+                >
+                  <GoalRing
+                    value={me.data.todayXp}
+                    goal={me.data.dailyGoal}
+                    className="size-4"
+                  />
+                  <span aria-hidden>
+                    {Math.min(me.data.todayXp, me.data.dailyGoal)}/
+                    {me.data.dailyGoal}
+                  </span>
+                  <span className="sr-only">
+                    Daily goal: {me.data.todayXp} of {me.data.dailyGoal} XP
+                    today
+                  </span>
+                </span>
+              )}
               <Badge
                 icon={<Flame className="size-3.5" fill="currentColor" />}
                 label={`${me.data.streak.current} day streak${me.data.streak.freezes > 0 ? `, ${me.data.streak.freezes} freeze${me.data.streak.freezes === 1 ? '' : 's'} saved` : ''}`}

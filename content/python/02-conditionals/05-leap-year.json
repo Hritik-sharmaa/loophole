@@ -21,6 +21,15 @@
         "body": "Python works out `and` before `or`. Brackets make the order obvious, to you and to Python.",
         "code": "n = 30\nprint(n % 3 == 0 and (n % 5 == 0 or n % 7 == 0))\n",
         "output": "True"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "It calls everyone a teenager, even a 40-year-old. Which line is wrong?",
+        "code": "age = int(input())\nif age >= 13 or age <= 19:\n    print(\"teenager\")\nelse:\n    print(\"not a teen\")\n",
+        "bug": {
+          "line": 2,
+          "fix": "With `or`, one true side is enough, and every age is `>= 13` or `<= 19`. Both must be true, so use `and`."
+        }
       }
     ],
     "check": {

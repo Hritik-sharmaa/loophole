@@ -15,6 +15,15 @@
         "body": "`=` puts a value into a variable. `==` asks whether two values are equal. Inside an `if`, you almost always want `==`.",
         "code": "n = 9\nif n % 3 == 0:\n    print(\"divides by 3\")\nelse:\n    print(\"does not divide by 3\")\n",
         "output": "divides by 3"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "It should check whether a number divides by 5, but Python refuses to run it. Tap the bug.",
+        "code": "n = int(input())\nif n % 5 = 0:\n    print(\"divides by 5\")\nelse:\n    print(\"does not divide by 5\")\n",
+        "bug": {
+          "line": 2,
+          "fix": "`=` stores a value; `==` compares two. Line 2 needs `n % 5 == 0`."
+        }
       }
     ],
     "check": {

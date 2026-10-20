@@ -13,6 +13,15 @@
         "title": "Borders and corners",
         "body": "`border` draws an edge, like `2px solid black`. `border-radius` rounds the corners.",
         "code": "<style>\n  .box { border: 2px solid black; border-radius: 12px; padding: 12px; }\n</style>\n<div class=\"box\">Rounded box</div>"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "The box should have a black edge, but none shows. Which line is wrong?",
+        "code": "<style>\n  .box { border: 2px black; padding: 12px; }\n</style>\n<div class=\"box\">Hello</div>\n",
+        "bug": {
+          "line": 2,
+          "fix": "A border needs a style as well as a size and colour: `border: 2px solid black;`. Without `solid`, nothing is drawn."
+        }
       }
     ],
     "check": {

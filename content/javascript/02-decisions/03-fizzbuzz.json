@@ -15,6 +15,15 @@
         "body": "With `else if`, the first true condition wins, so put the strictest check first or a broader one will catch it.",
         "code": "const n = 30;\nif (n % 2 === 0 && n % 3 === 0) {\n  console.log(\"both\");\n} else if (n % 2 === 0) {\n  console.log(\"even\");\n} else {\n  console.log(\"neither\");\n}\n",
         "output": "both"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "Only adult members get in free, but a 25-year-old who is not a member does too. Which line is wrong?",
+        "code": "const age = 25;\nconst member = false;\nif (age >= 18 || member) {\n  console.log(\"free entry\");\n}\n",
+        "bug": {
+          "line": 3,
+          "fix": "`||` needs just one side to be true. Both must be true here, so use `&&`."
+        }
       }
     ],
     "check": {

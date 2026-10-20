@@ -12,6 +12,15 @@
       {
         "title": "Fast-forward",
         "body": "If `main` hasn't moved since the branch started, Git simply moves `main` forward to the branch's latest commit. That is a fast-forward."
+      },
+      {
+        "title": "Spot the bug",
+        "body": "The merge says `Already up to date.` and `main` never gets the footer. Which line is wrong?",
+        "code": "git init\ntouch index.html\ngit add .\ngit commit -m \"Start\"\ngit switch -c footer\ntouch footer.html\ngit add .\ngit commit -m \"Add footer\"\ngit merge footer\n",
+        "bug": {
+          "line": 9,
+          "fix": "You are still on `footer`, so this merges `footer` into itself. Run `git switch main` first, then `git merge footer`."
+        }
       }
     ],
     "check": {

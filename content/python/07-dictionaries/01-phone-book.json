@@ -27,6 +27,15 @@
         "body": "`a, b = line.split()` splits a line and stores the two pieces in two variables at once.",
         "code": "name, score = \"ada 90\".split()\nprint(score, name)\n",
         "output": "90 ada"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "It should print Ada's age, 36, but crashes with a `KeyError`. Tap the bug.",
+        "code": "ages = {\"ada\": 36, \"bo\": 7}\nprint(ages[\"Ada\"])\n",
+        "bug": {
+          "line": 2,
+          "fix": "Keys must match exactly, capitals too. The key is `\"ada\"`, so use `ages[\"ada\"]`."
+        }
       }
     ],
     "check": {

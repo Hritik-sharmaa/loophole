@@ -13,6 +13,15 @@
         "title": "property: value;",
         "body": "Each line inside the braces is `property: value;`. Don't forget the colon and the semicolon.",
         "code": "<style>\n  h1 { color: purple; background-color: yellow; }\n</style>\n<h1>Loud heading</h1>"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "The heading should be purple, but stays black. Tap the bug.",
+        "code": "<style>\n  h1 { color purple; }\n</style>\n<h1>Hello</h1>\n",
+        "bug": {
+          "line": 2,
+          "fix": "Each line in a rule is `property: value;`. Line 2 is missing the colon: `color: purple;`."
+        }
       }
     ],
     "check": {

@@ -15,6 +15,15 @@
         "body": "Array methods give back arrays, so you can chain them: filter first, then map.",
         "code": "const result = [1, 2, 3, 4].filter(x => x > 2).map(x => x * 10);\nconsole.log(result.join(\" \"));\n",
         "output": "30 40"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "It should print `10 20 30`, but prints `1 2 3`. Which line is wrong?",
+        "code": "const nums = [1, 2, 3];\nnums.map(x => x * 10);\nconsole.log(nums.join(\" \"));\n",
+        "bug": {
+          "line": 2,
+          "fix": "`map` makes a new array and leaves `nums` alone, so line 2 throws its result away. Keep it: `const tens = nums.map(x => x * 10);`, then print `tens`."
+        }
       }
     ],
     "check": {

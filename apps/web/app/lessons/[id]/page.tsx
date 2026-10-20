@@ -8,6 +8,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { AppHeader } from '@/components/app-header';
 import { Checklist } from '@/components/checklist';
 import { CodeEditor } from '@/components/code-editor';
+import { GoalRing, lessonsLeft } from '@/components/daily-goal';
 import {
   GUIDES,
   Guide,
@@ -259,7 +260,11 @@ function Exercise({
   return (
     <div className="flex flex-col gap-6">
       {/* The guide reads out the task (DESIGN_SYSTEM §9). */}
-      <GuideSays guide={guide} mood={completed ? 'happy' : 'idle'}>
+      <GuideSays
+        guide={guide}
+        mood={completed ? 'happy' : 'idle'}
+        speak={prompt}
+      >
         <p className="text-xs font-bold tracking-wide text-text-secondary uppercase">
           Your task
         </p>
@@ -449,6 +454,20 @@ function LessonComplete({
           }
         />
       </dl>
+
+      {/* Today against the daily goal (ADR-033). */}
+      {me.data && me.data.dailyGoal !== null && (
+        <p className="flex items-center gap-2 font-bold">
+          <GoalRing
+            value={me.data.todayXp}
+            goal={me.data.dailyGoal}
+            className="size-6 shrink-0"
+          />
+          {me.data.todayXp >= me.data.dailyGoal
+            ? `Daily goal done: ${me.data.todayXp} XP today!`
+            : `Daily goal: ${me.data.todayXp} of ${me.data.dailyGoal} XP. ${lessonsLeft(me.data.todayXp, me.data.dailyGoal)} more ${lessonsLeft(me.data.todayXp, me.data.dailyGoal) === 1 ? 'lesson' : 'lessons'} to go.`}
+        </p>
+      )}
 
       <div className="flex w-full max-w-sm flex-col gap-3">
         {result.certificateSlug && (

@@ -1,5 +1,5 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import type { MeResponse } from '@loophole/shared';
+import type { ActivityResponse, DailyGoal, MeResponse } from '@loophole/shared';
 import { count, eq } from 'drizzle-orm';
 import { DbService } from '../../db/db.service.js';
 import { profiles, userProgress, type Profile } from '../../db/schema/index.js';
@@ -36,14 +36,22 @@ export class UsersService {
 
   async updateMe(user: AuthUser, dto: UpdateMeDto): Promise<MeResponse> {
     const current = await this.getOrCreate(user);
-    if (dto.username === undefined && dto.avatarUrl === undefined) {
+    if (
+      dto.username === undefined &&
+      dto.avatarUrl === undefined &&
+      dto.dailyGoal === undefined
+    ) {
       return this.toMe(current);
     }
 
     try {
       const [updated] = await this.db.drizzle
         .update(profiles)
-        .set({ username: dto.username, avatarUrl: dto.avatarUrl })
+        .set({
+          username: dto.username,
+          avatarUrl: dto.avatarUrl,
+          dailyGoal: dto.dailyGoal,
+        })
         .where(eq(profiles.id, user.id))
         .returning();
       return this.toMe(updated);
@@ -56,6 +64,12 @@ export class UsersService {
       }
       throw err;
     }
+  }
+
+  // GET /me/activity: XP per day for the streak calendar (ADR-033).
+  async activity(user: AuthUser): Promise<ActivityResponse> {
+    await this.getOrCreate(user);
+    return this.gamification.activity(user.id);
   }
 
   // Returns the user's profile, creating it on their first request.
@@ -100,7 +114,7 @@ export class UsersService {
       .from(userProgress)
       .where(eq(userProgress.userId, profile.id));
 
-    const { xp, streak } = await this.gamification.stats(profile.id);
+    const { xp, streak, todayXp } = await this.gamification.stats(profile.id);
     const elos = await this.ratings.elosOf([profile.id]);
 
     return {
@@ -111,6 +125,9 @@ export class UsersService {
       streak,
       rating: elos.get(profile.id) ?? STARTING_ELO,
       lessonsCompleted: done,
+      // The column's check allows only 10, 20 or 30.
+      dailyGoal: profile.dailyGoal as DailyGoal | null,
+      todayXp,
     };
   }
 }

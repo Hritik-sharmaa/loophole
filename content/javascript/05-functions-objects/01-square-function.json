@@ -21,6 +21,15 @@
         "body": "`console.log` only shows a value. `return` hands it back, so the caller can keep using it.",
         "code": "function addOne(n) {\n  return n + 1;\n}\n\nconsole.log(addOne(4) * 10);\n",
         "output": "50"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "It should print 13, but prints 12 and then `NaN`. Tap the bug.",
+        "code": "function triple(n) {\n  console.log(n * 3);\n}\n\nconsole.log(triple(4) + 1);\n",
+        "bug": {
+          "line": 2,
+          "fix": "`console.log` only shows the value, so `triple` gives back `undefined`. Line 2 should be `return n * 3;`."
+        }
       }
     ],
     "check": {

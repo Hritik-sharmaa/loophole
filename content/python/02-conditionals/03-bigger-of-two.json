@@ -15,6 +15,15 @@
         "body": "`>=` means greater than or equal, so it is True when both values are the same. That is handy for ties.",
         "code": "print(5 >= 5)\nprint(5 > 5)\n",
         "output": "True\nFalse"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "18-year-olds count as adults, but for 18 this prints `child`. Which line is wrong?",
+        "code": "age = int(input())\nif age > 18:\n    print(\"adult\")\nelse:\n    print(\"child\")\n",
+        "bug": {
+          "line": 2,
+          "fix": "`>` is False when both sides are equal. Line 2 needs `>=` so that 18 counts too."
+        }
       }
     ],
     "check": {

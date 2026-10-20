@@ -15,6 +15,15 @@
         "body": "Leave out start to begin at 0; leave out stop to go to the end. Negative numbers count from the end.",
         "code": "word = \"rainbow\"\nprint(word[:3])\nprint(word[3:])\nprint(word[-3:])\n",
         "output": "rai\nnbow\nbow"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "It should print the first four letters, `rain`, but prints `rai`. Tap the bug.",
+        "code": "word = \"rainbow\"\nprint(word[0:3])\n",
+        "bug": {
+          "line": 2,
+          "fix": "A slice stops just before its stop index, so `[0:3]` gives three letters. Use `word[0:4]` (or `word[:4]`)."
+        }
       }
     ],
     "check": {

@@ -14,6 +14,15 @@
       {
         "title": "Why the order matters",
         "body": "If the `>= 50` check came first, a speed of 120 would print okay and never reach the fast check. The first match wins."
+      },
+      {
+        "title": "Spot the bug",
+        "body": "For 40 degrees it prints `warm`, never `hot`. Tap the line that checks too early.",
+        "code": "temp = int(input())\nif temp >= 20:\n    print(\"warm\")\nelif temp >= 35:\n    print(\"hot\")\nelse:\n    print(\"cool\")\n",
+        "bug": {
+          "line": 2,
+          "fix": "The first true check wins, and 40 is already `>= 20`. Check the higher limit first: `if temp >= 35`, then `elif temp >= 20`."
+        }
       }
     ],
     "check": {

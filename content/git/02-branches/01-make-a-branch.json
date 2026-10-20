@@ -13,6 +13,15 @@
         "title": "Switching",
         "body": "`git switch <name>` moves you to a branch. `git switch -c <name>` creates one and moves you there in one step.",
         "code": "git init\ntouch a.txt\ngit add .\ngit commit -m \"Start\"\ngit switch -c idea\ngit branch"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "The last command fails: there is no branch to move to. Which line is wrong?",
+        "code": "git init\ntouch a.txt\ngit add .\ngit commit -m \"Start\"\ngit switch idea\n",
+        "bug": {
+          "line": 5,
+          "fix": "`git switch` only moves to a branch that exists. `git switch -c idea` creates it and moves you there."
+        }
       }
     ],
     "check": {

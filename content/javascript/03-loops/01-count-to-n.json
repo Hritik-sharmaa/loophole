@@ -15,6 +15,15 @@
         "body": "Change the step to count by 2, or count down with `i--` or `i -= 2`.",
         "code": "for (let i = 10; i >= 6; i -= 2) {\n  console.log(i);\n}\n",
         "output": "10\n8\n6"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "It should print laps 1 to 5, but stops at lap 4. Tap the bug.",
+        "code": "for (let i = 1; i < 5; i++) {\n  console.log(\"lap\", i);\n}\n",
+        "bug": {
+          "line": 1,
+          "fix": "`i < 5` stops before 5. Use `i <= 5` to include it."
+        }
       }
     ],
     "check": {

@@ -22,6 +22,15 @@
         "body": "`sum(nums)` adds up every number in the list.",
         "code": "print(sum([10, 20, 5]))\n",
         "output": "35"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "It should print the last item, 15, but crashes with an `IndexError`. Which line is wrong?",
+        "code": "nums = [4, 8, 15]\nprint(nums[3])\n",
+        "bug": {
+          "line": 2,
+          "fix": "The first item is `nums[0]`, so 15 is `nums[2]` (or `nums[-1]`). There is no `nums[3]`."
+        }
       }
     ],
     "check": {

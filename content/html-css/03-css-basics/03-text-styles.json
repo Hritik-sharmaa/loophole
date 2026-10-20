@@ -13,6 +13,15 @@
         "title": "Lining text up",
         "body": "`text-align` lines text up: `left`, `center` or `right`.",
         "code": "<style>\n  h1 { text-align: center; }\n</style>\n<h1>Centered</h1>"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "The heading should be much bigger, but nothing changes. Tap the bug.",
+        "code": "<style>\n  h2 { font-size: 30; }\n</style>\n<h2>Big news</h2>\n",
+        "bug": {
+          "line": 2,
+          "fix": "Sizes need a unit. The browser ignores a bare `30`; write `30px`."
+        }
       }
     ],
     "check": {

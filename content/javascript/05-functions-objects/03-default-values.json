@@ -15,6 +15,15 @@
         "body": "A function can build a string, often between backticks, and return it.",
         "code": "const label = (item, price = 1) => `${item}: ${price} coin`;\nconsole.log(label(\"apple\"));\nconsole.log(label(\"melon\", 3));\n",
         "output": "apple: 1 coin\nmelon: 3 coin"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "It should print `pen costs 25`, but prints `25 costs pen`. Tap the bug.",
+        "code": "function price(item, cost = 10) {\n  return `${item} costs ${cost}`;\n}\n\nconsole.log(price(25, \"pen\"));\n",
+        "bug": {
+          "line": 5,
+          "fix": "Arguments fill the parameters in order, and `item` comes first. Call it as `price(\"pen\", 25)`."
+        }
       }
     ],
     "check": {

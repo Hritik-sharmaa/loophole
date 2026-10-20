@@ -1,4 +1,5 @@
 import type { CSSProperties, ReactNode } from 'react';
+import { ReadAloud } from '@/components/read-aloud';
 
 // The crew (ADR-028): one guide per course, drawn flat with no outlines
 // (the one exception to "everything is a sticker", DESIGN_SYSTEM §9). They
@@ -13,6 +14,8 @@ type Look = {
   name: string;
   // What they say when a lesson is done.
   cheer: string;
+  // Their reading-aloud voice, higher or lower (ADR-032).
+  pitch: number;
   skin: string;
   shade: string;
   hair: string;
@@ -31,6 +34,7 @@ export const GUIDES: Record<GuideId, Look> = {
   priya: {
     name: 'Priya',
     cheer: 'Shabaash!',
+    pitch: 1.1,
     skin: '#B5784A',
     shade: '#93603A',
     hair: '#1F1414',
@@ -45,6 +49,7 @@ export const GUIDES: Record<GuideId, Look> = {
   arjun: {
     name: 'Arjun',
     cheer: 'Badhiya!',
+    pitch: 1,
     skin: '#8D5524',
     shade: '#6F4120',
     hair: '#1B1433',
@@ -58,6 +63,7 @@ export const GUIDES: Record<GuideId, Look> = {
   meera: {
     name: 'Meera',
     cheer: 'Wah!',
+    pitch: 1.2,
     skin: '#D29A66',
     shade: '#B47E4E',
     hair: '#231A1A',
@@ -72,6 +78,7 @@ export const GUIDES: Record<GuideId, Look> = {
   harpreet: {
     name: 'Harpreet',
     cheer: 'Balle balle!',
+    pitch: 0.85,
     skin: '#C68642',
     shade: '#A26A2C',
     hair: '#241A1A',
@@ -189,14 +196,18 @@ export function CrewLineup({
 }
 
 // A guide beside a speech bubble: how the crew talks to the learner.
+// `speak` is the bubble's text as plain words; with it, a speaker button
+// in the corner reads it aloud in the guide's voice (ADR-032).
 export function GuideSays({
   guide,
   mood = 'idle',
+  speak,
   children,
   className = '',
 }: {
   guide: GuideId;
   mood?: GuideMood;
+  speak?: string;
   children: ReactNode;
   className?: string;
 }) {
@@ -213,7 +224,10 @@ export function GuideSays({
           aria-hidden
           className="absolute bottom-4 -left-[9px] size-4 rotate-45 border-b-2 border-l-2 border-ink bg-paper"
         />
-        <div className="relative">{children}</div>
+        <div className="relative flex items-start gap-3">
+          <div className="min-w-0 flex-1">{children}</div>
+          {speak && <ReadAloud text={speak} pitch={GUIDES[guide].pitch} />}
+        </div>
       </div>
     </div>
   );

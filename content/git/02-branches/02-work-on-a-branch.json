@@ -8,6 +8,15 @@
         "title": "Commits stay on their branch",
         "body": "A commit on a branch exists only there until you merge it, so `main` stays exactly as it was. Watch `header.html` disappear when we switch back.",
         "code": "git init\ntouch index.html\ngit add .\ngit commit -m \"Start\"\ngit switch -c header\ntouch header.html\ngit add .\ngit commit -m \"Add header\"\ngit switch main\nls"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "`menu.html` should be committed on the `menu` branch, but it lands on `main`. Tap the bug.",
+        "code": "git init\ntouch index.html\ngit add .\ngit commit -m \"Start\"\ngit branch menu\ntouch menu.html\ngit add .\ngit commit -m \"Add menu\"\n",
+        "bug": {
+          "line": 5,
+          "fix": "`git branch menu` only creates the branch; you stay on `main`. `git switch -c menu` creates it and moves you there."
+        }
       }
     ],
     "check": {

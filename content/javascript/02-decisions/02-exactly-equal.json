@@ -15,6 +15,15 @@
         "body": "`==` converts types before comparing, so `\"1\" == 1` is true. That causes surprises, so use `===`.",
         "code": "console.log(\"1\" == 1);\nconsole.log(\"1\" === 1);\n",
         "output": "true\nfalse"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "Whatever colour you type, it always says `My favourite too!`. Tap the bug.",
+        "code": "let color = prompt();\nif (color = \"blue\") {\n  console.log(\"My favourite too!\");\n} else {\n  console.log(\"Nice choice\");\n}\n",
+        "bug": {
+          "line": 2,
+          "fix": "`=` stores `\"blue\"` in `color`, so the condition is always true. Compare with `===`: `if (color === \"blue\")`."
+        }
       }
     ],
     "check": {

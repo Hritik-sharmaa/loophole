@@ -12,6 +12,15 @@
       {
         "title": "One class, many elements",
         "body": "Many elements can share a class, so one rule styles all of them at once."
+      },
+      {
+        "title": "Spot the bug",
+        "body": "The paragraph should be light blue, but nothing changes. Which line is wrong?",
+        "code": "<style>\n  note { background-color: lightblue; }\n</style>\n<p class=\"note\">Remember the milk.</p>\n",
+        "bug": {
+          "line": 2,
+          "fix": "A class rule starts with a dot: `.note`. Without it, CSS looks for a `<note>` tag, and there is none."
+        }
       }
     ],
     "check": {

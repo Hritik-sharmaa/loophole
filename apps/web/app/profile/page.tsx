@@ -1,16 +1,17 @@
 'use client';
 
-import type { MeResponse } from '@loophole/shared';
+import type { DailyGoal, MeResponse } from '@loophole/shared';
 import { useQueryClient } from '@tanstack/react-query';
 import { Award } from 'lucide-react';
 import Link from 'next/link';
 import { useState, type FormEvent, type ReactNode } from 'react';
 import { AppHeader } from '@/components/app-header';
+import { GoalPicker, StreakCalendar } from '@/components/daily-goal';
 import { CrewLineup } from '@/components/guide';
 import { secondaryButton } from '@/components/ui/buttons';
 import { ApiError } from '@/lib/api';
 import { useMyCertificates } from '@/lib/queries/use-certificates';
-import { useMe, useUpdateMe } from '@/lib/queries/use-me';
+import { useActivity, useMe, useUpdateMe } from '@/lib/queries/use-me';
 import { supabase } from '@/lib/supabase';
 import { useRequireSession } from '@/lib/use-require-session';
 
@@ -57,10 +58,53 @@ function Profile({ me }: { me: MeResponse }) {
         <Stat label="Rating" value={me.rating} />
         <Stat label="Lessons done" value={me.lessonsCompleted} />
       </dl>
+      <StreakSection goal={me.dailyGoal} />
+      <GoalSetting current={me.dailyGoal} />
       <Certificates />
       <UsernameForm current={me.username} />
       <LogoutButton />
     </Centered>
+  );
+}
+
+// The last five weeks, one square a day (ADR-033).
+function StreakSection({ goal }: { goal: DailyGoal | null }) {
+  const activity = useActivity(true);
+  return (
+    <section className="flex w-full flex-col gap-2 text-left">
+      <h2 className="text-sm font-semibold text-text-secondary">
+        Last 5 weeks
+      </h2>
+      {activity.data ? (
+        <StreakCalendar activity={activity.data} goal={goal} />
+      ) : activity.isError ? (
+        <p role="alert" className="text-sm font-semibold">
+          ✕ Could not load your days: {activity.error.message}
+        </p>
+      ) : (
+        <p className="text-sm text-text-secondary">Loading your days…</p>
+      )}
+    </section>
+  );
+}
+
+// Change the daily goal picked in the welcome (ADR-033). Saved on tap.
+function GoalSetting({ current }: { current: DailyGoal | null }) {
+  const update = useUpdateMe();
+  return (
+    <section className="flex w-full flex-col gap-2 text-left">
+      <h2 className="text-sm font-semibold text-text-secondary">Daily goal</h2>
+      <GoalPicker
+        value={current}
+        onPick={(dailyGoal) => update.mutate({ dailyGoal })}
+        disabled={update.isPending}
+      />
+      {update.isError && (
+        <p role="alert" className="text-sm font-semibold">
+          ✕ {update.error.message}
+        </p>
+      )}
+    </section>
   );
 }
 

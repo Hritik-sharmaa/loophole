@@ -19,6 +19,15 @@
       {
         "title": "Test the edge cases",
         "body": "Always try the smallest input too. What does your loop do when the number is 0, and how many digits does 0 have?"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "It should add up the digits of 123 and print 6, but it never finishes. Which line is wrong?",
+        "code": "n = int(input())\ntotal = 0\nwhile n > 0:\n    total += n % 10\n    n = n % 10\nprint(total)\n",
+        "bug": {
+          "line": 5,
+          "fix": "`n % 10` keeps the last digit, so `n` never reaches 0. Line 5 should drop it instead: `n = n // 10`."
+        }
       }
     ],
     "check": {

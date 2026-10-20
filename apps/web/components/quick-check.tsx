@@ -42,7 +42,7 @@ export function QuickCheck({
 
   return (
     <section className="flex flex-col gap-6">
-      <GuideSays guide={guide} mood={mood}>
+      <GuideSays guide={guide} mood={mood} speak={check.question}>
         <span className={`${chip} bg-lemon text-ink`}>Quick check</span>
         <h2 className="mt-2 font-display text-xl font-extrabold sm:text-2xl">
           {check.question}

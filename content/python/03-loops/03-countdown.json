@@ -15,6 +15,15 @@
         "body": "If nothing in the body changes the condition, the loop never ends. `n -= 2` is a short way to write `n = n - 2`.",
         "code": "n = 3\nwhile n > 0:\n    print(n)\n    n -= 2\n",
         "output": "3\n1"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "It should print 1, 2, 4, 8 … up to 64, but it prints 1 forever. Which line is wrong?",
+        "code": "n = 1\nwhile n <= 64:\n    print(n)\n    n * 2\n",
+        "bug": {
+          "line": 4,
+          "fix": "`n * 2` works out a value and throws it away, so `n` never changes and the loop never ends. Line 4 should be `n = n * 2`."
+        }
       }
     ],
     "check": {

@@ -165,8 +165,10 @@ describe('Lessons (e2e)', () => {
 
   it('GET /courses/:slug/units/:unitId/bug-hunt lists the unit’s bug cards (ADR-031)', async () => {
     // The path says how long each unit's Bug hunt is.
-    expect(path.units[0].bugs).toBe(6);
-    expect(path.units[1].bugs).toBe(0);
+    // Every lesson has one bug card, so every unit has a full hunt.
+    for (const unit of path.units) {
+      expect(unit.bugs).toBe(unit.lessons.length);
+    }
 
     const hunt = (await get(
       `/courses/python/units/${path.units[0].id}/bug-hunt`,

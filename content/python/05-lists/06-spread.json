@@ -15,6 +15,15 @@
         "body": "Python works out `max(...)` and `min(...)` first, then applies the operator between their results.",
         "code": "print(max([1, 5]) * 2)\n",
         "output": "10"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "It should print the middle of the hottest and coldest days, `13.5`, but prints `22.5`. Tap the bug.",
+        "code": "temps = [12, 18, 9, 15]\nmiddle = max(temps) + min(temps) / 2\nprint(middle)\n",
+        "bug": {
+          "line": 2,
+          "fix": "Division happens before addition, so only `min(temps)` is halved. Add brackets: `(max(temps) + min(temps)) / 2`."
+        }
       }
     ],
     "check": {

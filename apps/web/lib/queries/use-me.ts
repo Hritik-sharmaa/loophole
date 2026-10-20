@@ -1,6 +1,10 @@
 'use client';
 
-import type { MeResponse, UpdateMeRequest } from '@loophole/shared';
+import type {
+  ActivityResponse,
+  MeResponse,
+  UpdateMeRequest,
+} from '@loophole/shared';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { apiFetch } from '../api';
 
@@ -25,5 +29,14 @@ export function useUpdateMe() {
         body: JSON.stringify(body),
       }),
     onSuccess: (me) => queryClient.setQueryData(ME_KEY, me),
+  });
+}
+
+// GET /me/activity: XP per day for the streak calendar (ADR-033).
+export function useActivity(enabled: boolean) {
+  return useQuery({
+    queryKey: ['activity'],
+    queryFn: () => apiFetch<ActivityResponse>('/me/activity'),
+    enabled,
   });
 }

@@ -16,6 +16,15 @@
         "body": "Python can chain comparisons: `3 <= age <= 12` is True when age is from 3 to 12, both included.",
         "code": "age = 8\nprint(3 <= age <= 12)\n",
         "output": "True"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "At exactly 18 o'clock it prints nothing at all. Tap the bug.",
+        "code": "hour = int(input())\nif hour < 12:\n    print(\"morning\")\nelif hour < 18:\n    print(\"afternoon\")\nelif hour > 18:\n    print(\"evening\")\n",
+        "bug": {
+          "line": 6,
+          "fix": "`hour > 18` skips 18 itself. Use `else:` to catch everything left, or `hour >= 18`."
+        }
       }
     ],
     "check": {

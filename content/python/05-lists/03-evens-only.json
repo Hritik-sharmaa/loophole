@@ -21,6 +21,15 @@
         "body": "`\" \".join(...)` joins items with a space between them. It needs strings, so `map(str, ...)` converts the numbers first.",
         "code": "print(\" \".join(map(str, [1, 2, 3])))\n",
         "output": "1 2 3"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "It should print `1 2 3`, but crashes with a `TypeError`. Which line is wrong?",
+        "code": "nums = [1, 2, 3]\nprint(\" \".join(nums))\n",
+        "bug": {
+          "line": 2,
+          "fix": "`join` needs strings. Turn the numbers into text first: `\" \".join(map(str, nums))`."
+        }
       }
     ],
     "check": {

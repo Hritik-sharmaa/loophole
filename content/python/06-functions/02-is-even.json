@@ -21,6 +21,15 @@
         "body": "A function that returns True or False reads nicely inside an `if`.",
         "code": "def is_big(n):\n    return n > 100\n\n\nif is_big(250):\n    print(\"wow\")\n",
         "output": "wow"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "A 30-year-old is told `too young`. Tap the bug.",
+        "code": "def is_adult(age):\n    return age < 18\n\nif is_adult(30):\n    print(\"welcome\")\nelse:\n    print(\"too young\")\n",
+        "bug": {
+          "line": 2,
+          "fix": "Line 2 returns True for children. An adult is 18 or more: `return age >= 18`."
+        }
       }
     ],
     "check": {

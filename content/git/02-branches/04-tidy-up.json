@@ -12,6 +12,15 @@
       {
         "title": "Git protects unmerged work",
         "body": "`-d` refuses to delete a branch whose commits aren't merged yet, so you can't lose work by accident."
+      },
+      {
+        "title": "Spot the bug",
+        "body": "Git refuses to delete `extra`. Tap the line that runs too early.",
+        "code": "git init\ntouch a.txt\ngit add .\ngit commit -m \"Start\"\ngit switch -c extra\ntouch b.txt\ngit add .\ngit commit -m \"Add b\"\ngit switch main\ngit branch -d extra\n",
+        "bug": {
+          "line": 10,
+          "fix": "`extra` is not merged yet, so `-d` protects its work. Run `git merge extra` first, then delete the branch."
+        }
       }
     ],
     "check": {

@@ -21,6 +21,15 @@
         "body": "Start with an empty string `\"\"` and add to it with `+=`. Looping over a string gives you one character at a time.",
         "code": "result = \"\"\nfor ch in \"abc\":\n    result += ch * 2\nprint(result)\n",
         "output": "aabbcc"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "It should print each word on its own line, but crashes with a `TypeError`. Which line is wrong?",
+        "code": "words = \"red green blue\".split\nfor w in words:\n    print(w)\n",
+        "bug": {
+          "line": 1,
+          "fix": "Line 1 forgot the brackets. `split()` calls the method; without `()`, `words` is the method itself, not a list of words."
+        }
       }
     ],
     "check": {

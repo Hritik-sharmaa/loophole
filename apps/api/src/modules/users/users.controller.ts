@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Patch } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
-import type { MeResponse } from '@loophole/shared';
+import type { ActivityResponse, MeResponse } from '@loophole/shared';
 import type { AuthUser } from '../../integrations/supabase-auth.client.js';
 import { CurrentUser } from '../auth/current-user.decorator.js';
 import { UpdateMeDto } from './dto/update-me.dto.js';
@@ -14,6 +14,12 @@ export class UsersController {
   @Get()
   getMe(@CurrentUser() user: AuthUser): Promise<MeResponse> {
     return this.users.getMe(user);
+  }
+
+  // The streak calendar's days (ADR-033).
+  @Get('activity')
+  activity(@CurrentUser() user: AuthUser): Promise<ActivityResponse> {
+    return this.users.activity(user);
   }
 
   // A write route: 10 a minute per user.

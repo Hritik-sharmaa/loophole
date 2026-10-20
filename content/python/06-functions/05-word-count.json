@@ -15,6 +15,15 @@
         "body": "`len()` counts the items in a list, so you can count the pieces after splitting. `split(\",\")` cuts at commas instead of spaces.",
         "code": "parts = \"a,b,c,d\".split(\",\")\nprint(len(parts))\n",
         "output": "4"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "It should count the drinks and print 3, but prints 1. Which line is wrong?",
+        "code": "line = \"tea,coffee,juice\"\nparts = line.split()\nprint(len(parts))\n",
+        "bug": {
+          "line": 2,
+          "fix": "`split()` cuts at spaces, and there are none here. Cut at the commas: `line.split(\",\")`."
+        }
       }
     ],
     "check": {

@@ -12,6 +12,15 @@
       {
         "title": "The title",
         "body": "`<title>` goes in the `<head>`. It doesn't show on the page: it is the name on the browser tab and in search results."
+      },
+      {
+        "title": "Spot the bug",
+        "body": "The browser tab does not show `My recipes`. Tap the line in the wrong place.",
+        "code": "<!DOCTYPE html>\n<html>\n  <head>\n  </head>\n  <body>\n    <title>My recipes</title>\n    <h1>Recipes</h1>\n  </body>\n</html>\n",
+        "bug": {
+          "line": 6,
+          "fix": "`<title>` belongs in the `<head>`, not the `<body>`. Move it between `<head>` and `</head>`."
+        }
       }
     ],
     "check": {

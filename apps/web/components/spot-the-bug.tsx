@@ -45,7 +45,7 @@ export function SpotTheBug({
 
   return (
     <section className="flex flex-col gap-6">
-      <GuideSays guide={guide} mood={mood}>
+      <GuideSays guide={guide} mood={mood} speak={card.body}>
         <span className={`${chip} bg-pink text-ink`}>
           <Bug className="size-3.5" strokeWidth={3} aria-hidden /> Spot the bug
         </span>

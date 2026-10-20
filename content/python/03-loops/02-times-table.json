@@ -15,6 +15,15 @@
         "body": "Put `f` before the opening quote and you can drop values straight into the text with `{}`.",
         "code": "n = 7\nprint(f\"{n} squared is {n * n}\")\n",
         "output": "7 squared is 49"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "It prints `{n} times {i} is {n * i}` three times instead of the numbers. Tap the bug.",
+        "code": "n = 4\nfor i in range(1, 4):\n    print(\"{n} times {i} is {n * i}\")\n",
+        "bug": {
+          "line": 3,
+          "fix": "Without `f` before the quote, Python prints the braces as plain text. Line 3 needs `print(f\"...\")`."
+        }
       }
     ],
     "check": {

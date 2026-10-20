@@ -8,6 +8,15 @@
         "title": "Pull, change, add, commit, push",
         "body": "Most days with Git look the same: pull, change files, `git add`, `git commit`, `git push`. Here is the middle of the loop.",
         "code": "git init\necho \"hello\" > notes.txt\ngit add notes.txt\ngit commit -m \"Add notes\"\ngit log --oneline"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "GitHub never gets the new file. Which line is in the wrong place?",
+        "code": "echo \"hello\" > notes.txt\ngit add notes.txt\ngit push\ngit commit -m \"Add notes\"\n",
+        "bug": {
+          "line": 3,
+          "fix": "A push sends commits, and nothing is committed yet. Commit first, then `git push`."
+        }
       }
     ],
     "check": {

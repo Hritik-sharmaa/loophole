@@ -15,6 +15,15 @@
         "body": "Combine the loop variable with string repetition and each line can be a bit longer than the last.",
         "code": "for i in range(1, 4):\n    print(\"o\" * (i * 2))\n",
         "output": "oo\noooo\noooooo"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "Type 5 and it crashes with a `TypeError`. The error points at line 2: tap the line that really causes it.",
+        "code": "size = input()\nprint(\"=\" * size)\n",
+        "bug": {
+          "line": 1,
+          "fix": "`input()` gives text, and text can only be repeated a whole number of times. Line 1 needs `int(input())`."
+        }
       }
     ],
     "check": {

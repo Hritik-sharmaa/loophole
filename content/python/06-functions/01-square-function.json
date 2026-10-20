@@ -21,6 +21,15 @@
         "body": "`print` only shows a value. `return` hands it back, so the caller can keep using it, for example in more maths.",
         "code": "def add_one(n):\n    return n + 1\n\n\nx = add_one(4) * 10\nprint(x)\n",
         "output": "50"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "It should print 11, but prints 10 and then crashes with a `TypeError`. Which line is wrong?",
+        "code": "def double(n):\n    print(n * 2)\n\nresult = double(5) + 1\nprint(result)\n",
+        "bug": {
+          "line": 2,
+          "fix": "`print` only shows the value, so `double` gives back `None`. Line 2 should be `return n * 2`."
+        }
       }
     ],
     "check": {

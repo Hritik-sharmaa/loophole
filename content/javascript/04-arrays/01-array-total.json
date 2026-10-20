@@ -22,6 +22,15 @@
         "body": "`for (const x of nums)` visits each item of an array in order.",
         "code": "let total = 0;\nfor (const x of [10, 20, 5]) {\n  total += x;\n}\nconsole.log(total);\n",
         "output": "35"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "It should print the last item, 15, but prints `undefined`. Tap the bug.",
+        "code": "const nums = [4, 8, 15];\nconsole.log(nums[nums.length]);\n",
+        "bug": {
+          "line": 2,
+          "fix": "Indexes start at 0, so the last one is `nums.length - 1`: `nums[nums.length - 1]`."
+        }
       }
     ],
     "check": {

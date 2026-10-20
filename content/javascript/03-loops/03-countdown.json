@@ -15,6 +15,15 @@
         "body": "`break` leaves a loop straight away.",
         "code": "let n = 1;\nwhile (true) {\n  if (n > 2) {\n    break;\n  }\n  console.log(n);\n  n++;\n}\n",
         "output": "1\n2"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "It should print 1, 2, 4 … up to 64, but prints 1 forever. Tap the bug.",
+        "code": "let n = 1;\nwhile (n <= 64) {\n  console.log(n);\n  n * 2;\n}\n",
+        "bug": {
+          "line": 4,
+          "fix": "`n * 2` works out a value and throws it away, so `n` never changes. Line 4 should be `n = n * 2;`."
+        }
       }
     ],
     "check": {

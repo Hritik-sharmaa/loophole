@@ -11,6 +11,15 @@
       {
         "title": "Then go inside",
         "body": "The clone is a folder like any other: `cd` into it to start working."
+      },
+      {
+        "title": "Spot the bug",
+        "body": "`cd` fails right after the clone. Which line is wrong?",
+        "code": "git clone https://github.com/loophole/recipes.git\ncd recipes.git\ngit log --oneline\n",
+        "bug": {
+          "line": 2,
+          "fix": "The new folder is named after the repository, without `.git`: `cd recipes`."
+        }
       }
     ],
     "check": {

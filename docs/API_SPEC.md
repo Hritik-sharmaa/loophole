@@ -29,10 +29,11 @@ Base URL: `https://api.<domain>` (local: `http://localhost:3001`). All bodies ar
 
 ### Users — S1
 
-| Method | Path  | Body                        | Response                                                                                           |
-| ------ | ----- | --------------------------- | -------------------------------------------------------------------------------------------------- |
-| GET    | `/me` | —                           | `{ id, username, avatarUrl, xp, streak: { current, longest, freezes }, rating, lessonsCompleted }` |
-| PATCH  | `/me` | `{ username?, avatarUrl? }` | updated profile                                                                                    |
+| Method | Path           | Body                                    | Response                                                                                                                                                                                              |
+| ------ | -------------- | --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET    | `/me`          | —                                       | `{ id, username, avatarUrl, xp, streak: { current, longest, freezes }, rating, lessonsCompleted, dailyGoal, todayXp }` — `dailyGoal` is 10, 20, 30 or null; `todayXp` is XP since 00:00 IST (ADR-033) |
+| GET    | `/me/activity` | —                                       | `{ from, today, days: [{ date, xp }] }` — XP per IST day from `from` (Monday four weeks ago) to `today`; days without XP are left out (ADR-033)                                                       |
+| PATCH  | `/me`          | `{ username?, avatarUrl?, dailyGoal? }` | updated profile; `dailyGoal` must be 10, 20 or 30 (400 otherwise)                                                                                                                                     |
 
 ### Lessons — S2
 

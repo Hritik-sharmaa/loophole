@@ -6,11 +6,23 @@ Format: **ADR-NNN · Title** — Status (Accepted / Superseded by ADR-NNN) · Da
 
 ---
 
+**ADR-033 · First-run welcome, a daily goal and a streak calendar** — Accepted · 2026-10-20
+
+- Decision: `profiles.daily_goal` (smallint, 10, 20 or 30 XP: one, two or three lessons, shown as 5, 10 or 15 minutes; null until picked; migration 0012). `GET /me` adds `dailyGoal` and `todayXp` (XP since 00:00 IST); `PATCH /me` accepts `dailyGoal`. `GET /me/activity` returns XP per IST day for five weeks (Monday four weeks ago to today), bucketed from `xp_events`. In the web app, `/learn` sends anyone without a goal to `/welcome`: the crew says hello, the learner picks a first course, then a goal, then that course's guide greets them and opens their next lesson. The header shows a goal ring (`todayXp/goal`, Orange filling, Blue with a tick when met); the finish screen says how many lessons are left today; the profile has a five-week streak calendar and the goal picker.
+- Why: from the ideas backlog: a new learner used to land on a list of courses with nothing asking them to commit. Duolingo's first minute (pick a goal, meet the character, start a lesson) and Coddy's streak calendar are what bring learners back daily.
+- Trade-off: existing users also see the welcome once, since their goal starts null. The calendar judges every past day against today's goal, not the goal at that time (no goal history is stored). The goal is a nudge only: it pays nothing and doesn't affect the streak (FR-10 stays one lesson a day).
+
+**ADR-032 · Read aloud with the browser's speech** — Accepted · 2026-10-20
+
+- Decision: guide speech bubbles that teach (Learn cards, the quick check, spot-the-bug cards, the task) get a speaker button that reads the bubble aloud with the Web Speech API (`speechSynthesis`), preferring an Indian English (`en-IN`) voice, at 0.95 speed and a pitch per guide. Tap again to stop; changing card stops it. The button is hidden where speech isn't supported.
+- Why: from the ideas backlog (ROADMAP "Ideas backlog"): Coddy offers audio on every lesson, and many beginners in India read English more slowly than they listen. The browser does it for free, with no server, key or cost.
+- Trade-off: voices depend on the device (Windows has Microsoft Ravi and Heera for en-IN; some phones have none, so a default English voice reads it). Code in backticks is read as plain text, which can sound odd for symbols.
+
 **ADR-031 · Spot-the-bug cards and a Bug hunt per unit** — Accepted · 2026-10-20
 
-- Decision: a Learn card may carry `bug: { line, fix }`: short code with exactly one wrong line, which the learner taps (any course language; never run, so no input or output). It is checked in the browser and recorded nowhere, like the quick check. A wrong tap strikes the line; "Show me" reveals it; the fix then shows in the bottom bar. Every lesson in each course's first unit (23 lessons) ends its cards with one. `GET /courses/:slug/units/:unitId/bug-hunt` returns a unit's bug cards; each unit with bugs gets a Bug hunt stop at its end of the path (Pink, like a duel; open once the unit's badge is earned) that replays them full screen and ends with how many were found on the first try. No XP. `CoursePath` units gain `bugs` (the hunt's length); cheat sheets leave bug cards out.
+- Decision: a Learn card may carry `bug: { line, fix }`: short code with exactly one wrong line, which the learner taps (any course language; never run, so no input or output). It is checked in the browser and recorded nowhere, like the quick check. A wrong tap strikes the line; "Show me" reveals it; the fix then shows in the bottom bar. Every lesson (all 90) ends its cards with one: the first units came first, the other 67 lessons the same day. `GET /courses/:slug/units/:unitId/bug-hunt` returns a unit's bug cards; each unit with bugs gets a Bug hunt stop at its end of the path (Pink, like a duel; open once the unit's badge is earned) that replays them full screen and ends with how many were found on the first try. No XP. `CoursePath` units gain `bugs` (the hunt's length); cheat sheets leave bug cards out.
 - Why: the developer wanted more on the Learn step. Reading only is passive (Coddy reviewers asked for more practice); finding bugs is Loophole's own skill, the one duels test, so each lesson now trains it, and the unit review mirrors Duolingo's practice at the end of a unit.
-- Trade-off: answers reach the browser, so a determined learner can read them; acceptable because nothing is paid or ranked. Bug cards exist only in the first unit of each course so far; later units have no Bug hunt until content is written. Bug hunts are open to anyone who finished the unit, but nothing on the server enforces that order (it doesn't need to: no rewards).
+- Trade-off: answers reach the browser, so a determined learner can read them; acceptable because nothing is paid or ranked. Bug hunts are open to anyone who finished the unit, but nothing on the server enforces that order (it doesn't need to: no rewards).
 
 **ADR-030 · Course page: unit badges, cheat sheets and a certificate stop** — Accepted · 2026-10-20
 

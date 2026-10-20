@@ -15,6 +15,15 @@
         "body": "A dictionary keeps keys in the order they were first added. Updating a key later does not move it.",
         "code": "d = {}\nd[\"b\"] = 1\nd[\"a\"] = 2\nd[\"b\"] = 3\nfor k in d:\n    print(k, d[k])\n",
         "output": "b 3\na 2"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "It should add up each item, but crashes with a `TypeError`. Which line is wrong?",
+        "code": "totals = {}\nfor line in [\"pen 2\", \"ink 1\", \"pen 4\"]:\n    item, qty = line.split()\n    totals[item] = totals.get(item, 0) + qty\nprint(totals)\n",
+        "bug": {
+          "line": 4,
+          "fix": "`split()` gives text, so `qty` is `\"2\"`, not 2. Convert it before adding: `+ int(qty)`."
+        }
       }
     ],
     "check": {

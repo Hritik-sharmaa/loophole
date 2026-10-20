@@ -13,6 +13,15 @@
         "title": "gap",
         "body": "`gap` adds space between the boxes in a flex row.",
         "code": "<style>\n  .row { display: flex; gap: 12px; }\n  .row div { background-color: pink; padding: 10px; }\n</style>\n<div class=\"row\">\n  <div>One</div>\n  <div>Two</div>\n  <div>Three</div>\n</div>"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "The boxes should sit side by side, but they still stack. Tap the bug.",
+        "code": "<style>\n  .row div { display: flex; }\n</style>\n<div class=\"row\">\n  <div>One</div>\n  <div>Two</div>\n</div>\n",
+        "bug": {
+          "line": 2,
+          "fix": "`display: flex` goes on the box that holds them, `.row`, not on each box inside it."
+        }
       }
     ],
     "check": {

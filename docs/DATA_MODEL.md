@@ -13,6 +13,7 @@ Conventions: `uuid` primary keys (`gen_random_uuid()`), `timestamptz` in UTC, sn
 | id         | uuid PK     | = `auth.users.id`                                                                           |
 | username   | text        | unique, 3–20 chars of a–z, 0–9, _ ; auto-generated on first login, editable via `PATCH /me` |
 | avatar_url | text        | nullable                                                                                    |
+| daily_goal | smallint    | nullable; 10, 20 or 30 XP a day, picked in the welcome (ADR-033, migration 0012)            |
 | created_at | timestamptz |                                                                                             |
 
 ### courses — S2

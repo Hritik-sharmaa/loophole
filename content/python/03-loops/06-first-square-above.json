@@ -15,6 +15,15 @@
         "body": "When a `while` loop ends, its variable holds the first value that made the condition False.",
         "code": "k = 1\nwhile k * 3 <= 10:\n    k += 1\nprint(k)\n",
         "output": "4"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "It should keep doubling until it passes 1000 and print 1024, but it prints 1. Tap the bug.",
+        "code": "x = 1\nwhile x > 1000:\n    x = x * 2\nprint(x)\n",
+        "bug": {
+          "line": 2,
+          "fix": "`1 > 1000` is False straight away, so the loop never runs. Keep going while you are not there yet: `while x <= 1000:`."
+        }
       }
     ],
     "check": {

@@ -119,12 +119,14 @@ describe('the real content/ folder', () => {
     }
   });
 
-  // ADR-031: every first-unit lesson ends its cards with a bug to spot.
-  it('gives every first-unit lesson a spot-the-bug card', () => {
+  // ADR-031: every lesson ends its cards with one bug to spot.
+  it('gives every lesson one spot-the-bug card, last', () => {
     for (const course of loadAllContent(REAL_CONTENT)) {
-      for (const lesson of course.units[0].lessons) {
+      for (const lesson of course.units.flatMap((u) => u.lessons)) {
+        const where = `${course.slug}/${lesson.slug}`;
         const bugs = lesson.learn?.cards.filter((c) => c.bug) ?? [];
-        expect(bugs, `${course.slug}/${lesson.slug}`).toHaveLength(1);
+        expect(bugs, where).toHaveLength(1);
+        expect(lesson.learn?.cards.at(-1)?.bug, where).toBeDefined();
       }
     }
   });

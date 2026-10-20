@@ -18,6 +18,15 @@
         "title": "Buttons",
         "body": "`<button>` makes a button. Inside a `<form>`, a `type=\"submit\"` button sends the form.",
         "code": "<form>\n  <input type=\"text\">\n  <button type=\"submit\">Send</button>\n</form>"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "Pressing the button empties the box instead of sending the form. Which line is wrong?",
+        "code": "<form>\n  <label for=\"email\">Email</label>\n  <input id=\"email\" type=\"email\">\n  <button type=\"reset\">Sign me up</button>\n</form>\n",
+        "bug": {
+          "line": 4,
+          "fix": "`type=\"reset\"` clears the form. To send it, the button needs `type=\"submit\"`."
+        }
       }
     ],
     "check": {

@@ -35,11 +35,12 @@ export function useSubmit() {
         queryKey: ['submissions', exerciseId],
       });
       if (result.lessonCompleted) {
-        // The path (next node unlocked), the catalog's progress and /me
-        // (lessons, XP, streak) changed.
+        // The path (next node unlocked), the catalog's progress, /me
+        // (lessons, XP, streak, XP today) and the streak calendar changed.
         void queryClient.invalidateQueries({ queryKey: ['course-path'] });
         void queryClient.invalidateQueries({ queryKey: ['courses'] });
         void queryClient.invalidateQueries({ queryKey: ['me'] });
+        void queryClient.invalidateQueries({ queryKey: ['activity'] });
       }
       if (result.certificateSlug) {
         void queryClient.invalidateQueries({ queryKey: ['certificates'] });

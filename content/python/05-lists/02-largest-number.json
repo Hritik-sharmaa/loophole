@@ -15,6 +15,15 @@
         "body": "`len(nums)` tells you how many items a list has.",
         "code": "print(len([7, 2, 9, 4]))\n",
         "output": "4"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "It should print how many names are in the list, 3, but prints 4. Tap the bug.",
+        "code": "names = [\"Asha\", \"Ravi\", \"Meena\"]\nprint(len(names[0]))\n",
+        "bug": {
+          "line": 2,
+          "fix": "`len(names[0])` counts the letters in the first name. Count the list itself: `len(names)`."
+        }
       }
     ],
     "check": {

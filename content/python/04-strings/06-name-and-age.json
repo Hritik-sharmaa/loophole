@@ -15,6 +15,15 @@
         "body": "Joining text and a number with `+` is an error. An f-string converts the number for you, and `{}` can hold a calculation.",
         "code": "n = 3\nprint(f\"I have {n} apples, then {n + 2}.\")\n",
         "output": "I have 3 apples, then 5."
+      },
+      {
+        "title": "Spot the bug",
+        "body": "Python stops with a `TypeError` here. Tap the line that causes it.",
+        "code": "city = \"Pune\"\nparks = 7\nprint(city + \" has \" + parks + \" parks.\")\n",
+        "bug": {
+          "line": 3,
+          "fix": "Joining text and a number with `+` is an error. An f-string converts the number for you: `print(f\"{city} has {parks} parks.\")`."
+        }
       }
     ],
     "check": {

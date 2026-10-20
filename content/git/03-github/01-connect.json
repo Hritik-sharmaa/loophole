@@ -12,6 +12,15 @@
       {
         "title": "Creating the GitHub side",
         "body": "On github.com you create an empty repository and copy its URL. In these lessons, that repository already exists for you."
+      },
+      {
+        "title": "Spot the bug",
+        "body": "The second command fails. Which line is wrong?",
+        "code": "git init\ngit remote add https://github.com/you/notes.git\ngit remote -v\n",
+        "bug": {
+          "line": 2,
+          "fix": "`git remote add` needs a name before the URL: `git remote add origin https://github.com/you/notes.git`."
+        }
       }
     ],
     "check": {

@@ -21,6 +21,15 @@
         "body": "`len(word)` counts the characters. The last index is always `len(word) - 1`.",
         "code": "print(len(\"hello\"))\n",
         "output": "5"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "It should print the last letter, `n`, but crashes with an `IndexError`. Tap the bug.",
+        "code": "word = \"python\"\nprint(word[len(word)])\n",
+        "bug": {
+          "line": 2,
+          "fix": "Indexes start at 0, so the last one is `len(word) - 1`. The short way is `word[-1]`."
+        }
       }
     ],
     "check": {

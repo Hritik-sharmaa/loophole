@@ -16,6 +16,15 @@
         "code": "const n = Number(prompt());\nif (n > 100) {\n  console.log(\"big\");\n} else if (n > 10) {\n  console.log(\"medium\");\n} else {\n  console.log(\"small\");\n}\n",
         "input": "42\n",
         "output": "medium"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "JavaScript stops with a `SyntaxError` before running anything. Which line is wrong?",
+        "code": "const temp = Number(prompt());\nif (temp > 30) {\n  console.log(\"hot\");\n} else if (temp > 15) {\n  console.log(\"warm\");\n} else (temp > 0) {\n  console.log(\"cold\");\n}\n",
+        "bug": {
+          "line": 6,
+          "fix": "`else` takes no condition: it catches everything left. Write `} else {`, or `} else if (temp > 0) {`."
+        }
       }
     ],
     "check": {

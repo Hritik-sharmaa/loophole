@@ -12,6 +12,15 @@
       {
         "title": "Links inside your site",
         "body": "An `href` that starts with `/` goes to another page on the same site, like `/about`."
+      },
+      {
+        "title": "Spot the bug",
+        "body": "The Contact link shows up, but clicking it goes nowhere. Tap the bug.",
+        "code": "<nav>\n  <a href=\"/\">Home</a>\n  <a href=\"/shop\">Shop</a>\n  <a>Contact</a>\n</nav>\n",
+        "bug": {
+          "line": 4,
+          "fix": "A link needs an `href` to know where to go, like `<a href=\"/contact\">Contact</a>`."
+        }
       }
     ],
     "check": {

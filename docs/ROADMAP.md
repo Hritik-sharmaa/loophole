@@ -111,8 +111,43 @@ Loop for every slice: AI **writes** the slice → you **review** and change it �
 - [x] The crew: four Indian guides, one per course; Byte becomes the logo (ADR-028)
 - [x] Full-screen lessons with a fixed Continue bar and a finish screen (ADR-029)
 - [x] Unit badges, cheat sheets and a certificate stop on the course page (ADR-030)
-- [x] Spot-the-bug cards in every first-unit lesson, and a Bug hunt review per unit (ADR-031)
-- [ ] Spot-the-bug cards for the remaining units (CONTENT_GUIDE "Spot-the-bug cards")
+- [x] Spot-the-bug cards in every lesson, and a Bug hunt review per unit (ADR-031)
 - [ ] Playwright e2e for J-1 and J-3; deploy step in GitHub Actions
 - [ ] Scalability, only if needed: see `ARCHITECTURE.md` §5
 - [ ] Stretch: replay (FR-27), bug of the day (FR-28), spectate (FR-29), JavaScript track (FR-30)
+
+## Ideas backlog (developer approved, 2026-10-20)
+
+Ideas from comparing Duolingo, Coddy and Codédex, kept here so none get lost. Build them one slice at a time, in this order unless the developer picks otherwise. Size: S under a day, M one or two slices, L larger.
+
+**1. Finish what we started**
+
+- [x] Spot-the-bug cards for every lesson after the first unit, so every unit has a Bug hunt (M, content)
+- [ ] Playwright e2e: sign in → lesson → finish screen (M)
+- [ ] Re-test Node run times on the VPS (S, ADR-025)
+
+**2. Bring learners back every day**
+
+- [x] First-run welcome: pick a course and a daily goal (5 / 10 / 15 minutes); the guide says hello (M, ADR-033)
+- [x] Daily goal ring in the header and a streak calendar on the profile (M, ADR-033)
+- [ ] Bug of the day: one buggy program a day for everyone, with a small board (M, FR-28)
+- [ ] Weekly leagues of ~20 learners with promotion and demotion (L; new tables and a weekly job)
+
+**3. More ways to learn in a lesson**
+
+- [x] Read aloud: a speaker button on guide bubbles, using the browser's speech (S, ADR-032)
+- [ ] "Explain it differently" on Learn cards, through the AI tutor and its daily cap (S–M)
+- [ ] Practice stop: mixes earlier quick checks and bug cards (spaced repetition) (M)
+- [ ] Hinglish mode for cards and guide lines (L; doubles the writing)
+
+**4. Duels**
+
+- [ ] Practice duel against a guide bot when nobody is online (M)
+- [ ] JavaScript duel problems (M)
+- [ ] Duel replays (L, FR-27)
+
+**5. Later**
+
+- [ ] Small projects between units, like Codédex's checkpoint projects (L)
+- [ ] Learner avatars (M)
+- [ ] Job-focused paths, e.g. "Frontend: HTML → CSS → JS → Git" (M)

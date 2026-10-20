@@ -1,9 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import type { MeResponse, WeeklyLeaderboard } from '@loophole/shared';
-import { asc, eq, gte, sql } from 'drizzle-orm';
+import type {
+  ActivityResponse,
+  MeResponse,
+  WeeklyLeaderboard,
+} from '@loophole/shared';
+import { and, asc, eq, gte, sql } from 'drizzle-orm';
 import { DbService } from '../../db/db.service.js';
 import { profiles, streaks, xpEvents } from '../../db/schema/index.js';
-import { istDate, istWeekStart } from '../../common/ist-calendar.js';
+import {
+  addDays,
+  istDate,
+  istDayStart,
+  istWeekStart,
+} from '../../common/ist-calendar.js';
 import {
   NO_STREAK,
   nextStreak,
@@ -62,10 +71,12 @@ export class GamificationService {
   async stats(
     userId: string,
     now = new Date(),
-  ): Promise<Pick<MeResponse, 'xp' | 'streak'>> {
-    const [{ xp }] = await this.db.drizzle
+  ): Promise<Pick<MeResponse, 'xp' | 'streak' | 'todayXp'>> {
+    const [{ xp, todayXp }] = await this.db.drizzle
       .select({
         xp: sql<number>`cast(coalesce(sum(${xpEvents.amount}), 0) as int)`,
+        // The daily goal's progress (ADR-033): XP since 00:00 IST.
+        todayXp: sql<number>`cast(coalesce(sum(${xpEvents.amount}) filter (where ${xpEvents.createdAt} >= ${istDayStart(now).toISOString()}::timestamptz), 0) as int)`,
       })
       .from(xpEvents)
       .where(eq(xpEvents.userId, userId));
@@ -73,11 +84,42 @@ export class GamificationService {
 
     return {
       xp,
+      todayXp,
       streak: {
         current: visibleStreak(state, istDate(now)),
         longest: state.longest,
         freezes: state.freezes,
       },
+    };
+  }
+
+  // GET /me/activity (ADR-033): XP per IST day over five weeks, Monday
+  // four weeks ago through today, for the profile's streak calendar.
+  // Bucketed here rather than in SQL so the day boundary is the same IST
+  // rule as everywhere else.
+  async activity(userId: string, now = new Date()): Promise<ActivityResponse> {
+    const today = istDate(now);
+    const from = addDays(istDate(istWeekStart(now)), -28);
+    const rows = await this.db.drizzle
+      .select({ amount: xpEvents.amount, createdAt: xpEvents.createdAt })
+      .from(xpEvents)
+      .where(
+        and(
+          eq(xpEvents.userId, userId),
+          gte(xpEvents.createdAt, new Date(`${from}T00:00:00+05:30`)),
+        ),
+      );
+    const byDay = new Map<string, number>();
+    for (const { amount, createdAt } of rows) {
+      const day = istDate(createdAt);
+      byDay.set(day, (byDay.get(day) ?? 0) + amount);
+    }
+    return {
+      from,
+      today,
+      days: [...byDay]
+        .sort(([a], [b]) => (a < b ? -1 : 1))
+        .map(([date, xp]) => ({ date, xp })),
     };
   }
 

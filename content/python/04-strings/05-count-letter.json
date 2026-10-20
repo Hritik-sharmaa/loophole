@@ -15,6 +15,15 @@
         "body": "Python treats `A` and `a` as two different characters.",
         "code": "print(\"Anna\".count(\"a\"))\n",
         "output": "1"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "It should count every `a`, big or small, and print 5, but it prints 2. Which line is wrong?",
+        "code": "text = \"Anna and Adam\"\nprint(text.count(\"A\"))\n",
+        "bug": {
+          "line": 2,
+          "fix": "Capitals are different letters, so `count(\"A\")` misses the small ones. Count in a lowercase copy: `text.lower().count(\"a\")`."
+        }
       }
     ],
     "check": {

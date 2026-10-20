@@ -21,6 +21,15 @@
         "body": "`join(\" \")` glues an array's items into one string, with the separator between them.",
         "code": "console.log([1, 2, 3].join(\" \"));\nconsole.log([1, 2, 3].join(\", \"));\n",
         "output": "1 2 3\n1, 2, 3"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "It should print only the numbers over 10, `12 20`, but prints `false true false true`. Tap the bug.",
+        "code": "const big = [5, 12, 8, 20].map(x => x > 10);\nconsole.log(big.join(\" \"));\n",
+        "bug": {
+          "line": 1,
+          "fix": "`map` turns every item into the answer of its test. To keep only some items, use `filter`."
+        }
       }
     ],
     "check": {

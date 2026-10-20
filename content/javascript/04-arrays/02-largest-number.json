@@ -13,6 +13,15 @@
       {
         "title": "Spreading an array",
         "body": "`...nums` spreads an array out into separate values, as if you had typed them one by one."
+      },
+      {
+        "title": "Spot the bug",
+        "body": "It should print 9, but prints `NaN`. Which line is wrong?",
+        "code": "const nums = [7, 2, 9, 4];\nconsole.log(Math.max(nums));\n",
+        "bug": {
+          "line": 2,
+          "fix": "`Math.max` wants separate numbers, not an array. Spread it: `Math.max(...nums)`."
+        }
       }
     ],
     "check": {

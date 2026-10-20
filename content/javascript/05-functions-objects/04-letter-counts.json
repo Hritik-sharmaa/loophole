@@ -21,6 +21,15 @@
         "body": "`Object.keys(obj)` gives an array of the keys, and `.sort()` puts text in alphabetical order.",
         "code": "const scores = { cy: 5, ada: 9, bo: 7 };\nfor (const key of Object.keys(scores).sort()) {\n  console.log(key, scores[key]);\n}\n",
         "output": "ada 9\nbo 7\ncy 5"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "It should print 36, but prints `undefined`. Which line is wrong?",
+        "code": "const ages = { ada: 36, bo: 7 };\nconst key = \"ada\";\nconsole.log(ages.key);\n",
+        "bug": {
+          "line": 3,
+          "fix": "`ages.key` looks for a key literally named `key`. To use the variable's value, write `ages[key]`."
+        }
       }
     ],
     "check": {

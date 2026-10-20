@@ -9,6 +9,11 @@ export function istDate(now: Date): string {
   return new Date(now.getTime() + IST_OFFSET_MS).toISOString().slice(0, 10);
 }
 
+// The instant the current IST day began: 00:00 IST.
+export function istDayStart(now: Date): Date {
+  return new Date(`${istDate(now)}T00:00:00+05:30`);
+}
+
 // The "YYYY-MM-DD" day `days` after (or before, if negative) `date`.
 export function addDays(date: string, days: number): string {
   const d = new Date(`${date}T00:00:00Z`);

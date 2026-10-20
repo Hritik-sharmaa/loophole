@@ -81,6 +81,18 @@ describe('API (e2e)', () => {
     expect(res.body).toMatchObject({ error: { code: 'VALIDATION_FAILED' } });
   });
 
+  it('PATCH /me with a daily goal other than 10, 20 or 30 returns 400 (ADR-033)', async () => {
+    verify.mockResolvedValue(user);
+
+    const res = await request(app.getHttpServer())
+      .patch('/me')
+      .set('Authorization', 'Bearer good-token')
+      .send({ dailyGoal: 15 })
+      .expect(400);
+
+    expect(res.body).toMatchObject({ error: { code: 'VALIDATION_FAILED' } });
+  });
+
   it('PATCH /me with an unknown field returns 400', async () => {
     verify.mockResolvedValue(user);
 

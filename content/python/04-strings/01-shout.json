@@ -15,6 +15,15 @@
         "body": "`upper()` does not change the original. It gives back a new string, which you can join to more text with `+`.",
         "code": "name = \"ada\"\nprint(name.upper() + \"?\")\nprint(name)\n",
         "output": "ADA?\nada"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "Type `HELLO` and it prints `HELLO`, not `hello`. Which line is wrong?",
+        "code": "word = input()\nword.lower()\nprint(word)\n",
+        "bug": {
+          "line": 2,
+          "fix": "`lower()` gives back a new string and leaves `word` as it was. Keep the result: `word = word.lower()`."
+        }
       }
     ],
     "check": {

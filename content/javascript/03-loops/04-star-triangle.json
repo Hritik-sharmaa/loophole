@@ -15,6 +15,15 @@
         "body": "Use the loop counter to make each line longer than the last.",
         "code": "for (let i = 1; i <= 3; i++) {\n  console.log(\"o\".repeat(i * 2));\n}\n",
         "output": "oo\noooo\noooooo"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "It should print `ab`, `abab`, `ababab`, but prints `NaN` three times. Which line is wrong?",
+        "code": "for (let i = 1; i <= 3; i++) {\n  console.log(\"ab\" * i);\n}\n",
+        "bug": {
+          "line": 2,
+          "fix": "JavaScript cannot multiply text, so `\"ab\" * i` is `NaN` (not a number). Repeat it instead: `\"ab\".repeat(i)`."
+        }
       }
     ],
     "check": {

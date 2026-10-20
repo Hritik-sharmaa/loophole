@@ -3,6 +3,8 @@
 import type { CourseOverview } from '@loophole/shared';
 import { ArrowRight, Lock } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import { AppHeader } from '@/components/app-header';
 import { CourseBanner } from '@/components/course-banner';
 import { GUIDES, Guide, GuideSays, guideFor } from '@/components/guide';
@@ -25,6 +27,13 @@ export default function LearnPage() {
   const { loading } = useRequireSession();
   const courses = useCourses(!loading);
   const me = useMe(!loading);
+  const router = useRouter();
+
+  // No daily goal yet: a first visit. The welcome picks a course and a
+  // goal first (ADR-033).
+  useEffect(() => {
+    if (me.data && me.data.dailyGoal === null) router.replace('/welcome');
+  }, [me.data, router]);
 
   const list = courses.data ?? [];
   // orderCourses() on the server puts the most recent course first.

@@ -111,7 +111,7 @@ A card with a `bug` is a spot-the-bug card: short code with exactly one wrong li
 - `line` is 1-based and must be a line of `code`; `fix` says what is wrong and how to fix it, in one or two sentences.
 - **One bug only**, using only what the lesson (or earlier ones) taught. The body says the symptom ("prints 7 instead of 12", "stops with a `NameError`") so the learner reasons from it; when the error points at a different line than the cause, say so.
 - Put it last, after the teaching cards, so it practises what they just taught. It counts toward the 1–5 cards.
-- Bug cards stay out of the unit's cheat sheet and make up its **Bug hunt**, the review at the end of the unit. Every lesson of each course's first unit has one; `content-files.spec.ts` checks that.
+- Bug cards stay out of the unit's cheat sheet and make up its **Bug hunt**, the review at the end of the unit. Every lesson has exactly one, as its last card; `content-files.spec.ts` checks that.
 
 ### Grading rule
 

@@ -21,6 +21,15 @@
         "body": "A comparison gives `true` or `false`, so a function can return one directly.",
         "code": "const isBig = n => n > 100;\nconsole.log(isBig(500));\nconsole.log(isBig(7));\n",
         "output": "true\nfalse"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "JavaScript stops with a `SyntaxError`. Which line is wrong?",
+        "code": "const add = a, b => a + b;\nconsole.log(add(2, 3));\n",
+        "bug": {
+          "line": 1,
+          "fix": "With two parameters, wrap them in brackets: `const add = (a, b) => a + b;`."
+        }
       }
     ],
     "check": {

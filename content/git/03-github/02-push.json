@@ -11,6 +11,15 @@
       {
         "title": "Next time, just push",
         "body": "After that first `-u`, `git status` tells you when you are ahead of GitHub, and a plain `git push` sends your new commits."
+      },
+      {
+        "title": "Spot the bug",
+        "body": "The push fails: Git cannot find a remote called `main`. Tap the bug.",
+        "code": "git add .\ngit commit -m \"Add about page\"\ngit push -u main origin\n",
+        "bug": {
+          "line": 3,
+          "fix": "The remote comes first, then the branch: `git push -u origin main`."
+        }
       }
     ],
     "check": {

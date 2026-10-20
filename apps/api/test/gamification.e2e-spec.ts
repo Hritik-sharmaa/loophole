@@ -1,6 +1,7 @@
 import type { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import type {
+  ActivityResponse,
   CoursePath,
   MeResponse,
   SubmissionResult,
@@ -65,6 +66,13 @@ describe('XP, streak and leaderboard (e2e)', () => {
       request(app.getHttpServer())
         .get(url)
         .set('Authorization', `Bearer ${who}`)
+        .expect(200)
+        .then((res) => res.body as unknown),
+    patch: (url: string, body: object) =>
+      request(app.getHttpServer())
+        .patch(url)
+        .set('Authorization', `Bearer ${who}`)
+        .send(body)
         .expect(200)
         .then((res) => res.body as unknown),
     solve: (lessonIndex: number) => {
@@ -136,6 +144,15 @@ describe('XP, streak and leaderboard (e2e)', () => {
     });
   });
 
+  it('a new user has no daily goal until they pick one (ADR-033)', async () => {
+    expect(await me('ada')).toMatchObject({ dailyGoal: null, todayXp: 0 });
+    const saved = (await as('ada').patch('/me', {
+      dailyGoal: 20,
+    })) as MeResponse;
+    expect(saved.dailyGoal).toBe(20);
+    expect((await me('ada')).dailyGoal).toBe(20);
+  });
+
   it('day 1: the first completion pays 10 XP and starts the streak (J-1)', async () => {
     expect((await as('ada').solve(0)).xpAwarded).toBe(10);
     expect(await me('ada')).toMatchObject({
@@ -158,7 +175,11 @@ describe('XP, streak and leaderboard (e2e)', () => {
 
   it('day 1: a second new lesson the same day adds XP, not streak', async () => {
     expect((await as('ada').solve(1)).xpAwarded).toBe(10);
-    expect(await me('ada')).toMatchObject({ xp: 20, streak: { current: 1 } });
+    expect(await me('ada')).toMatchObject({
+      xp: 20,
+      todayXp: 20,
+      streak: { current: 1 },
+    });
   });
 
   it('day 2: re-solving an old lesson does not move the streak', async () => {
@@ -166,6 +187,8 @@ describe('XP, streak and leaderboard (e2e)', () => {
     await as('ada').solve(0);
     // Still alive (active yesterday), but not extended.
     expect((await me('ada')).streak.current).toBe(1);
+    // A new IST day starts the daily goal from 0.
+    expect((await me('ada')).todayXp).toBe(0);
   });
 
   it('day 2, just before midnight IST: a new lesson extends the streak (J-4)', async () => {
@@ -173,6 +196,7 @@ describe('XP, streak and leaderboard (e2e)', () => {
     await as('ada').solve(2);
     expect(await me('ada')).toMatchObject({
       xp: 30,
+      todayXp: 10,
       streak: { current: 2, longest: 2 },
     });
   });
@@ -183,6 +207,20 @@ describe('XP, streak and leaderboard (e2e)', () => {
 
     await as('ada').solve(3);
     expect((await me('ada')).streak).toMatchObject({ current: 1, longest: 2 });
+  });
+
+  it('GET /me/activity gives XP per IST day over five weeks (ADR-033)', async () => {
+    const activity = (await as('ada').get('/me/activity')) as ActivityResponse;
+    // Friday 2026-10-16: this week's Monday is 10-12, four weeks before is 09-14.
+    expect(activity).toEqual({
+      from: '2026-09-14',
+      today: '2026-10-16',
+      days: [
+        { date: '2026-10-13', xp: 20 },
+        { date: '2026-10-14', xp: 10 },
+        { date: '2026-10-16', xp: 10 },
+      ],
+    });
   });
 
   it('the weekly board ranks by XP since Monday, with the caller’s rank', async () => {

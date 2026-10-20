@@ -15,6 +15,15 @@
         "body": "Keep a counter and add 1 for every item that passes a test.",
         "code": "count = 0\nfor x in [3, 8, 1, 9]:\n    if x > 5:\n        count += 1\nprint(count)\n",
         "output": "2"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "It should print the average, `5.0`, but prints `7.5`. Which line is wrong?",
+        "code": "nums = [2, 4, 9]\naverage = sum(nums) / 2\nprint(average)\n",
+        "bug": {
+          "line": 2,
+          "fix": "Divide by how many numbers there are, not by 2: `sum(nums) / len(nums)` works for any list."
+        }
       }
     ],
     "check": {

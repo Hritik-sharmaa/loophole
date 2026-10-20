@@ -15,6 +15,15 @@
         "body": "Keep the best value seen so far and replace it only when you find something strictly better. `None` means \"nothing yet\". Using `>` rather than `>=` keeps the first one on a tie.",
         "code": "best = None\nfor x in [4, 9, 2, 9]:\n    if best is None or x > best:\n        best = x\nprint(best)\n",
         "output": "9"
+      },
+      {
+        "title": "Spot the bug",
+        "body": "It should print each name with its score, but crashes with a `ValueError`. Tap the bug.",
+        "code": "scores = {\"ada\": 90, \"bo\": 75}\nfor name, score in scores:\n    print(name, score)\n",
+        "bug": {
+          "line": 2,
+          "fix": "Looping over a dictionary gives only its keys. Use `scores.items()` to get each name and score together."
+        }
       }
     ],
     "check": {
