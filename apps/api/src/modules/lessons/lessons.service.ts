@@ -108,7 +108,11 @@ export class LessonsService {
         title: lessons.title,
         learn: lessons.learn,
         courseId: units.courseId,
-        course: { slug: courses.slug, title: courses.title },
+        course: {
+          slug: courses.slug,
+          title: courses.title,
+          language: courses.language,
+        },
         language: courses.language,
         // Checks are all shown to the learner; only their labels are sent.
         checks: exercises.checks,

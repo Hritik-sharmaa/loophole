@@ -1,0 +1,58 @@
+{
+  "slug": "minutes-and-seconds",
+  "title": "Minutes and seconds",
+  "position": 5,
+  "learn": {
+    "cards": [
+      {
+        "title": "Rounding down",
+        "body": "`/` gives a decimal: `7 / 2` is `3.5`. `Math.floor()` rounds down to the whole number below.",
+        "code": "console.log(7 / 2);\nconsole.log(Math.floor(7 / 2));\n",
+        "output": "3.5\n3"
+      },
+      {
+        "title": "The remainder %",
+        "body": "`%` gives what is left over after dividing. 17 split into groups of 5 leaves 2.",
+        "code": "console.log(17 % 5);\nconsole.log(10 % 2);\n",
+        "output": "2\n0"
+      },
+      {
+        "title": "Printing several values",
+        "body": "Give `console.log()` several values separated by commas and it prints them with one space between each.",
+        "code": "const weeks = Math.floor(10 / 7);\nconst days = 10 % 7;\nconsole.log(weeks, \"week\", days, \"days\");\n",
+        "output": "1 week 3 days"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "console.log(Math.floor(100 / 60), 100 % 60);\n",
+      "options": ["1 40", "1.6666666666666667 40", "40 1"],
+      "answer": 0,
+      "explanation": "100 / 60 rounds down to 1 whole minute, and 100 % 60 is the 40 seconds left over."
+    }
+  },
+  "exercise": {
+    "prompt": "Read a number of seconds and print it as `M min S s`. For `135`, print `2 min 15 s`",
+    "starterCode": "const seconds = Number(prompt());\n// work out the whole minutes and the seconds left over\n",
+    "sampleTests": [
+      {
+        "input": "135\n",
+        "expectedOutput": "2 min 15 s"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "0\n",
+        "expectedOutput": "0 min 0 s"
+      },
+      {
+        "input": "59\n",
+        "expectedOutput": "0 min 59 s"
+      },
+      {
+        "input": "3600\n",
+        "expectedOutput": "60 min 0 s"
+      }
+    ]
+  }
+}

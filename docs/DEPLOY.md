@@ -65,6 +65,8 @@ bash infra/install-runtimes.sh            # once; runtimes live in a volume
 curl https://$API_DOMAIN/health           # {"status":"ok","piston":"ok"}
 ```
 
+`install-runtimes.sh` installs Python 3.12.0 and Node 20.11.1 (the JavaScript course, ADR-025). It skips what is already installed, so after pulling a version that adds a runtime, run it again on the VPS.
+
 Caddy fetches the HTTPS certificate on the first request. If that fails, check the DNS record and that ports 80 and 443 are open.
 
 ### ADR-018 re-test

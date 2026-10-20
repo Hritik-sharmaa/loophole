@@ -14,11 +14,13 @@ import { chip, stickerCard } from '@/components/ui/card';
 export function LearnCards({
   lessonId,
   kind,
+  language,
   cards,
   onDone,
 }: {
   lessonId: string;
   kind: ExerciseKind;
+  language: string;
   cards: LearnCard[];
   onDone: () => void;
 }) {
@@ -58,6 +60,7 @@ export function LearnCards({
         {card.code && (
           <LearnExample
             kind={kind}
+            language={language}
             lessonId={lessonId}
             code={card.code}
             input={card.input}

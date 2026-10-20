@@ -16,12 +16,6 @@ import { useRequireSession } from '@/lib/use-require-session';
 // what is coming. Delete an entry once its course is seeded.
 const COMING_SOON = [
   {
-    title: 'JavaScript',
-    mark: 'js',
-    description:
-      'Make pages interactive: values, functions, arrays and the DOM.',
-  },
-  {
     title: 'Git & GitHub',
     mark: 'git',
     description: 'Save your work, branch, merge and share it like a pro.',
@@ -29,7 +23,11 @@ const COMING_SOON = [
 ];
 
 // The short mark on each course's tile, by course language.
-const MARKS: Record<string, string> = { python: 'py', html: '</>' };
+const MARKS: Record<string, string> = {
+  python: 'py',
+  html: '</>',
+  javascript: 'js',
+};
 
 // The signed-in home (ADR-023): continue the current course, or pick one.
 export default function LearnPage() {

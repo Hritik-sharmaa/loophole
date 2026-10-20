@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { CodeEditor } from '@/components/code-editor';
 import { secondaryButton } from '@/components/ui/buttons';
 import { WebPreview } from '@/components/web-preview';
+import { languageInfo } from '@/lib/languages';
 import { useRun } from '@/lib/queries/use-run';
 
 // A Learn example. Program courses: code the learner can edit and run
@@ -13,6 +14,8 @@ import { useRun } from '@/lib/queries/use-run';
 // live preview as the learner edits it; nothing is sent to the server.
 export function LearnExample(props: {
   kind: ExerciseKind;
+  // The course language: picks the editor's highlighting and file name.
+  language: string;
   lessonId: string;
   code: string;
   input?: string;
@@ -47,11 +50,13 @@ function WebExample({ code: original }: { code: string }) {
 // Before any run it shows what the unedited code prints, so the card
 // teaches even when the code runner is down.
 function RunnableExample({
+  language,
   lessonId,
   code: original,
   input,
   output,
 }: {
+  language: string;
   lessonId: string;
   code: string;
   input?: string;
@@ -62,13 +67,15 @@ function RunnableExample({
   const [code, setCode] = useState(start);
   const run = useRun();
   const result = run.data;
+  const { editor, example } = languageInfo(language);
 
   return (
     <div className="flex flex-col gap-3">
       <CodeEditor
         value={code}
         onChange={setCode}
-        fileName="example.py"
+        fileName={example}
+        language={editor}
         compact
       />
 

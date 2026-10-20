@@ -1,0 +1,58 @@
+{
+  "slug": "square-function",
+  "title": "Your first function",
+  "position": 1,
+  "learn": {
+    "cards": [
+      {
+        "title": "function",
+        "body": "`function` creates a named block of code that runs whenever you call it by name.",
+        "code": "function sayHi() {\n  console.log(\"hi!\");\n}\n\nsayHi();\nsayHi();\n",
+        "output": "hi!\nhi!"
+      },
+      {
+        "title": "Parameters and return",
+        "body": "Values go in through parameters in the brackets. `return` sends a result back to whoever called the function.",
+        "code": "function double(n) {\n  return n * 2;\n}\n\nconsole.log(double(5));\nconsole.log(double(21));\n",
+        "output": "10\n42"
+      },
+      {
+        "title": "return is not console.log",
+        "body": "`console.log` only shows a value. `return` hands it back, so the caller can keep using it.",
+        "code": "function addOne(n) {\n  return n + 1;\n}\n\nconsole.log(addOne(4) * 10);\n",
+        "output": "50"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "function f(n) {\n  return n + 3;\n}\n\nconsole.log(f(2) * 2);\n",
+      "options": ["10", "7", "8"],
+      "answer": 0,
+      "explanation": "`f(2)` returns 5, and 5 * 2 is 10."
+    }
+  },
+  "exercise": {
+    "prompt": "Finish the function `square(n)` so it returns `n * n`. The code below reads a number and prints `square` of it.",
+    "starterCode": "function square(n) {\n  // return n times n\n}\n\nconst n = Number(prompt());\nconsole.log(square(n));\n",
+    "sampleTests": [
+      {
+        "input": "4\n",
+        "expectedOutput": "16"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "0\n",
+        "expectedOutput": "0"
+      },
+      {
+        "input": "-3\n",
+        "expectedOutput": "9"
+      },
+      {
+        "input": "1000\n",
+        "expectedOutput": "1000000"
+      }
+    ]
+  }
+}

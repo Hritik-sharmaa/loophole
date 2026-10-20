@@ -14,7 +14,10 @@ const REQUEST_TIMEOUT_MS = 10_000;
 const HEALTH_TIMEOUT_MS = 2_000;
 
 // The file name Piston saves the code under, per language.
-const FILE_NAMES: Record<string, string> = { python: 'main.py' };
+const FILE_NAMES: Record<string, string> = {
+  python: 'main.py',
+  javascript: 'main.js',
+};
 
 // One program run against one stdin.
 export type RunResult = {

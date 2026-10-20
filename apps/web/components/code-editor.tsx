@@ -1,6 +1,7 @@
 'use client';
 
 import { html } from '@codemirror/lang-html';
+import { javascript } from '@codemirror/lang-javascript';
 import { python } from '@codemirror/lang-python';
 import CodeMirror, { EditorView } from '@uiw/react-codemirror';
 
@@ -26,6 +27,7 @@ const shared = [
 // the editor whenever the extensions array changes identity.
 const EXTENSIONS = {
   python: [python(), ...shared],
+  javascript: [javascript(), ...shared],
   // HTML mode also highlights the CSS inside <style> (ADR-024).
   html: [html(), ...shared],
 };

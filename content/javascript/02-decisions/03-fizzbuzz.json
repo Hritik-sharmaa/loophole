@@ -1,0 +1,56 @@
+{
+  "slug": "fizzbuzz",
+  "title": "FizzBuzz for one number",
+  "position": 3,
+  "learn": {
+    "cards": [
+      {
+        "title": "&&, || and !",
+        "body": "`&&` (and) is true only when both sides are. `||` (or) is true when at least one side is. `!` flips true and false.",
+        "code": "console.log(true && false);\nconsole.log(true || false);\nconsole.log(!true);\n",
+        "output": "false\ntrue\nfalse"
+      },
+      {
+        "title": "Strictest check first",
+        "body": "With `else if`, the first true condition wins, so put the strictest check first or a broader one will catch it.",
+        "code": "const n = 30;\nif (n % 2 === 0 && n % 3 === 0) {\n  console.log(\"both\");\n} else if (n % 2 === 0) {\n  console.log(\"even\");\n} else {\n  console.log(\"neither\");\n}\n",
+        "output": "both"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "const n = 10;\nconsole.log(n > 5 && n % 2 === 1);\n",
+      "options": ["false", "true"],
+      "answer": 0,
+      "explanation": "`n > 5` is true, but 10 is even, so `n % 2 === 1` is false, and `&&` needs both."
+    }
+  },
+  "exercise": {
+    "prompt": "Read a whole number. Print `FizzBuzz` if it divides by both 3 and 5, `Fizz` if only by 3, `Buzz` if only by 5, and the number itself otherwise.",
+    "starterCode": "const n = Number(prompt());\n// check the strictest case first\n",
+    "sampleTests": [
+      {
+        "input": "15\n",
+        "expectedOutput": "FizzBuzz"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "9\n",
+        "expectedOutput": "Fizz"
+      },
+      {
+        "input": "10\n",
+        "expectedOutput": "Buzz"
+      },
+      {
+        "input": "7\n",
+        "expectedOutput": "7"
+      },
+      {
+        "input": "0\n",
+        "expectedOutput": "FizzBuzz"
+      }
+    ]
+  }
+}

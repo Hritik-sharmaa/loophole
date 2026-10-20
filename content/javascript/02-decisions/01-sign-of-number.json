@@ -1,0 +1,53 @@
+{
+  "slug": "sign-of-number",
+  "title": "Positive, negative or zero",
+  "position": 1,
+  "learn": {
+    "cards": [
+      {
+        "title": "Comparisons",
+        "body": "`>`, `<`, `>=` and `<=` compare two values and give `true` or `false`.",
+        "code": "console.log(5 > 3);\nconsole.log(2 >= 3);\n",
+        "output": "true\nfalse"
+      },
+      {
+        "title": "if, else if, else",
+        "body": "`if` runs the code in its braces only when the condition is true. `else if` tries another condition, and `else` catches the rest. Only the first match runs.",
+        "code": "const n = Number(prompt());\nif (n > 100) {\n  console.log(\"big\");\n} else if (n > 10) {\n  console.log(\"medium\");\n} else {\n  console.log(\"small\");\n}\n",
+        "input": "42\n",
+        "output": "medium"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "const x = 0;\nif (x > 0) {\n  console.log(\"A\");\n} else if (x === 0) {\n  console.log(\"B\");\n} else {\n  console.log(\"C\");\n}\n",
+      "options": ["A", "B", "C"],
+      "answer": 1,
+      "explanation": "`x > 0` is false, so JavaScript tries `x === 0`, which is true."
+    }
+  },
+  "exercise": {
+    "prompt": "Read a whole number. Print `positive` if it is greater than 0, `negative` if it is less than 0, and `zero` otherwise.",
+    "starterCode": "const n = Number(prompt());\n// use if / else if / else below\n",
+    "sampleTests": [
+      {
+        "input": "5\n",
+        "expectedOutput": "positive"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "-3\n",
+        "expectedOutput": "negative"
+      },
+      {
+        "input": "0\n",
+        "expectedOutput": "zero"
+      },
+      {
+        "input": "1000000\n",
+        "expectedOutput": "positive"
+      }
+    ]
+  }
+}

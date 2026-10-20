@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@codemirror/lang-html": "^6.4.12",
+    "@codemirror/lang-javascript": "^6.2.5",
     "@codemirror/lang-python": "^6.2.1",
     "@hookform/resolvers": "^5.9.1",
     "@loophole/shared": "workspace:*",

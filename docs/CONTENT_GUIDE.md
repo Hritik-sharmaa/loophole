@@ -105,6 +105,15 @@ Each test runs the program with `input` as stdin. It passes when **trimmed stdou
 - Write the reference solution during authoring and check it passes every test before committing. Keep it out of `content/`: it goes in `content-solutions/<course>/<unit-folder>/<lesson-file>.py`, which is git-ignored.
 - `content-files.spec.ts` in the API parses the real `content/` folder in CI, so a malformed lesson file fails the build, not the seed.
 
+### JavaScript programs (ADR-025)
+
+A course with `language: "javascript"` is graded exactly like Python (stdin in, trimmed stdout compared), in Piston's Node 20.11.1. JavaScript has no simple way to read stdin, so Loophole appends a `prompt()` helper after the learner's code: each call returns the next line of input as text (or `null` when there is none), like the browser's `prompt()`. Line numbers in errors are unchanged.
+
+- Read input with `prompt()`, and numbers with `Number(prompt())`; a line of numbers is `prompt().split(" ").map(Number)`.
+- Print with `console.log()`. Avoid printing arrays or objects directly (`[ 1, 2 ]` formatting is Node-specific); use `join(" ")`.
+- Don't name anything `prompt`.
+- Check every example, the quick check, the reference solution (`content-solutions/javascript/…/*.js`) and the starter code through Piston with `withProgramHelpers()` applied, as the API runs them. Docker Desktop sometimes stalls Node's start past the 3 s wall clock (status `TO` with little CPU time); re-run those before suspecting the content.
+
 ### Web exercises: the HTML & CSS track (ADR-024)
 
 A course whose `language` is `html` has web exercises: the learner writes one page (HTML, with CSS in a `<style>` tag) beside a live preview, and the API checks it against rules. Instead of `sampleTests` and `hiddenTests`, the exercise has `checks`:

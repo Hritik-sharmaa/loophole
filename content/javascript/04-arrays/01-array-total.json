@@ -1,0 +1,59 @@
+{
+  "slug": "array-total",
+  "title": "Total of an array",
+  "position": 1,
+  "learn": {
+    "cards": [
+      {
+        "title": "Arrays hold lists",
+        "body": "An array keeps values in order inside square brackets. `nums[0]` is the first item and `nums.length` is how many there are.",
+        "code": "const nums = [4, 8, 15];\nconsole.log(nums[0]);\nconsole.log(nums.length);\n",
+        "output": "4\n3"
+      },
+      {
+        "title": "Reading a line of numbers",
+        "body": "`split(\" \")` cuts text at spaces into an array of pieces, and `.map(Number)` turns each piece into a number.",
+        "code": "const nums = prompt().split(\" \").map(Number);\nconsole.log(nums[1] + nums[2]);\n",
+        "input": "3 1 2\n",
+        "output": "3"
+      },
+      {
+        "title": "for...of",
+        "body": "`for (const x of nums)` visits each item of an array in order.",
+        "code": "let total = 0;\nfor (const x of [10, 20, 5]) {\n  total += x;\n}\nconsole.log(total);\n",
+        "output": "35"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "const a = [5, 6, 7];\nconsole.log(a[a.length - 1]);\n",
+      "options": ["7", "3", "5"],
+      "answer": 0,
+      "explanation": "`a.length` is 3, so `a[2]` is the last item, 7. Indexes start at 0."
+    }
+  },
+  "exercise": {
+    "prompt": "Read whole numbers on one line, separated by spaces, and print their total.",
+    "starterCode": "const nums = prompt().split(\" \").map(Number);\n// print the total of nums\n",
+    "sampleTests": [
+      {
+        "input": "1 2 3\n",
+        "expectedOutput": "6"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "5\n",
+        "expectedOutput": "5"
+      },
+      {
+        "input": "-1 1\n",
+        "expectedOutput": "0"
+      },
+      {
+        "input": "100 200 300 400\n",
+        "expectedOutput": "1000"
+      }
+    ]
+  }
+}

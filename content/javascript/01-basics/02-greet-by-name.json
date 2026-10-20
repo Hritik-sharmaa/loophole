@@ -1,0 +1,60 @@
+{
+  "slug": "greet-by-name",
+  "title": "Greet by name",
+  "position": 2,
+  "learn": {
+    "cards": [
+      {
+        "title": "Variables",
+        "body": "`const` creates a variable: a name for a value. Use the name later to get the value back.",
+        "code": "const city = \"Paris\";\nconsole.log(city);\n",
+        "output": "Paris"
+      },
+      {
+        "title": "Reading input with prompt()",
+        "body": "On Loophole, `prompt()` reads one line of input as text, just like `prompt()` asks the user for text in a browser.",
+        "code": "const name = prompt();\nconsole.log(name);\n",
+        "input": "Ada\n",
+        "output": "Ada"
+      },
+      {
+        "title": "Dropping values into text",
+        "body": "A string between backticks (the key left of 1) can drop in values with `${...}`. It reads more easily than gluing pieces with `+`.",
+        "code": "const name = prompt();\nconsole.log(`Hello, ${name}.`);\n",
+        "input": "Grace\n",
+        "output": "Hello, Grace."
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "const animal = \"cat\";\nconsole.log(`I love ${animal}s`);\n",
+      "options": ["I love cats", "I love ${animal}s", "I love animals"],
+      "answer": 0,
+      "explanation": "Inside backticks, `${animal}` is replaced by the value of `animal`, which is \"cat\"."
+    }
+  },
+  "exercise": {
+    "prompt": "Read a name and print `Hi, <name>!`. For `Ada`, print `Hi, Ada!`",
+    "starterCode": "const name = prompt();\n// print the greeting below\n",
+    "sampleTests": [
+      {
+        "input": "Ada\n",
+        "expectedOutput": "Hi, Ada!"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "Grace\n",
+        "expectedOutput": "Hi, Grace!"
+      },
+      {
+        "input": "Bo\n",
+        "expectedOutput": "Hi, Bo!"
+      },
+      {
+        "input": "Mary Jane\n",
+        "expectedOutput": "Hi, Mary Jane!"
+      }
+    ]
+  }
+}

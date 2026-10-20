@@ -104,7 +104,8 @@ Loop for every slice: AI **writes** the slice → you **review** and change it �
 - [x] Responsive pass (phone tab bar) and installable PWA (ADR-022)
 - [x] Course catalog at `/learn`, one path per course at `/learn/[slug]` (ADR-023, FR-31)
 - [x] HTML & CSS track: 15 lessons, live preview, pages checked by rules on the server (ADR-024)
-- [ ] JavaScript track (Piston Node, stdout grading like Python)
+- [x] JavaScript track: 20 lessons, Node 20 in Piston, `prompt()` for input (ADR-025)
+- [ ] Re-test Node run times on the VPS (Docker Desktop stalls some Node starts past 3 s; ADR-025)
 - [ ] Git & GitHub track (simulated repo)
 - [ ] Playwright e2e for J-1 and J-3; deploy step in GitHub Actions
 - [ ] Scalability, only if needed: see `ARCHITECTURE.md` §5

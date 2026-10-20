@@ -20,6 +20,7 @@ import { chip, stickerCard, stickerOutline } from '@/components/ui/card';
 import { WebPreview } from '@/components/web-preview';
 import { ApiError } from '@/lib/api';
 import { celebrate } from '@/lib/celebrate';
+import { languageInfo } from '@/lib/languages';
 import { useLesson } from '@/lib/queries/use-lessons';
 import { useSubmissions, useSubmit } from '@/lib/queries/use-submissions';
 import { useCountUp } from '@/lib/use-count-up';
@@ -114,6 +115,7 @@ function Lesson({
             <LearnCards
               lessonId={lesson.id}
               kind={lesson.exercise.kind}
+              language={lesson.course.language}
               cards={learn.cards}
               onDone={() => go('check')}
             />
@@ -225,7 +227,12 @@ function Exercise({
       ) : (
         <>
           <SampleTests tests={sampleTests} />
-          <CodeEditor value={code} onChange={setCode} fileName="main.py" />
+          <CodeEditor
+            value={code}
+            onChange={setCode}
+            fileName={languageInfo(lesson.course.language).file}
+            language={languageInfo(lesson.course.language).editor}
+          />
         </>
       )}
 

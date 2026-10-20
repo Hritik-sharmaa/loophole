@@ -1,0 +1,56 @@
+{
+  "slug": "changing-values",
+  "title": "Changing values with let",
+  "position": 4,
+  "learn": {
+    "cards": [
+      {
+        "title": "let can change",
+        "body": "A `const` never changes. Use `let` for a variable you will update later.",
+        "code": "let score = 10;\nscore = score + 5;\nconsole.log(score);\n",
+        "output": "15"
+      },
+      {
+        "title": "Shortcuts",
+        "body": "`score += 5` is short for `score = score + 5`, and `count++` adds 1.",
+        "code": "let count = 0;\ncount += 3;\ncount++;\nconsole.log(count);\n",
+        "output": "4"
+      },
+      {
+        "title": "const protects values",
+        "body": "Assigning to a `const` again is an error. Use `const` for values you never mean to change, and `let` only when you do."
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "let x = 2;\nx *= 5;\nx++;\nconsole.log(x);\n",
+      "options": ["11", "10", "7"],
+      "answer": 0,
+      "explanation": "`x *= 5` makes x 10, then `x++` adds 1."
+    }
+  },
+  "exercise": {
+    "prompt": "Read a starting balance, then a deposit, then a withdrawal (whole numbers, one per line). Add the deposit, take away the withdrawal, and print the final balance.",
+    "starterCode": "let balance = Number(prompt());\nconst deposit = Number(prompt());\nconst withdrawal = Number(prompt());\n// update balance, then print it\n",
+    "sampleTests": [
+      {
+        "input": "100\n50\n30\n",
+        "expectedOutput": "120"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "0\n0\n0\n",
+        "expectedOutput": "0"
+      },
+      {
+        "input": "10\n5\n20\n",
+        "expectedOutput": "-5"
+      },
+      {
+        "input": "999\n1\n1000\n",
+        "expectedOutput": "0"
+      }
+    ]
+  }
+}

@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import type { RunResponse } from '@loophole/shared';
 import { exerciseKind } from '../../common/exercise-kind.js';
+import { withProgramHelpers } from '../../common/program-helpers.js';
 import { PistonClient } from '../../integrations/piston.client.js';
 import { LessonsService } from '../lessons/lessons.service.js';
 import { STDERR_MAX, TIMEOUT_MESSAGE } from '../submissions/grading.js';
@@ -28,7 +29,11 @@ export class RunsService {
         message: 'This lesson shows a live preview instead of running code.',
       });
     }
-    const run = await this.piston.run(language, code, input ?? '');
+    const run = await this.piston.run(
+      language,
+      withProgramHelpers(language, code),
+      input ?? '',
+    );
 
     return {
       stdout: run.stdout.slice(0, STDERR_MAX),

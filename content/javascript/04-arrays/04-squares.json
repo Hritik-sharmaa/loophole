@@ -1,0 +1,52 @@
+{
+  "slug": "squares",
+  "title": "Square them all",
+  "position": 4,
+  "learn": {
+    "cards": [
+      {
+        "title": "map() changes every item",
+        "body": "`nums.map(x => x * 2)` makes a new array where every item has been changed by the function.",
+        "code": "const doubled = [1, 2, 3].map(x => x * 2);\nconsole.log(doubled.join(\" \"));\n",
+        "output": "2 4 6"
+      },
+      {
+        "title": "Chaining",
+        "body": "Array methods give back arrays, so you can chain them: filter first, then map.",
+        "code": "const result = [1, 2, 3, 4].filter(x => x > 2).map(x => x * 10);\nconsole.log(result.join(\" \"));\n",
+        "output": "30 40"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "console.log([1, 2, 3].map(x => x + 1).join(\" \"));\n",
+      "options": ["2 3 4", "1 2 3", "3 4 5"],
+      "answer": 0,
+      "explanation": "`map` adds 1 to every item."
+    }
+  },
+  "exercise": {
+    "prompt": "Read whole numbers on one line and print each one squared, in the same order, separated by spaces.",
+    "starterCode": "const nums = prompt().split(\" \").map(Number);\n// square every number and print them\n",
+    "sampleTests": [
+      {
+        "input": "1 2 3\n",
+        "expectedOutput": "1 4 9"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "-3 0\n",
+        "expectedOutput": "9 0"
+      },
+      {
+        "input": "10\n",
+        "expectedOutput": "100"
+      },
+      {
+        "input": "2 2 5\n",
+        "expectedOutput": "4 4 25"
+      }
+    ]
+  }
+}

@@ -117,8 +117,9 @@ export type WebCheck =
 export type LessonDetail = {
   id: string;
   title: string;
-  // The course it belongs to, for the way back to its path.
-  course: { slug: string; title: string };
+  // The course it belongs to: the way back to its path, and its language
+  // for the editor's highlighting and file name.
+  course: { slug: string; title: string; language: string };
   learn: LessonLearn | null;
   exercise: {
     id: string;

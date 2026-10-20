@@ -79,7 +79,11 @@ describe('Web exercises (e2e)', () => {
   });
 
   it('sends the checklist labels and no tests', () => {
-    expect(lesson.course).toEqual({ slug: 'html-css', title: 'HTML & CSS' });
+    expect(lesson.course).toEqual({
+      slug: 'html-css',
+      title: 'HTML & CSS',
+      language: 'html',
+    });
     expect(lesson.exercise.kind).toBe('web');
     expect(lesson.exercise.sampleTests).toEqual([]);
     expect(lesson.exercise.checks).toEqual([

@@ -87,6 +87,13 @@ describe('Lessons (e2e)', () => {
         lastActivityAt: null,
       }),
       expect.objectContaining({
+        slug: 'javascript',
+        language: 'javascript',
+        lessonCount: 20,
+        completedCount: 0,
+        lastActivityAt: null,
+      }),
+      expect.objectContaining({
         slug: 'python',
         language: 'python',
         lessonCount: 40,
@@ -94,7 +101,7 @@ describe('Lessons (e2e)', () => {
         lastActivityAt: null,
       }),
     ]);
-    expect(body[1].description).toContain('40 bite-sized lessons');
+    expect(body[2].description).toContain('40 bite-sized lessons');
   });
 
   it('a new user has lesson 1 active and every other lesson locked', async () => {
@@ -121,7 +128,11 @@ describe('Lessons (e2e)', () => {
     const body = (await get(`/lessons/${first}`, 200)) as LessonDetail;
 
     expect(body.title).toBe('Hello, world');
-    expect(body.course).toEqual({ slug: 'python', title: 'Python Basics' });
+    expect(body.course).toEqual({
+      slug: 'python',
+      title: 'Python Basics',
+      language: 'python',
+    });
     expect(body.exercise.prompt).toContain('Hello, Loophole!');
     expect(body.exercise.sampleTests).toEqual([
       { input: '', expectedOutput: 'Hello, Loophole!' },
@@ -184,8 +195,8 @@ describe('Lessons (e2e)', () => {
     const summary = await seedContent(db, CONTENT_DIR);
 
     expect(await counts()).toEqual(before);
-    // Python 7 units / 40 lessons + HTML & CSS 3 units / 15 lessons.
-    expect(before).toEqual({ units: 10, lessons: 55, exercises: 55 });
+    // Python 7 units / 40 lessons, HTML & CSS 3 / 15, JavaScript 5 / 20.
+    expect(before).toEqual({ units: 15, lessons: 75, exercises: 75 });
     expect(summary.stale).toEqual([]);
     // Progress survives a re-seed because lesson ids are kept.
     const [{ n }] = await db.select({ n: count() }).from(userProgress);

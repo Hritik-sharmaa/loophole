@@ -6,6 +6,13 @@ Format: **ADR-NNN · Title** — Status (Accepted / Superseded by ADR-NNN) · Da
 
 ---
 
+**ADR-025 · JavaScript track: Node in Piston, with prompt() for input** — Accepted · 2026-10-20
+
+- Decision: a course with `language: "javascript"` runs in Piston's Node 20.11.1 (package `node`, installed by `infra/install-runtimes.sh`) and is graded like Python: stdin in, trimmed stdout compared. `withProgramHelpers()` (`src/common/program-helpers.ts`) appends a `prompt()` function after the learner's code before every Piston run (submissions, duels, `/runs`): it returns the next stdin line, or `null` at the end, like the browser's `prompt()`. It is a hoisted function declaration placed last, so it works from line 1 and error line numbers stay correct. The first course has 20 lessons in 5 units, with Learn steps, all checked in Piston. The web editor picks highlighting and file names (`main.js`) from the lesson's course language, now part of `GET /lessons/:id`.
+- Why: the agreed order after HTML & CSS (ADR-023). Raw Node needs `require('fs').readFileSync(0, …)` to read input, which a beginner can't be expected to write; `prompt()` is real browser JavaScript, so the habit carries over to the web.
+- Trade-off: the course teaches core JavaScript only; the DOM needs a browser and is left for later. A learner who declares their own `prompt` gets a redeclaration error. On Docker Desktop, Node sometimes takes more than 3 s of wall clock to start (status `TO` with ~250 ms of CPU), which grades as a time-out; the run limit stays at 3 s (NFR-04) until Node is re-tested on the VPS, as Python was for ADR-018.
+- Also fixed: `install-runtimes.sh` checked installed runtimes by package name, but the `node` package's runtime is called `javascript`, so a second run would have tried to reinstall it and failed. It now checks Piston's package list.
+
 **ADR-024 · HTML & CSS track: pages checked by rules on the server** — Accepted · 2026-10-20
 
 - Decision: a course with `language: "html"` has web exercises. The learner edits one page with a live preview (an `<iframe sandbox="">` with `srcDoc`, so nothing in it can run scripts or reach the app). On submit, the API parses the page with `htmlparser2`, matches elements with `css-select` (selectors parsed with `css-what`), reads `<style>` blocks with `postcss`, and checks it against the exercise's rules (`element`, `attribute`, `style`) in `modules/submissions/web-checks.ts`. Results reuse the submission shape (`kind: "check"`), so XP, streaks, progress and certificates are unchanged. All checks are visible. `exercises.checks` stores them; `exerciseKind()` picks the grader from the course language. `POST /runs` refuses web lessons. The first course has 15 lessons in 3 units.

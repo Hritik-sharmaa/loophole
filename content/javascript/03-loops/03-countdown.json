@@ -1,0 +1,52 @@
+{
+  "slug": "countdown",
+  "title": "Countdown",
+  "position": 3,
+  "learn": {
+    "cards": [
+      {
+        "title": "while loops",
+        "body": "A `while` loop repeats as long as its condition is true. Something inside must change, or it never stops.",
+        "code": "let n = 1;\nwhile (n <= 3) {\n  console.log(n);\n  n++;\n}\n",
+        "output": "1\n2\n3"
+      },
+      {
+        "title": "break",
+        "body": "`break` leaves a loop straight away.",
+        "code": "let n = 1;\nwhile (true) {\n  if (n > 2) {\n    break;\n  }\n  console.log(n);\n  n++;\n}\n",
+        "output": "1\n2"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "let n = 2;\nwhile (n > 0) {\n  n--;\n}\nconsole.log(n);\n",
+      "options": ["0", "1", "-1"],
+      "answer": 0,
+      "explanation": "The loop stops when `n > 0` is first false, at 0. The `console.log` is after the loop, so it runs once."
+    }
+  },
+  "exercise": {
+    "prompt": "Read N and count down from N to 1, one number per line, then print `Liftoff!`. Use a `while` loop.",
+    "starterCode": "let n = Number(prompt());\n// count down with a while loop\nconsole.log(\"Liftoff!\");\n",
+    "sampleTests": [
+      {
+        "input": "3\n",
+        "expectedOutput": "3\n2\n1\nLiftoff!"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "1\n",
+        "expectedOutput": "1\nLiftoff!"
+      },
+      {
+        "input": "5\n",
+        "expectedOutput": "5\n4\n3\n2\n1\nLiftoff!"
+      },
+      {
+        "input": "0\n",
+        "expectedOutput": "Liftoff!"
+      }
+    ]
+  }
+}

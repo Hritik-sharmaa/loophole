@@ -1,0 +1,52 @@
+{
+  "slug": "star-triangle",
+  "title": "Star triangle",
+  "position": 4,
+  "learn": {
+    "cards": [
+      {
+        "title": "repeat()",
+        "body": "`text.repeat(n)` gives the text n times in a row.",
+        "code": "console.log(\"ab\".repeat(3));\nconsole.log(\"-\".repeat(5));\n",
+        "output": "ababab\n-----"
+      },
+      {
+        "title": "Lines that grow",
+        "body": "Use the loop counter to make each line longer than the last.",
+        "code": "for (let i = 1; i <= 3; i++) {\n  console.log(\"o\".repeat(i * 2));\n}\n",
+        "output": "oo\noooo\noooooo"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "for (let i = 0; i < 2; i++) {\n  console.log(\"*\".repeat(i + 1));\n}\n",
+      "options": ["*\n**", "**\n**", "\n*"],
+      "answer": 0,
+      "explanation": "i is 0 and then 1, so the lines have 1 and then 2 stars."
+    }
+  },
+  "exercise": {
+    "prompt": "Read N and print a triangle of N rows: row 1 has one `*`, row 2 has two, and so on, with no spaces.",
+    "starterCode": "const n = Number(prompt());\n// print the triangle, one row per line\n",
+    "sampleTests": [
+      {
+        "input": "3\n",
+        "expectedOutput": "*\n**\n***"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "1\n",
+        "expectedOutput": "*"
+      },
+      {
+        "input": "4\n",
+        "expectedOutput": "*\n**\n***\n****"
+      },
+      {
+        "input": "0\n",
+        "expectedOutput": ""
+      }
+    ]
+  }
+}

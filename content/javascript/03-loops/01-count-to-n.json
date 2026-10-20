@@ -1,0 +1,52 @@
+{
+  "slug": "count-to-n",
+  "title": "Count to N",
+  "position": 1,
+  "learn": {
+    "cards": [
+      {
+        "title": "for loops",
+        "body": "A `for` loop has three parts: where to start, when to keep going, and how to step.",
+        "code": "for (let i = 1; i <= 3; i++) {\n  console.log(\"round\", i);\n}\n",
+        "output": "round 1\nround 2\nround 3"
+      },
+      {
+        "title": "Other steps",
+        "body": "Change the step to count by 2, or count down with `i--` or `i -= 2`.",
+        "code": "for (let i = 10; i >= 6; i -= 2) {\n  console.log(i);\n}\n",
+        "output": "10\n8\n6"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "for (let i = 0; i < 3; i++) {\n  console.log(i);\n}\n",
+      "options": ["0\n1\n2", "1\n2\n3", "0\n1\n2\n3"],
+      "answer": 0,
+      "explanation": "It starts at 0 and stops before 3, because the condition is `i < 3`."
+    }
+  },
+  "exercise": {
+    "prompt": "Read N and print the numbers from 1 to N, one per line. Use a `for` loop.",
+    "starterCode": "const n = Number(prompt());\n// print 1 to n, one per line\n",
+    "sampleTests": [
+      {
+        "input": "3\n",
+        "expectedOutput": "1\n2\n3"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "1\n",
+        "expectedOutput": "1"
+      },
+      {
+        "input": "5\n",
+        "expectedOutput": "1\n2\n3\n4\n5"
+      },
+      {
+        "input": "0\n",
+        "expectedOutput": ""
+      }
+    ]
+  }
+}

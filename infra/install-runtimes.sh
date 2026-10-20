@@ -5,12 +5,16 @@
 set -euo pipefail
 
 PISTON=${PISTON:-http://127.0.0.1:2000}
-# Same version as local development, so grading behaves the same.
-RUNTIMES=("python 3.12.0")
+# Same versions as local development, so grading behaves the same.
+# "node" is Piston's package for the JavaScript course (language
+# "javascript", ADR-025).
+RUNTIMES=("python 3.12.0" "node 20.11.1")
 
 for entry in "${RUNTIMES[@]}"; do
   read -r language version <<<"$entry"
-  if curl -fsS "$PISTON/api/v2/runtimes" | grep -q "\"language\":\"$language\",\"version\":\"$version\""; then
+  # Check the package list, not the runtimes: a package's runtime can have
+  # another name (the "node" package runs language "javascript").
+  if curl -fsS "$PISTON/api/v2/packages" | grep -q "\"language\":\"$language\",\"language_version\":\"$version\",\"installed\":true"; then
     echo "$language $version: already installed"
     continue
   fi

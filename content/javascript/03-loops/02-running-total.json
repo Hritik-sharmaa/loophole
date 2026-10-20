@@ -1,0 +1,53 @@
+{
+  "slug": "running-total",
+  "title": "Add them up",
+  "position": 2,
+  "learn": {
+    "cards": [
+      {
+        "title": "Running totals",
+        "body": "Start a total at 0 before the loop, then add to it each time round.",
+        "code": "let total = 0;\nfor (let i = 1; i <= 4; i++) {\n  total += i;\n}\nconsole.log(total);\n",
+        "output": "10"
+      },
+      {
+        "title": "Reading inside a loop",
+        "body": "Each `prompt()` reads the next line, so calling it inside a loop reads one line per round.",
+        "code": "for (let i = 0; i < 2; i++) {\n  const word = prompt();\n  console.log(\"got\", word);\n}\n",
+        "input": "apple\npear\n",
+        "output": "got apple\ngot pear"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "let total = 0;\nfor (let i = 0; i < 3; i++) {\n  total += 2;\n}\nconsole.log(total);\n",
+      "options": ["6", "2", "3"],
+      "answer": 0,
+      "explanation": "The loop runs 3 times and adds 2 each time."
+    }
+  },
+  "exercise": {
+    "prompt": "The first line is a count N; then N lines follow, each with one whole number. Print their sum.",
+    "starterCode": "const n = Number(prompt());\nlet total = 0;\n// read n more numbers and add each to total\nconsole.log(total);\n",
+    "sampleTests": [
+      {
+        "input": "3\n4\n5\n6\n",
+        "expectedOutput": "15"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "1\n7\n",
+        "expectedOutput": "7"
+      },
+      {
+        "input": "0\n",
+        "expectedOutput": "0"
+      },
+      {
+        "input": "4\n-1\n-2\n3\n10\n",
+        "expectedOutput": "10"
+      }
+    ]
+  }
+}

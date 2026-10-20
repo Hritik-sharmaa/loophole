@@ -1,0 +1,58 @@
+{
+  "slug": "letter-counts",
+  "title": "Counting with objects",
+  "position": 4,
+  "learn": {
+    "cards": [
+      {
+        "title": "Objects hold named values",
+        "body": "An object stores values under names called keys. Read one with a dot, or with the key in square brackets.",
+        "code": "const person = { name: \"Ada\", age: 36 };\nconsole.log(person.name);\nconsole.log(person[\"age\"]);\n",
+        "output": "Ada\n36"
+      },
+      {
+        "title": "Adding and updating keys",
+        "body": "Assign to a key to add it, or to change it if it is already there. `?? 0` gives 0 when a key is missing.",
+        "code": "const counts = {};\nfor (const ch of \"aab\") {\n  counts[ch] = (counts[ch] ?? 0) + 1;\n}\nconsole.log(counts.a, counts.b);\n",
+        "output": "2 1"
+      },
+      {
+        "title": "Keys in order",
+        "body": "`Object.keys(obj)` gives an array of the keys, and `.sort()` puts text in alphabetical order.",
+        "code": "const scores = { cy: 5, ada: 9, bo: 7 };\nfor (const key of Object.keys(scores).sort()) {\n  console.log(key, scores[key]);\n}\n",
+        "output": "ada 9\nbo 7\ncy 5"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "const d = { x: 1 };\nd.x = 5;\nconsole.log(d.x);\n",
+      "options": ["5", "1", "6"],
+      "answer": 0,
+      "explanation": "Assigning to an existing key replaces its value."
+    }
+  },
+  "exercise": {
+    "prompt": "Read a word in lowercase letters and print how many times each letter appears, one per line as `letter count`, in alphabetical order.",
+    "starterCode": "const word = prompt();\nconst counts = {};\n// count each letter, then print them in alphabetical order\n",
+    "sampleTests": [
+      {
+        "input": "banana\n",
+        "expectedOutput": "a 3\nb 1\nn 2"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "a\n",
+        "expectedOutput": "a 1"
+      },
+      {
+        "input": "mississippi\n",
+        "expectedOutput": "i 4\nm 1\np 2\ns 4"
+      },
+      {
+        "input": "zebra\n",
+        "expectedOutput": "a 1\nb 1\ne 1\nr 1\nz 1"
+      }
+    ]
+  }
+}

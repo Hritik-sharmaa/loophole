@@ -109,6 +109,34 @@ describe('Runs (e2e)', () => {
     );
   });
 
+  // ADR-025: JavaScript gets prompt() appended, after the learner's lines.
+  it('runs a JavaScript lesson in Node with the prompt() helper', async () => {
+    run.mockResolvedValue({
+      stdout: 'Ada\n',
+      stderr: '',
+      exitCode: 0,
+      timedOut: false,
+    });
+    const path = (
+      await request(app.getHttpServer())
+        .get('/courses/javascript/path')
+        .set('Authorization', 'Bearer learner')
+    ).body as CoursePath;
+    const code = 'console.log(prompt());\n';
+
+    await post('learner', {
+      lessonId: path.units[0].lessons[0].id,
+      code,
+      input: 'Ada\n',
+    }).expect(200);
+
+    const [language, sent, stdin] = run.mock.calls[0];
+    expect(language).toBe('javascript');
+    expect(sent.startsWith(code)).toBe(true);
+    expect(sent).toContain('function prompt()');
+    expect(stdin).toBe('Ada\n');
+  });
+
   it('explains a time-out when the program printed no error', async () => {
     run.mockResolvedValue({
       stdout: '',

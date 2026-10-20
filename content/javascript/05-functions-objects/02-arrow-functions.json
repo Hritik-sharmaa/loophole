@@ -1,0 +1,58 @@
+{
+  "slug": "arrow-functions",
+  "title": "Arrow functions",
+  "position": 2,
+  "learn": {
+    "cards": [
+      {
+        "title": "A shorter way",
+        "body": "`const double = n => n * 2;` does the same as a `function` that returns `n * 2`.",
+        "code": "const double = n => n * 2;\nconsole.log(double(7));\n",
+        "output": "14"
+      },
+      {
+        "title": "More parameters",
+        "body": "With two or more parameters, wrap them in brackets: `(a, b) => a + b`.",
+        "code": "const add = (a, b) => a + b;\nconsole.log(add(2, 3));\n",
+        "output": "5"
+      },
+      {
+        "title": "Returning true or false",
+        "body": "A comparison gives `true` or `false`, so a function can return one directly.",
+        "code": "const isBig = n => n > 100;\nconsole.log(isBig(500));\nconsole.log(isBig(7));\n",
+        "output": "true\nfalse"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "const odd = n => n % 2 === 1;\nconsole.log(odd(8));\n",
+      "options": ["false", "true", "0"],
+      "answer": 0,
+      "explanation": "8 % 2 is 0, and `0 === 1` is false."
+    }
+  },
+  "exercise": {
+    "prompt": "Fix the arrow function `isEven` so it returns `true` when n is even and `false` otherwise. The code below prints `even` or `odd` based on it.",
+    "starterCode": "const isEven = n => false; // fix this\n\nconst n = Number(prompt());\nif (isEven(n)) {\n  console.log(\"even\");\n} else {\n  console.log(\"odd\");\n}\n",
+    "sampleTests": [
+      {
+        "input": "4\n",
+        "expectedOutput": "even"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "7\n",
+        "expectedOutput": "odd"
+      },
+      {
+        "input": "0\n",
+        "expectedOutput": "even"
+      },
+      {
+        "input": "-2\n",
+        "expectedOutput": "even"
+      }
+    ]
+  }
+}

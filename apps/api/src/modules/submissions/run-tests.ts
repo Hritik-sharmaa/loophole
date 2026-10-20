@@ -3,6 +3,7 @@ import type {
   PistonClient,
   RunResult,
 } from '../../integrations/piston.client.js';
+import { withProgramHelpers } from '../../common/program-helpers.js';
 import type { TestRun } from './grading.js';
 
 // Stands in for a test that was not run; grade() counts it as failed.
@@ -28,12 +29,13 @@ export async function runTests(
     ...sampleTests.map((test) => ({ kind: 'sample' as const, test })),
     ...hiddenTests.map((test) => ({ kind: 'hidden' as const, test })),
   ];
+  const program = withProgramHelpers(language, code);
   const runs: TestRun[] = [];
   for (const t of tests) {
     const timedOutBefore = runs.some((r) => r.run.timedOut);
     const run = timedOutBefore
       ? SKIPPED
-      : await piston.run(language, code, t.test.input);
+      : await piston.run(language, program, t.test.input);
     runs.push({ ...t, run });
   }
   return runs;

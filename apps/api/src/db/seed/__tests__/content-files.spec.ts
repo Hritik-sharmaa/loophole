@@ -54,6 +54,23 @@ describe('the real content/ folder', () => {
   });
 
   // ADR-024: the HTML & CSS track, graded by checks instead of tests.
+  // ADR-025: graded like Python, in Piston's Node runtime.
+  it('loads the JavaScript course as program exercises', () => {
+    const js = course('javascript');
+    expect(js.language).toBe('javascript');
+    expect(js.units.map((u) => [u.slug, u.lessons.length])).toEqual([
+      ['basics', 5],
+      ['decisions', 3],
+      ['loops', 4],
+      ['arrays', 4],
+      ['functions-objects', 4],
+    ]);
+    for (const lesson of js.units.flatMap((u) => u.lessons)) {
+      expect(lesson.exercise.checks, lesson.slug).toBeNull();
+      expect(lesson.exercise.hiddenTests.length).toBeGreaterThanOrEqual(3);
+    }
+  });
+
   it('loads the HTML & CSS course as web exercises', () => {
     const html = course('html-css');
     expect(html.language).toBe('html');

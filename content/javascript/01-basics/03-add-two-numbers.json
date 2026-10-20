@@ -1,0 +1,60 @@
+{
+  "slug": "add-two-numbers",
+  "title": "Add two numbers",
+  "position": 3,
+  "learn": {
+    "cards": [
+      {
+        "title": "prompt() gives text",
+        "body": "`prompt()` always gives back text, even when the user types digits. Adding two pieces of text with `+` glues them together.",
+        "code": "const a = prompt();\nconst b = prompt();\nconsole.log(a + b);\n",
+        "input": "2\n3\n",
+        "output": "23"
+      },
+      {
+        "title": "Number() makes a number",
+        "body": "Wrap the text in `Number()` to turn it into a number. Then the maths works.",
+        "code": "const a = Number(prompt());\nconst b = Number(prompt());\nconsole.log(a - b);\n",
+        "input": "10\n4\n",
+        "output": "6"
+      },
+      {
+        "title": "Maths operators",
+        "body": "`+`, `-`, `*` and `/` add, subtract, multiply and divide. As in school maths, `*` and `/` happen first; brackets change the order.",
+        "code": "console.log(2 + 3 * 4);\nconsole.log((2 + 3) * 4);\n",
+        "output": "14\n20"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "console.log(\"4\" + \"4\");\n",
+      "options": ["8", "44", "An error"],
+      "answer": 1,
+      "explanation": "Both values are strings in quotes, so `+` glues them into 44."
+    }
+  },
+  "exercise": {
+    "prompt": "Read two whole numbers, one per line, and print their sum.",
+    "starterCode": "const a = Number(prompt());\nconst b = Number(prompt());\n// print the sum below\n",
+    "sampleTests": [
+      {
+        "input": "2\n3\n",
+        "expectedOutput": "5"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "0\n0\n",
+        "expectedOutput": "0"
+      },
+      {
+        "input": "-4\n10\n",
+        "expectedOutput": "6"
+      },
+      {
+        "input": "1000000\n1\n",
+        "expectedOutput": "1000001"
+      }
+    ]
+  }
+}

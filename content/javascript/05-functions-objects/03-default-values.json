@@ -1,0 +1,52 @@
+{
+  "slug": "default-values",
+  "title": "Default values",
+  "position": 3,
+  "learn": {
+    "cards": [
+      {
+        "title": "Defaults",
+        "body": "Give a parameter a default with `=`. When the caller leaves it out, the default is used.",
+        "code": "function repeat(word, times = 2) {\n  return word.repeat(times);\n}\n\nconsole.log(repeat(\"ha\"));\nconsole.log(repeat(\"ha\", 4));\n",
+        "output": "haha\nhahahaha"
+      },
+      {
+        "title": "Returning text",
+        "body": "A function can build a string, often between backticks, and return it.",
+        "code": "const label = (item, price = 1) => `${item}: ${price} coin`;\nconsole.log(label(\"apple\"));\nconsole.log(label(\"melon\", 3));\n",
+        "output": "apple: 1 coin\nmelon: 3 coin"
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "function tag(name, mark = \"*\") {\n  return mark + name + mark;\n}\n\nconsole.log(tag(\"hi\", \"!\"));\n",
+      "options": ["!hi!", "*hi*", "!hi"],
+      "answer": 0,
+      "explanation": "The call passes \"!\", so it replaces the default \"*\"."
+    }
+  },
+  "exercise": {
+    "prompt": "Finish `greet(name, greeting = \"Hello\")` so it returns `<greeting>, <name>!`. The code below prints `greet(name)` and then `greet(name, \"Welcome\")`.",
+    "starterCode": "function greet(name, greeting = \"Hello\") {\n  // return the greeting text\n  return \"\";\n}\n\nconst name = prompt();\nconsole.log(greet(name));\nconsole.log(greet(name, \"Welcome\"));\n",
+    "sampleTests": [
+      {
+        "input": "Ada\n",
+        "expectedOutput": "Hello, Ada!\nWelcome, Ada!"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "Bo\n",
+        "expectedOutput": "Hello, Bo!\nWelcome, Bo!"
+      },
+      {
+        "input": "Mary Jane\n",
+        "expectedOutput": "Hello, Mary Jane!\nWelcome, Mary Jane!"
+      },
+      {
+        "input": "X\n",
+        "expectedOutput": "Hello, X!\nWelcome, X!"
+      }
+    ]
+  }
+}

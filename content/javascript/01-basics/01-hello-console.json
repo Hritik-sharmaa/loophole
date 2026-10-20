@@ -1,0 +1,56 @@
+{
+  "slug": "hello-console",
+  "title": "Hello, console",
+  "position": 1,
+  "learn": {
+    "cards": [
+      {
+        "title": "console.log() prints",
+        "body": "`console.log()` shows a value in the console, the text window where programs print. Text goes in quotes.",
+        "code": "console.log(\"Hello!\");\n",
+        "output": "Hello!"
+      },
+      {
+        "title": "One line each",
+        "body": "Each `console.log()` prints on its own line. The semicolon at the end marks the end of a statement.",
+        "code": "console.log(\"First line\");\nconsole.log(\"Second line\");\n",
+        "output": "First line\nSecond line"
+      },
+      {
+        "title": "Every character counts",
+        "body": "The grader compares your output letter by letter, so capitals, commas and spaces all matter. `Hello` and `hello` are different."
+      }
+    ],
+    "check": {
+      "question": "What does this print?",
+      "code": "console.log(\"Hi, \" + \"there!\");\n",
+      "options": ["Hi, there!", "\"Hi, \" + \"there!\"", "Hi,there!"],
+      "answer": 0,
+      "explanation": "`+` joins the two strings exactly as they are, then `console.log()` prints the result without quotes."
+    }
+  },
+  "exercise": {
+    "prompt": "Every programmer starts here. Print exactly `Hello, JavaScript!`",
+    "starterCode": "// Print the greeting below\n",
+    "sampleTests": [
+      {
+        "input": "",
+        "expectedOutput": "Hello, JavaScript!"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "",
+        "expectedOutput": "Hello, JavaScript!"
+      },
+      {
+        "input": "\n",
+        "expectedOutput": "Hello, JavaScript!"
+      },
+      {
+        "input": "ignored\n",
+        "expectedOutput": "Hello, JavaScript!"
+      }
+    ]
+  }
+}
