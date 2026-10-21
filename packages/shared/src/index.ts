@@ -83,6 +83,20 @@ export type CoursePath = {
 // no quick checks, no exercises.
 // GET /courses/:slug/units/:unitId/bug-hunt (ADR-031): every bug card in
 // a unit, for the review at the end of the unit. Ungraded; no XP.
+// GET /courses/:slug/practice (ADR-037): a mixed review from the lessons
+// the learner has finished: their quick checks and spot-the-bug cards,
+// older lessons more often. Ungraded; no XP. Empty until a lesson is done.
+export type PracticeItem =
+  | { kind: 'check'; lesson: string; check: QuickCheck }
+  | {
+      kind: 'bug';
+      lesson: string;
+      body: string;
+      code: string;
+      bug: { line: number; fix: string };
+    };
+export type PracticeSet = { course: CourseSummary; items: PracticeItem[] };
+
 export type UnitBugHunt = {
   unitId: string;
   title: string;

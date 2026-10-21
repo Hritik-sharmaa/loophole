@@ -30,6 +30,8 @@ import type {
   LessonLearn,
   LessonState,
   MeResponse,
+  PracticeItem,
+  PracticeSet,
   QueueJoined,
   RatingLeaderboard,
   RunResponse,
@@ -615,6 +617,46 @@ const apiRoutes: [
       return course
         ? ok(path(u, course))
         : fail(404, 'NOT_FOUND', 'Course not found.');
+    },
+  ],
+  // ADR-037: every quick check and bug card of the lessons this user
+  // finished in the course (the real API samples up to 8, older first).
+  [
+    'GET',
+    /^\/courses\/([^/]+)\/practice$/,
+    (m, u) => {
+      const course = courses.find((c) => c.slug === m[1]);
+      if (!course) return fail(404, 'NOT_FOUND', 'Course not found.');
+      const items: PracticeItem[] = course.units
+        .flatMap((unit) => unit.lessons)
+        .filter((l) => u.completed.has(l.id) && l.learn)
+        .flatMap((l): PracticeItem[] => [
+          { kind: 'check', lesson: l.title, check: l.learn!.check },
+          ...l.learn!.cards.flatMap((c): PracticeItem[] =>
+            c.bug && c.code !== undefined
+              ? [
+                  {
+                    kind: 'bug',
+                    lesson: l.title,
+                    body: c.body,
+                    code: c.code,
+                    bug: c.bug,
+                  },
+                ]
+              : [],
+          ),
+        ])
+        .slice(0, 8);
+      const set: PracticeSet = {
+        course: {
+          id: course.id,
+          slug: course.slug,
+          title: course.title,
+          language: course.language,
+        },
+        items,
+      };
+      return ok(set);
     },
   ],
   [

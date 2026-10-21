@@ -16,11 +16,14 @@ import { chip } from '@/components/ui/card';
 export function QuickCheck({
   guide,
   check,
+  nextLabel = 'Start the exercise',
   onDone,
 }: {
   guide: GuideId;
   check: QuickCheckData;
-  onDone: () => void;
+  nextLabel?: string;
+  // firstTry: solved with no wrong pick (the practice stop counts these).
+  onDone: (firstTry: boolean) => void;
 }) {
   const [wrong, setWrong] = useState<Set<number>>(new Set());
   const [solved, setSolved] = useState(false);
@@ -110,11 +113,11 @@ export function QuickCheck({
         </div>
         <button
           type="button"
-          onClick={onDone}
+          onClick={() => onDone(wrong.size === 0)}
           disabled={!solved}
           className={`${primaryButton} min-w-40 uppercase sm:min-w-52`}
         >
-          Start the exercise
+          {nextLabel}
         </button>
       </ActionBar>
     </section>

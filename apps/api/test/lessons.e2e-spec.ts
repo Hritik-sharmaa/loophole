@@ -4,6 +4,7 @@ import type {
   CourseOverview,
   CoursePath,
   LessonDetail,
+  PracticeSet,
   UnitBugHunt,
   UnitCheatSheet,
 } from '@loophole/shared';
@@ -209,6 +210,13 @@ describe('Lessons (e2e)', () => {
     await get('/courses/python/units/not-a-uuid/cheatsheet', 400);
   });
 
+  it('GET /courses/:slug/practice is empty before any lesson is done (ADR-037)', async () => {
+    const set = (await get('/courses/python/practice', 200)) as PracticeSet;
+    expect(set.course.slug).toBe('python');
+    expect(set.items).toEqual([]);
+    await get('/courses/nope/practice', 404);
+  });
+
   it('GET /lessons/:id returns the active lesson with sample tests', async () => {
     const [first] = lessonIds();
     const body = (await get(`/lessons/${first}`, 200)) as LessonDetail;
@@ -258,6 +266,16 @@ describe('Lessons (e2e)', () => {
     const [python] = (await get('/courses', 200)) as CourseOverview[];
     expect(python.completedCount).toBe(1);
     expect(python.lastActivityAt).not.toBeNull();
+  });
+
+  it('practice brings back the quick check and bug card of a finished lesson', async () => {
+    const set = (await get('/courses/python/practice', 200)) as PracticeSet;
+    expect(set.items.map((i) => i.kind).sort()).toEqual(['bug', 'check']);
+    expect(set.items.every((i) => i.lesson === 'Hello, world')).toBe(true);
+    const check = set.items.find((i) => i.kind === 'check');
+    expect(check?.kind === 'check' && check.check.options).toContain(
+      'Hi, there!',
+    );
   });
 
   it('returns 404 for an unknown lesson or course, 400 for a bad id', async () => {

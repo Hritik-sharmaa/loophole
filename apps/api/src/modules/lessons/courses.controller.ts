@@ -2,6 +2,7 @@ import { Controller, Get, Param, ParseUUIDPipe } from '@nestjs/common';
 import type {
   CourseOverview,
   CoursePath,
+  PracticeSet,
   UnitBugHunt,
   UnitCheatSheet,
 } from '@loophole/shared';
@@ -26,6 +27,15 @@ export class CoursesController {
     @Param('slug') slug: string,
   ): Promise<CoursePath> {
     return this.lessons.getPath(user.id, slug);
+  }
+
+  // A mixed review from the lessons this user finished (ADR-037).
+  @Get(':slug/practice')
+  practice(
+    @CurrentUser() user: AuthUser,
+    @Param('slug') slug: string,
+  ): Promise<PracticeSet> {
+    return this.lessons.getPractice(user.id, slug);
   }
 
   // One unit's Learn cards on a single page (ADR-030).

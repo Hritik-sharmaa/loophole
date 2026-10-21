@@ -6,6 +6,12 @@ Format: **ADR-NNN · Title** — Status (Accepted / Superseded by ADR-NNN) · Da
 
 ---
 
+**ADR-037 · The practice stop: a mixed review of finished lessons** — Accepted · 2026-10-21
+
+- Decision: `GET /courses/:slug/practice` returns up to 8 items drawn from the lessons the user has finished in that course: each lesson's quick check and its spot-the-bug card. `pickPractice` (`modules/lessons/practice.ts`, unit-tested) samples without replacement, weighting each lesson by how long ago it was finished (oldest weighs the most, the newest still 1): a light spaced repetition with no new table. The course page shows "Practice what you've learned" once a lesson is done; `/learn/[slug]/practice` plays the items full screen with the quick check and spot-the-bug components and ends with "n of m right the first time". Every visit is a new mix. Ungraded, unrecorded, no XP.
+- Why: from the ideas backlog: Duolingo puts practice on the path so old lessons come back before they're forgotten. Both question types already exist in every lesson (ADR-021, ADR-031), so practice needs no new content.
+- Trade-off: no memory of what the learner got wrong, so weak spots aren't targeted yet; that would need storing answers. No XP, so practice doesn't move the daily goal (the same choice as the Bug hunt).
+
 **ADR-036 · "Explain it differently" on Learn cards** — Accepted · 2026-10-21
 
 - Decision: under each teaching card a quiet link, "Didn't get it? Explain it differently", calls `POST /ai/explain-card { lessonId, card }`. The server reads the card (title, body, example) from the lesson itself, checks the lesson is unlocked, and asks Gemini (`GeminiClient.explainCard`) to explain the same idea again in simpler words with an everyday comparison; the answer is cut to 120 words and shown as the guide's second bubble ("In other words"), with read aloud. It counts toward the same daily cap (20) and the 10-a-minute limit as Hint and Explain my error. Spot-the-bug cards are refused (404), since their code holds the answer.

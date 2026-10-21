@@ -18,6 +18,22 @@ test('J-4: a returning learner sees their streak, goal and rank', async ({
   await expect(page.getByText('1 day streak')).toBeAttached();
   await expect(page.getByText('Daily goal: 10 of 20 XP today')).toBeAttached();
 
+  // The practice stop (ADR-037) brings back Hello, world: its quick check,
+  // then its spot-the-bug card (the bug is on line 2).
+  await page.goto('/learn/python');
+  await page
+    .getByRole('link', { name: /Practice what you.ve learned/ })
+    .click();
+  await page.getByText('Hi, there!', { exact: true }).click();
+  await page.getByRole('button', { name: 'Next question' }).click();
+  await page.getByRole('button', { name: 'Line 2', exact: true }).click();
+  await expect(page.getByText('You found it!')).toBeVisible();
+  await page.getByRole('button', { name: 'Finish' }).click();
+  await expect(
+    page.getByRole('heading', { name: 'Practice done!' }),
+  ).toBeVisible();
+  await expect(page.getByText(/2 of 2/)).toBeVisible();
+
   // The learner's own row on this week's board, marked "(you)".
   await page.goto('/leaderboard');
   await expect(

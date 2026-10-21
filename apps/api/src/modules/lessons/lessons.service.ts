@@ -9,6 +9,8 @@ import type {
   GitScenario,
   LessonDetail,
   LessonState,
+  PracticeItem,
+  PracticeSet,
   UnitBugHunt,
   UnitCheatSheet,
 } from '@loophole/shared';
@@ -25,6 +27,7 @@ import {
 } from '../../db/schema/index.js';
 import { orderCourses } from './course-order.js';
 import { lessonStates } from './lesson-states.js';
+import { pickPractice } from './practice.js';
 
 // The columns a course summary exposes, reused by every query below.
 const COURSE_COLUMNS = {
@@ -177,6 +180,41 @@ export class LessonsService {
         ),
       ),
     };
+  }
+
+  // The practice stop (ADR-037): quick checks and bug cards from the
+  // lessons this user finished in the course, older ones more often.
+  // Answers travel to the browser, as they already do in lessons: nothing
+  // here is graded or paid.
+  async getPractice(userId: string, courseSlug: string): Promise<PracticeSet> {
+    const [course] = await this.db.drizzle
+      .select(COURSE_COLUMNS)
+      .from(courses)
+      .where(eq(courses.slug, courseSlug));
+    if (!course) throw notFound('Course');
+
+    const done = await this.db.drizzle
+      .select({ title: lessons.title, learn: lessons.learn })
+      .from(userProgress)
+      .innerJoin(lessons, eq(userProgress.lessonId, lessons.id))
+      .innerJoin(units, eq(lessons.unitId, units.id))
+      .where(
+        and(eq(userProgress.userId, userId), eq(units.courseId, course.id)),
+      )
+      // Finished longest ago first: pickPractice weighs those the most.
+      .orderBy(asc(userProgress.completedAt));
+
+    const pool = done.flatMap(({ title, learn }): PracticeItem[] => [
+      ...(learn
+        ? [{ kind: 'check' as const, lesson: title, check: learn.check }]
+        : []),
+      ...(learn?.cards ?? []).flatMap(({ body, code, bug }) =>
+        bug && code !== undefined
+          ? [{ kind: 'bug' as const, lesson: title, body, code, bug }]
+          : [],
+      ),
+    ]);
+    return { course, items: pickPractice(pool) };
   }
 
   // A unit's lessons with their Learn step, in path order. 404 unless the

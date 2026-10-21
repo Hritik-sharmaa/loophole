@@ -4,6 +4,7 @@ import type {
   CourseOverview,
   CoursePath,
   LessonDetail,
+  PracticeSet,
   UnitBugHunt,
   UnitCheatSheet,
 } from '@loophole/shared';
@@ -70,5 +71,17 @@ export function useBugHunt(slug: string, unitId: string, enabled: boolean) {
     retry: (failures, error) =>
       !(error instanceof ApiError && error.status < 500) && failures < 1,
     staleTime: Infinity,
+  });
+}
+
+// The practice stop's mixed review (ADR-037). A new mix on every visit.
+export function usePractice(slug: string, enabled: boolean) {
+  return useQuery({
+    queryKey: ['practice', slug],
+    queryFn: () =>
+      apiFetch<PracticeSet>(`/courses/${encodeURIComponent(slug)}/practice`),
+    enabled,
+    staleTime: 0,
+    gcTime: 0,
   });
 }

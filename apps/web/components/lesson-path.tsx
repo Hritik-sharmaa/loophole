@@ -1,7 +1,7 @@
 'use client';
 
 import type { CoursePath, LessonState } from '@loophole/shared';
-import { Award, Bug } from 'lucide-react';
+import { Award, Bug, Dumbbell } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { CheatSheet } from '@/components/cheat-sheet';
@@ -10,6 +10,7 @@ import { GUIDES, Guide, guideFor } from '@/components/guide';
 import { LessonNode } from '@/components/lesson-node';
 import { ProgressBar } from '@/components/progress-bar';
 import { UnitBadge } from '@/components/unit-badge';
+import { secondaryButton } from '@/components/ui/buttons';
 import { chip, stickerCard } from '@/components/ui/card';
 import {
   PATH_WIDTH,
@@ -95,6 +96,17 @@ export function LessonPath({
                 ))}
               </ul>
             </div>
+            {/* The practice stop (ADR-037): once there is something to
+                review. */}
+            {completed > 0 && (
+              <Link
+                href={`/learn/${path.course.slug}/practice`}
+                className={`${secondaryButton} self-start px-4 py-2 text-sm`}
+              >
+                <Dumbbell className="size-4" strokeWidth={2.5} aria-hidden />
+                Practice what you&apos;ve learned
+              </Link>
+            )}
           </div>
           {/* The course's guide (ADR-028), cheering once it's all done. */}
           <Guide
