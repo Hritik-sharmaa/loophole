@@ -19,6 +19,7 @@ import { primaryButton, secondaryButton } from '@/components/ui/buttons';
 import { chip, stickerCard, stickerOutline } from '@/components/ui/card';
 import { celebrate } from '@/lib/celebrate';
 import { formatDuration } from '@/lib/format-time';
+import { languageInfo } from '@/lib/languages';
 import {
   useBotDuel,
   useForfeitBotDuel,
@@ -185,8 +186,8 @@ function Race({ duel, fetchedAt }: { duel: BotDuel; fetchedAt: number }) {
       <CodeEditor
         value={code}
         onChange={setCode}
-        fileName="main.py"
-        language="python"
+        fileName={languageInfo(duel.problem.language).file}
+        language={languageInfo(duel.problem.language).editor}
       />
 
       {!over && (
@@ -273,7 +274,7 @@ function Outcome({ duel }: { duel: BotDuel }) {
           type="button"
           onClick={() =>
             rematch.mutate(
-              { opponent: duel.opponent },
+              { opponent: duel.opponent, language: duel.problem.language },
               {
                 onSuccess: (next) => router.push(`/duels/bot/${next.id}`),
               },

@@ -29,21 +29,31 @@ test('J-3: a learner wins their first duel', async ({ page }) => {
   await expect(page.getByText('Rating +16')).toBeVisible();
 });
 
-// Practice duel against a guide bot (ADR-039): nobody else is needed. The
-// mock's bot takes four minutes, so the learner wins; then a rematch, which
-// they give up.
-test('a learner races a crew bot, wins, then gives up a rematch', async ({
+// Practice duel against a guide bot (ADR-039), in JavaScript (ADR-040):
+// nobody else is needed. The mock's bot takes four minutes, so the learner
+// wins; then a rematch, which they give up.
+test('a learner picks JavaScript, races a crew bot, wins, then gives up a rematch', async ({
   page,
 }) => {
   await signUp(page, 'bot');
   await finishWelcome(page);
   await page.goto('/duels');
 
+  // Python until they pick; the pick is remembered on the next visit.
+  const js = page.getByRole('radio', { name: 'JavaScript' });
+  await expect(page.getByRole('radio', { name: 'Python' })).toBeChecked();
+  await js.click();
+  await expect(js).toBeChecked();
+  await expect(page.getByText(/real JavaScript duel problem/)).toBeVisible();
+  await page.reload();
+  await expect(js).toBeChecked();
+
   await page.getByRole('button', { name: 'Race Meera' }).click();
   await expect(page).toHaveURL(/\/duels\/bot\/[\w-]+$/);
   await expect(
     page.getByRole('heading', { name: 'Average of a list' }),
   ).toBeVisible();
+  await expect(page.getByText('main.js')).toBeVisible();
   await expect(page.getByRole('timer')).toBeVisible();
   await expect(page.getByText(/0 \/ 5\s+tests passing/)).toBeVisible();
 

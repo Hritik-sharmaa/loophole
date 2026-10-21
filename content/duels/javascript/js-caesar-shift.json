@@ -1,0 +1,33 @@
+{
+  "slug": "js-caesar-shift",
+  "title": "Caesar shift",
+  "language": "javascript",
+  "difficulty": 2,
+  "description": "The first line is a shift K (0 to 25); the second is text in lowercase letters and spaces. Move every letter K places forward in the alphabet, wrapping from z back to a, and keep spaces as they are.",
+  "buggyCode": "const k = Number(prompt());\nconst text = prompt();\nlet out = '';\nfor (const ch of text) {\n  out += String.fromCharCode(ch.charCodeAt(0) + k);\n}\nconsole.log(out);\n",
+  "bugCount": 2,
+  "sampleTests": [
+    {
+      "input": "1\nabc\n",
+      "expectedOutput": "bcd"
+    }
+  ],
+  "hiddenTests": [
+    {
+      "input": "3\nxyz\n",
+      "expectedOutput": "abc"
+    },
+    {
+      "input": "2\nhi there\n",
+      "expectedOutput": "jk vjgtg"
+    },
+    {
+      "input": "0\nhello world\n",
+      "expectedOutput": "hello world"
+    },
+    {
+      "input": "13\nuryyb\n",
+      "expectedOutput": "hello"
+    }
+  ]
+}

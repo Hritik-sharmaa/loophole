@@ -1,15 +1,20 @@
 'use client';
 
-import type { DuelEnd } from '@loophole/shared';
+import type { DuelEnd, DuelLanguage } from '@loophole/shared';
 import { Flag, Swords } from 'lucide-react';
 import Link from 'next/link';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { AppHeader } from '@/components/app-header';
 import { BotOpponents } from '@/components/bot-opponents';
-import { Guide } from '@/components/guide';
+import { Guide, guideFor } from '@/components/guide';
 import { CodeEditor } from '@/components/code-editor';
 import { DuelCountdown } from '@/components/duel-countdown';
+import {
+  DuelLanguagePicker,
+  duelLanguageName,
+  useDuelLanguage,
+} from '@/components/duel-language-picker';
 import { InlineCode } from '@/components/inline-code';
 import { ProgressBar } from '@/components/progress-bar';
 import { SampleTests } from '@/components/sample-tests';
@@ -17,6 +22,7 @@ import { TestResults } from '@/components/test-results';
 import { primaryButton, secondaryButton } from '@/components/ui/buttons';
 import { chip, stickerCard, stickerOutline } from '@/components/ui/card';
 import { celebrate } from '@/lib/celebrate';
+import { languageInfo } from '@/lib/languages';
 import { useMe } from '@/lib/queries/use-me';
 import { useDuelSocket, type DuelState } from '@/lib/use-duel-socket';
 import { useRequireSession } from '@/lib/use-require-session';
@@ -33,6 +39,12 @@ export default function DuelsPage() {
   );
   const me = useMe(!loading);
   const queryClient = useQueryClient();
+  // ADR-040: the pool for both the live queue and the crew races.
+  const [language, setLanguage] = useDuelLanguage();
+  const outOfDuel =
+    state.phase === 'offline' ||
+    state.phase === 'idle' ||
+    state.phase === 'queued';
 
   // A finished duel changed ratings (S8): refresh the header, profile and
   // leaderboards.
@@ -47,6 +59,16 @@ export default function DuelsPage() {
     <>
       <AppHeader />
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-6 sm:px-6 sm:py-8">
+        {!loading && outOfDuel && (
+          <div className="mb-6">
+            {/* Locked while queued: leave the queue to switch. */}
+            <DuelLanguagePicker
+              value={language}
+              onChange={setLanguage}
+              disabled={state.phase === 'queued'}
+            />
+          </div>
+        )}
         {loading || state.phase === 'connecting' ? (
           <p className="text-text-secondary">Connecting to the duel server…</p>
         ) : state.phase === 'offline' ? (
@@ -54,8 +76,9 @@ export default function DuelsPage() {
         ) : state.phase === 'idle' || state.phase === 'queued' ? (
           <Lobby
             state={state}
+            language={language}
             rating={me.data?.rating}
-            onFind={findDuel}
+            onFind={() => findDuel(language)}
             onCancel={leaveQueue}
           />
         ) : (
@@ -65,18 +88,14 @@ export default function DuelsPage() {
             myId={myId}
             onSubmit={submit}
             onForfeit={forfeit}
-            onPlayAgain={findDuel}
+            onPlayAgain={() => findDuel(state.problem?.language ?? language)}
           />
         )}
         {/* Out of a duel, or the server is away: the crew (ADR-039) and
             the daily bug (ADR-035) train the same skill solo. Both are
             plain HTTP, so they work without the duel socket. */}
-        {(state.phase === 'offline' ||
-          state.phase === 'idle' ||
-          state.phase === 'queued') && <BotOpponents />}
-        {(state.phase === 'offline' ||
-          state.phase === 'idle' ||
-          state.phase === 'queued') && (
+        {outOfDuel && <BotOpponents language={language} />}
+        {outOfDuel && (
           <p className="mt-6 text-center">
             <Link
               href="/bug-of-the-day"
@@ -93,11 +112,13 @@ export default function DuelsPage() {
 
 function Lobby({
   state,
+  language,
   rating,
   onFind,
   onCancel,
 }: {
   state: DuelState;
+  language: DuelLanguage;
   rating: number | undefined;
   onFind: () => void;
   onCancel: () => void;
@@ -109,9 +130,9 @@ function Lobby({
       className={`${stickerCard} flex flex-col items-center gap-6 px-6 py-12 text-center`}
     >
       <div className="flex items-end gap-4">
-        {/* Duels are Python (content/duels/python), so Priya hosts them. */}
+        {/* The picked language's guide hosts: Priya, or Arjun. */}
         <Guide
-          guide="priya"
+          guide={guideFor(language)}
           mood={queued ? 'thinking' : 'idle'}
           className="h-28 w-20"
         />
@@ -134,7 +155,7 @@ function Lobby({
       {queued ? (
         <div role="status" className="flex flex-col items-center gap-4">
           <p className="font-bold">
-            Looking for an opponent…
+            Looking for a {duelLanguageName(language)} opponent…
             {state.position !== null && state.position > 1
               ? ` (you are #${state.position} in line)`
               : ''}
@@ -222,6 +243,7 @@ function Room({
       {end && (
         <Outcome
           end={end}
+          language={problem.language}
           myId={myId}
           opponent={opponent?.username ?? 'Your opponent'}
           onPlayAgain={onPlayAgain}
@@ -242,7 +264,12 @@ function Room({
 
       <SampleTests tests={problem.sampleTests} />
 
-      <CodeEditor value={code} onChange={setCode} fileName="main.py" />
+      <CodeEditor
+        value={code}
+        onChange={setCode}
+        fileName={languageInfo(problem.language).file}
+        language={languageInfo(problem.language).editor}
+      />
 
       {!end && (
         <div className="flex flex-wrap items-center gap-3">
@@ -281,11 +308,13 @@ function Room({
 
 function Outcome({
   end,
+  language,
   myId,
   opponent,
   onPlayAgain,
 }: {
   end: DuelEnd;
+  language: DuelLanguage;
   myId: string | null;
   opponent: string;
   onPlayAgain: () => void;
@@ -311,7 +340,7 @@ function Outcome({
       className={`${stickerOutline} flex flex-wrap items-center justify-between gap-4 px-6 py-4 ${won ? 'bg-lemon' : 'bg-paper'}`}
     >
       <Guide
-        guide="priya"
+        guide={guideFor(language)}
         mood={won ? 'happy' : end.result === 'draw' ? 'idle' : 'oops'}
         className="h-24 w-[68px] shrink-0"
       />

@@ -123,14 +123,14 @@ Hidden test results show only `passed`, never input or expected output. Throttle
 
 ### Bot duels — Phase 3 (ADR-039)
 
-| Method | Path                         | Body           | Response                                                                                                                                                     |
-| ------ | ---------------------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| POST   | `/bot-duels`                 | `{ opponent }` | `BotDuel`: `{ id, opponent, problem: { title, description, buggyCode, sampleTests }, startedAt, endsAt, totalTests, botSchedule, result, timeMs, attempts }` |
-| GET    | `/bot-duels/:id`             | —              | `BotDuel`; 404 for someone else's                                                                                                                            |
-| POST   | `/bot-duels/:id/submissions` | `{ code }`     | `{ status, testsPassed, totalTests, results, stderr, duel: BotDuel }` — 409 `ILLEGAL_TRANSITION` once the race is over; 10 a minute per user                 |
-| POST   | `/bot-duels/:id/forfeit`     | —              | `BotDuel` with `result: "gave-up"`; 409 once over                                                                                                            |
+| Method | Path                         | Body                     | Response                                                                                                                                                               |
+| ------ | ---------------------------- | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| POST   | `/bot-duels`                 | `{ opponent, language }` | `BotDuel`: `{ id, opponent, problem: { title, language, description, buggyCode, sampleTests }, startedAt, endsAt, totalTests, botSchedule, result, timeMs, attempts }` |
+| GET    | `/bot-duels/:id`             | —                        | `BotDuel`; 404 for someone else's                                                                                                                                      |
+| POST   | `/bot-duels/:id/submissions` | `{ code }`               | `{ status, testsPassed, totalTests, results, stderr, duel: BotDuel }` — 409 `ILLEGAL_TRANSITION` once the race is over; 10 a minute per user                           |
+| POST   | `/bot-duels/:id/forfeit`     | —                        | `BotDuel` with `result: "gave-up"`; 409 once over                                                                                                                      |
 
-- `opponent` is `meera`, `arjun` or `harpreet` (else 400). Starting is limited to 10 a minute. The problem is random from the Python duel pool.
+- `opponent` is `meera`, `arjun` or `harpreet`; `language` is `python` or `javascript` (ADR-040); anything else is 400. Starting is limited to 10 a minute. The problem is random from that language's duel pool.
 - `botSchedule` is the ms after `startedAt` at which the bot passes each test; its last entry is when the bot finishes. `result` is `null`, `won`, `lost` or `gave-up`; `timeMs` is set when won.
 - Any read after the bot's finish marks the race `lost`. A full pass received before the bot's finish wins, even if a read marked the race lost while that pass was being graded. No rating or XP changes.
 
@@ -189,7 +189,7 @@ Namespace: `/duels`. Connect with `auth: { token: <supabase access token> }`; th
 
 | Event          | Payload            | Allowed when                         |
 | -------------- | ------------------ | ------------------------------------ |
-| `queue:join`   | `{}`               | not in queue or duel                 |
+| `queue:join`   | `{ language? }`    | not in queue or duel                 |
 | `queue:leave`  | `{}`               | in queue                             |
 | `duel:submit`  | `{ duelId, code }` | duel `in_progress`, user is a player |
 | `duel:forfeit` | `{ duelId }`       | duel `in_progress`                   |
@@ -200,7 +200,7 @@ Namespace: `/duels`. Connect with `auth: { token: <supabase access token> }`; th
 | --------------- | ------------------------------------------------------------------------------------------------ | ------------------ |
 | `queue:joined`  | `{ position }`                                                                                   | the player         |
 | `duel:matched`  | `{ duelId, opponent: { username, elo } }`                                                        | both players       |
-| `duel:start`    | `{ duelId, problem: { title, description, buggyCode, sampleTests }, endsAt }`                    | room `duel:<id>`   |
+| `duel:start`    | `{ duelId, problem: { title, language, description, buggyCode, sampleTests }, endsAt }`          | room `duel:<id>`   |
 | `duel:progress` | `{ userId, testsPassed, totalTests }`                                                            | room               |
 | `duel:result`   | `{ testsPassed, totalTests, results }`                                                           | the submitter only |
 | `duel:end`      | `{ duelId, result: "win" \| "draw" \| "forfeit", winnerId, ratingChange: { [userId]: number } }` | room               |
@@ -211,6 +211,7 @@ Rules: the opponent's code is never sent; `endsAt` is an ISO timestamp the clien
 
 - **Connect:** a missing or bad token fails the handshake with `connect_error`, `err.data = { code: "UNAUTHENTICATED", message }`. A player mid-duel who reconnects (reload, second tab) gets `duel:matched` and `duel:start` again for that duel.
 - **Errors** arrive as `error` events with the REST codes: `VALIDATION_FAILED` (bad payload), `NOT_FOUND` (unknown duel or not a player), `ILLEGAL_TRANSITION` (duel not running, or `queue:join` while in a duel), `RATE_LIMITED` (throttle).
+- **Languages (ADR-040):** `queue:join` takes `language`, `python` or `javascript` (no payload means `python`; anything else is `VALIDATION_FAILED`). Only players who picked the same language are paired, and the duel's problem comes from that pool. `queue:joined.position` is the place among players waiting for that language. Queueing again from another tab may switch language and keeps the wait.
 - `duel:result` uses the lesson grading (hidden tests report only `passed`); `duel:progress` goes to both players.
 - `duel:end` reaches both players exactly once. `ratingChange` is each player's Elo change (S8): K = 32, a draw scores 0.5, a forfeit counts as a loss, and the two changes always add up to 0. A submission graded after `endsAt` or after the end changes nothing.
 - At most 20 duels run at once (NFR-07); beyond that, matched pairs wait in the queue.

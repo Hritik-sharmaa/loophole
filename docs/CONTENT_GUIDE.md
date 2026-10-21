@@ -228,6 +228,8 @@ A course whose `language` is `html` has web exercises: the learner writes one pa
 - Start from a correct program, then inject 1–3 realistic bugs (off-by-one, wrong operator, wrong variable, missing return, bad condition).
 - The buggy code must run without crashing on at least one test, so both players see partial progress.
 - Solvable by an intermediate learner in 2–4 minutes.
-- At least 15 problems before S7 ends: 6 at difficulty 1, 6 at 2, 3 at 3. (Done: `content/duels/python/`, checked in CI by `content-files.spec.ts`.)
-- Keep the fixed program in `content-solutions/duels/<language>/<slug>.py` (git-ignored), and check it in Piston before committing: the solution passes every test, and the buggy code passes at least one and fails at least one, so both players see partial progress.
+- At least 15 problems per language: 6 at difficulty 1, 6 at 2, 3 at 3. (Done: `content/duels/python/` and `content/duels/javascript/`, checked in CI by `content-files.spec.ts`.)
+- Slugs are unique across languages: JavaScript problems start with `js-`. The folder name must match the file's `language`.
+- JavaScript problems read input with `prompt()` (one line per call, ADR-025) and print with `console.log`. Prefer bugs JavaScript learners really meet: a number left as a string from `prompt()`, `sort()` without a compare function, `''.split(' ')` giving `['']`, a method named without `()`.
+- Keep the fixed program in `content-solutions/duels/<language>/<slug>.py` (or `.js`; git-ignored), and check it in Piston before committing: the solution passes every test, and the buggy code passes at least one and fails at least one, so both players see partial progress.
 - `bugCount` is for authors only; the seed does not store it.

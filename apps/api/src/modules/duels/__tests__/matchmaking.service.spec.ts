@@ -61,8 +61,20 @@ describe('MatchmakingService', () => {
 
     queue.join('b', 's2', 1500, 30_000); // 300 apart; a has waited 30 s: ±350
     expect(queue.takePair(30_000)).toEqual([
-      { userId: 'a', socketId: 'tab2', elo: 1200, joinedAt: 0 },
-      { userId: 'b', socketId: 's2', elo: 1500, joinedAt: 30_000 },
+      {
+        userId: 'a',
+        socketId: 'tab2',
+        elo: 1200,
+        language: 'python',
+        joinedAt: 0,
+      },
+      {
+        userId: 'b',
+        socketId: 's2',
+        elo: 1500,
+        language: 'python',
+        joinedAt: 30_000,
+      },
     ]);
   });
 
@@ -74,5 +86,29 @@ describe('MatchmakingService', () => {
     queue.leaveSocket('s2');
     queue.join('d', 's4', 1200, 0);
     expect(ids(queue.takePair(0))).toEqual(['c', 'd']);
+  });
+
+  // ADR-040: one queue per duel language.
+  it('pairs only players who picked the same language', () => {
+    expect(queue.join('py1', 's1', 1200, 0, 'python')).toBe(1);
+    expect(queue.join('js1', 's2', 1200, 0, 'javascript')).toBe(1);
+    expect(queue.takePair(0)).toBeNull();
+
+    expect(queue.join('js2', 's3', 1210, 0, 'javascript')).toBe(2);
+    const pair = queue.takePair(0);
+    expect(ids(pair)).toEqual(['js1', 'js2']);
+    expect(pair?.map((p) => p.language)).toEqual(['javascript', 'javascript']);
+    expect(queue.takePair(0)).toBeNull(); // py1 still waits
+  });
+
+  it('a second tab can switch language, keeping the wait', () => {
+    queue.join('a', 'tab1', 1200, 0, 'python');
+    expect(queue.join('a', 'tab2', 1200, 30_000, 'javascript')).toBe(1);
+    queue.join('b', 's2', 1200, 30_000, 'javascript');
+    expect(queue.takePair(30_000)?.[0]).toMatchObject({
+      userId: 'a',
+      language: 'javascript',
+      joinedAt: 0,
+    });
   });
 });

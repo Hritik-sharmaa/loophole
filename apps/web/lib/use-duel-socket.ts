@@ -2,12 +2,14 @@
 
 import type {
   DuelEnd,
+  DuelLanguage,
   DuelMatched,
   DuelOpponentStatus,
   DuelProgress,
   DuelStart,
   DuelSubmissionResult,
   QueueJoined,
+  QueueJoinRequest,
   SocketError,
 } from '@loophole/shared';
 import { useCallback, useEffect, useReducer, useRef } from 'react';
@@ -186,9 +188,12 @@ export function useDuelSocket(myId: string | null, enabled: boolean) {
     };
   }, [enabled, myId]);
 
-  const findDuel = useCallback(() => {
+  // Queues for a duel in one language (ADR-040).
+  const findDuel = useCallback((language: DuelLanguage) => {
     dispatch({ type: 'reset' });
-    socketRef.current?.emit('queue:join');
+    socketRef.current?.emit('queue:join', {
+      language,
+    } satisfies QueueJoinRequest);
   }, []);
   const leaveQueue = useCallback(() => {
     socketRef.current?.emit('queue:leave');

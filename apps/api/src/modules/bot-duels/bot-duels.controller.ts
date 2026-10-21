@@ -25,7 +25,7 @@ export class BotDuelsController {
     @CurrentUser() user: AuthUser,
     @Body() dto: StartBotDuelDto,
   ): Promise<BotDuel> {
-    return this.botDuels.start(user, dto.opponent);
+    return this.botDuels.start(user, dto.opponent, dto.language);
   }
 
   @Get(':id')

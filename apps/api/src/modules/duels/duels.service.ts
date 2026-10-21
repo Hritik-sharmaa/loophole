@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import type {
   DuelEnd,
+  DuelLanguage,
   DuelMatched,
   DuelOpponentStatus,
   DuelProgress,
@@ -179,7 +180,11 @@ export class DuelsService implements OnApplicationBootstrap, OnModuleDestroy {
 
   // ---- queue -------------------------------------------------------------
 
-  async joinQueue(userId: string, socketId: string): Promise<void> {
+  async joinQueue(
+    userId: string,
+    socketId: string,
+    language: DuelLanguage = 'python',
+  ): Promise<void> {
     this.limitActions(userId);
     if (await this.liveDuelOf(userId)) {
       throw new HttpException(
@@ -190,7 +195,13 @@ export class DuelsService implements OnApplicationBootstrap, OnModuleDestroy {
     // FR-18: the queue pairs by rating band.
     const elo =
       (await this.ratings.elosOf([userId])).get(userId) ?? STARTING_ELO;
-    const position = this.matchmaking.join(userId, socketId, elo);
+    const position = this.matchmaking.join(
+      userId,
+      socketId,
+      elo,
+      Date.now(),
+      language,
+    );
     this.emit(socketId, 'queue:joined', { position } satisfies QueueJoined);
     await this.matchWaiting();
   }
@@ -207,7 +218,7 @@ export class DuelsService implements OnApplicationBootstrap, OnModuleDestroy {
       if (!pair) return;
       this.starting++;
       try {
-        await this.start(pair[0].userId, pair[1].userId);
+        await this.start(pair[0].userId, pair[1].userId, pair[0].language);
       } catch (err) {
         this.logger.error(err);
         const error: SocketError = {
@@ -221,14 +232,21 @@ export class DuelsService implements OnApplicationBootstrap, OnModuleDestroy {
     }
   }
 
-  // waiting → matched → in_progress for two players (FR-17, FR-19).
-  private async start(playerA: string, playerB: string): Promise<void> {
+  // waiting → matched → in_progress for two players (FR-17, FR-19), on a
+  // random problem in the language they both picked (ADR-040).
+  private async start(
+    playerA: string,
+    playerB: string,
+    language: DuelLanguage,
+  ): Promise<void> {
     const [problem] = await this.db.drizzle
       .select({ id: duelProblems.id })
       .from(duelProblems)
+      .where(eq(duelProblems.language, language))
       .orderBy(sql`random()`)
       .limit(1);
-    if (!problem) throw new Error('No duel problems: run the seed.');
+    if (!problem)
+      throw new Error(`No ${language} duel problems: run the seed.`);
 
     assertTransition('waiting', 'matched');
     const [matched] = await this.db.drizzle
@@ -258,15 +276,18 @@ export class DuelsService implements OnApplicationBootstrap, OnModuleDestroy {
     duel: Duel,
     resume?: { socket: Socket; userId: string },
   ): Promise<void> {
-    const [problem] = await this.db.drizzle
+    const [row] = await this.db.drizzle
       .select({
         title: duelProblems.title,
+        language: duelProblems.language,
         description: duelProblems.description,
         buggyCode: duelProblems.buggyCode,
         sampleTests: duelProblems.sampleTests,
       })
       .from(duelProblems)
       .where(eq(duelProblems.id, duel.problemId));
+    // The seed only loads folders named after a DuelLanguage.
+    const problem = { ...row, language: row.language as DuelLanguage };
     const players = await this.db.drizzle
       .select({ id: profiles.id, username: profiles.username })
       .from(profiles)

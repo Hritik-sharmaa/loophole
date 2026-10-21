@@ -1,0 +1,33 @@
+{
+  "slug": "js-count-vowels",
+  "title": "Count the vowels",
+  "language": "javascript",
+  "difficulty": 1,
+  "description": "Read one word in lowercase letters and print how many vowels (a, e, i, o, u) it contains.",
+  "buggyCode": "const word = prompt();\nlet count = 0;\nfor (const ch of word) {\n  if ('aeio'.includes(ch)) {\n    count++;\n  }\n}\nconsole.log(count);\n",
+  "bugCount": 1,
+  "sampleTests": [
+    {
+      "input": "hello\n",
+      "expectedOutput": "2"
+    }
+  ],
+  "hiddenTests": [
+    {
+      "input": "sky\n",
+      "expectedOutput": "0"
+    },
+    {
+      "input": "queue\n",
+      "expectedOutput": "4"
+    },
+    {
+      "input": "education\n",
+      "expectedOutput": "5"
+    },
+    {
+      "input": "banana\n",
+      "expectedOutput": "3"
+    }
+  ]
+}

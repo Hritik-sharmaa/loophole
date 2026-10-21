@@ -1,0 +1,37 @@
+{
+  "slug": "js-run-length",
+  "title": "Run-length encoding",
+  "language": "javascript",
+  "difficulty": 3,
+  "description": "Read a line of lowercase letters and print each run of repeated letters as the letter followed by its count: aaabcc becomes a3b1c2. An empty line prints an empty line.",
+  "buggyCode": "const s = prompt();\nlet out = '';\nlet count = 1;\nfor (let i = 1; i < s.length; i++) {\n  if (s[i] === s[i - 1]) {\n    count++;\n  } else {\n    out += s[i - 1] + count;\n    count = 0;\n  }\n}\nconsole.log(out);\n",
+  "bugCount": 2,
+  "sampleTests": [
+    {
+      "input": "aaabcc\n",
+      "expectedOutput": "a3b1c2"
+    }
+  ],
+  "hiddenTests": [
+    {
+      "input": "\n",
+      "expectedOutput": ""
+    },
+    {
+      "input": "a\n",
+      "expectedOutput": "a1"
+    },
+    {
+      "input": "abcd\n",
+      "expectedOutput": "a1b1c1d1"
+    },
+    {
+      "input": "zzzz\n",
+      "expectedOutput": "z4"
+    },
+    {
+      "input": "aabbbaa\n",
+      "expectedOutput": "a2b3a2"
+    }
+  ]
+}

@@ -22,6 +22,7 @@ import type {
   DailyBugToday,
   DailyGoal,
   DuelEnd,
+  DuelLanguage,
   DuelStart,
   DuelSubmissionResult,
   ExplainCardResponse,
@@ -37,6 +38,7 @@ import type {
   PracticeItem,
   PracticeSet,
   QueueJoined,
+  QueueJoinRequest,
   RatingLeaderboard,
   RunResponse,
   SubmissionResult,
@@ -132,15 +134,31 @@ const lessonByExercise = new Map(
   [...lessonsById.values()].map((l) => [l.exerciseId, l]),
 );
 
+// The first problem of each duel pool (ADR-040); the files carry their
+// language, so they are already DuelStart problems.
 type DuelFile = DuelStart['problem'] & { slug: string };
-const duelProblem = readJson<DuelFile>(
-  join(
-    CONTENT,
-    'duels',
-    'python',
-    readdirSync(join(CONTENT, 'duels', 'python')).sort()[0],
-  ),
-);
+const firstDuel = (language: DuelLanguage) =>
+  readJson<DuelFile>(
+    join(
+      CONTENT,
+      'duels',
+      language,
+      readdirSync(join(CONTENT, 'duels', language)).sort()[0],
+    ),
+  );
+const duelProblems: Record<DuelLanguage, DuelFile> = {
+  python: firstDuel('python'),
+  javascript: firstDuel('javascript'),
+};
+// The bug of the day stays Python.
+const duelProblem = duelProblems.python;
+const problemView = (p: DuelFile): DuelStart['problem'] => ({
+  title: p.title,
+  language: p.language,
+  description: p.description,
+  buggyCode: p.buggyCode,
+  sampleTests: p.sampleTests,
+});
 
 // ---- Users ----
 
@@ -929,12 +947,9 @@ const apiRoutes: [
       const duel: BotDuel = {
         id: randomUUID(),
         opponent: body.opponent as BotOpponent,
-        problem: {
-          title: duelProblem.title,
-          description: duelProblem.description,
-          buggyCode: duelProblem.buggyCode,
-          sampleTests: duelProblem.sampleTests,
-        },
+        problem: problemView(
+          duelProblems[body.language as DuelLanguage] ?? duelProblem,
+        ),
         startedAt: new Date(now).toISOString(),
         endsAt: new Date(now + 300_000).toISOString(),
         totalTests: BOT_SCHEDULE.length,
@@ -968,7 +983,7 @@ const apiRoutes: [
       const duel = botDuels.get(m[1])!;
       duel.attempts++;
       const fixed =
-        String(body.code ?? '').trim() !== duelProblem.buggyCode.trim();
+        String(body.code ?? '').trim() !== duel.problem.buggyCode.trim();
       if (fixed) {
         duel.result = 'won';
         duel.timeMs = Date.now() - Date.parse(duel.startedAt);
@@ -1080,8 +1095,10 @@ io.of('/duels')
   .on('connection', (socket) => {
     const user = socket.data.user as UserState;
     let duelId: string | null = null;
+    let problem = duelProblem;
 
-    socket.on('queue:join', () => {
+    socket.on('queue:join', (data?: QueueJoinRequest) => {
+      problem = duelProblems[data?.language ?? 'python'];
       socket.emit('queue:joined', { position: 1 } satisfies QueueJoined);
       setTimeout(() => {
         duelId = randomUUID();
@@ -1091,12 +1108,7 @@ io.of('/duels')
         });
         const start: DuelStart = {
           duelId,
-          problem: {
-            title: duelProblem.title,
-            description: duelProblem.description,
-            buggyCode: duelProblem.buggyCode,
-            sampleTests: duelProblem.sampleTests,
-          },
+          problem: problemView(problem),
           endsAt: new Date(Date.now() + 5 * 60_000).toISOString(),
         };
         socket.emit('duel:start', start);
@@ -1118,7 +1130,7 @@ io.of('/duels')
 
     socket.on('duel:submit', (data: { duelId: string; code: string }) => {
       if (!duelId || data.duelId !== duelId) return;
-      const fixed = data.code.trim() !== duelProblem.buggyCode.trim();
+      const fixed = data.code.trim() !== problem.buggyCode.trim();
       const testsPassed = fixed ? TOTAL : 1;
       const result: DuelSubmissionResult = {
         testsPassed,

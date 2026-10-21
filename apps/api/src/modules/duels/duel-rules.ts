@@ -1,5 +1,12 @@
 import { ConflictException } from '@nestjs/common';
-import type { DuelResultKind, DuelStatus } from '@loophole/shared';
+import type {
+  DuelLanguage,
+  DuelResultKind,
+  DuelStatus,
+} from '@loophole/shared';
+
+// ADR-040: one duel pool per language (content/duels/<language>/).
+export const DUEL_LANGUAGES: readonly DuelLanguage[] = ['python', 'javascript'];
 
 // ADR-012: duels last 5 minutes.
 export const DUEL_DURATION_MS = 5 * 60 * 1000;

@@ -3,7 +3,12 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import type { BotDuel, BotDuelSubmission, BotOpponent } from '@loophole/shared';
+import type {
+  BotDuel,
+  BotDuelSubmission,
+  BotOpponent,
+  DuelLanguage,
+} from '@loophole/shared';
 import { and, eq, gt, isNull, or, sql } from 'drizzle-orm';
 import { DbService } from '../../db/db.service.js';
 import { botDuels, duelProblems } from '../../db/schema/index.js';
@@ -14,9 +19,6 @@ import { grade } from '../submissions/grading.js';
 import { runTests } from '../submissions/run-tests.js';
 import { UsersService } from '../users/users.service.js';
 import { botFinishAt, botSchedule } from './bot-duel-rules.js';
-
-// Bot duels use the live duels' pool (content/duels/python).
-const POOL_LANGUAGE = 'python';
 
 type Row = typeof botDuels.$inferSelect;
 
@@ -33,10 +35,12 @@ export class BotDuelsService {
     private readonly users: UsersService,
   ) {}
 
-  // POST /bot-duels: a random problem from the pool and a fresh schedule.
+  // POST /bot-duels: a random problem from the live duels' pool in that
+  // language (ADR-040) and a fresh schedule.
   async start(
     user: AuthUser,
     opponent: BotOpponent,
+    language: DuelLanguage,
     now = new Date(),
   ): Promise<BotDuel> {
     await this.users.ensureProfile(user);
@@ -47,7 +51,7 @@ export class BotDuelsService {
         hiddenTests: duelProblems.hiddenTests,
       })
       .from(duelProblems)
-      .where(eq(duelProblems.language, POOL_LANGUAGE))
+      .where(eq(duelProblems.language, language))
       .orderBy(sql`random()`)
       .limit(1);
     if (!problem) {
@@ -189,6 +193,7 @@ export class BotDuelsService {
     const [problem] = await this.db.drizzle
       .select({
         title: duelProblems.title,
+        language: duelProblems.language,
         description: duelProblems.description,
         buggyCode: duelProblems.buggyCode,
         sampleTests: duelProblems.sampleTests,
@@ -198,7 +203,8 @@ export class BotDuelsService {
     return {
       id: row.id,
       opponent: row.opponent,
-      problem,
+      // The seed only loads folders named after a DuelLanguage.
+      problem: { ...problem, language: problem.language as DuelLanguage },
       startedAt: row.startedAt.toISOString(),
       endsAt: row.endsAt.toISOString(),
       totalTests: row.botSchedule.length,

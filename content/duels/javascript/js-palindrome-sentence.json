@@ -1,0 +1,33 @@
+{
+  "slug": "js-palindrome-sentence",
+  "title": "Palindrome sentence",
+  "language": "javascript",
+  "difficulty": 2,
+  "description": "Read a line of text and print yes if it reads the same backwards, ignoring capital letters and spaces, otherwise print no. \"Never odd or even\" is a palindrome.",
+  "buggyCode": "const text = prompt();\nconst reversed = text.split('').reverse().join('');\nif (text === reversed) {\n  console.log('yes');\n} else {\n  console.log('no');\n}\n",
+  "bugCount": 2,
+  "sampleTests": [
+    {
+      "input": "level\n",
+      "expectedOutput": "yes"
+    }
+  ],
+  "hiddenTests": [
+    {
+      "input": "hello\n",
+      "expectedOutput": "no"
+    },
+    {
+      "input": "Racecar\n",
+      "expectedOutput": "yes"
+    },
+    {
+      "input": "never odd or even\n",
+      "expectedOutput": "yes"
+    },
+    {
+      "input": "Noon\n",
+      "expectedOutput": "yes"
+    }
+  ]
+}

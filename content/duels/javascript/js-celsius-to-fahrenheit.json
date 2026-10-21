@@ -1,0 +1,33 @@
+{
+  "slug": "js-celsius-to-fahrenheit",
+  "title": "Celsius to Fahrenheit",
+  "language": "javascript",
+  "difficulty": 1,
+  "description": "Read a temperature in Celsius (a whole number) and print it in Fahrenheit using F = C × 9 / 5 + 32, dropping anything after the decimal point (use Math.trunc()).",
+  "buggyCode": "const c = Number(prompt());\nconst f = (c * 5) / 9 + 32;\nconsole.log(Math.trunc(f));\n",
+  "bugCount": 1,
+  "sampleTests": [
+    {
+      "input": "100\n",
+      "expectedOutput": "212"
+    }
+  ],
+  "hiddenTests": [
+    {
+      "input": "0\n",
+      "expectedOutput": "32"
+    },
+    {
+      "input": "-40\n",
+      "expectedOutput": "-40"
+    },
+    {
+      "input": "37\n",
+      "expectedOutput": "98"
+    },
+    {
+      "input": "25\n",
+      "expectedOutput": "77"
+    }
+  ]
+}

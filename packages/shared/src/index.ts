@@ -371,8 +371,13 @@ export type ExplainCardResponse = {
 
 export type DuelStatus = 'matched' | 'in_progress' | 'completed';
 export type DuelResultKind = 'win' | 'draw' | 'forfeit';
+// The duel pools (content/duels/<language>/, ADR-040).
+export type DuelLanguage = 'python' | 'javascript';
 
 // Client → server
+// queue:join payload: players are only paired within one language. No
+// payload (older clients) means Python.
+export type QueueJoinRequest = { language?: DuelLanguage };
 export type DuelSubmitRequest = { duelId: string; code: string };
 export type DuelForfeitRequest = { duelId: string };
 
@@ -387,6 +392,7 @@ export type DuelStart = {
   duelId: string;
   problem: {
     title: string;
+    language: DuelLanguage;
     description: string;
     buggyCode: string;
     sampleTests: TestCase[];
@@ -490,7 +496,10 @@ export type DailyBugResult = {
 export type BotOpponent = 'meera' | 'arjun' | 'harpreet';
 
 // POST /bot-duels body.
-export type StartBotDuelRequest = { opponent: BotOpponent };
+export type StartBotDuelRequest = {
+  opponent: BotOpponent;
+  language: DuelLanguage;
+};
 
 // 'won': the learner's fix passed before the bot finished; 'lost': the bot
 // finished first; 'gave-up': the learner gave up.
@@ -503,6 +512,7 @@ export type BotDuel = {
   opponent: BotOpponent;
   problem: {
     title: string;
+    language: DuelLanguage;
     description: string;
     buggyCode: string;
     sampleTests: TestCase[];

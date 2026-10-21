@@ -1,0 +1,37 @@
+{
+  "slug": "js-merge-sorted",
+  "title": "Merge two sorted lists",
+  "language": "javascript",
+  "difficulty": 3,
+  "description": "Each of the two lines holds whole numbers in increasing order, separated by spaces (a line may be empty). Print all the numbers from both lines in increasing order on one line.",
+  "buggyCode": "const a = prompt().split(' ').map(Number);\nconst b = prompt().split(' ').map(Number);\nlet i = 0;\nlet j = 0;\nconst out = [];\nwhile (i < a.length && j < b.length) {\n  if (a[i] < b[j]) {\n    out.push(a[i]);\n    i++;\n  } else {\n    out.push(b[j]);\n    j++;\n  }\n}\nout.push(...a.slice(i + 1), ...b.slice(j));\nconsole.log(out.join(' '));\n",
+  "bugCount": 2,
+  "sampleTests": [
+    {
+      "input": "1 3 5\n2 4 6\n",
+      "expectedOutput": "1 2 3 4 5 6"
+    }
+  ],
+  "hiddenTests": [
+    {
+      "input": "\n\n",
+      "expectedOutput": ""
+    },
+    {
+      "input": "5 6\n1 2\n",
+      "expectedOutput": "1 2 5 6"
+    },
+    {
+      "input": "1 2\n5 6\n",
+      "expectedOutput": "1 2 5 6"
+    },
+    {
+      "input": "1 2 3\n\n",
+      "expectedOutput": "1 2 3"
+    },
+    {
+      "input": "2\n1 3\n",
+      "expectedOutput": "1 2 3"
+    }
+  ]
+}

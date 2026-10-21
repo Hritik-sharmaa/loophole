@@ -15,7 +15,11 @@ import {
   SupabaseAuthClient,
   type AuthUser,
 } from '../../integrations/supabase-auth.client.js';
-import { DuelForfeitDto, DuelSubmitDto } from './dto/duel-events.dto.js';
+import {
+  DuelForfeitDto,
+  DuelSubmitDto,
+  QueueJoinDto,
+} from './dto/duel-events.dto.js';
 import { DuelsService } from './duels.service.js';
 
 type SocketData = { user: AuthUser };
@@ -77,8 +81,11 @@ export class DuelsGateway
   }
 
   @SubscribeMessage('queue:join')
-  async joinQueue(@ConnectedSocket() socket: Socket): Promise<void> {
-    await this.duels.joinQueue(userOf(socket).id, socket.id);
+  async joinQueue(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() { language = 'python' }: QueueJoinDto,
+  ): Promise<void> {
+    await this.duels.joinQueue(userOf(socket).id, socket.id, language);
   }
 
   @SubscribeMessage('queue:leave')

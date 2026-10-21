@@ -511,16 +511,20 @@ const validDuel = {
 
 describe('duel problems', () => {
   // docs/CONTENT_GUIDE.md §5 and FR-26: at least 15, split 6 / 6 / 3.
-  it('the real content/duels folder has 15 problems at the right levels', () => {
+  // ADR-040: a pool per duel language, each 6 / 6 / 3.
+  it('the real content/duels folder has 15 problems per language at the right levels', () => {
     const problems = loadDuelProblems(REAL_CONTENT);
-    expect(problems).toHaveLength(15);
-    const byLevel = [1, 2, 3].map(
-      (d) => problems.filter((p) => p.difficulty === d).length,
-    );
-    expect(byLevel).toEqual([6, 6, 3]);
     expect(new Set(problems.map((p) => p.language))).toEqual(
-      new Set(['python']),
+      new Set(['python', 'javascript']),
     );
+    for (const language of ['python', 'javascript']) {
+      const pool = problems.filter((p) => p.language === language);
+      expect(pool).toHaveLength(15);
+      const byLevel = [1, 2, 3].map(
+        (d) => pool.filter((p) => p.difficulty === d).length,
+      );
+      expect(byLevel).toEqual([6, 6, 3]);
+    }
   });
 
   it('accepts a valid problem', () => {

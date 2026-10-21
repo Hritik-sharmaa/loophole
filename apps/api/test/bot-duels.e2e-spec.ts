@@ -65,8 +65,8 @@ describe('Bot duels (e2e, ADR-039)', () => {
     bodies.push(res.body);
     return res.body as unknown;
   };
-  const start = (who: string, opponent = 'arjun') =>
-    send(who, 'post', '/bot-duels', { opponent }) as Promise<BotDuel>;
+  const start = (who: string, opponent = 'arjun', language = 'python') =>
+    send(who, 'post', '/bot-duels', { opponent, language }) as Promise<BotDuel>;
   const get = (who: string, id: string, status?: number) =>
     send(who, 'get', `/bot-duels/${id}`, undefined, status) as Promise<BotDuel>;
   const submit = (who: string, id: string, code: string, status?: number) =>
@@ -79,7 +79,8 @@ describe('Bot duels (e2e, ADR-039)', () => {
     ) as Promise<BotDuelSubmission>;
   const solveCode = async (duel: BotDuel) => {
     const [p] = (await db.select().from(duelProblems)).filter(
-      (p) => p.title === duel.problem.title,
+      (p) =>
+        p.title === duel.problem.title && p.language === duel.problem.language,
     );
     return `solve:${p.id}`;
   };
@@ -102,8 +103,11 @@ describe('Bot duels (e2e, ADR-039)', () => {
         duringGrading = null;
         await hook();
       }
+      // The first line only: JavaScript programs get the prompt() helper
+      // appended before they run.
+      const id = code.split('\n')[0].replace('solve:', '');
       const out: RunResult = {
-        stdout: answers.get(code.replace('solve:', ''))?.get(stdin) ?? '',
+        stdout: answers.get(id)?.get(stdin) ?? '',
         stderr: '',
         exitCode: 0,
         timedOut: false,
@@ -214,8 +218,30 @@ describe('Bot duels (e2e, ADR-039)', () => {
     await submit('bob', duel.id, 'print(1)', 404);
   });
 
-  it('rejects an unknown opponent and a bad id', async () => {
-    await send('ada', 'post', '/bot-duels', { opponent: 'byte' }, 400);
+  it('races in the language picked: a JavaScript problem (ADR-040)', async () => {
+    const duel = await start('ada', 'meera', 'javascript');
+    expect(duel.problem.language).toBe('javascript');
+    expect(duel.problem.buggyCode).toContain('prompt()');
+    const fix = await submit('ada', duel.id, await solveCode(duel));
+    expect(fix.duel.result).toBe('won');
+  });
+
+  it('rejects an unknown opponent or language, and a bad id', async () => {
+    await send(
+      'ada',
+      'post',
+      '/bot-duels',
+      { opponent: 'byte', language: 'python' },
+      400,
+    );
+    await send(
+      'ada',
+      'post',
+      '/bot-duels',
+      { opponent: 'meera', language: 'ruby' },
+      400,
+    );
+    await send('ada', 'post', '/bot-duels', { opponent: 'meera' }, 400);
     await get('ada', 'not-a-uuid', 400);
   });
 

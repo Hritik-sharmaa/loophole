@@ -1,7 +1,8 @@
 'use client';
 
-import type { BotOpponent } from '@loophole/shared';
+import type { BotOpponent, DuelLanguage } from '@loophole/shared';
 import { useRouter } from 'next/navigation';
+import { duelLanguageName } from '@/components/duel-language-picker';
 import { GUIDES, Guide } from '@/components/guide';
 import { primaryButton } from '@/components/ui/buttons';
 import { chip, stickerCard } from '@/components/ui/card';
@@ -35,13 +36,14 @@ export const BOTS: Record<
 
 // "Practice with the crew" on the duels page: always there, even when
 // nobody else is online or the duel server is away (it is plain HTTP).
-export function BotOpponents() {
+// The race is in the language picked at the top of the page (ADR-040).
+export function BotOpponents({ language }: { language: DuelLanguage }) {
   const router = useRouter();
   const start = useStartBotDuel();
 
   function race(opponent: BotOpponent) {
     start.mutate(
-      { opponent },
+      { opponent, language },
       { onSuccess: (duel) => router.push(`/duels/bot/${duel.id}`) },
     );
   }
@@ -56,8 +58,8 @@ export function BotOpponents() {
           Practice with the crew
         </h2>
         <p className="text-text-secondary">
-          Nobody around? Race one of us on a real duel problem. No rating
-          change, just practice.
+          Nobody around? Race one of us on a real {duelLanguageName(language)}{' '}
+          duel problem. No rating change, just practice.
         </p>
       </div>
       <ul className="grid gap-4 sm:grid-cols-3">

@@ -144,7 +144,7 @@ Ideas from comparing Duolingo, Coddy and Codédex, kept here so none get lost. B
 **4. Duels**
 
 - [x] Practice duel against a guide bot when nobody is online (M, ADR-039)
-- [ ] JavaScript duel problems (M)
+- [x] JavaScript duel problems, with a language picker before every duel (M, ADR-040)
 - [ ] Duel replays (L, FR-27)
 
 **5. Later**

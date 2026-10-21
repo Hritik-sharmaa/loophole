@@ -1,0 +1,33 @@
+{
+  "slug": "js-largest-of-three",
+  "title": "Largest of three",
+  "language": "javascript",
+  "difficulty": 1,
+  "description": "Read three whole numbers, one per line, and print the largest of them.",
+  "buggyCode": "const a = prompt();\nconst b = prompt();\nconst c = prompt();\nif (a >= b && a >= c) {\n  console.log(a);\n} else if (b >= a && b >= c) {\n  console.log(b);\n} else {\n  console.log(a);\n}\n",
+  "bugCount": 2,
+  "sampleTests": [
+    {
+      "input": "3\n1\n2\n",
+      "expectedOutput": "3"
+    }
+  ],
+  "hiddenTests": [
+    {
+      "input": "5\n9\n1\n",
+      "expectedOutput": "9"
+    },
+    {
+      "input": "1\n2\n3\n",
+      "expectedOutput": "3"
+    },
+    {
+      "input": "2\n2\n7\n",
+      "expectedOutput": "7"
+    },
+    {
+      "input": "-1\n-5\n-3\n",
+      "expectedOutput": "-1"
+    }
+  ]
+}

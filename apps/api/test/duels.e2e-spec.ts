@@ -12,7 +12,7 @@ import type {
   QueueJoined,
   SocketError,
 } from '@loophole/shared';
-import { eq, ne } from 'drizzle-orm';
+import { eq, notInArray } from 'drizzle-orm';
 import type { Server } from 'node:http';
 import type { AddressInfo } from 'node:net';
 import { io, type Socket } from 'socket.io-client';
@@ -53,6 +53,9 @@ const NAMES = [
   'pam',
   'qin',
   'ray',
+  'sam',
+  'tia',
+  'uma',
 ];
 const USERS: Record<string, AuthUser> = Object.fromEntries(
   NAMES.map((name, i) => [
@@ -65,7 +68,8 @@ const USERS: Record<string, AuthUser> = Object.fromEntries(
   ]),
 );
 
-// Fake Piston for "Sum to N" (the only problem left in the pool):
+// Fake Piston for "Sum to N" (the only problem left in each language's
+// pool):
 // "fixed" is right on every test, "buggy" sums to N - 1 (passes only N = 0),
 // "two" is right only for N = 0 and N = 3. "slow" is "fixed" taking 50 ms
 // a run, so two players' gradings overlap and both reach the finish line.
@@ -195,10 +199,13 @@ describe('Duels (e2e)', () => {
     testDb = await createTestDb();
     db = testDb.db;
     await seedContent(db, CONTENT_DIR);
-    // Keep one problem, so every duel's tests are known.
+    // Keep one problem per language (the same one), so every duel's tests
+    // are known.
     await db
       .delete(duelProblems)
-      .where(ne(duelProblems.slug, 'off-by-one-sum'));
+      .where(
+        notInArray(duelProblems.slug, ['off-by-one-sum', 'js-off-by-one-sum']),
+      );
     for (const { id } of Object.values(USERS)) {
       await db.execute(`insert into auth.users (id) values ('${id}')`);
     }
@@ -241,6 +248,8 @@ describe('Duels (e2e)', () => {
     expect(mb.opponent.username).toBe('ana');
     expect(sa).toEqual(sb);
     expect(sa.problem.title).toBe('Sum to N');
+    // queue:join without a language (older clients) means Python.
+    expect(sa.problem.language).toBe('python');
     expect(sa.problem.sampleTests).toEqual([
       { input: '3\n', expectedOutput: '6' },
     ]);
@@ -521,6 +530,47 @@ describe('Duels (e2e)', () => {
 
   // AGENTS.md hard rule 2: hidden tests never leave the server, and the
   // opponent never sees your code (FR-20).
+  it('pairs only players who picked the same language, on a problem in it (ADR-040)', async () => {
+    const [sam, tia, uma] = [
+      await connect('sam'),
+      await connect('tia'),
+      await connect('uma'),
+    ];
+    sam.send('queue:join', { language: 'python' });
+    expect(await sam.next<QueueJoined>('queue:joined')).toEqual({
+      position: 1,
+    });
+    tia.send('queue:join', { language: 'javascript' });
+    // First in the JavaScript line, though sam is waiting too.
+    expect(await tia.next<QueueJoined>('queue:joined')).toEqual({
+      position: 1,
+    });
+    await settle();
+    expect(sam.count('duel:matched') + tia.count('duel:matched')).toBe(0);
+
+    uma.send('queue:join', { language: 'javascript' });
+    const [st, su] = await Promise.all([
+      tia.next<DuelStart>('duel:start'),
+      uma.next<DuelStart>('duel:start'),
+    ]);
+    expect(st).toEqual(su);
+    expect(st.problem).toMatchObject({
+      title: 'Sum to N',
+      language: 'javascript',
+    });
+    expect(st.problem.buggyCode).toContain('prompt()');
+    expect(sam.count('duel:matched')).toBe(0);
+    sam.send('queue:leave');
+  });
+
+  it('rejects a duel language with no pool', async () => {
+    const sam = byName('sam');
+    sam.send('queue:join', { language: 'ruby' });
+    expect(await sam.next<SocketError>('error')).toMatchObject({
+      code: 'VALIDATION_FAILED',
+    });
+  });
+
   it('no event ever carries hidden tests or code', () => {
     const all = players.flatMap((p) => p.events);
     expect(all.length).toBeGreaterThan(40);
