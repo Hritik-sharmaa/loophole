@@ -39,7 +39,8 @@ export class UsersService {
     if (
       dto.username === undefined &&
       dto.avatarUrl === undefined &&
-      dto.dailyGoal === undefined
+      dto.dailyGoal === undefined &&
+      dto.lessonLanguage === undefined
     ) {
       return this.toMe(current);
     }
@@ -51,6 +52,7 @@ export class UsersService {
           username: dto.username,
           avatarUrl: dto.avatarUrl,
           dailyGoal: dto.dailyGoal,
+          lessonLanguage: dto.lessonLanguage,
         })
         .where(eq(profiles.id, user.id))
         .returning();
@@ -128,6 +130,7 @@ export class UsersService {
       // The column's check allows only 10, 20 or 30.
       dailyGoal: profile.dailyGoal as DailyGoal | null,
       todayXp,
+      lessonLanguage: profile.lessonLanguage,
     };
   }
 }

@@ -8,19 +8,31 @@
         "title": "Indexes start at 0",
         "body": "Each character in a string has a position called an index. The first is at `[0]`, the second at `[1]`.",
         "code": "word = \"cat\"\nprint(word[0])\nprint(word[1])\n",
-        "output": "c\na"
+        "output": "c\na",
+        "hi": {
+          "title": "Indexes 0 se shuru hote hain",
+          "body": "String ke har character ki ek position hoti hai jise index kehte hain. Pehla `[0]` par hai, doosra `[1]` par."
+        }
       },
       {
         "title": "Negative indexes count from the end",
         "body": "`[-1]` is the last character, `[-2]` the one before it.",
         "code": "word = \"cat\"\nprint(word[-1])\n",
-        "output": "t"
+        "output": "t",
+        "hi": {
+          "title": "Negative indexes end se ginte hain",
+          "body": "`[-1]` aakhri character hai, `[-2]` usse pehle wala."
+        }
       },
       {
         "title": "len() gives the length",
         "body": "`len(word)` counts the characters. The last index is always `len(word) - 1`.",
         "code": "print(len(\"hello\"))\n",
-        "output": "5"
+        "output": "5",
+        "hi": {
+          "title": "len() length deta hai",
+          "body": "`len(word)` characters ginta hai. Aakhri index hamesha `len(word) - 1` hota hai."
+        }
       },
       {
         "title": "Spot the bug",
@@ -29,6 +41,11 @@
         "bug": {
           "line": 2,
           "fix": "Indexes start at 0, so the last one is `len(word) - 1`. The short way is `word[-1]`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Isse aakhri letter `n` print karna chahiye, par yeh `IndexError` dekar crash hota hai. Bug par tap karo.",
+          "fix": "Indexes 0 se shuru hote hain, isliye aakhri `len(word) - 1` hai. Chhota tareeka hai `word[-1]`."
         }
       }
     ],
@@ -37,11 +54,16 @@
       "code": "w = \"python\"\nprint(w[1], w[-2])\n",
       "options": ["y o", "p n", "y n"],
       "answer": 0,
-      "explanation": "Index 1 is the second letter, y. Index -2 is the second from the end, o."
+      "explanation": "Index 1 is the second letter, y. Index -2 is the second from the end, o.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "Index 1 doosra letter hai, y. Index -2 end se doosra hai, o."
+      }
     }
   },
   "exercise": {
     "prompt": "Read a word and print its first letter and its last letter, separated by a space. Use indexes `[0]` and `[-1]`.",
+    "promptHi": "Ek word padho aur uska pehla aur aakhri letter print karo, beech mein ek space. Indexes `[0]` aur `[-1]` use karo.",
     "starterCode": "word = input()\n# print the first and last letters\n",
     "sampleTests": [
       {

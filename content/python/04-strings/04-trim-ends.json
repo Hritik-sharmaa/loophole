@@ -8,13 +8,21 @@
         "title": "Slices take a piece",
         "body": "`word[start:stop]` gives the characters from start up to, but not including, stop.",
         "code": "word = \"rainbow\"\nprint(word[0:4])\nprint(word[4:7])\n",
-        "output": "rain\nbow"
+        "output": "rain\nbow",
+        "hi": {
+          "title": "Slices ek tukda lete hain",
+          "body": "`word[start:stop]` start se lekar stop tak ke characters deta hai, par stop shaamil nahi hota."
+        }
       },
       {
         "title": "Leaving out an end",
         "body": "Leave out start to begin at 0; leave out stop to go to the end. Negative numbers count from the end.",
         "code": "word = \"rainbow\"\nprint(word[:3])\nprint(word[3:])\nprint(word[-3:])\n",
-        "output": "rai\nnbow\nbow"
+        "output": "rai\nnbow\nbow",
+        "hi": {
+          "title": "Ek end chhod dena",
+          "body": "Start chhod do toh 0 se shuru hoga; stop chhod do toh end tak jaayega. Negative numbers end se ginte hain."
+        }
       },
       {
         "title": "Spot the bug",
@@ -23,6 +31,11 @@
         "bug": {
           "line": 2,
           "fix": "A slice stops just before its stop index, so `[0:3]` gives three letters. Use `word[0:4]` (or `word[:4]`)."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Isse pehle chaar letters `rain` print karne chahiye, par yeh `rai` print karta hai. Bug par tap karo.",
+          "fix": "Slice stop index se theek pehle ruk jaata hai, isliye `[0:3]` teen letters deta hai. `word[0:4]` (ya `word[:4]`) use karo."
         }
       }
     ],
@@ -31,11 +44,16 @@
       "code": "print(\"python\"[2:4])\n",
       "options": ["th", "yth", "tho"],
       "answer": 0,
-      "explanation": "Index 2 is t and index 3 is h. The slice stops before index 4."
+      "explanation": "Index 2 is t and index 3 is h. The slice stops before index 4.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "Index 2 par t hai aur index 3 par h. Slice index 4 se pehle ruk jaata hai."
+      }
     }
   },
   "exercise": {
     "prompt": "Read a word of at least two letters and print it without its first and last letters, using slicing. For `python`, print `ytho`.",
+    "promptHi": "Kam se kam do letters ka ek word padho aur slicing se use pehle aur aakhri letter ke bina print karo. `python` ke liye `ytho` print karo.",
     "starterCode": "word = input()\n# print word without its first and last letters\n",
     "sampleTests": [
       {

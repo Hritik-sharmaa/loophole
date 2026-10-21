@@ -35,6 +35,7 @@ import type {
   LeagueResponse,
   LearnCard,
   LessonDetail,
+  LessonLanguage,
   LessonLearn,
   LessonState,
   MeResponse,
@@ -170,6 +171,7 @@ type UserState = {
   email: string;
   username: string;
   dailyGoal: DailyGoal | null;
+  lessonLanguage: LessonLanguage;
   rating: number;
   xp: { at: Date; amount: number }[];
   completed: Map<string, Date>;
@@ -198,6 +200,7 @@ function userFor(email: string): UserState {
       email,
       username: base.slice(0, 20).padEnd(3, '_'),
       dailyGoal: null,
+      lessonLanguage: 'en',
       rating: 1000,
       xp: [],
       completed: new Map(),
@@ -314,6 +317,7 @@ function me(user: UserState): MeResponse {
     rating: user.rating,
     lessonsCompleted: user.completed.size,
     dailyGoal: user.dailyGoal,
+    lessonLanguage: user.lessonLanguage,
     todayXp: xpSince(user, istDate(new Date())),
   };
 }
@@ -371,8 +375,54 @@ function path(user: UserState, course: Course): CoursePath {
 const kindOf = (language: string) =>
   language === 'html' ? 'web' : language === 'git' ? 'git' : 'program';
 
-function lessonDetail(lesson: Lesson): LessonDetail {
+// The content files carry Hinglish next to the English (ADR-042); like the
+// API, pick one language and drop the rest.
+type Stored = {
+  hi?: {
+    title?: string;
+    body?: string;
+    fix?: string;
+    question?: string;
+    explanation?: string;
+    options?: string[];
+  };
+};
+function localLearn(
+  learn: LessonLearn | undefined,
+  language: LessonLanguage,
+): LessonLearn | null {
+  if (!learn) return null;
+  const pick = language === 'hinglish';
+  return {
+    cards: learn.cards.map((card) => {
+      const { hi, ...en } = card as LearnCard & Stored;
+      if (!pick || !hi) return en;
+      return {
+        ...en,
+        title: hi.title ?? en.title,
+        body: hi.body ?? en.body,
+        ...(en.bug && hi.fix ? { bug: { ...en.bug, fix: hi.fix } } : {}),
+      };
+    }),
+    check: (() => {
+      const { hi, ...en } = learn.check as LessonLearn['check'] & Stored;
+      if (!pick || !hi) return en;
+      return {
+        ...en,
+        question: hi.question ?? en.question,
+        explanation: hi.explanation ?? en.explanation,
+        options: hi.options ?? en.options,
+      };
+    })(),
+  };
+}
+
+function lessonDetail(
+  lesson: Lesson,
+  language: LessonLanguage = 'en',
+): LessonDetail {
   const { exercise } = lesson;
+  const promptHi = (exercise as { promptHi?: string }).promptHi;
   return {
     id: lesson.id,
     title: lesson.title,
@@ -381,11 +431,11 @@ function lessonDetail(lesson: Lesson): LessonDetail {
       title: lesson.course.title,
       language: lesson.course.language,
     },
-    learn: lesson.learn ?? null,
+    learn: localLearn(lesson.learn, language),
     exercise: {
       id: lesson.exerciseId,
       kind: kindOf(lesson.course.language),
-      prompt: exercise.prompt,
+      prompt: language === 'hinglish' && promptHi ? promptHi : exercise.prompt,
       starterCode: exercise.starterCode,
       sampleTests: exercise.sampleTests ?? [],
       checks: (exercise.checks ?? exercise.gitScenario?.checks ?? []).map(
@@ -673,6 +723,19 @@ const apiRoutes: [
         }
         u.dailyGoal = body.dailyGoal as DailyGoal;
       }
+      if (body.lessonLanguage !== undefined) {
+        if (
+          body.lessonLanguage !== 'en' &&
+          body.lessonLanguage !== 'hinglish'
+        ) {
+          return fail(
+            400,
+            'VALIDATION_FAILED',
+            'lessonLanguage must be en or hinglish',
+          );
+        }
+        u.lessonLanguage = body.lessonLanguage;
+      }
       if (typeof body.username === 'string') u.username = body.username;
       return ok(me(u));
     },
@@ -718,9 +781,10 @@ const apiRoutes: [
       const items: PracticeItem[] = course.units
         .flatMap((unit) => unit.lessons)
         .filter((l) => u.completed.has(l.id) && l.learn)
+        .map((l) => ({ ...l, learn: localLearn(l.learn, u.lessonLanguage)! }))
         .flatMap((l): PracticeItem[] => [
-          { kind: 'check', lesson: l.title, check: l.learn!.check },
-          ...l.learn!.cards.flatMap((c): PracticeItem[] =>
+          { kind: 'check', lesson: l.title, check: l.learn.check },
+          ...l.learn.cards.flatMap((c): PracticeItem[] =>
             c.bug && c.code !== undefined
               ? [
                   {
@@ -750,12 +814,13 @@ const apiRoutes: [
   [
     'GET',
     /^\/courses\/([^/]+)\/units\/([^/]+)\/(cheatsheet|bug-hunt)$/,
-    (m) => {
+    (m, u) => {
       const unit = courses
         .find((c) => c.slug === m[1])
         ?.units.find((x) => x.id === m[2]);
       if (!unit) return fail(404, 'NOT_FOUND', 'Unit not found.');
-      const cards = (l: Lesson): LearnCard[] => l.learn?.cards ?? [];
+      const cards = (l: Lesson): LearnCard[] =>
+        localLearn(l.learn, u.lessonLanguage)?.cards ?? [];
       if (m[3] === 'cheatsheet') {
         const sheet: UnitCheatSheet = {
           unitId: unit.id,
@@ -794,7 +859,7 @@ const apiRoutes: [
       if (states(u, lesson.course).get(lesson.id) === 'locked') {
         return fail(403, 'LESSON_LOCKED', 'Finish the previous lesson first.');
       }
-      return ok(lessonDetail(lesson));
+      return ok(lessonDetail(lesson, u.lessonLanguage));
     },
   ],
   [

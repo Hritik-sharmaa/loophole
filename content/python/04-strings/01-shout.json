@@ -8,13 +8,21 @@
         "title": "String methods",
         "body": "Strings come with built-in tools called methods. Call one with a dot: `word.upper()` gives a capitalised copy, `word.lower()` a lowercase one.",
         "code": "word = \"PyThOn\"\nprint(word.upper())\nprint(word.lower())\n",
-        "output": "PYTHON\npython"
+        "output": "PYTHON\npython",
+        "hi": {
+          "title": "String methods",
+          "body": "Strings ke saath built-in tools aate hain jinhe methods kehte hain. Unhe dot se call karo: `word.upper()` capital letters wali copy deta hai, `word.lower()` small letters wali."
+        }
       },
       {
         "title": "Methods return a new string",
         "body": "`upper()` does not change the original. It gives back a new string, which you can join to more text with `+`.",
         "code": "name = \"ada\"\nprint(name.upper() + \"?\")\nprint(name)\n",
-        "output": "ADA?\nada"
+        "output": "ADA?\nada",
+        "hi": {
+          "title": "Methods nayi string dete hain",
+          "body": "`upper()` original ko nahi badalta. Yeh ek nayi string wapas deta hai, jise aap `+` se aur text ke saath jod sakte ho."
+        }
       },
       {
         "title": "Spot the bug",
@@ -23,6 +31,11 @@
         "bug": {
           "line": 2,
           "fix": "`lower()` gives back a new string and leaves `word` as it was. Keep the result: `word = word.lower()`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "`HELLO` type karo toh yeh `hello` nahi, `HELLO` hi print karta hai. Kaunsi line galat hai?",
+          "fix": "`lower()` nayi string deta hai aur `word` ko waisa hi chhod deta hai. Result ko rakho: `word = word.lower()`."
         }
       }
     ],
@@ -31,11 +44,16 @@
       "code": "print(\"Hi there\".upper())\n",
       "options": ["HI THERE", "Hi There", "HI there"],
       "answer": 0,
-      "explanation": "upper() turns every letter into a capital. The space stays a space."
+      "explanation": "upper() turns every letter into a capital. The space stays a space.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "upper() har letter ko capital bana deta hai. Space, space hi rehta hai."
+      }
     }
   },
   "exercise": {
     "prompt": "Read a line of text and print it in capital letters followed by `!`. For `hello`, print `HELLO!`",
+    "promptHi": "Text ki ek line padho aur use capital letters mein print karo, aakhir mein `!` ke saath. `hello` ke liye `HELLO!` print karo.",
     "starterCode": "text = input()\n# print text in capitals with ! at the end\n",
     "sampleTests": [
       {

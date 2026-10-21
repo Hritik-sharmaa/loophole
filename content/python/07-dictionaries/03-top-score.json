@@ -8,13 +8,21 @@
         "title": "Looping over a dictionary",
         "body": "`for key in d` visits the keys in the order they were added. `d.items()` gives each key and value together.",
         "code": "scores = {\"ada\": 90, \"bo\": 75}\nfor name, score in scores.items():\n    print(name, score)\n",
-        "output": "ada 90\nbo 75"
+        "output": "ada 90\nbo 75",
+        "hi": {
+          "title": "Dictionary par loop",
+          "body": "`for key in d` keys par usi order mein jaata hai jismein woh jodi gayi thi. `d.items()` har key aur value ek saath deta hai."
+        }
       },
       {
         "title": "The best so far",
         "body": "Keep the best value seen so far and replace it only when you find something strictly better. `None` means \"nothing yet\". Using `>` rather than `>=` keeps the first one on a tie.",
         "code": "best = None\nfor x in [4, 9, 2, 9]:\n    if best is None or x > best:\n        best = x\nprint(best)\n",
-        "output": "9"
+        "output": "9",
+        "hi": {
+          "title": "Ab tak ka best",
+          "body": "Ab tak ki best value rakho aur use tabhi badlo jab kuch sach mein behtar mile. `None` ka matlab \"abhi kuch nahi\". `>=` ki jagah `>` use karne se tie hone par pehla wala bana rehta hai."
+        }
       },
       {
         "title": "Spot the bug",
@@ -23,6 +31,11 @@
         "bug": {
           "line": 2,
           "fix": "Looping over a dictionary gives only its keys. Use `scores.items()` to get each name and score together."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Isse har naam uske score ke saath print karna chahiye, par yeh `ValueError` dekar crash hota hai. Bug par tap karo.",
+          "fix": "Dictionary par loop sirf keys deta hai. Har naam aur score ek saath paane ke liye `scores.items()` use karo."
         }
       }
     ],
@@ -31,11 +44,16 @@
       "code": "best = 0\nfor x in [3, 7, 7, 1]:\n    if x > best:\n        best = x\nprint(best)\n",
       "options": ["7", "3", "1"],
       "answer": 0,
-      "explanation": "best becomes 3, then 7. The second 7 is not greater, and 1 is smaller."
+      "explanation": "best becomes 3, then 7. The second 7 is not greater, and 1 is smaller.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "best pehle 3 banta hai, phir 7. Doosra 7 bada nahi hai, aur 1 chhota hai."
+      }
     }
   },
   "exercise": {
     "prompt": "The first line is a count N; then N lines of `name score`. Print the name with the highest score. If several share it, print the one that came first.",
+    "promptHi": "Pehli line mein count N hai; phir `name score` ki N lines. Sabse zyada score wala naam print karo. Agar kai logon ka same ho, toh jo pehle aaya woh print karo.",
     "starterCode": "n = int(input())\nscores = {}\n# read the scores, then print the top name\n",
     "sampleTests": [
       {

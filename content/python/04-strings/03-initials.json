@@ -8,19 +8,31 @@
         "title": "split() cuts text into words",
         "body": "`text.split()` cuts a string at spaces and gives back a list of words. Extra spaces are ignored.",
         "code": "words = \"red   green blue\".split()\nprint(words)\n",
-        "output": "['red', 'green', 'blue']"
+        "output": "['red', 'green', 'blue']",
+        "hi": {
+          "title": "split() text ko words mein kaatta hai",
+          "body": "`text.split()` string ko spaces par kaatta hai aur words ki list deta hai. Extra spaces ignore ho jaate hain."
+        }
       },
       {
         "title": "Looping over words",
         "body": "A `for` loop can walk through each word in that list.",
         "code": "for w in \"big blue sea\".split():\n    print(w[0])\n",
-        "output": "b\nb\ns"
+        "output": "b\nb\ns",
+        "hi": {
+          "title": "Words par loop",
+          "body": "`for` loop us list ke har word se guzar sakta hai."
+        }
       },
       {
         "title": "Building a string",
         "body": "Start with an empty string `\"\"` and add to it with `+=`. Looping over a string gives you one character at a time.",
         "code": "result = \"\"\nfor ch in \"abc\":\n    result += ch * 2\nprint(result)\n",
-        "output": "aabbcc"
+        "output": "aabbcc",
+        "hi": {
+          "title": "String banana",
+          "body": "Khaali string `\"\"` se shuru karo aur `+=` se usme jodte jao. String par loop chalao toh ek baar mein ek character milta hai."
+        }
       },
       {
         "title": "Spot the bug",
@@ -29,6 +41,11 @@
         "bug": {
           "line": 1,
           "fix": "Line 1 forgot the brackets. `split()` calls the method; without `()`, `words` is the method itself, not a list of words."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Isse har word alag line mein print karna chahiye, par yeh `TypeError` dekar crash hota hai. Kaunsi line galat hai?",
+          "fix": "Line 1 mein brackets bhool gaye. `split()` method ko call karta hai; `()` ke bina `words` khud method hai, words ki list nahi."
         }
       }
     ],
@@ -37,11 +54,16 @@
       "code": "print(len(\"one  two three\".split()))\n",
       "options": ["3", "4", "14"],
       "answer": 0,
-      "explanation": "split() ignores the double space and finds 3 words."
+      "explanation": "split() ignores the double space and finds 3 words.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "split() double space ko ignore karta hai aur 3 words dhoondta hai."
+      }
     }
   },
   "exercise": {
     "prompt": "Read a full name and print its initials in capital letters, with no spaces: `ada lovelace` becomes `AL`. Words may be separated by more than one space.",
+    "promptHi": "Poora naam padho aur uske initials capital letters mein print karo, bina spaces ke: `ada lovelace` ka `AL` banega. Words ke beech ek se zyada space ho sakte hain.",
     "starterCode": "name = input()\n# print the initials\n",
     "sampleTests": [
       {

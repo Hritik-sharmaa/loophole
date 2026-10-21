@@ -8,6 +8,7 @@ import { GuideSays, type GuideId } from '@/components/guide';
 import { InlineCode } from '@/components/inline-code';
 import { primaryButton } from '@/components/ui/buttons';
 import { chip } from '@/components/ui/card';
+import { useLessonWords } from '@/lib/lesson-words';
 
 // The Learn step's one question (ADR-021). Ungraded and unrecorded: the
 // answer is checked here in the browser, and a wrong pick just says try
@@ -42,6 +43,7 @@ export function QuickCheck({
   }
 
   const mood = solved ? 'happy' : lastWrong ? 'oops' : 'thinking';
+  const words = useLessonWords();
 
   return (
     <section className="flex flex-col gap-6">
@@ -99,16 +101,14 @@ export function QuickCheck({
             <p>
               <span className="flex items-center gap-1 font-display text-lg font-extrabold">
                 <Check className="size-5 text-blue" strokeWidth={3.5} />
-                That&apos;s it!
+                {words.right}
               </span>
               <InlineCode text={check.explanation} />
             </p>
           ) : lastWrong ? (
-            <p className="font-bold">
-              Not quite. Look at the code again and try another answer.
-            </p>
+            <p className="font-bold">{words.wrong}</p>
           ) : (
-            <p className="font-bold text-text-secondary">Pick an answer.</p>
+            <p className="font-bold text-text-secondary">{words.pick}</p>
           )}
         </div>
         <button

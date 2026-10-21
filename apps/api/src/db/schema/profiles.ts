@@ -1,3 +1,4 @@
+import type { LessonLanguage } from '@loophole/shared';
 import { sql } from 'drizzle-orm';
 import {
   check,
@@ -22,6 +23,11 @@ export const profiles = pgTable(
     // XP a day the learner aims for, picked in the welcome (ADR-033);
     // null until then.
     dailyGoal: smallint('daily_goal'),
+    // The language lessons are shown in (ADR-042).
+    lessonLanguage: text('lesson_language')
+      .$type<LessonLanguage>()
+      .notNull()
+      .default('en'),
     createdAt: timestamp('created_at', { withTimezone: true })
       .notNull()
       .defaultNow(),
@@ -32,6 +38,10 @@ export const profiles = pgTable(
       sql`char_length(${table.username}) between 3 and 20`,
     ),
     check('profiles_daily_goal', sql`${table.dailyGoal} in (10, 20, 30)`),
+    check(
+      'profiles_lesson_language',
+      sql`${table.lessonLanguage} in ('en', 'hinglish')`,
+    ),
   ],
   // RLS on with no policies: the browser's anon key can read nothing.
   // The API connects as the database owner, which bypasses RLS.

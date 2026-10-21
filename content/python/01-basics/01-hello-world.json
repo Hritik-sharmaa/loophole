@@ -8,17 +8,29 @@
         "title": "Your first line of Python",
         "body": "A program is a list of instructions the computer follows from top to bottom. `print()` is the instruction that shows something on the screen.",
         "code": "print(\"Hello!\")\n",
-        "output": "Hello!"
+        "output": "Hello!",
+        "hi": {
+          "title": "Python ki pehli line",
+          "body": "Program instructions ki ek list hai, jise computer upar se neeche tak follow karta hai. `print()` woh instruction hai jo screen par kuch dikhata hai."
+        }
       },
       {
         "title": "Text goes in quotes",
         "body": "Text in Python is called a string. Wrap it in quotes so Python knows where it starts and ends. Each `print()` starts a new line.",
         "code": "print(\"I am learning Python\")\nprint(\"One line at a time\")\n",
-        "output": "I am learning Python\nOne line at a time"
+        "output": "I am learning Python\nOne line at a time",
+        "hi": {
+          "title": "Text quotes mein jaata hai",
+          "body": "Python mein text ko string kehte hain. Use quotes mein rakho taaki Python ko pata chale woh kahan shuru aur kahan khatam hota hai. Har `print()` nayi line se shuru hota hai."
+        }
       },
       {
         "title": "Every character counts",
-        "body": "The grader compares your output letter by letter, so capitals, commas and spaces all matter. `Hello` and `hello` are different."
+        "body": "The grader compares your output letter by letter, so capitals, commas and spaces all matter. `Hello` and `hello` are different.",
+        "hi": {
+          "title": "Har character matter karta hai",
+          "body": "Grader aapka output letter by letter compare karta hai, isliye capitals, commas aur spaces sab matter karte hain. `Hello` aur `hello` alag hain."
+        }
       },
       {
         "title": "Spot the bug",
@@ -27,6 +39,11 @@
         "bug": {
           "line": 2,
           "fix": "The text on line 2 has no closing quote, so Python can't tell where it ends. It needs a `\"` before the `)`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Isse teen lines print karni chahiye, par unmein se ek tooti hui hai. Us par tap karo.",
+          "fix": "Line 2 ke text ka closing quote nahi hai, isliye Python ko pata nahi chalta text kahan khatam hota hai. `)` se pehle ek `\"` chahiye."
         }
       }
     ],
@@ -35,11 +52,16 @@
       "code": "print(\"Hi, there!\")\n",
       "options": ["Hi, there!", "\"Hi, there!\"", "print Hi, there!"],
       "answer": 0,
-      "explanation": "The quotes only mark where the text starts and ends. They are not printed."
+      "explanation": "The quotes only mark where the text starts and ends. They are not printed.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "Quotes sirf batate hain ki text kahan shuru aur khatam hota hai. Woh khud print nahi hote."
+      }
     }
   },
   "exercise": {
     "prompt": "Every programmer starts here. Print exactly `Hello, Loophole!`",
+    "promptHi": "Har programmer yahin se shuru karta hai. Bilkul `Hello, Loophole!` print karo.",
     "starterCode": "# Print the greeting below\n",
     "sampleTests": [
       {

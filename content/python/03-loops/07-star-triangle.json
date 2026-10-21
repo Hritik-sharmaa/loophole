@@ -8,13 +8,21 @@
         "title": "Repeating text with *",
         "body": "Multiplying a string by a whole number repeats it.",
         "code": "print(\"ab\" * 3)\nprint(\"-\" * 5)\n",
-        "output": "ababab\n-----"
+        "output": "ababab\n-----",
+        "hi": {
+          "title": "* se text repeat karna",
+          "body": "String ko kisi whole number se multiply karo toh woh repeat ho jaata hai."
+        }
       },
       {
         "title": "Lines that grow",
         "body": "Combine the loop variable with string repetition and each line can be a bit longer than the last.",
         "code": "for i in range(1, 4):\n    print(\"o\" * (i * 2))\n",
-        "output": "oo\noooo\noooooo"
+        "output": "oo\noooo\noooooo",
+        "hi": {
+          "title": "Badhti hui lines",
+          "body": "Loop variable ko string repetition ke saath jodo, toh har line pichli se thodi lambi ho sakti hai."
+        }
       },
       {
         "title": "Spot the bug",
@@ -23,6 +31,11 @@
         "bug": {
           "line": 1,
           "fix": "`input()` gives text, and text can only be repeated a whole number of times. Line 1 needs `int(input())`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "5 type karo toh yeh `TypeError` dekar crash hota hai. Error line 2 dikhata hai: us line par tap karo jo asal mein problem hai.",
+          "fix": "`input()` text deta hai, aur text sirf whole number baar repeat ho sakta hai. Line 1 ko `int(input())` chahiye."
         }
       }
     ],
@@ -31,11 +44,16 @@
       "code": "for i in range(2):\n    print(\"*\" * (i + 1))\n",
       "options": ["*\n**", "**\n**", "\n*"],
       "answer": 0,
-      "explanation": "i is 0 and then 1, so the lines have 1 and then 2 stars."
+      "explanation": "i is 0 and then 1, so the lines have 1 and then 2 stars.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "i pehle 0 aur phir 1 hai, isliye lines mein pehle 1 aur phir 2 stars hain."
+      }
     }
   },
   "exercise": {
     "prompt": "Read N and print a triangle of N rows: row 1 has one `*`, row 2 has two, and so on, with no spaces.",
+    "promptHi": "N padho aur N rows ka triangle print karo: row 1 mein ek `*`, row 2 mein do, aur aise hi aage, bina spaces ke.",
     "starterCode": "n = int(input())\n# print the triangle, one row per line\n",
     "sampleTests": [
       {

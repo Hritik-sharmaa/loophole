@@ -10,6 +10,10 @@ export type ApiErrorBody = {
 export type DailyGoal = 10 | 20 | 30;
 
 // GET /me and PATCH /me
+// The language lessons are shown in (ADR-042): cards, quick checks, bug
+// fixes and exercise prompts. Code and outputs are the same in both.
+export type LessonLanguage = 'en' | 'hinglish';
+
 export type MeResponse = {
   id: string;
   username: string;
@@ -22,6 +26,7 @@ export type MeResponse = {
   dailyGoal: DailyGoal | null;
   // XP earned since 00:00 IST today.
   todayXp: number;
+  lessonLanguage: LessonLanguage;
 };
 
 // PATCH /me body
@@ -29,6 +34,7 @@ export type UpdateMeRequest = {
   username?: string;
   avatarUrl?: string;
   dailyGoal?: DailyGoal;
+  lessonLanguage?: LessonLanguage;
 };
 
 // GET /me/activity (ADR-033): XP per IST day for the streak calendar, the

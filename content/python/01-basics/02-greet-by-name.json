@@ -8,21 +8,33 @@
         "title": "Variables hold values",
         "body": "A variable is a name for a value. `=` stores the value on the right under the name on the left. Use the name later to get the value back.",
         "code": "city = \"Paris\"\nprint(city)\n",
-        "output": "Paris"
+        "output": "Paris",
+        "hi": {
+          "title": "Variables values rakhte hain",
+          "body": "Variable kisi value ka naam hota hai. `=` right side ki value ko left side ke naam mein store karta hai. Baad mein woh naam likho aur value wapas mil jaayegi."
+        }
       },
       {
         "title": "Reading input",
         "body": "`input()` reads one line that the user types and gives it back as text. Store it in a variable to use it.",
         "code": "name = input()\nprint(name)\n",
         "input": "Ada\n",
-        "output": "Ada"
+        "output": "Ada",
+        "hi": {
+          "title": "Input padhna",
+          "body": "`input()` user ki type ki hui ek line padhta hai aur use text ki tarah wapas deta hai. Use karne ke liye use ek variable mein store karo."
+        }
       },
       {
         "title": "Joining text with +",
         "body": "Use `+` to glue strings together. Python adds no spaces for you, so put the spaces and punctuation in yourself.",
         "code": "name = input()\nprint(\"Hello, \" + name + \".\")\n",
         "input": "Grace\n",
-        "output": "Hello, Grace."
+        "output": "Hello, Grace.",
+        "hi": {
+          "title": "+ se text jodna",
+          "body": "Strings ko jodne ke liye `+` use karo. Python khud se koi space nahi daalta, isliye spaces aur punctuation aapko khud lagane honge."
+        }
       },
       {
         "title": "Spot the bug",
@@ -31,6 +43,11 @@
         "bug": {
           "line": 3,
           "fix": "Line 3 asks for `greting`, but the variable is called `greeting`. Python only knows the names you have made."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Isse aapka type kiya hua naam greet karna chahiye, par Python `NameError` dekar ruk jaata hai. Kaunsi line galat hai?",
+          "fix": "Line 3 `greting` maangti hai, par variable ka naam `greeting` hai. Python sirf wahi naam jaanta hai jo aapne banaye hain."
         }
       }
     ],
@@ -39,11 +56,16 @@
       "code": "animal = \"cat\"\nprint(\"I love \" + animal + \"s\")\n",
       "options": ["I love cats", "I love animals", "I love cat s"],
       "answer": 0,
-      "explanation": "`animal` holds \"cat\", and + joins the pieces exactly as they are, with no extra spaces."
+      "explanation": "`animal` holds \"cat\", and + joins the pieces exactly as they are, with no extra spaces.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "`animal` mein \"cat\" hai, aur + pieces ko bilkul waise hi jodta hai jaise woh hain, bina extra space ke."
+      }
     }
   },
   "exercise": {
     "prompt": "Read a name from input and print `Hi, <name>!`. For `Ada`, print `Hi, Ada!`",
+    "promptHi": "Input se ek naam padho aur `Hi, <name>!` print karo. `Ada` ke liye `Hi, Ada!` print karo.",
     "starterCode": "name = input()\n# print the greeting below\n",
     "sampleTests": [
       {

@@ -8,13 +8,21 @@
         "title": "Counting with a dictionary",
         "body": "Use each letter as a key and its count as the value. `d.get(key, 0)` gives the value, or 0 when the key is missing.",
         "code": "counts = {}\nfor ch in \"aab\":\n    counts[ch] = counts.get(ch, 0) + 1\nprint(counts)\n",
-        "output": "{'a': 2, 'b': 1}"
+        "output": "{'a': 2, 'b': 1}",
+        "hi": {
+          "title": "Dictionary se ginna",
+          "body": "Har letter ko key aur uski ginti ko value banao. `d.get(key, 0)` value deta hai, ya key na ho toh 0."
+        }
       },
       {
         "title": "Keys in order",
         "body": "`sorted(d)` gives the keys in order: alphabetical for strings.",
         "code": "d = {\"b\": 1, \"c\": 5, \"a\": 2}\nfor key in sorted(d):\n    print(key, d[key])\n",
-        "output": "a 2\nb 1\nc 5"
+        "output": "a 2\nb 1\nc 5",
+        "hi": {
+          "title": "Order mein keys",
+          "body": "`sorted(d)` keys ko order mein deta hai: strings ke liye alphabetical."
+        }
       },
       {
         "title": "Spot the bug",
@@ -23,6 +31,11 @@
         "bug": {
           "line": 3,
           "fix": "A new letter is not in the dictionary yet. `counts.get(ch, 0) + 1` starts it at 0."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Isse har letter ginna chahiye, par yeh pehle letter par hi `KeyError` dekar crash hota hai. Kaunsi line galat hai?",
+          "fix": "Naya letter abhi dictionary mein nahi hai. `counts.get(ch, 0) + 1` use 0 se shuru karta hai."
         }
       }
     ],
@@ -31,11 +44,16 @@
       "code": "counts = {}\nfor ch in \"pop\":\n    counts[ch] = counts.get(ch, 0) + 1\nprint(counts[\"p\"])\n",
       "options": ["2", "1", "3"],
       "answer": 0,
-      "explanation": "p appears twice in \"pop\", so its count is 2."
+      "explanation": "p appears twice in \"pop\", so its count is 2.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "\"pop\" mein p do baar aata hai, isliye uski ginti 2 hai."
+      }
     }
   },
   "exercise": {
     "prompt": "Read a word in lowercase letters and print how many times each letter appears, one per line as `letter count`, in alphabetical order.",
+    "promptHi": "Lowercase letters ka ek word padho aur print karo ki har letter kitni baar aata hai, har line mein `letter count`, alphabetical order mein.",
     "starterCode": "word = input()\ncounts = {}\n# count each letter in counts, then print them in alphabetical order\n",
     "sampleTests": [
       {

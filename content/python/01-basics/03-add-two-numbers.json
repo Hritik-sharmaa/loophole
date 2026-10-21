@@ -9,20 +9,32 @@
         "body": "`input()` always gives back text, even when the user types digits. Adding two pieces of text glues them together.",
         "code": "a = input()\nb = input()\nprint(a + b)\n",
         "input": "2\n3\n",
-        "output": "23"
+        "output": "23",
+        "hi": {
+          "title": "input() text deta hai",
+          "body": "`input()` hamesha text hi deta hai, chahe user digits type kare. Do text ko add karne par woh bas jud jaate hain."
+        }
       },
       {
         "title": "int() makes a number",
         "body": "Wrap `input()` in `int()` to turn the text into a whole number. Now the maths works.",
         "code": "a = int(input())\nb = int(input())\nprint(a - b)\n",
         "input": "10\n4\n",
-        "output": "6"
+        "output": "6",
+        "hi": {
+          "title": "int() number banata hai",
+          "body": "`input()` ko `int()` mein wrap karo, toh text whole number ban jaata hai. Ab maths sahi chalega."
+        }
       },
       {
         "title": "print() shows numbers too",
         "body": "`print()` works with numbers and with whole calculations.",
         "code": "print(7 + 1)\nprint(10 - 3)\n",
-        "output": "8\n7"
+        "output": "8\n7",
+        "hi": {
+          "title": "print() numbers bhi dikhata hai",
+          "body": "`print()` numbers aur poori calculations ke saath bhi kaam karta hai."
+        }
       },
       {
         "title": "Spot the bug",
@@ -31,6 +43,11 @@
         "bug": {
           "line": 2,
           "fix": "`input()` gives text, so `b` is text and `a + b` can't add it to a number. Line 2 needs `int(input())`, like line 1."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Isse do numbers add karne chahiye, par yeh crash ho jaata hai. Error line 3 dikhata hai: us line par tap karo jo asal mein problem hai.",
+          "fix": "`input()` text deta hai, isliye `b` text hai aur `a + b` use number ke saath add nahi kar sakta. Line 1 ki tarah line 2 ko bhi `int(input())` chahiye."
         }
       }
     ],
@@ -39,11 +56,17 @@
       "code": "print(\"4\" + \"4\")\n",
       "options": ["8", "44", "An error"],
       "answer": 1,
-      "explanation": "Both values are strings in quotes, so + joins them into 44."
+      "explanation": "Both values are strings in quotes, so + joins them into 44.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "options": ["8", "44", "Error aayega"],
+        "explanation": "Dono values quotes mein strings hain, isliye + unhe jodkar 44 bana deta hai."
+      }
     }
   },
   "exercise": {
     "prompt": "Read two whole numbers from input, one per line, and print their sum.",
+    "promptHi": "Input se do whole numbers padho, har line mein ek, aur unka sum print karo.",
     "starterCode": "a = int(input())\nb = int(input())\n# print the sum below\n",
     "sampleTests": [
       {

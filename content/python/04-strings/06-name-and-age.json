@@ -8,13 +8,21 @@
         "title": "f-strings fill in values",
         "body": "An f-string has `f` before the quote. Anything inside `{}` is replaced with its value.",
         "code": "pet = \"Rex\"\nlegs = 4\nprint(f\"{pet} has {legs} legs.\")\n",
-        "output": "Rex has 4 legs."
+        "output": "Rex has 4 legs.",
+        "hi": {
+          "title": "f-strings values bharte hain",
+          "body": "f-string ke quote se pehle `f` hota hai. `{}` ke andar jo bhi ho, uski jagah uski value aa jaati hai."
+        }
       },
       {
         "title": "Numbers without the fuss",
         "body": "Joining text and a number with `+` is an error. An f-string converts the number for you, and `{}` can hold a calculation.",
         "code": "n = 3\nprint(f\"I have {n} apples, then {n + 2}.\")\n",
-        "output": "I have 3 apples, then 5."
+        "output": "I have 3 apples, then 5.",
+        "hi": {
+          "title": "Numbers bina jhanjhat ke",
+          "body": "Text aur number ko `+` se jodna error hai. f-string number ko aapke liye convert kar deta hai, aur `{}` mein calculation bhi aa sakti hai."
+        }
       },
       {
         "title": "Spot the bug",
@@ -23,6 +31,11 @@
         "bug": {
           "line": 3,
           "fix": "Joining text and a number with `+` is an error. An f-string converts the number for you: `print(f\"{city} has {parks} parks.\")`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Yahan Python `TypeError` dekar ruk jaata hai. Us line par tap karo jo iski wajah hai.",
+          "fix": "Text aur number ko `+` se jodna error hai. f-string number ko aapke liye convert kar deta hai: `print(f\"{city} has {parks} parks.\")`."
         }
       }
     ],
@@ -31,11 +44,16 @@
       "code": "x = 5\nprint(f\"x is {x * 2}\")\n",
       "options": ["x is 10", "x is {x * 2}", "x is 52"],
       "answer": 0,
-      "explanation": "The braces hold a calculation, and the f-string puts its result, 10, in their place."
+      "explanation": "The braces hold a calculation, and the f-string puts its result, 10, in their place.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "Braces mein ek calculation hai, aur f-string uski jagah uska result, 10, daal deta hai."
+      }
     }
   },
   "exercise": {
     "prompt": "Read a name and then an age, each on its own line, and print `<name> is <age> years old.` using an f-string. For `Ada` and `36`, print `Ada is 36 years old.`",
+    "promptHi": "Ek naam aur phir ek age padho, dono alag lines mein, aur f-string se `<name> is <age> years old.` print karo. `Ada` aur `36` ke liye `Ada is 36 years old.` print karo.",
     "starterCode": "name = input()\nage = int(input())\n# print the sentence with an f-string\n",
     "sampleTests": [
       {

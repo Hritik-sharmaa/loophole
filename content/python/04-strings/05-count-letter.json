@@ -8,13 +8,21 @@
         "title": "count() counts",
         "body": "`text.count(x)` tells you how many times x appears in the text.",
         "code": "print(\"mississippi\".count(\"s\"))\nprint(\"mississippi\".count(\"ss\"))\n",
-        "output": "4\n2"
+        "output": "4\n2",
+        "hi": {
+          "title": "count() ginta hai",
+          "body": "`text.count(x)` batata hai ki text mein x kitni baar aata hai."
+        }
       },
       {
         "title": "Capitals are different letters",
         "body": "Python treats `A` and `a` as two different characters.",
         "code": "print(\"Anna\".count(\"a\"))\n",
-        "output": "1"
+        "output": "1",
+        "hi": {
+          "title": "Capitals alag letters hain",
+          "body": "Python `A` aur `a` ko do alag characters maanta hai."
+        }
       },
       {
         "title": "Spot the bug",
@@ -23,6 +31,11 @@
         "bug": {
           "line": 2,
           "fix": "Capitals are different letters, so `count(\"A\")` misses the small ones. Count in a lowercase copy: `text.lower().count(\"a\")`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Isse har `a` ginna chahiye, chhota ho ya bada, aur 5 print karna chahiye, par yeh 2 print karta hai. Kaunsi line galat hai?",
+          "fix": "Capitals alag letters hain, isliye `count(\"A\")` chhote waale chhod deta hai. Lowercase copy mein gino: `text.lower().count(\"a\")`."
         }
       }
     ],
@@ -31,11 +44,16 @@
       "code": "print(\"hello world\".count(\"o\"))\n",
       "options": ["2", "1", "0"],
       "answer": 0,
-      "explanation": "There is one o in hello and one in world."
+      "explanation": "There is one o in hello and one in world.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "hello mein ek o hai aur world mein ek."
+      }
     }
   },
   "exercise": {
     "prompt": "The first line is a word, the second a single letter. Print how many times that letter appears in the word (capitals count as different letters).",
+    "promptHi": "Pehli line ek word hai, doosri ek akela letter. Print karo ki woh letter word mein kitni baar aata hai (capitals alag letters gine jaate hain).",
     "starterCode": "word = input()\nletter = input()\n# print how many times letter appears in word\n",
     "sampleTests": [
       {

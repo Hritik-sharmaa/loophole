@@ -8,13 +8,21 @@
         "title": "The average",
         "body": "The average is the total divided by how many there are: `sum(nums) / len(nums)`. `/` always gives a decimal.",
         "code": "nums = [2, 4, 9]\nprint(sum(nums) / len(nums))\n",
-        "output": "5.0"
+        "output": "5.0",
+        "hi": {
+          "title": "Average",
+          "body": "Average matlab total ko ginti se divide karna: `sum(nums) / len(nums)`. `/` hamesha decimal deta hai."
+        }
       },
       {
         "title": "Counting matches",
         "body": "Keep a counter and add 1 for every item that passes a test.",
         "code": "count = 0\nfor x in [3, 8, 1, 9]:\n    if x > 5:\n        count += 1\nprint(count)\n",
-        "output": "2"
+        "output": "2",
+        "hi": {
+          "title": "Matches ginna",
+          "body": "Ek counter rakho aur har us item ke liye 1 jodo jo test pass karta hai."
+        }
       },
       {
         "title": "Spot the bug",
@@ -23,6 +31,11 @@
         "bug": {
           "line": 2,
           "fix": "Divide by how many numbers there are, not by 2: `sum(nums) / len(nums)` works for any list."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Isse average `5.0` print karna chahiye, par yeh `7.5` print karta hai. Kaunsi line galat hai?",
+          "fix": "2 se nahi, numbers ki ginti se divide karo: `sum(nums) / len(nums)` kisi bhi list ke liye chalta hai."
         }
       }
     ],
@@ -31,11 +44,16 @@
       "code": "nums = [1, 1, 4]\nprint(sum(nums) / len(nums))\n",
       "options": ["2.0", "6", "3.0"],
       "answer": 0,
-      "explanation": "The total is 6 and there are 3 numbers, so 6 / 3 is 2.0."
+      "explanation": "The total is 6 and there are 3 numbers, so 6 / 3 is 2.0.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "Total 6 hai aur 3 numbers hain, isliye 6 / 3 = 2.0."
+      }
     }
   },
   "exercise": {
     "prompt": "Read whole numbers on one line and print how many of them are greater than their average.",
+    "promptHi": "Ek line mein whole numbers padho aur print karo ki unmein se kitne apne average se bade hain.",
     "starterCode": "nums = list(map(int, input().split()))\n# work out the average, then count the numbers above it\n",
     "sampleTests": [
       {

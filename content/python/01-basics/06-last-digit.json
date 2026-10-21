@@ -8,13 +8,21 @@
         "title": "Remainder by 10",
         "body": "Divide a whole number by 10 and the remainder is its last digit. `%` gives you that remainder.",
         "code": "print(587 % 10)\n",
-        "output": "7"
+        "output": "7",
+        "hi": {
+          "title": "10 se remainder",
+          "body": "Kisi whole number ko 10 se divide karo, toh remainder uska last digit hota hai. `%` aapko wahi remainder deta hai."
+        }
       },
       {
         "title": "Dropping the last digit",
         "body": "`// 10` does the opposite: it removes the last digit.",
         "code": "print(587 // 10)\n",
-        "output": "58"
+        "output": "58",
+        "hi": {
+          "title": "Last digit hatana",
+          "body": "`// 10` ulta kaam karta hai: yeh last digit hata deta hai."
+        }
       },
       {
         "title": "Spot the bug",
@@ -23,6 +31,11 @@
         "bug": {
           "line": 2,
           "fix": "`n // 10` drops the last digit. The remainder, `n % 10`, is the last digit."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "427 ke liye isse 7 print karna chahiye, par yeh 42 print karta hai. Bug par tap karo.",
+          "fix": "`n // 10` last digit hata deta hai. Remainder, yaani `n % 10`, hi last digit hai."
         }
       }
     ],
@@ -31,11 +44,16 @@
       "code": "n = 2049\nprint(n % 10)\n",
       "options": ["2", "9", "204"],
       "answer": 1,
-      "explanation": "2049 divided by 10 leaves 9 over, and that is the last digit."
+      "explanation": "2049 divided by 10 leaves 9 over, and that is the last digit.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "2049 ko 10 se divide karne par 9 bachta hai, aur wahi last digit hai."
+      }
     }
   },
   "exercise": {
     "prompt": "Read a whole number (0 or more) and print its last digit. Hint: the remainder after dividing by 10 is the last digit.",
+    "promptHi": "Ek whole number padho (0 ya usse bada) aur uska last digit print karo. Hint: 10 se divide karne ke baad ka remainder hi last digit hai.",
     "starterCode": "n = int(input())\n# print the last digit below\n",
     "sampleTests": [
       {

@@ -1,9 +1,5 @@
-import type {
-  GitScenario,
-  LessonLearn,
-  TestCase,
-  WebCheck,
-} from '@loophole/shared';
+import type { GitScenario, TestCase, WebCheck } from '@loophole/shared';
+import type { StoredLearn } from '../../common/lesson-text.js';
 import {
   integer,
   jsonb,
@@ -55,9 +51,9 @@ export const lessons = pgTable(
     slug: text('slug').notNull(),
     title: text('title').notNull(),
     position: integer('position').notNull(),
-    // The Learn step's cards and quick check (ADR-021). Null for a lesson
-    // that goes straight to the exercise.
-    learn: jsonb('learn').$type<LessonLearn>(),
+    // The Learn step's cards and quick check (ADR-021), with their Hinglish
+    // (ADR-042). Null for a lesson that goes straight to the exercise.
+    learn: jsonb('learn').$type<StoredLearn>(),
   },
   (t) => [
     unique('lessons_unit_slug').on(t.unitId, t.slug),
@@ -74,6 +70,8 @@ export const exercises = pgTable('exercises', {
     .unique()
     .references(() => lessons.id, { onDelete: 'cascade' }),
   prompt: text('prompt').notNull(),
+  // The prompt in Hinglish (ADR-042); null until the lesson has it.
+  promptHi: text('prompt_hi'),
   starterCode: text('starter_code').notNull(),
   sampleTests: jsonb('sample_tests').$type<TestCase[]>().notNull(),
   hiddenTests: jsonb('hidden_tests').$type<TestCase[]>().notNull(),

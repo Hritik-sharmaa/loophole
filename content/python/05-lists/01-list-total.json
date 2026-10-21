@@ -8,20 +8,32 @@
         "title": "Lists hold many values",
         "body": "A list keeps values in order inside square brackets. `nums[0]` is the first item.",
         "code": "nums = [4, 8, 15]\nprint(nums)\nprint(nums[0])\n",
-        "output": "[4, 8, 15]\n4"
+        "output": "[4, 8, 15]\n4",
+        "hi": {
+          "title": "Lists kai values rakhti hain",
+          "body": "List values ko square brackets ke andar order mein rakhti hai. `nums[0]` pehla item hai."
+        }
       },
       {
         "title": "Reading a line of numbers",
         "body": "`input().split()` gives a list of text pieces. `map(int, ...)` turns each into a number and `list()` collects them.",
         "code": "nums = list(map(int, input().split()))\nprint(nums)\n",
         "input": "3 1 2\n",
-        "output": "[3, 1, 2]"
+        "output": "[3, 1, 2]",
+        "hi": {
+          "title": "Numbers ki ek line padhna",
+          "body": "`input().split()` text ke tukdon ki list deta hai. `map(int, ...)` har tukde ko number banata hai aur `list()` unhe ikattha karta hai."
+        }
       },
       {
         "title": "sum() adds a list",
         "body": "`sum(nums)` adds up every number in the list.",
         "code": "print(sum([10, 20, 5]))\n",
-        "output": "35"
+        "output": "35",
+        "hi": {
+          "title": "sum() list ko jodta hai",
+          "body": "`sum(nums)` list ke har number ko jod deta hai."
+        }
       },
       {
         "title": "Spot the bug",
@@ -30,6 +42,11 @@
         "bug": {
           "line": 2,
           "fix": "The first item is `nums[0]`, so 15 is `nums[2]` (or `nums[-1]`). There is no `nums[3]`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Isse aakhri item 15 print karna chahiye, par yeh `IndexError` dekar crash hota hai. Kaunsi line galat hai?",
+          "fix": "Pehla item `nums[0]` hai, isliye 15 `nums[2]` (ya `nums[-1]`) hai. `nums[3]` hai hi nahi."
         }
       }
     ],
@@ -38,11 +55,17 @@
       "code": "print(sum([1, 2]) + 3)\n",
       "options": ["6", "33", "An error"],
       "answer": 0,
-      "explanation": "sum([1, 2]) is 3, and 3 + 3 is 6."
+      "explanation": "sum([1, 2]) is 3, and 3 + 3 is 6.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "options": ["6", "33", "Error aayega"],
+        "explanation": "sum([1, 2]) ka matlab 3, aur 3 + 3 = 6."
+      }
     }
   },
   "exercise": {
     "prompt": "Read whole numbers on one line, separated by spaces, and print their total.",
+    "promptHi": "Ek line mein spaces se alag kiye whole numbers padho aur unka total print karo.",
     "starterCode": "nums = list(map(int, input().split()))\n# print the total of nums\n",
     "sampleTests": [
       {

@@ -1,12 +1,13 @@
 'use client';
 
-import type { DailyGoal, MeResponse } from '@loophole/shared';
+import type { DailyGoal, LessonLanguage, MeResponse } from '@loophole/shared';
 import { useQueryClient } from '@tanstack/react-query';
 import { Award } from 'lucide-react';
 import Link from 'next/link';
 import { useState, type FormEvent, type ReactNode } from 'react';
 import { AppHeader } from '@/components/app-header';
 import { GoalPicker, StreakCalendar } from '@/components/daily-goal';
+import { LessonLanguagePicker } from '@/components/lesson-language-picker';
 import { CrewLineup } from '@/components/guide';
 import { secondaryButton } from '@/components/ui/buttons';
 import { ApiError } from '@/lib/api';
@@ -60,6 +61,7 @@ function Profile({ me }: { me: MeResponse }) {
       </dl>
       <StreakSection goal={me.dailyGoal} />
       <GoalSetting current={me.dailyGoal} />
+      <LanguageSetting current={me.lessonLanguage} />
       <Certificates />
       <UsernameForm current={me.username} />
       <LogoutButton />
@@ -109,6 +111,33 @@ function GoalSetting({ current }: { current: DailyGoal | null }) {
 }
 
 // FR-15: one per finished course, each with its public /c/<slug> page.
+// The language lessons are shown in (ADR-042). Saved on tap; lessons
+// already open reload in the new language.
+function LanguageSetting({ current }: { current: LessonLanguage }) {
+  const update = useUpdateMe();
+  return (
+    <section className="flex w-full flex-col gap-2 text-left">
+      <h2 className="text-sm font-semibold text-text-secondary">
+        Lesson language
+      </h2>
+      <LessonLanguagePicker
+        value={current}
+        onPick={(lessonLanguage) => update.mutate({ lessonLanguage })}
+        disabled={update.isPending}
+      />
+      <p className="text-sm text-text-secondary">
+        Cards, quick checks and tasks switch; code stays the same. Python is in
+        Hinglish now; the other courses follow.
+      </p>
+      {update.isError && (
+        <p role="alert" className="text-sm font-semibold">
+          ✕ {update.error.message}
+        </p>
+      )}
+    </section>
+  );
+}
+
 function Certificates() {
   const certs = useMyCertificates(true);
   if (!certs.data || certs.data.length === 0) return null;

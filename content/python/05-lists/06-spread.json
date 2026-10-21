@@ -8,13 +8,21 @@
         "title": "Calculating with results",
         "body": "Built-in functions give back values, so you can use them straight away in a calculation.",
         "code": "temps = [12, 18, 9, 15]\nprint(max(temps) + min(temps))\n",
-        "output": "27"
+        "output": "27",
+        "hi": {
+          "title": "Results ke saath calculate karna",
+          "body": "Built-in functions values wapas dete hain, isliye unhe seedhe calculation mein use kar sakte ho."
+        }
       },
       {
         "title": "Inside out",
         "body": "Python works out `max(...)` and `min(...)` first, then applies the operator between their results.",
         "code": "print(max([1, 5]) * 2)\n",
-        "output": "10"
+        "output": "10",
+        "hi": {
+          "title": "Andar se bahar",
+          "body": "Python pehle `max(...)` aur `min(...)` nikalta hai, phir unke results ke beech operator lagata hai."
+        }
       },
       {
         "title": "Spot the bug",
@@ -23,6 +31,11 @@
         "bug": {
           "line": 2,
           "fix": "Division happens before addition, so only `min(temps)` is halved. Add brackets: `(max(temps) + min(temps)) / 2`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Isse sabse garam aur sabse thande din ka beech wala `13.5` print karna chahiye, par yeh `22.5` print karta hai. Bug par tap karo.",
+          "fix": "Division addition se pehle hota hai, isliye sirf `min(temps)` aadha hota hai. Brackets lagao: `(max(temps) + min(temps)) / 2`."
         }
       }
     ],
@@ -31,11 +44,16 @@
       "code": "print(max([3, 10]) - min([3, 10]))\n",
       "options": ["7", "-7", "13"],
       "answer": 0,
-      "explanation": "max is 10 and min is 3, so 10 - 3 is 7."
+      "explanation": "max is 10 and min is 3, so 10 - 3 is 7.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "max 10 hai aur min 3, isliye 10 - 3 = 7."
+      }
     }
   },
   "exercise": {
     "prompt": "Read whole numbers on one line and print the difference between the largest and the smallest.",
+    "promptHi": "Ek line mein whole numbers padho aur sabse bade aur sabse chhote ka farak print karo.",
     "starterCode": "nums = list(map(int, input().split()))\n# print largest minus smallest\n",
     "sampleTests": [
       {

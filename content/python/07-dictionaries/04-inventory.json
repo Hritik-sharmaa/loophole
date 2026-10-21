@@ -8,13 +8,21 @@
         "title": "Adding up per key",
         "body": "To total values per key, add to what is already there. `get(key, 0)` starts a new key at 0.",
         "code": "totals = {}\nfor line in [\"pen 2\", \"ink 1\", \"pen 4\"]:\n    item, qty = line.split()\n    totals[item] = totals.get(item, 0) + int(qty)\nprint(totals)\n",
-        "output": "{'pen': 6, 'ink': 1}"
+        "output": "{'pen': 6, 'ink': 1}",
+        "hi": {
+          "title": "Har key ka total",
+          "body": "Har key ka total banane ke liye jo pehle se hai usme jodo. `get(key, 0)` nayi key ko 0 se shuru karta hai."
+        }
       },
       {
         "title": "Dictionaries remember order",
         "body": "A dictionary keeps keys in the order they were first added. Updating a key later does not move it.",
         "code": "d = {}\nd[\"b\"] = 1\nd[\"a\"] = 2\nd[\"b\"] = 3\nfor k in d:\n    print(k, d[k])\n",
-        "output": "b 3\na 2"
+        "output": "b 3\na 2",
+        "hi": {
+          "title": "Dictionaries order yaad rakhti hain",
+          "body": "Dictionary keys ko usi order mein rakhti hai jismein woh pehli baar jodi gayi. Baad mein key update karne se uski jagah nahi badalti."
+        }
       },
       {
         "title": "Spot the bug",
@@ -23,6 +31,11 @@
         "bug": {
           "line": 4,
           "fix": "`split()` gives text, so `qty` is `\"2\"`, not 2. Convert it before adding: `+ int(qty)`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Isse har item jodna chahiye, par yeh `TypeError` dekar crash hota hai. Kaunsi line galat hai?",
+          "fix": "`split()` text deta hai, isliye `qty` `\"2\"` hai, 2 nahi. Jodne se pehle convert karo: `+ int(qty)`."
         }
       }
     ],
@@ -31,11 +44,16 @@
       "code": "d = {\"x\": 1}\nd[\"x\"] = d.get(\"x\", 0) + 2\nd[\"y\"] = d.get(\"y\", 0) + 2\nprint(d)\n",
       "options": ["{'x': 3, 'y': 2}", "{'x': 2, 'y': 2}", "{'x': 1, 'y': 2}"],
       "answer": 0,
-      "explanation": "x already holds 1, so it becomes 3. y is new, so get() starts it at 0 and it becomes 2."
+      "explanation": "x already holds 1, so it becomes 3. y is new, so get() starts it at 0 and it becomes 2.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "x mein pehle se 1 hai, isliye woh 3 ho jaata hai. y naya hai, isliye get() use 0 se shuru karta hai aur woh 2 ho jaata hai."
+      }
     }
   },
   "exercise": {
     "prompt": "The first line is a count N; then N lines of `item quantity`, where the same item can appear more than once. Print each item once with its total, as `item total`, in the order items first appeared.",
+    "promptHi": "Pehli line mein count N hai; phir `item quantity` ki N lines, jismein same item ek se zyada baar aa sakta hai. Har item ek baar uske total ke saath print karo, `item total` ki tarah, usi order mein jismein items pehli baar aaye.",
     "starterCode": "n = int(input())\ntotals = {}\n# add up the quantities per item, then print them\n",
     "sampleTests": [
       {

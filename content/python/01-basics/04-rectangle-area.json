@@ -8,19 +8,31 @@
         "title": "Maths operators",
         "body": "Python does maths with `+` (add), `-` (subtract), `*` (multiply) and `/` (divide).",
         "code": "print(6 * 7)\nprint(3 + 4 * 2)\n",
-        "output": "42\n11"
+        "output": "42\n11",
+        "hi": {
+          "title": "Maths operators",
+          "body": "Python maths karta hai `+` (add), `-` (subtract), `*` (multiply) aur `/` (divide) se."
+        }
       },
       {
         "title": "Order of operations",
         "body": "As in school maths, `*` and `/` happen before `+` and `-`. Use brackets to change the order.",
         "code": "print((3 + 4) * 2)\n",
-        "output": "14"
+        "output": "14",
+        "hi": {
+          "title": "Operations ka order",
+          "body": "School maths ki tarah, `*` aur `/` pehle hote hain, `+` aur `-` baad mein. Order badalna ho toh brackets use karo."
+        }
       },
       {
         "title": "Maths with variables",
         "body": "Store numbers in variables, then calculate with their names.",
         "code": "price = 4\ncount = 3\ntotal = price * count\nprint(total)\n",
-        "output": "12"
+        "output": "12",
+        "hi": {
+          "title": "Variables ke saath maths",
+          "body": "Numbers ko variables mein store karo, phir unke naam se calculate karo."
+        }
       },
       {
         "title": "Spot the bug",
@@ -29,6 +41,11 @@
         "bug": {
           "line": 3,
           "fix": "Area is width times height. Line 3 should multiply with `*`, not add with `+`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "3 aur 4 do toh yeh 12 ki jagah 7 print karta hai. Kaunsi line galat hai?",
+          "fix": "Area width guna height hota hai. Line 3 ko `*` se multiply karna chahiye, `+` se add nahi."
         }
       }
     ],
@@ -37,11 +54,16 @@
       "code": "print(2 + 3 * 4)\n",
       "options": ["20", "14", "24"],
       "answer": 1,
-      "explanation": "* happens first: 3 * 4 is 12, then 2 + 12 is 14."
+      "explanation": "* happens first: 3 * 4 is 12, then 2 + 12 is 14.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "* pehle hota hai: 3 * 4 = 12, phir 2 + 12 = 14."
+      }
     }
   },
   "exercise": {
     "prompt": "Read the width and then the height of a rectangle (whole numbers, one per line) and print its area.",
+    "promptHi": "Rectangle ki width aur phir height padho (whole numbers, har line mein ek) aur uska area print karo.",
     "starterCode": "width = int(input())\nheight = int(input())\n# print the area below\n",
     "sampleTests": [
       {

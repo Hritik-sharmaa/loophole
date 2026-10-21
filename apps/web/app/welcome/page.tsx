@@ -1,6 +1,10 @@
 'use client';
 
-import type { CourseOverview, DailyGoal } from '@loophole/shared';
+import type {
+  CourseOverview,
+  DailyGoal,
+  LessonLanguage,
+} from '@loophole/shared';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -13,6 +17,7 @@ import {
   guideFor,
 } from '@/components/guide';
 import { LanguageTile } from '@/components/language-logo';
+import { LessonLanguagePicker } from '@/components/lesson-language-picker';
 import { Logo } from '@/components/logo';
 import { ProgressBar } from '@/components/progress-bar';
 import { primaryButton, secondaryButton } from '@/components/ui/buttons';
@@ -21,12 +26,13 @@ import { useCoursePath, useCourses } from '@/lib/queries/use-lessons';
 import { useMe, useUpdateMe } from '@/lib/queries/use-me';
 import { useRequireSession } from '@/lib/use-require-session';
 
-type Step = 'course' | 'goal' | 'hello';
-const STEPS: Step[] = ['course', 'goal', 'hello'];
+type Step = 'course' | 'goal' | 'language' | 'hello';
+const STEPS: Step[] = ['course', 'goal', 'language', 'hello'];
 
 // The first-run welcome (ADR-033): pick a first course, pick a daily goal,
-// then that course's guide says hello and leads into lesson 1. /learn sends
-// anyone without a daily goal here.
+// pick English or Hinglish lessons (ADR-042), then that course's guide says
+// hello and leads into lesson 1. /learn sends anyone without a daily goal
+// here.
 export default function WelcomePage() {
   const { loading } = useRequireSession();
   const me = useMe(!loading);
@@ -35,6 +41,7 @@ export default function WelcomePage() {
   const [step, setStep] = useState<Step>('course');
   const [course, setCourse] = useState<CourseOverview | null>(null);
   const [goal, setGoal] = useState<DailyGoal>(20);
+  const [language, setLanguage] = useState<LessonLanguage>('en');
   // The first lesson to open at the end: the chosen course's active one.
   const path = useCoursePath(course?.slug, step === 'hello');
 
@@ -42,7 +49,16 @@ export default function WelcomePage() {
   const name = GUIDES[guide].name;
 
   function saveGoal() {
-    update.mutate({ dailyGoal: goal }, { onSuccess: () => setStep('hello') });
+    update.mutate(
+      { dailyGoal: goal },
+      { onSuccess: () => setStep('language') },
+    );
+  }
+  function saveLanguage() {
+    update.mutate(
+      { lessonLanguage: language },
+      { onSuccess: () => setStep('hello') },
+    );
   }
 
   const next = path.data?.units
@@ -151,6 +167,52 @@ export default function WelcomePage() {
             <button
               type="button"
               onClick={saveGoal}
+              disabled={update.isPending}
+              className={`${primaryButton} uppercase sm:self-end sm:min-w-52`}
+            >
+              {update.isPending ? 'Saving…' : 'Continue'}
+            </button>
+          </>
+        ) : step === 'language' ? (
+          <>
+            <button
+              type="button"
+              onClick={() => setStep('goal')}
+              className="inline-flex items-center gap-1 self-start rounded-badge text-sm font-bold text-text-secondary hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+            >
+              <ArrowLeft className="size-4" strokeWidth={3} aria-hidden />{' '}
+              Change my goal
+            </button>
+            <GuideSays guide={guide} mood="thinking">
+              <h1 className="font-display text-2xl font-extrabold text-balance">
+                How should I explain things?
+              </h1>
+              <p className="text-lg">
+                English, or Hinglish, the way we talk? Code stays the same
+                either way, and you can switch on your profile.
+              </p>
+            </GuideSays>
+            <LessonLanguagePicker
+              value={language}
+              onPick={setLanguage}
+              disabled={update.isPending}
+            />
+            {course &&
+              course.language !== 'python' &&
+              language === 'hinglish' && (
+                <p className="text-sm font-bold text-text-secondary">
+                  {course.title} is still in English for now: Python is the
+                  first course in Hinglish, and the others follow.
+                </p>
+              )}
+            {update.isError && (
+              <p role="alert" className="font-bold">
+                ✕ {update.error.message}
+              </p>
+            )}
+            <button
+              type="button"
+              onClick={saveLanguage}
               disabled={update.isPending}
               className={`${primaryButton} uppercase sm:self-end sm:min-w-52`}
             >

@@ -8,13 +8,21 @@
         "title": "max() and min()",
         "body": "`max(nums)` gives the largest value in a list and `min(nums)` the smallest.",
         "code": "nums = [7, 2, 9, 4]\nprint(max(nums))\nprint(min(nums))\n",
-        "output": "9\n2"
+        "output": "9\n2",
+        "hi": {
+          "title": "max() aur min()",
+          "body": "`max(nums)` list ki sabse badi value deta hai aur `min(nums)` sabse chhoti."
+        }
       },
       {
         "title": "len() counts items",
         "body": "`len(nums)` tells you how many items a list has.",
         "code": "print(len([7, 2, 9, 4]))\n",
-        "output": "4"
+        "output": "4",
+        "hi": {
+          "title": "len() items ginta hai",
+          "body": "`len(nums)` batata hai ki list mein kitne items hain."
+        }
       },
       {
         "title": "Spot the bug",
@@ -23,6 +31,11 @@
         "bug": {
           "line": 2,
           "fix": "`len(names[0])` counts the letters in the first name. Count the list itself: `len(names)`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Isse print karna chahiye ki list mein kitne naam hain, yaani 3, par yeh 4 print karta hai. Bug par tap karo.",
+          "fix": "`len(names[0])` pehle naam ke letters ginta hai. List ko hi gino: `len(names)`."
         }
       }
     ],
@@ -31,11 +44,16 @@
       "code": "print(max([-5, -1, -9]))\n",
       "options": ["-1", "-9", "-5"],
       "answer": 0,
-      "explanation": "Among negative numbers, the one closest to zero is the largest."
+      "explanation": "Among negative numbers, the one closest to zero is the largest.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "Negative numbers mein jo zero ke sabse paas hai, wahi sabse bada hai."
+      }
     }
   },
   "exercise": {
     "prompt": "Read whole numbers on one line, separated by spaces, and print the largest. Try `max()`.",
+    "promptHi": "Ek line mein spaces se alag kiye whole numbers padho aur sabse bada print karo. `max()` try karo.",
     "starterCode": "nums = list(map(int, input().split()))\n# print the largest number\n",
     "sampleTests": [
       {

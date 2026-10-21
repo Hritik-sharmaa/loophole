@@ -556,3 +556,136 @@ describe('duel problems', () => {
     }
   });
 });
+
+describe('Hinglish (ADR-042)', () => {
+  const bugCard = {
+    title: 'Spot the bug',
+    body: 'Tap it.',
+    code: 'print("Hi)\n',
+    bug: { line: 1, fix: 'Close the quote.' },
+  };
+  const hinglish = (patch: Record<string, unknown> = {}) => ({
+    ...validLesson,
+    exercise: { ...validLesson.exercise, promptHi: 'Sum print karo.' },
+    learn: {
+      cards: [
+        {
+          ...validLearn.cards[0],
+          hi: { title: 'print()', body: 'Value dikhata hai.' },
+        },
+        {
+          ...bugCard,
+          hi: {
+            title: 'Bug dhoondo',
+            body: 'Tap karo.',
+            fix: 'Quote band karo.',
+          },
+        },
+      ],
+      check: {
+        ...validLearn.check,
+        hi: { question: 'Yeh kya print karega?', explanation: '1 + 1 = 2.' },
+      },
+    },
+    ...patch,
+  });
+
+  it('keeps each card’s, the check’s and the prompt’s Hinglish', () => {
+    const lesson = parseLesson(hinglish(), 'x.json');
+    expect(lesson.exercise.promptHi).toBe('Sum print karo.');
+    expect(lesson.learn?.cards[1].hi).toEqual({
+      title: 'Bug dhoondo',
+      body: 'Tap karo.',
+      fix: 'Quote band karo.',
+    });
+    expect(lesson.learn?.check.hi?.question).toBe('Yeh kya print karega?');
+  });
+
+  it('a lesson without Hinglish has a null promptHi', () => {
+    expect(parseLesson(validLesson, 'x.json').exercise.promptHi).toBeNull();
+  });
+
+  it('is all or nothing within a lesson', () => {
+    const noPrompt = hinglish();
+    // The English exercise has no promptHi.
+    const exercise = validLesson.exercise;
+    expect(() => parseLesson({ ...noPrompt, exercise }, 'x.json')).toThrow(
+      /all or nothing/,
+    );
+    const onlyPrompt = {
+      ...validLesson,
+      learn: validLearn,
+      exercise: { ...validLesson.exercise, promptHi: 'Sum print karo.' },
+    };
+    expect(() => parseLesson(onlyPrompt, 'x.json')).toThrow(/all or nothing/);
+  });
+
+  it('a bug card needs its fix in Hinglish, a teaching card has none', () => {
+    const lesson = hinglish();
+    const [card, bug] = lesson.learn.cards;
+    const noFix = { ...bug, hi: { title: 'T', body: 'B' } };
+    expect(() =>
+      parseLesson(
+        { ...lesson, learn: { ...lesson.learn, cards: [card, noFix] } },
+        'x.json',
+      ),
+    ).toThrow(/hi\.fix/);
+    const fixOnTeaching = { ...card, hi: { ...card.hi, fix: 'F' } };
+    expect(() =>
+      parseLesson(
+        { ...lesson, learn: { ...lesson.learn, cards: [fixOnTeaching, bug] } },
+        'x.json',
+      ),
+    ).toThrow(/bug cards only/);
+  });
+
+  it('Hinglish options need one per English option', () => {
+    const lesson = hinglish();
+    const check = {
+      ...lesson.learn.check,
+      hi: { ...lesson.learn.check.hi, options: ['2'] },
+    };
+    expect(() =>
+      parseLesson({ ...lesson, learn: { ...lesson.learn, check } }, 'x.json'),
+    ).toThrow(/one option per English option/);
+  });
+
+  // The words change, the code doesn't: every `code` span (exact outputs
+  // the grader compares, names, operators) is the same in both languages.
+  it('Hinglish keeps every code span of the English', () => {
+    const spans = (text = '') =>
+      (text.match(/`[^`]+`/g) ?? []).sort().join(' | ');
+    for (const course of loadAllContent(REAL_CONTENT)) {
+      for (const lesson of course.units.flatMap((u) => u.lessons)) {
+        const where = `${course.slug}/${lesson.slug}`;
+        if (lesson.exercise.promptHi !== null) {
+          expect(spans(lesson.exercise.promptHi), where).toBe(
+            spans(lesson.exercise.prompt),
+          );
+        }
+        for (const card of lesson.learn?.cards ?? []) {
+          if (!card.hi) continue;
+          expect(spans(card.hi.body), where).toBe(spans(card.body));
+          expect(spans(card.hi.fix), where).toBe(spans(card.bug?.fix));
+        }
+        const check = lesson.learn?.check;
+        if (check?.hi) {
+          expect(spans(check.hi.explanation), where).toBe(
+            spans(check.explanation),
+          );
+        }
+      }
+    }
+  });
+
+  it('every Python lesson has Hinglish', () => {
+    const python = loadAllContent(REAL_CONTENT).find(
+      (c) => c.slug === 'python',
+    )!;
+    const lessons = python.units.flatMap((u) => u.lessons);
+    expect(lessons).toHaveLength(40);
+    for (const lesson of lessons) {
+      expect(lesson.exercise.promptHi, lesson.slug).not.toBeNull();
+    }
+  });
+});

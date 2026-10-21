@@ -8,6 +8,7 @@ import type {
   CoursePath,
   GitScenario,
   LessonDetail,
+  LessonLanguage,
   LessonState,
   PracticeItem,
   PracticeSet,
@@ -16,12 +17,19 @@ import type {
 } from '@loophole/shared';
 import { and, asc, count, eq, inArray, max } from 'drizzle-orm';
 import { exerciseKind } from '../../common/exercise-kind.js';
+import {
+  localizeCard,
+  localizeCheck,
+  localizeLearn,
+  localizePrompt,
+} from '../../common/lesson-text.js';
 import { DbService } from '../../db/db.service.js';
 import {
   certificates,
   courses,
   exercises,
   lessons,
+  profiles,
   units,
   userProgress,
 } from '../../db/schema/index.js';
@@ -143,10 +151,12 @@ export class LessonsService {
   // order. Open for every unit, locked ones included, like a guidebook:
   // cards only teach, so nothing graded or secret is in them.
   async getCheatSheet(
+    userId: string,
     courseSlug: string,
     unitId: string,
   ): Promise<UnitCheatSheet> {
     const rows = await this.unitLessons(courseSlug, unitId);
+    const language = await this.lessonLanguage(userId);
     return {
       unitId,
       title: rows[0].unitTitle,
@@ -157,6 +167,7 @@ export class LessonsService {
         // running.
         cards: (row.learn?.cards ?? [])
           .filter((card) => !card.bug)
+          .map((card) => localizeCard(card, language))
           .map(({ title, body, code }) =>
             code === undefined ? { title, body } : { title, body, code },
           ),
@@ -167,17 +178,24 @@ export class LessonsService {
   // A unit's Bug hunt (ADR-031): every spot-the-bug card in it, in path
   // order, for an ungraded review. Answers may travel to the browser: like
   // the quick check, nothing here pays XP.
-  async getBugHunt(courseSlug: string, unitId: string): Promise<UnitBugHunt> {
+  async getBugHunt(
+    userId: string,
+    courseSlug: string,
+    unitId: string,
+  ): Promise<UnitBugHunt> {
     const rows = await this.unitLessons(courseSlug, unitId);
+    const language = await this.lessonLanguage(userId);
     return {
       unitId,
       title: rows[0].unitTitle,
       bugs: rows.flatMap((row) =>
-        (row.learn?.cards ?? []).flatMap(({ title, body, code, bug }) =>
-          bug && code !== undefined
-            ? [{ lesson: row.lessonTitle, title, body, code, bug }]
-            : [],
-        ),
+        (row.learn?.cards ?? [])
+          .map((card) => localizeCard(card, language))
+          .flatMap(({ title, body, code, bug }) =>
+            bug && code !== undefined
+              ? [{ lesson: row.lessonTitle, title, body, code, bug }]
+              : [],
+          ),
       ),
     };
   }
@@ -204,17 +222,36 @@ export class LessonsService {
       // Finished longest ago first: pickPractice weighs those the most.
       .orderBy(asc(userProgress.completedAt));
 
+    const language = await this.lessonLanguage(userId);
     const pool = done.flatMap(({ title, learn }): PracticeItem[] => [
       ...(learn
-        ? [{ kind: 'check' as const, lesson: title, check: learn.check }]
+        ? [
+            {
+              kind: 'check' as const,
+              lesson: title,
+              check: localizeCheck(learn.check, language),
+            },
+          ]
         : []),
-      ...(learn?.cards ?? []).flatMap(({ body, code, bug }) =>
-        bug && code !== undefined
-          ? [{ kind: 'bug' as const, lesson: title, body, code, bug }]
-          : [],
-      ),
+      ...(learn?.cards ?? [])
+        .map((card) => localizeCard(card, language))
+        .flatMap(({ body, code, bug }) =>
+          bug && code !== undefined
+            ? [{ kind: 'bug' as const, lesson: title, body, code, bug }]
+            : [],
+        ),
     ]);
     return { course, items: pickPractice(pool) };
+  }
+
+  // The language this user reads lessons in (ADR-042); English until
+  // they pick, or before their profile exists.
+  private async lessonLanguage(userId: string): Promise<LessonLanguage> {
+    const [row] = await this.db.drizzle
+      .select({ language: profiles.lessonLanguage })
+      .from(profiles)
+      .where(eq(profiles.id, userId));
+    return row?.language ?? 'en';
   }
 
   // A unit's lessons with their Learn step, in path order. 404 unless the
@@ -252,6 +289,7 @@ export class LessonsService {
         // Checks are all shown to the learner; only their labels are sent.
         checks: exercises.checks,
         gitScenario: exercises.gitScenario,
+        promptHi: exercises.promptHi,
         exercise: {
           id: exercises.id,
           prompt: exercises.prompt,
@@ -267,13 +305,20 @@ export class LessonsService {
     if (!lesson) throw notFound('Lesson');
 
     await this.assertUnlocked(userId, lesson.id, lesson.courseId);
+    // ADR-042: the learner's language; stored Hinglish never goes out as is.
+    const language = await this.lessonLanguage(userId);
     return {
       id: lesson.id,
       title: lesson.title,
       course: lesson.course,
-      learn: lesson.learn,
+      learn: localizeLearn(lesson.learn, language),
       exercise: {
         ...lesson.exercise,
+        prompt: localizePrompt(
+          lesson.exercise.prompt,
+          lesson.promptHi,
+          language,
+        ),
         kind: exerciseKind(lesson.language),
         checks: (lesson.checks ?? lesson.gitScenario?.checks ?? []).map(
           (c) => c.label,

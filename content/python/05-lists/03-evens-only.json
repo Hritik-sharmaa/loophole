@@ -8,19 +8,31 @@
         "title": "Looping over a list",
         "body": "`for x in nums` visits each item in order.",
         "code": "for x in [3, 6, 9]:\n    print(x * 10)\n",
-        "output": "30\n60\n90"
+        "output": "30\n60\n90",
+        "hi": {
+          "title": "List par loop",
+          "body": "`for x in nums` har item par order mein jaata hai."
+        }
       },
       {
         "title": "append() adds to the end",
         "body": "Start with an empty list `[]` and use `.append(x)` to add items one by one.",
         "code": "big = []\nfor x in [5, 12, 8, 20]:\n    if x > 10:\n        big.append(x)\nprint(big)\n",
-        "output": "[12, 20]"
+        "output": "[12, 20]",
+        "hi": {
+          "title": "append() end mein jodta hai",
+          "body": "Khaali list `[]` se shuru karo aur `.append(x)` se ek ek karke items jodo."
+        }
       },
       {
         "title": "Printing with spaces",
         "body": "`\" \".join(...)` joins items with a space between them. It needs strings, so `map(str, ...)` converts the numbers first.",
         "code": "print(\" \".join(map(str, [1, 2, 3])))\n",
-        "output": "1 2 3"
+        "output": "1 2 3",
+        "hi": {
+          "title": "Spaces ke saath print karna",
+          "body": "`\" \".join(...)` items ko beech mein space daalkar jodta hai. Ise strings chahiye, isliye `map(str, ...)` pehle numbers ko convert karta hai."
+        }
       },
       {
         "title": "Spot the bug",
@@ -29,6 +41,11 @@
         "bug": {
           "line": 2,
           "fix": "`join` needs strings. Turn the numbers into text first: `\" \".join(map(str, nums))`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Isse `1 2 3` print karna chahiye, par yeh `TypeError` dekar crash hota hai. Kaunsi line galat hai?",
+          "fix": "`join` ko strings chahiye. Pehle numbers ko text banao: `\" \".join(map(str, nums))`."
         }
       }
     ],
@@ -37,11 +54,16 @@
       "code": "r = []\nfor x in [1, 2, 3, 4]:\n    if x % 2 == 1:\n        r.append(x)\nprint(r)\n",
       "options": ["[1, 3]", "[2, 4]", "[1, 2, 3, 4]"],
       "answer": 0,
-      "explanation": "x % 2 == 1 is True for odd numbers, so only 1 and 3 are added."
+      "explanation": "x % 2 == 1 is True for odd numbers, so only 1 and 3 are added.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "x % 2 == 1 odd numbers ke liye True hai, isliye sirf 1 aur 3 jodte hain."
+      }
     }
   },
   "exercise": {
     "prompt": "Read whole numbers on one line and print only the even ones, in the same order, separated by spaces. If there are none, print an empty line.",
+    "promptHi": "Ek line mein whole numbers padho aur sirf even waale print karo, usi order mein, spaces se alag. Agar ek bhi nahi hai, toh khaali line print karo.",
     "starterCode": "nums = list(map(int, input().split()))\nevens = []\n# add the even numbers to evens\nprint(\" \".join(map(str, evens)))\n",
     "sampleTests": [
       {

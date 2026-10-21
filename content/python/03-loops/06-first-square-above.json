@@ -8,13 +8,21 @@
         "title": "Loop until you get there",
         "body": "When you do not know how many rounds you need, use `while` with the opposite of your goal: keep going while you are not there yet.",
         "code": "x = 1\nwhile x < 100:\n    x = x * 2\nprint(x)\n",
-        "output": "128"
+        "output": "128",
+        "hi": {
+          "title": "Wahan pahunchne tak loop",
+          "body": "Jab pata na ho kitne rounds chahiye, toh apne goal ke ulte ke saath `while` use karo: jab tak wahan nahi pahunche, chalte raho."
+        }
       },
       {
         "title": "The value after the loop",
         "body": "When a `while` loop ends, its variable holds the first value that made the condition False.",
         "code": "k = 1\nwhile k * 3 <= 10:\n    k += 1\nprint(k)\n",
-        "output": "4"
+        "output": "4",
+        "hi": {
+          "title": "Loop ke baad ki value",
+          "body": "Jab `while` loop khatam hota hai, uske variable mein woh pehli value hoti hai jisne condition ko False banaya."
+        }
       },
       {
         "title": "Spot the bug",
@@ -23,6 +31,11 @@
         "bug": {
           "line": 2,
           "fix": "`1 > 1000` is False straight away, so the loop never runs. Keep going while you are not there yet: `while x <= 1000:`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Isse 1000 paar hone tak double karte rehna chahiye aur 1024 print karna chahiye, par yeh 1 print karta hai. Bug par tap karo.",
+          "fix": "`1 > 1000` shuru se hi False hai, isliye loop kabhi chalta hi nahi. Jab tak wahan nahi pahunche, chalte raho: `while x <= 1000:`."
         }
       }
     ],
@@ -31,11 +44,16 @@
       "code": "k = 1\nwhile k * k < 20:\n    k += 1\nprint(k)\n",
       "options": ["4", "5", "20"],
       "answer": 1,
-      "explanation": "4 * 4 is 16, still under 20, so k grows to 5. Then 5 * 5 = 25 stops the loop."
+      "explanation": "4 * 4 is 16, still under 20, so k grows to 5. Then 5 * 5 = 25 stops the loop.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "4 * 4 = 16, abhi bhi 20 se kam, isliye k 5 ho jaata hai. Phir 5 * 5 = 25 loop rok deta hai."
+      }
     }
   },
   "exercise": {
     "prompt": "Read a whole number N and print the smallest whole number k (starting from 1) whose square `k * k` is greater than N. Use a `while` loop.",
+    "promptHi": "Ek whole number N padho aur woh sabse chhota whole number k print karo (1 se shuru) jiska square `k * k` N se bada ho. `while` loop use karo.",
     "starterCode": "n = int(input())\nk = 1\n# grow k until k * k > n\nprint(k)\n",
     "sampleTests": [
       {

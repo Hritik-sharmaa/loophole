@@ -8,25 +8,41 @@
         "title": "Dictionaries map keys to values",
         "body": "A dictionary stores pairs in curly braces. Look a value up by its key with square brackets.",
         "code": "ages = {\"ada\": 36, \"bo\": 7}\nprint(ages[\"ada\"])\n",
-        "output": "36"
+        "output": "36",
+        "hi": {
+          "title": "Dictionaries keys ko values se jodti hain",
+          "body": "Dictionary curly braces mein pairs store karti hai. Kisi value ko uski key se square brackets mein dhoondo."
+        }
       },
       {
         "title": "Adding and replacing",
         "body": "Assigning to a key adds it, or replaces the old value if the key is already there.",
         "code": "ages = {}\nages[\"cy\"] = 20\nages[\"cy\"] = 21\nprint(ages)\n",
-        "output": "{'cy': 21}"
+        "output": "{'cy': 21}",
+        "hi": {
+          "title": "Jodna aur badalna",
+          "body": "Kisi key ko value assign karo toh woh jud jaati hai, ya agar key pehle se hai toh purani value badal jaati hai."
+        }
       },
       {
         "title": "Is the key there?",
         "body": "`key in d` is True when the dictionary has that key. Looking up a missing key with `[]` is an error, so check first.",
         "code": "ages = {\"ada\": 36}\nprint(\"ada\" in ages)\nprint(\"zed\" in ages)\n",
-        "output": "True\nFalse"
+        "output": "True\nFalse",
+        "hi": {
+          "title": "Key hai ya nahi?",
+          "body": "`key in d` True hai jab dictionary mein woh key ho. `[]` se missing key dhoondna error hai, isliye pehle check karo."
+        }
       },
       {
         "title": "Two values from one line",
         "body": "`a, b = line.split()` splits a line and stores the two pieces in two variables at once.",
         "code": "name, score = \"ada 90\".split()\nprint(score, name)\n",
-        "output": "90 ada"
+        "output": "90 ada",
+        "hi": {
+          "title": "Ek line se do values",
+          "body": "`a, b = line.split()` line ko split karke dono tukde ek saath do variables mein store karta hai."
+        }
       },
       {
         "title": "Spot the bug",
@@ -35,6 +51,11 @@
         "bug": {
           "line": 2,
           "fix": "Keys must match exactly, capitals too. The key is `\"ada\"`, so use `ages[\"ada\"]`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Isse Ada ki age 36 print karni chahiye, par yeh `KeyError` dekar crash hota hai. Bug par tap karo.",
+          "fix": "Keys bilkul match honi chahiye, capitals bhi. Key `\"ada\"` hai, isliye `ages[\"ada\"]` use karo."
         }
       }
     ],
@@ -43,11 +64,16 @@
       "code": "d = {\"x\": 1}\nd[\"x\"] = 5\nprint(d[\"x\"])\n",
       "options": ["5", "1", "6"],
       "answer": 0,
-      "explanation": "Assigning to an existing key replaces its value."
+      "explanation": "Assigning to an existing key replaces its value.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "Pehle se maujood key ko assign karne par uski value badal jaati hai."
+      }
     }
   },
   "exercise": {
     "prompt": "The first line is a count N; then N lines of `name number`. The last line is a name: print its number, or `unknown` if it is not in the book. Store the book in a dictionary; if a name appears twice, the later number wins.",
+    "promptHi": "Pehli line mein count N hai; phir `name number` ki N lines. Aakhri line ek naam hai: uska number print karo, ya agar woh book mein nahi hai toh `unknown`. Book ko dictionary mein store karo; agar koi naam do baar aaye, toh baad wala number jeetega.",
     "starterCode": "n = int(input())\nbook = {}\n# read n lines of \"name number\" into book\n# then read one name and print its number or unknown\n",
     "sampleTests": [
       {

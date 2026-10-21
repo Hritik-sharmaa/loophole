@@ -41,18 +41,20 @@ export class CoursesController {
   // One unit's Learn cards on a single page (ADR-030).
   @Get(':slug/units/:unitId/cheatsheet')
   cheatSheet(
+    @CurrentUser() user: AuthUser,
     @Param('slug') slug: string,
     @Param('unitId', new ParseUUIDPipe()) unitId: string,
   ): Promise<UnitCheatSheet> {
-    return this.lessons.getCheatSheet(slug, unitId);
+    return this.lessons.getCheatSheet(user.id, slug, unitId);
   }
 
   // One unit's spot-the-bug cards, for its Bug hunt review (ADR-031).
   @Get(':slug/units/:unitId/bug-hunt')
   bugHunt(
+    @CurrentUser() user: AuthUser,
     @Param('slug') slug: string,
     @Param('unitId', new ParseUUIDPipe()) unitId: string,
   ): Promise<UnitBugHunt> {
-    return this.lessons.getBugHunt(slug, unitId);
+    return this.lessons.getBugHunt(user.id, slug, unitId);
   }
 }

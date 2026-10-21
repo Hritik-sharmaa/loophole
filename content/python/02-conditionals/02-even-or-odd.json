@@ -8,13 +8,21 @@
         "title": "Even numbers leave nothing over",
         "body": "A number is even when dividing it by 2 leaves no remainder, so `n % 2` is `0`.",
         "code": "print(10 % 2)\nprint(7 % 2)\n",
-        "output": "0\n1"
+        "output": "0\n1",
+        "hi": {
+          "title": "Even numbers mein kuch nahi bachta",
+          "body": "Number even hota hai jab 2 se divide karne par koi remainder nahi bachta, yaani `n % 2` ka matlab `0`."
+        }
       },
       {
         "title": "== compares, = stores",
         "body": "`=` puts a value into a variable. `==` asks whether two values are equal. Inside an `if`, you almost always want `==`.",
         "code": "n = 9\nif n % 3 == 0:\n    print(\"divides by 3\")\nelse:\n    print(\"does not divide by 3\")\n",
-        "output": "divides by 3"
+        "output": "divides by 3",
+        "hi": {
+          "title": "== compare karta hai, = store karta hai",
+          "body": "`=` variable mein value daalta hai. `==` poochta hai ki do values barabar hain ya nahi. `if` ke andar almost hamesha `==` chahiye."
+        }
       },
       {
         "title": "Spot the bug",
@@ -23,6 +31,11 @@
         "bug": {
           "line": 2,
           "fix": "`=` stores a value; `==` compares two. Line 2 needs `n % 5 == 0`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Isse check karna chahiye ki number 5 se divide hota hai ya nahi, par Python ise chalane se mana kar deta hai. Bug par tap karo.",
+          "fix": "`=` value store karta hai; `==` do values compare karta hai. Line 2 ko `n % 5 == 0` chahiye."
         }
       }
     ],
@@ -31,11 +44,17 @@
       "code": "print(15 % 2 == 0)\n",
       "options": ["True", "False", "An error"],
       "answer": 1,
-      "explanation": "15 % 2 is 1, and 1 == 0 is False, so 15 is odd."
+      "explanation": "15 % 2 is 1, and 1 == 0 is False, so 15 is odd.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "options": ["True", "False", "Error aayega"],
+        "explanation": "15 % 2 ka matlab 1, aur 1 == 0 False hai, isliye 15 odd hai."
+      }
     }
   },
   "exercise": {
     "prompt": "Read a whole number and print `even` if it divides by 2 with nothing left over, otherwise print `odd`.",
+    "promptHi": "Ek whole number padho aur agar woh 2 se poora divide hota hai toh `even` print karo, warna `odd`.",
     "starterCode": "n = int(input())\n# print even or odd below\n",
     "sampleTests": [
       {

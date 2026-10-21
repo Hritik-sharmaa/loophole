@@ -8,6 +8,7 @@ import { GuideSays, type GuideId } from '@/components/guide';
 import { InlineCode } from '@/components/inline-code';
 import { primaryButton } from '@/components/ui/buttons';
 import { chip } from '@/components/ui/card';
+import { useLessonWords } from '@/lib/lesson-words';
 
 type BugCard = Required<Pick<LearnCard, 'body' | 'code' | 'bug'>>;
 
@@ -42,6 +43,7 @@ export function SpotTheBug({
   }
 
   const mood = found ? 'happy' : wrong.size > 0 ? 'oops' : 'thinking';
+  const words = useLessonWords();
 
   return (
     <section className="flex flex-col gap-6">
@@ -110,23 +112,23 @@ export function SpotTheBug({
                 {found ? (
                   <>
                     <Check className="size-5 text-blue" strokeWidth={3.5} />
-                    You found it!
+                    {words.found}
                   </>
                 ) : (
-                  `The bug is on line ${card.bug.line}.`
+                  words.bugOnLine(card.bug.line)
                 )}
               </span>
               <InlineCode text={card.bug.fix} />
             </p>
           ) : wrong.size > 0 ? (
             <p className="flex flex-wrap items-center gap-x-3 font-bold">
-              Not that one. Look again.
+              {words.notThat}
               <button
                 type="button"
                 onClick={() => setShown(true)}
                 className="rounded-badge text-text-secondary underline hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
               >
-                Show me
+                {words.showMe}
               </button>
             </p>
           ) : (
@@ -141,7 +143,7 @@ export function SpotTheBug({
                   Back
                 </button>
               )}
-              Tap the line with the bug.
+              {words.tapBug}
             </p>
           )}
         </div>

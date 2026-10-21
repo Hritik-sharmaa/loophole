@@ -8,13 +8,14 @@ Conventions: `uuid` primary keys (`gen_random_uuid()`), `timestamptz` in UTC, sn
 
 ### profiles — S1
 
-| Column     | Type        | Notes                                                                                       |
-| ---------- | ----------- | ------------------------------------------------------------------------------------------- |
-| id         | uuid PK     | = `auth.users.id`                                                                           |
-| username   | text        | unique, 3–20 chars of a–z, 0–9, _ ; auto-generated on first login, editable via `PATCH /me` |
-| avatar_url | text        | nullable                                                                                    |
-| daily_goal | smallint    | nullable; 10, 20 or 30 XP a day, picked in the welcome (ADR-033, migration 0012)            |
-| created_at | timestamptz |                                                                                             |
+| Column          | Type        | Notes                                                                                             |
+| --------------- | ----------- | ------------------------------------------------------------------------------------------------- |
+| id              | uuid PK     | = `auth.users.id`                                                                                 |
+| username        | text        | unique, 3–20 chars of a–z, 0–9, _ ; auto-generated on first login, editable via `PATCH /me`       |
+| avatar_url      | text        | nullable                                                                                          |
+| daily_goal      | smallint    | nullable; 10, 20 or 30 XP a day, picked in the welcome (ADR-033, migration 0012)                  |
+| lesson_language | text        | `en` (default) or `hinglish` (check); the language lessons are shown in (ADR-042, migration 0016) |
+| created_at      | timestamptz |                                                                                                   |
 
 ### courses — S2
 
@@ -54,6 +55,7 @@ Conventions: `uuid` primary keys (`gen_random_uuid()`), `timestamptz` in UTC, sn
 | id           | uuid PK           |                                                                                                                                        |
 | lesson_id    | uuid FK → lessons | one exercise per lesson in v1                                                                                                          |
 | prompt       | text              | Markdown                                                                                                                               |
+| prompt_hi    | text              | nullable; the prompt in Hinglish (ADR-042, migration 0016). `lessons.learn` cards and check carry their own `hi`                       |
 | starter_code | text              |                                                                                                                                        |
 | sample_tests | jsonb             | `[{ input, expectedOutput }]` — shown to learner                                                                                       |
 | hidden_tests | jsonb             | `[{ input, expectedOutput }]` — **never returned by the API**                                                                          |

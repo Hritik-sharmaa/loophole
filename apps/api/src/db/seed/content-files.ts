@@ -2,9 +2,6 @@ import type {
   ExerciseKind,
   GitCheck,
   GitScenario,
-  LearnCard,
-  LessonLearn,
-  QuickCheck,
   TestCase,
   WebCheck,
 } from '@loophole/shared';
@@ -12,6 +9,13 @@ import { parse as parseSelector } from 'css-what';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { exerciseKind } from '../../common/exercise-kind.js';
+import type {
+  CardHinglish,
+  CheckHinglish,
+  StoredCard,
+  StoredCheck,
+  StoredLearn,
+} from '../../common/lesson-text.js';
 import { newWorld, runCommands } from '../../modules/git/git-sim.js';
 
 // Reads and checks the content/ folder (docs/CONTENT_GUIDE.md) without
@@ -23,9 +27,11 @@ export type LessonContent = {
   slug: string;
   title: string;
   position: number;
-  learn: LessonLearn | null;
+  // With the Hinglish next to the English (ADR-042).
+  learn: StoredLearn | null;
   exercise: {
     prompt: string;
+    promptHi: string | null;
     starterCode: string;
     sampleTests: TestCase[];
     hiddenTests: TestCase[];
@@ -162,6 +168,10 @@ export function parseLesson(
   const o = asObject(json, file);
   const ex = asObject(o.exercise, file, 'exercise');
   const prompt = asText(ex.prompt, file, 'exercise.prompt');
+  const promptHi =
+    ex.promptHi === undefined
+      ? null
+      : asText(ex.promptHi, file, 'exercise.promptHi');
   const starterCode = asString(ex.starterCode, file, 'exercise.starterCode');
 
   let exercise: LessonContent['exercise'];
@@ -174,6 +184,7 @@ export function parseLesson(
     }
     exercise = {
       prompt,
+      promptHi,
       starterCode,
       sampleTests: [],
       hiddenTests: [],
@@ -192,6 +203,7 @@ export function parseLesson(
     }
     exercise = {
       prompt,
+      promptHi,
       starterCode,
       sampleTests: [],
       hiddenTests: [],
@@ -204,6 +216,7 @@ export function parseLesson(
     }
     exercise = {
       prompt,
+      promptHi,
       starterCode,
       sampleTests: asTests(
         ex.sampleTests,
@@ -222,13 +235,36 @@ export function parseLesson(
     };
   }
 
+  const learn = o.learn === undefined ? null : parseLearn(o.learn, file, kind);
+  assertHinglishComplete(learn, promptHi, file);
   return {
     slug: asSlug(o.slug, file, 'slug'),
     title: asText(o.title, file, 'title'),
     position: asPosition(o.position, file),
-    learn: o.learn === undefined ? null : parseLearn(o.learn, file, kind),
+    learn,
     exercise,
   };
+}
+
+// ADR-042: a lesson is in Hinglish all the way through or not at all, so a
+// learner never gets half a lesson in each language.
+function assertHinglishComplete(
+  learn: StoredLearn | null,
+  promptHi: string | null,
+  file: string,
+): void {
+  const parts = [
+    promptHi !== null,
+    ...(learn
+      ? [...learn.cards, learn.check].map((x) => x.hi !== undefined)
+      : []),
+  ];
+  if (parts.some(Boolean) && !parts.every(Boolean)) {
+    throw new ContentError(
+      file,
+      'Hinglish is all or nothing: every card, the check and exercise.promptHi',
+    );
+  }
 }
 
 // ADR-026. The setup is replayed here, so a broken one fails CI: any
@@ -374,7 +410,7 @@ export function parseLearn(
   json: unknown,
   file: string,
   kind: ExerciseKind = 'program',
-): LessonLearn {
+): StoredLearn {
   const o = asObject(json, file, 'learn');
   if (
     !Array.isArray(o.cards) ||
@@ -400,12 +436,15 @@ function parseCard(
   file: string,
   field: string,
   kind: ExerciseKind,
-): LearnCard {
+): StoredCard {
   const o = asObject(json, file, field);
-  const card: LearnCard = {
+  const card: StoredCard = {
     title: asText(o.title, file, `${field}.title`),
     body: asText(o.body, file, `${field}.body`),
   };
+  if (o.hi !== undefined) {
+    card.hi = parseCardHinglish(o.hi, o.bug !== undefined, file, field);
+  }
   if (o.bug !== undefined) return parseBugCard(o, card, file, field);
   if (o.code === undefined || kind !== 'program') {
     if (o.input !== undefined || o.output !== undefined) {
@@ -432,10 +471,10 @@ function parseCard(
 // course language.
 function parseBugCard(
   o: Record<string, unknown>,
-  card: LearnCard,
+  card: StoredCard,
   file: string,
   field: string,
-): LearnCard {
+): StoredCard {
   if (o.input !== undefined || o.output !== undefined) {
     throw new ContentError(file, `${field}: a bug card has no input or output`);
   }
@@ -452,7 +491,26 @@ function parseBugCard(
   };
 }
 
-function parseCheck(json: unknown, file: string): QuickCheck {
+// A card's Hinglish (ADR-042): title and body, plus the fix on a bug card.
+function parseCardHinglish(
+  json: unknown,
+  isBug: boolean,
+  file: string,
+  field: string,
+): CardHinglish {
+  const o = asObject(json, file, `${field}.hi`);
+  const hi: CardHinglish = {
+    title: asText(o.title, file, `${field}.hi.title`),
+    body: asText(o.body, file, `${field}.hi.body`),
+  };
+  if (isBug) hi.fix = asText(o.fix, file, `${field}.hi.fix`);
+  else if (o.fix !== undefined) {
+    throw new ContentError(file, `${field}.hi.fix belongs on bug cards only`);
+  }
+  return hi;
+}
+
+function parseCheck(json: unknown, file: string): StoredCheck {
   const field = 'learn.check';
   const o = asObject(json, file, field);
   if (
@@ -471,7 +529,7 @@ function parseCheck(json: unknown, file: string): QuickCheck {
   if (new Set(options).size !== options.length) {
     throw new ContentError(file, `${field}.options has duplicates`);
   }
-  const check: QuickCheck = {
+  const check: StoredCheck = {
     question: asText(o.question, file, `${field}.question`),
     options,
     answer: asIntIn(o.answer, 0, options.length - 1, file, `${field}.answer`),
@@ -480,7 +538,35 @@ function parseCheck(json: unknown, file: string): QuickCheck {
   if (o.code !== undefined) {
     check.code = asText(o.code, file, `${field}.code`);
   }
+  if (o.hi !== undefined) check.hi = parseCheckHinglish(o.hi, options, file);
   return check;
+}
+
+// The check's Hinglish (ADR-042). Options are optional: most are program
+// output, which stays the same; when given, one per English option.
+function parseCheckHinglish(
+  json: unknown,
+  options: string[],
+  file: string,
+): CheckHinglish {
+  const field = 'learn.check.hi';
+  const o = asObject(json, file, field);
+  const hi: CheckHinglish = {
+    question: asText(o.question, file, `${field}.question`),
+    explanation: asText(o.explanation, file, `${field}.explanation`),
+  };
+  if (o.options !== undefined) {
+    if (!Array.isArray(o.options) || o.options.length !== options.length) {
+      throw new ContentError(
+        file,
+        `${field}.options needs one option per English option`,
+      );
+    }
+    hi.options = o.options.map((opt, i) =>
+      asText(opt, file, `${field}.options[${i}]`),
+    );
+  }
+  return hi;
 }
 
 // Every content/duels/<language>/*.json file. The folder name must match

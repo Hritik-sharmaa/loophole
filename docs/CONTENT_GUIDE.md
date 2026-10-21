@@ -113,6 +113,28 @@ A card with a `bug` is a spot-the-bug card: short code with exactly one wrong li
 - Put it last, after the teaching cards, so it practises what they just taught. It counts toward the 1–5 cards.
 - Bug cards stay out of the unit's cheat sheet and make up its **Bug hunt**, the review at the end of the unit. Every lesson has exactly one, as its last card; `content-files.spec.ts` checks that.
 
+### Hinglish (ADR-042)
+
+A lesson may carry Hinglish next to its English. It is all or nothing: every card, the check and the exercise, or none of them (the loader refuses half).
+
+```json
+{
+  "title": "Text goes in quotes",
+  "body": "Text in Python is called a string. ...",
+  "code": "print(\"I am learning Python\")\n",
+  "output": "I am learning Python",
+  "hi": {
+    "title": "Text quotes mein jaata hai",
+    "body": "Python mein text ko string kehte hain. ..."
+  }
+}
+```
+
+- A card's `hi` has `title` and `body`, plus `fix` on a bug card (and only there). The check's `hi` has `question` and `explanation`, and `options` only when the options are words ("An error" → "Error aayega"), one per English option in the same order; output options stay as they are. The exercise has `promptHi` next to `prompt`.
+- Never translate code, inputs, outputs or tests. Every `code` span must appear in the Hinglish exactly as in the English: `content-files.spec.ts` checks it, because prompts hold the exact output the grader compares.
+- Style: Roman script, friendly, "aap"; keep programming words in English (string, variable, loop, list, function, input, output) the way Indian teachers say them. "Spot the bug" is "Bug dhoondo"; "What does this print?" is "Yeh kya print karega?".
+- Done: `content/python` (all 40 lessons). JavaScript, HTML & CSS and Git are next.
+
 ### Grading rule
 
 Each test runs the program with `input` as stdin. It passes when **trimmed stdout equals trimmed `expectedOutput`** (trailing whitespace and a final newline ignored). Exact match, not "contains".

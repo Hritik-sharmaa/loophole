@@ -8,13 +8,21 @@
         "title": "while repeats while a condition holds",
         "body": "A `while` loop checks its condition, runs the body, then checks again. It stops as soon as the condition is False.",
         "code": "n = 1\nwhile n <= 3:\n    print(n)\n    n = n + 1\n",
-        "output": "1\n2\n3"
+        "output": "1\n2\n3",
+        "hi": {
+          "title": "while tab tak chalta hai jab tak condition sahi hai",
+          "body": "`while` loop apni condition check karta hai, body chalata hai, phir dobara check karta hai. Condition False hote hi ruk jaata hai."
+        }
       },
       {
         "title": "Change the variable, or loop forever",
         "body": "If nothing in the body changes the condition, the loop never ends. `n -= 2` is a short way to write `n = n - 2`.",
         "code": "n = 3\nwhile n > 0:\n    print(n)\n    n -= 2\n",
-        "output": "3\n1"
+        "output": "3\n1",
+        "hi": {
+          "title": "Variable badlo, warna loop kabhi nahi rukega",
+          "body": "Agar body mein kuch bhi condition ko nahi badalta, toh loop kabhi khatam nahi hota. `n -= 2` likhna `n = n - 2` ka chhota tareeka hai."
+        }
       },
       {
         "title": "Spot the bug",
@@ -23,6 +31,11 @@
         "bug": {
           "line": 4,
           "fix": "`n * 2` works out a value and throws it away, so `n` never changes and the loop never ends. Line 4 should be `n = n * 2`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Isse 1, 2, 4, 8 … 64 tak print karna chahiye, par yeh hamesha 1 print karta rehta hai. Kaunsi line galat hai?",
+          "fix": "`n * 2` ek value nikalta hai aur phenk deta hai, isliye `n` kabhi nahi badalta aur loop kabhi khatam nahi hota. Line 4 `n = n * 2` honi chahiye."
         }
       }
     ],
@@ -31,11 +44,16 @@
       "code": "n = 2\nwhile n > 0:\n    n -= 1\nprint(n)\n",
       "options": ["0", "1", "-1"],
       "answer": 0,
-      "explanation": "The loop stops when n > 0 is first False, at 0. The print is not indented, so it runs once, after the loop."
+      "explanation": "The loop stops when n > 0 is first False, at 0. The print is not indented, so it runs once, after the loop.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "Loop tab rukta hai jab n > 0 pehli baar False hota hai, yaani 0 par. print indented nahi hai, isliye loop ke baad ek hi baar chalta hai."
+      }
     }
   },
   "exercise": {
     "prompt": "Read N and count down from N to 1, one number per line, then print `Liftoff!`. Use a `while` loop.",
+    "promptHi": "N padho aur N se 1 tak ulti ginti karo, har line mein ek number, phir `Liftoff!` print karo. `while` loop use karo.",
     "starterCode": "n = int(input())\n# count down with a while loop\nprint(\"Liftoff!\")\n",
     "sampleTests": [
       {

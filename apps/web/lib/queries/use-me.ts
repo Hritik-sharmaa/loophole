@@ -28,7 +28,16 @@ export function useUpdateMe() {
         method: 'PATCH',
         body: JSON.stringify(body),
       }),
-    onSuccess: (me) => queryClient.setQueryData(ME_KEY, me),
+    onSuccess: (me, body) => {
+      queryClient.setQueryData(ME_KEY, me);
+      // ADR-042: lessons, cheat sheets, bug hunts and practice come back
+      // in the new language.
+      if (body.lessonLanguage !== undefined) {
+        void queryClient.invalidateQueries({
+          predicate: (q) => q.queryKey[0] !== ME_KEY[0],
+        });
+      }
+    },
   });
 }
 

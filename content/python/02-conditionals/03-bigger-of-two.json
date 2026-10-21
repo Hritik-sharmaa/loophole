@@ -8,13 +8,21 @@
         "title": "Comparing two variables",
         "body": "A condition can compare two variables, not just a variable and a number.",
         "code": "a = 4\nb = 7\nif a < b:\n    print(\"a is smaller\")\nelse:\n    print(\"a is not smaller\")\n",
-        "output": "a is smaller"
+        "output": "a is smaller",
+        "hi": {
+          "title": "Do variables compare karna",
+          "body": "Condition do variables ko bhi compare kar sakti hai, sirf variable aur number ko nahi."
+        }
       },
       {
         "title": ">= includes equal",
         "body": "`>=` means greater than or equal, so it is True when both values are the same. That is handy for ties.",
         "code": "print(5 >= 5)\nprint(5 > 5)\n",
-        "output": "True\nFalse"
+        "output": "True\nFalse",
+        "hi": {
+          "title": ">= mein barabar bhi shaamil hai",
+          "body": "`>=` ka matlab hai bada ya barabar, isliye dono values same hon toh bhi True hai. Tie ke liye kaam ki cheez hai."
+        }
       },
       {
         "title": "Spot the bug",
@@ -23,6 +31,11 @@
         "bug": {
           "line": 2,
           "fix": "`>` is False when both sides are equal. Line 2 needs `>=` so that 18 counts too."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "18 saal wale adult gine jaate hain, par 18 ke liye yeh `child` print karta hai. Kaunsi line galat hai?",
+          "fix": "Dono side barabar hon toh `>` False hota hai. Line 2 ko `>=` chahiye taaki 18 bhi gina jaaye."
         }
       }
     ],
@@ -31,11 +44,17 @@
       "code": "a = 6\nb = 6\nif a > b:\n    print(a)\nelse:\n    print(b)\n",
       "options": ["6", "Nothing", "An error"],
       "answer": 0,
-      "explanation": "6 > 6 is False, so the else branch prints b, which is also 6."
+      "explanation": "6 > 6 is False, so the else branch prints b, which is also 6.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "options": ["6", "Kuch nahi", "Error aayega"],
+        "explanation": "6 > 6 False hai, isliye else branch b print karti hai, jo bhi 6 hai."
+      }
     }
   },
   "exercise": {
     "prompt": "Read two whole numbers, one per line, and print the bigger one. If they are equal, print that number.",
+    "promptHi": "Do whole numbers padho, har line mein ek, aur bada wala print karo. Agar dono barabar hain, toh wahi number print karo.",
     "starterCode": "a = int(input())\nb = int(input())\n# print the bigger number below\n",
     "sampleTests": [
       {

@@ -8,20 +8,32 @@
         "title": "Comparisons",
         "body": "`>`, `<`, `>=`, `<=`, `==` (equal) and `!=` (not equal) compare two values. The answer is `True` or `False`.",
         "code": "print(5 > 3)\nprint(2 == 3)\n",
-        "output": "True\nFalse"
+        "output": "True\nFalse",
+        "hi": {
+          "title": "Comparisons",
+          "body": "`>`, `<`, `>=`, `<=`, `==` (barabar) aur `!=` (barabar nahi) do values ko compare karte hain. Jawab `True` ya `False` hota hai."
+        }
       },
       {
         "title": "if runs code only when true",
         "body": "An `if` checks a condition. The indented lines under it run only when the condition is True. The colon and the 4-space indent are required.",
         "code": "temp = 30\nif temp > 25:\n    print(\"It's hot\")\nprint(\"Done\")\n",
-        "output": "It's hot\nDone"
+        "output": "It's hot\nDone",
+        "hi": {
+          "title": "if code tabhi chalata hai jab condition true ho",
+          "body": "`if` ek condition check karta hai. Uske neeche ki indented lines tabhi chalti hain jab condition True ho. Colon aur 4 spaces ka indent zaroori hai."
+        }
       },
       {
         "title": "elif and else",
         "body": "`elif` checks another condition when the ones above were False. `else` catches everything left. Only the first matching branch runs.",
         "code": "n = int(input())\nif n > 100:\n    print(\"big\")\nelif n > 10:\n    print(\"medium\")\nelse:\n    print(\"small\")\n",
         "input": "42\n",
-        "output": "medium"
+        "output": "medium",
+        "hi": {
+          "title": "elif aur else",
+          "body": "`elif` ek aur condition check karta hai jab upar wali sab False thi. `else` baaki sab pakad leta hai. Sirf pehli matching branch chalti hai."
+        }
       },
       {
         "title": "Spot the bug",
@@ -30,6 +42,11 @@
         "bug": {
           "line": 4,
           "fix": "Every `if`, `elif` and `else` line ends with a colon. Line 4 needs `elif temp > 15:`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Python kuch bhi chalane se pehle `SyntaxError` dekar ruk jaata hai. Kaunsi line galat hai?",
+          "fix": "Har `if`, `elif` aur `else` line colon par khatam hoti hai. Line 4 ko `elif temp > 15:` chahiye."
         }
       }
     ],
@@ -38,11 +55,16 @@
       "code": "x = 0\nif x > 0:\n    print(\"A\")\nelif x == 0:\n    print(\"B\")\nelse:\n    print(\"C\")\n",
       "options": ["A", "B", "C"],
       "answer": 1,
-      "explanation": "x > 0 is False, so Python checks x == 0 next, which is True."
+      "explanation": "x > 0 is False, so Python checks x == 0 next, which is True.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "x > 0 False hai, isliye Python aage x == 0 check karta hai, jo True hai."
+      }
     }
   },
   "exercise": {
     "prompt": "Read a whole number. Print `positive` if it is greater than 0, `negative` if it is less than 0, and `zero` otherwise.",
+    "promptHi": "Ek whole number padho. Agar woh 0 se bada hai toh `positive`, 0 se chhota hai toh `negative`, warna `zero` print karo.",
     "starterCode": "n = int(input())\n# use if / elif / else below\n",
     "sampleTests": [
       {

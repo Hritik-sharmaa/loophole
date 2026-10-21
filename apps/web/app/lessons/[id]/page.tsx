@@ -35,6 +35,7 @@ import { useMe } from '@/lib/queries/use-me';
 import { useSubmissions, useSubmit } from '@/lib/queries/use-submissions';
 import { useCountUp } from '@/lib/use-count-up';
 import { useRequireSession } from '@/lib/use-require-session';
+import { useLessonWords } from '@/lib/lesson-words';
 
 // One lesson, full screen (ADR-029): no app menu, just a way out and a
 // progress bar. Learn cards and a quick check, then the exercise (prompt,
@@ -407,6 +408,7 @@ function LessonComplete({
   onReview: () => void;
 }) {
   const me = useMe(true);
+  const words = useLessonWords();
   const xp = useCountUp(result.xpAwarded, { from: 0 });
   const { name, cheer, tint } = GUIDES[guide];
   const streak = me.data?.streak.current;
@@ -433,8 +435,9 @@ function LessonComplete({
       </div>
       <h1 className="font-display text-4xl font-extrabold">Lesson complete!</h1>
       <p className="text-lg">
-        <span className="font-bold">{name}:</span> “{cheer} You finished{' '}
-        <span className="font-bold">{lesson.title}</span>.”
+        <span className="font-bold">{name}:</span> “{cheer} {words.finished[0]}
+        <span className="font-bold">{lesson.title}</span>
+        {words.finished[1]}”
       </p>
 
       <dl className="grid w-full max-w-sm grid-cols-2 gap-3">

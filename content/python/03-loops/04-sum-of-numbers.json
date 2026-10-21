@@ -8,14 +8,22 @@
         "title": "Running totals",
         "body": "Start a variable at 0 before the loop and add to it each time round. `total += x` means `total = total + x`.",
         "code": "total = 0\nfor x in range(1, 5):\n    total += x\nprint(total)\n",
-        "output": "10"
+        "output": "10",
+        "hi": {
+          "title": "Running total",
+          "body": "Loop se pehle ek variable 0 se shuru karo aur har round mein usme jodte jao. `total += x` ka matlab `total = total + x`."
+        }
       },
       {
         "title": "Reading inside a loop",
         "body": "Each call to `input()` reads the next line, so calling it inside a loop reads one line per round.",
         "code": "for i in range(2):\n    word = input()\n    print(\"got\", word)\n",
         "input": "apple\npear\n",
-        "output": "got apple\ngot pear"
+        "output": "got apple\ngot pear",
+        "hi": {
+          "title": "Loop ke andar padhna",
+          "body": "Har baar `input()` agli line padhta hai, isliye loop ke andar call karne par har round mein ek line padhi jaati hai."
+        }
       },
       {
         "title": "Spot the bug",
@@ -24,6 +32,11 @@
         "bug": {
           "line": 2,
           "fix": "Line 2 sets `total` back to 0 every round. Start the total once, before the loop."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Isse 1 + 2 + 3 + 4 jodkar 10 print karna chahiye, par yeh 4 print karta hai. Bug par tap karo.",
+          "fix": "Line 2 har round mein `total` ko wapas 0 kar deti hai. Total ko loop se pehle ek hi baar shuru karo."
         }
       }
     ],
@@ -32,11 +45,16 @@
       "code": "total = 0\nfor x in range(3):\n    total += 2\nprint(total)\n",
       "options": ["6", "2", "3"],
       "answer": 0,
-      "explanation": "The loop runs 3 times and adds 2 each time: 2 + 2 + 2 = 6."
+      "explanation": "The loop runs 3 times and adds 2 each time: 2 + 2 + 2 = 6.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "Loop 3 baar chalta hai aur har baar 2 jodta hai: 2 + 2 + 2 = 6."
+      }
     }
   },
   "exercise": {
     "prompt": "The first line is a count N; then N lines follow, each with one whole number. Print their sum.",
+    "promptHi": "Pehli line mein count N hai; phir N lines aati hain, har ek mein ek whole number. Unka sum print karo.",
     "starterCode": "n = int(input())\ntotal = 0\n# read n more numbers and add each to total\nprint(total)\n",
     "sampleTests": [
       {

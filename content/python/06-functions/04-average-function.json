@@ -8,13 +8,21 @@
         "title": "Functions that take a list",
         "body": "A parameter can be a whole list. Inside the function, use it like any other list.",
         "code": "def biggest(numbers):\n    return max(numbers)\n\n\nprint(biggest([4, 11, 6]))\n",
-        "output": "11"
+        "output": "11",
+        "hi": {
+          "title": "List lene wale functions",
+          "body": "Parameter poori list bhi ho sakta hai. Function ke andar use kisi bhi list ki tarah use karo."
+        }
       },
       {
         "title": "Two decimal places",
         "body": "In an f-string, `{value:.2f}` shows a number with exactly two digits after the point.",
         "code": "x = 7 / 3\nprint(x)\nprint(f\"{x:.2f}\")\n",
-        "output": "2.3333333333333335\n2.33"
+        "output": "2.3333333333333335\n2.33",
+        "hi": {
+          "title": "Do decimal places",
+          "body": "f-string mein `{value:.2f}` number ko point ke baad theek do digits ke saath dikhata hai."
+        }
       },
       {
         "title": "Spot the bug",
@@ -23,6 +31,11 @@
         "bug": {
           "line": 2,
           "fix": "Two decimal places is `:.2f`, with a dot. Without the dot, `2` sets a width, not the number of decimals."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Isse `2.33` print karna chahiye, par yeh `2.333333` print karta hai. Bug par tap karo.",
+          "fix": "Do decimal places ke liye `:.2f` chahiye, dot ke saath. Dot ke bina `2` width set karta hai, decimals ki ginti nahi."
         }
       }
     ],
@@ -31,11 +44,16 @@
       "code": "print(f\"{5 / 2:.2f}\")\n",
       "options": ["2.50", "2.5", "2"],
       "answer": 0,
-      "explanation": "5 / 2 is 2.5, and :.2f always shows two decimals, so it prints 2.50."
+      "explanation": "5 / 2 is 2.5, and :.2f always shows two decimals, so it prints 2.50.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "5 / 2 ka matlab 2.5, aur :.2f hamesha do decimals dikhata hai, isliye 2.50 print hota hai."
+      }
     }
   },
   "exercise": {
     "prompt": "Write `average(numbers)` that returns the average of a list. Read whole numbers on one line and print their average with two decimal places, like `2.50`.",
+    "promptHi": "`average(numbers)` likho jo list ka average return kare. Ek line mein whole numbers padho aur unka average do decimal places ke saath print karo, jaise `2.50`.",
     "starterCode": "def average(numbers):\n    # return the average of the list\n    return 0\n\n\nnums = list(map(int, input().split()))\nprint(f\"{average(nums):.2f}\")\n",
     "sampleTests": [
       {

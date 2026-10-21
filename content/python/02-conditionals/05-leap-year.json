@@ -8,19 +8,31 @@
         "title": "and, or, not",
         "body": "`and` is True only when both sides are True. `or` is True when at least one side is. `not` flips True and False.",
         "code": "print(True and False)\nprint(True or False)\nprint(not True)\n",
-        "output": "False\nTrue\nFalse"
+        "output": "False\nTrue\nFalse",
+        "hi": {
+          "title": "and, or, not",
+          "body": "`and` tabhi True hai jab dono side True hon. `or` True hai jab kam se kam ek side True ho. `not` True aur False ko palat deta hai."
+        }
       },
       {
         "title": "Combining conditions",
         "body": "Join comparisons to describe a whole rule in one condition.",
         "code": "age = 15\nhas_ticket = True\nif age >= 12 and has_ticket:\n    print(\"come in\")\nelse:\n    print(\"sorry\")\n",
-        "output": "come in"
+        "output": "come in",
+        "hi": {
+          "title": "Conditions jodna",
+          "body": "Comparisons ko jodkar ek hi condition mein poora rule likh sakte ho."
+        }
       },
       {
         "title": "Brackets make it clear",
         "body": "Python works out `and` before `or`. Brackets make the order obvious, to you and to Python.",
         "code": "n = 30\nprint(n % 3 == 0 and (n % 5 == 0 or n % 7 == 0))\n",
-        "output": "True"
+        "output": "True",
+        "hi": {
+          "title": "Brackets se saaf hota hai",
+          "body": "Python `or` se pehle `and` solve karta hai. Brackets order ko saaf kar dete hain, aapke liye bhi aur Python ke liye bhi."
+        }
       },
       {
         "title": "Spot the bug",
@@ -29,6 +41,11 @@
         "bug": {
           "line": 2,
           "fix": "With `or`, one true side is enough, and every age is `>= 13` or `<= 19`. Both must be true, so use `and`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Yeh sabko teenager bolta hai, 40 saal wale ko bhi. Kaunsi line galat hai?",
+          "fix": "`or` ke saath ek true side kaafi hai, aur har age ya toh `>= 13` hai ya `<= 19`. Dono true hone chahiye, isliye `and` use karo."
         }
       }
     ],
@@ -37,11 +54,16 @@
       "code": "y = 1900\nprint(y % 4 == 0 and y % 100 != 0)\n",
       "options": ["True", "False"],
       "answer": 1,
-      "explanation": "1900 divides by 4, but it also divides by 100, so y % 100 != 0 is False, and and needs both sides True."
+      "explanation": "1900 divides by 4, but it also divides by 100, so y % 100 != 0 is False, and and needs both sides True.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "1900 4 se divide hota hai, par 100 se bhi hota hai, isliye y % 100 != 0 False hai, aur and ko dono side True chahiye."
+      }
     }
   },
   "exercise": {
     "prompt": "Read a year and print `leap` if it is a leap year, otherwise `common`. A year is a leap year if it divides by 4, except that years dividing by 100 are not, unless they also divide by 400.",
+    "promptHi": "Ek saal padho aur agar woh leap year hai toh `leap` print karo, warna `common`. Saal leap year hota hai agar 4 se divide ho, par jo saal 100 se divide hote hain woh leap nahi hote, jab tak woh 400 se bhi divide na hon.",
     "starterCode": "year = int(input())\n# print leap or common below\n",
     "sampleTests": [
       {

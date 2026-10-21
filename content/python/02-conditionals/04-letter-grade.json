@@ -9,11 +9,19 @@
         "body": "Python checks each condition from top to bottom and stops at the first True one. Order your checks from the highest value to the lowest.",
         "code": "speed = int(input())\nif speed >= 100:\n    print(\"fast\")\nelif speed >= 50:\n    print(\"okay\")\nelse:\n    print(\"slow\")\n",
         "input": "70\n",
-        "output": "okay"
+        "output": "okay",
+        "hi": {
+          "title": "elif ki chain",
+          "body": "Python har condition upar se neeche check karta hai aur pehli True wali par ruk jaata hai. Checks ko sabse badi value se sabse chhoti tak rakho."
+        }
       },
       {
         "title": "Why the order matters",
-        "body": "If the `>= 50` check came first, a speed of 120 would print okay and never reach the fast check. The first match wins."
+        "body": "If the `>= 50` check came first, a speed of 120 would print okay and never reach the fast check. The first match wins.",
+        "hi": {
+          "title": "Order kyun matter karta hai",
+          "body": "Agar `>= 50` wala check pehle aata, toh 120 ki speed okay print karti aur fast wale check tak kabhi nahi pahunchti. Pehla match jeet jaata hai."
+        }
       },
       {
         "title": "Spot the bug",
@@ -22,6 +30,11 @@
         "bug": {
           "line": 2,
           "fix": "The first true check wins, and 40 is already `>= 20`. Check the higher limit first: `if temp >= 35`, then `elif temp >= 20`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "40 degrees ke liye yeh `warm` print karta hai, `hot` kabhi nahi. Us line par tap karo jo bahut jaldi check karti hai.",
+          "fix": "Pehla true check jeet jaata hai, aur 40 pehle hi `>= 20` hai. Badi limit pehle check karo: `if temp >= 35`, phir `elif temp >= 20`."
         }
       }
     ],
@@ -30,11 +43,16 @@
       "code": "score = 75\nif score >= 50:\n    print(\"pass\")\nelif score >= 70:\n    print(\"good\")\n",
       "options": ["pass", "good", "pass\ngood"],
       "answer": 0,
-      "explanation": "score >= 50 is True first, so Python prints pass and skips every branch below it."
+      "explanation": "score >= 50 is True first, so Python prints pass and skips every branch below it.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "score >= 50 sabse pehle True hota hai, isliye Python pass print karta hai aur neeche ki har branch chhod deta hai."
+      }
     }
   },
   "exercise": {
     "prompt": "Read a score from 0 to 100 and print its letter grade: `A` for 90 or more, `B` for 80 to 89, `C` for 70 to 79, `D` for 60 to 69, and `F` below 60.",
+    "promptHi": "0 se 100 tak ka score padho aur uska letter grade print karo: 90 ya usse zyada ke liye `A`, 80 se 89 ke liye `B`, 70 se 79 ke liye `C`, 60 se 69 ke liye `D`, aur 60 se kam ke liye `F`.",
     "starterCode": "score = int(input())\n# print the letter grade below\n",
     "sampleTests": [
       {

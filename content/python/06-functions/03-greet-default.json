@@ -8,13 +8,21 @@
         "title": "Default values",
         "body": "Give a parameter a default with `=`. When the caller leaves it out, the default is used.",
         "code": "def repeat(word, times=2):\n    return word * times\n\n\nprint(repeat(\"ha\"))\nprint(repeat(\"ha\", 4))\n",
-        "output": "haha\nhahahaha"
+        "output": "haha\nhahahaha",
+        "hi": {
+          "title": "Default values",
+          "body": "Parameter ko `=` se default value do. Agar call karne wala use chhod de, toh default use hota hai."
+        }
       },
       {
         "title": "Returning text",
         "body": "A function can build a string and return it, ready for the caller to print.",
         "code": "def label(item, price=1):\n    return f\"{item}: {price} coin\"\n\n\nprint(label(\"apple\"))\nprint(label(\"melon\", 3))\n",
-        "output": "apple: 1 coin\nmelon: 3 coin"
+        "output": "apple: 1 coin\nmelon: 3 coin",
+        "hi": {
+          "title": "Text return karna",
+          "body": "Function ek string bana kar return kar sakta hai, jise call karne wala print kar sake."
+        }
       },
       {
         "title": "Spot the bug",
@@ -23,6 +31,11 @@
         "bug": {
           "line": 2,
           "fix": "Line 2 always repeats twice and ignores the parameter. Use it: `return word * times`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "`repeat(\"ha\", 3)` se `hahaha` milna chahiye, par `haha` milta hai. Kaunsi line galat hai?",
+          "fix": "Line 2 hamesha do baar repeat karti hai aur parameter ko ignore karti hai. Use karo: `return word * times`."
         }
       }
     ],
@@ -31,11 +44,16 @@
       "code": "def tag(name, mark=\"*\"):\n    return mark + name + mark\n\n\nprint(tag(\"hi\", \"!\"))\n",
       "options": ["!hi!", "*hi*", "!hi"],
       "answer": 0,
-      "explanation": "The call passes \"!\", so it replaces the default \"*\"."
+      "explanation": "The call passes \"!\", so it replaces the default \"*\".",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "Call \"!\" bhejta hai, isliye woh default \"*\" ki jagah le leta hai."
+      }
     }
   },
   "exercise": {
     "prompt": "Finish `greet(name, greeting=\"Hello\")` so it returns `<greeting>, <name>!`. The code below prints `greet(name)` and then `greet(name, \"Welcome\")`.",
+    "promptHi": "`greet(name, greeting=\"Hello\")` poora karo taaki woh `<greeting>, <name>!` return kare. Neeche ka code `greet(name)` aur phir `greet(name, \"Welcome\")` print karta hai.",
     "starterCode": "def greet(name, greeting=\"Hello\"):\n    # return the greeting text\n    return \"\"\n\n\nname = input()\nprint(greet(name))\nprint(greet(name, \"Welcome\"))\n",
     "sampleTests": [
       {

@@ -8,13 +8,21 @@
         "title": "Maths with the loop variable",
         "body": "Inside the loop you can calculate with the loop variable like any other number.",
         "code": "for i in range(1, 4):\n    print(i * 100)\n",
-        "output": "100\n200\n300"
+        "output": "100\n200\n300",
+        "hi": {
+          "title": "Loop variable ke saath maths",
+          "body": "Loop ke andar aap loop variable se kisi bhi number ki tarah calculate kar sakte ho."
+        }
       },
       {
         "title": "f-strings",
         "body": "Put `f` before the opening quote and you can drop values straight into the text with `{}`.",
         "code": "n = 7\nprint(f\"{n} squared is {n * n}\")\n",
-        "output": "7 squared is 49"
+        "output": "7 squared is 49",
+        "hi": {
+          "title": "f-strings",
+          "body": "Opening quote se pehle `f` lagao, phir `{}` se values seedhe text mein daal sakte ho."
+        }
       },
       {
         "title": "Spot the bug",
@@ -23,6 +31,11 @@
         "bug": {
           "line": 3,
           "fix": "Without `f` before the quote, Python prints the braces as plain text. Line 3 needs `print(f\"...\")`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Yeh numbers ki jagah teen baar `{n} times {i} is {n * i}` print karta hai. Bug par tap karo.",
+          "fix": "Quote se pehle `f` na ho toh Python braces ko plain text ki tarah print karta hai. Line 3 ko `print(f\"...\")` chahiye."
         }
       }
     ],
@@ -35,11 +48,16 @@
         "5 x 1 = 5\n5 x 2 = 10\n5 x 3 = 15"
       ],
       "answer": 0,
-      "explanation": "The loop runs for i = 1 and i = 2, and the f-string fills in each value."
+      "explanation": "The loop runs for i = 1 and i = 2, and the f-string fills in each value.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "Loop i = 1 aur i = 2 ke liye chalta hai, aur f-string har value bhar deta hai."
+      }
     }
   },
   "exercise": {
     "prompt": "Read a number N and print its times table from 1 to 10, one line each, in the form `3 x 4 = 12`.",
+    "promptHi": "Ek number N padho aur uska 1 se 10 tak ka table print karo, har line `3 x 4 = 12` ki tarah.",
     "starterCode": "n = int(input())\n# print n x 1 up to n x 10\n",
     "sampleTests": [
       {

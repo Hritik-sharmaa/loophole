@@ -8,13 +8,21 @@
         "title": "Functions use other tools",
         "body": "Inside a function you can use any built-in tool: `split()`, `len()`, `max()` and the rest.",
         "code": "def first_word(text):\n    return text.split()[0]\n\n\nprint(first_word(\"hello big world\"))\n",
-        "output": "hello"
+        "output": "hello",
+        "hi": {
+          "title": "Functions doosre tools use karte hain",
+          "body": "Function ke andar aap koi bhi built-in tool use kar sakte ho: `split()`, `len()`, `max()` aur baaki sab."
+        }
       },
       {
         "title": "len() works on lists",
         "body": "`len()` counts the items in a list, so you can count the pieces after splitting. `split(\",\")` cuts at commas instead of spaces.",
         "code": "parts = \"a,b,c,d\".split(\",\")\nprint(len(parts))\n",
-        "output": "4"
+        "output": "4",
+        "hi": {
+          "title": "len() lists par chalta hai",
+          "body": "`len()` list ke items ginta hai, isliye split karne ke baad tukde gin sakte ho. `split(\",\")` spaces ki jagah commas par kaatta hai."
+        }
       },
       {
         "title": "Spot the bug",
@@ -23,6 +31,11 @@
         "bug": {
           "line": 2,
           "fix": "`split()` cuts at spaces, and there are none here. Cut at the commas: `line.split(\",\")`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Isse drinks gin kar 3 print karna chahiye, par yeh 1 print karta hai. Kaunsi line galat hai?",
+          "fix": "`split()` spaces par kaatta hai, aur yahan koi space hai hi nahi. Commas par kaato: `line.split(\",\")`."
         }
       }
     ],
@@ -31,11 +44,16 @@
       "code": "print(len(\"to be or not\".split()))\n",
       "options": ["4", "12", "3"],
       "answer": 0,
-      "explanation": "split() gives 4 words, and len() counts them."
+      "explanation": "split() gives 4 words, and len() counts them.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "split() 4 words deta hai, aur len() unhe ginta hai."
+      }
     }
   },
   "exercise": {
     "prompt": "Write `word_count(text)` that returns how many words the text has (words are separated by spaces). Read a line and print `word_count` of it.",
+    "promptHi": "`word_count(text)` likho jo bataye text mein kitne words hain (words spaces se alag hote hain). Ek line padho aur uska `word_count` print karo.",
     "starterCode": "def word_count(text):\n    # return the number of words in text\n    return 0\n\n\nprint(word_count(input()))\n",
     "sampleTests": [
       {

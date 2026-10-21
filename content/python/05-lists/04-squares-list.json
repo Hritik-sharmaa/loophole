@@ -8,13 +8,21 @@
         "title": "Building a list in a loop",
         "body": "Use a `for` loop with `range` to work out a value each round and append it.",
         "code": "tens = []\nfor i in range(1, 4):\n    tens.append(i * 10)\nprint(tens)\n",
-        "output": "[10, 20, 30]"
+        "output": "[10, 20, 30]",
+        "hi": {
+          "title": "Loop mein list banana",
+          "body": "`range` ke saath `for` loop use karo, har round mein ek value nikaalo aur append karo."
+        }
       },
       {
         "title": "One append, one item",
         "body": "Each `append` adds exactly one item, so after the loop the list has one item per round.",
         "code": "items = []\nitems.append(\"a\")\nitems.append(\"b\")\nprint(len(items), items)\n",
-        "output": "2 ['a', 'b']"
+        "output": "2 ['a', 'b']",
+        "hi": {
+          "title": "Ek append, ek item",
+          "body": "Har `append` theek ek item jodta hai, isliye loop ke baad list mein har round ka ek item hota hai."
+        }
       },
       {
         "title": "Spot the bug",
@@ -23,6 +31,11 @@
         "bug": {
           "line": 4,
           "fix": "Line 4 is not indented, so it runs once, after the loop. Indent it to append a value every round."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Isse `[10, 20, 30]` print karna chahiye, par yeh `[30]` print karta hai. Bug par tap karo.",
+          "fix": "Line 4 indented nahi hai, isliye woh loop ke baad sirf ek baar chalti hai. Ise indent karo taaki har round mein value append ho."
         }
       }
     ],
@@ -31,11 +44,16 @@
       "code": "s = []\nfor i in range(1, 4):\n    s.append(i + i)\nprint(s)\n",
       "options": ["[2, 4, 6]", "[1, 4, 9]", "[1, 2, 3]"],
       "answer": 0,
-      "explanation": "Each round appends i + i: 2, then 4, then 6."
+      "explanation": "Each round appends i + i: 2, then 4, then 6.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "Har round i + i append karta hai: 2, phir 4, phir 6."
+      }
     }
   },
   "exercise": {
     "prompt": "Read N, build a list of the squares 1, 4, 9, … up to N × N using `append`, then print it with the numbers separated by spaces.",
+    "promptHi": "N padho, `append` se squares 1, 4, 9, … N × N tak ki list banao, phir use spaces se alag numbers ke saath print karo.",
     "starterCode": "n = int(input())\nsquares = []\n# append the squares of 1 to n\nprint(\" \".join(map(str, squares)))\n",
     "sampleTests": [
       {

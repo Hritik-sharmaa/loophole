@@ -8,19 +8,31 @@
         "title": "Whole division with //",
         "body": "`/` gives a decimal: `7 / 2` is `3.5`. `//` keeps only the whole part: `7 // 2` is `3`.",
         "code": "print(7 / 2)\nprint(7 // 2)\n",
-        "output": "3.5\n3"
+        "output": "3.5\n3",
+        "hi": {
+          "title": "// se whole division",
+          "body": "`/` decimal deta hai: `7 / 2` ka matlab `3.5`. `//` sirf whole part rakhta hai: `7 // 2` ka matlab `3`."
+        }
       },
       {
         "title": "The remainder with %",
         "body": "`%` gives what is left over after whole division. 7 split into groups of 2 leaves 1 over.",
         "code": "print(7 % 2)\nprint(17 % 5)\n",
-        "output": "1\n2"
+        "output": "1\n2",
+        "hi": {
+          "title": "% se remainder",
+          "body": "`%` batata hai whole division ke baad kitna bacha. 7 ko 2-2 ke groups mein baanto toh 1 bachta hai."
+        }
       },
       {
         "title": "Printing several values",
         "body": "Give `print()` several values separated by commas and it puts one space between each.",
         "code": "days = 10 // 7\nleft = 10 % 7\nprint(days, \"week\", left, \"days\")\n",
-        "output": "1 week 3 days"
+        "output": "1 week 3 days",
+        "hi": {
+          "title": "Kai values print karna",
+          "body": "`print()` ko commas se alag karke kai values do, woh har value ke beech ek space daal deta hai."
+        }
       },
       {
         "title": "Spot the bug",
@@ -29,6 +41,11 @@
         "bug": {
           "line": 2,
           "fix": "`/` gives a decimal like `2.5`. Whole hours need floor division: `minutes // 60`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "150 minutes ke liye isse `2 30` print karna chahiye, par yeh `2.5 30` print karta hai. Kaunsi line galat hai?",
+          "fix": "`/` decimal deta hai jaise `2.5`. Whole hours ke liye floor division chahiye: `minutes // 60`."
         }
       }
     ],
@@ -37,11 +54,16 @@
       "code": "print(100 // 60, 100 % 60)\n",
       "options": ["1 40", "1.66 40", "40 1"],
       "answer": 0,
-      "explanation": "100 // 60 is 1 whole hour, and 100 % 60 is the 40 minutes left over."
+      "explanation": "100 // 60 is 1 whole hour, and 100 % 60 is the 40 minutes left over.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "100 // 60 matlab 1 poora ghanta, aur 100 % 60 matlab bache hue 40 minutes."
+      }
     }
   },
   "exercise": {
     "prompt": "Read a number of minutes and print it as `H h M min`. Use `//` for the whole hours and `%` for the minutes left over. For `135`, print `2 h 15 min`",
+    "promptHi": "Minutes ki ek sankhya padho aur use `H h M min` ki tarah print karo. Poore ghanton ke liye `//` aur bache minutes ke liye `%` use karo. `135` ke liye `2 h 15 min` print karo.",
     "starterCode": "minutes = int(input())\n# work out the hours and the leftover minutes\n",
     "sampleTests": [
       {

@@ -29,11 +29,13 @@ Base URL: `https://api.<domain>` (local: `http://localhost:3001`). All bodies ar
 
 ### Users — S1
 
-| Method | Path           | Body                                    | Response                                                                                                                                                                                              |
-| ------ | -------------- | --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| GET    | `/me`          | —                                       | `{ id, username, avatarUrl, xp, streak: { current, longest, freezes }, rating, lessonsCompleted, dailyGoal, todayXp }` — `dailyGoal` is 10, 20, 30 or null; `todayXp` is XP since 00:00 IST (ADR-033) |
-| GET    | `/me/activity` | —                                       | `{ from, today, days: [{ date, xp }] }` — XP per IST day from `from` (Monday four weeks ago) to `today`; days without XP are left out (ADR-033)                                                       |
-| PATCH  | `/me`          | `{ username?, avatarUrl?, dailyGoal? }` | updated profile; `dailyGoal` must be 10, 20 or 30 (400 otherwise)                                                                                                                                     |
+| Method | Path           | Body                                                     | Response                                                                                                                                                                                                                                                                |
+| ------ | -------------- | -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET    | `/me`          | —                                                        | `{ id, username, avatarUrl, xp, streak: { current, longest, freezes }, rating, lessonsCompleted, dailyGoal, todayXp, lessonLanguage }` — `dailyGoal` is 10, 20, 30 or null; `todayXp` is XP since 00:00 IST (ADR-033); `lessonLanguage` is `en` or `hinglish` (ADR-042) |
+| GET    | `/me/activity` | —                                                        | `{ from, today, days: [{ date, xp }] }` — XP per IST day from `from` (Monday four weeks ago) to `today`; days without XP are left out (ADR-033)                                                                                                                         |
+| PATCH  | `/me`          | `{ username?, avatarUrl?, dailyGoal?, lessonLanguage? }` | updated profile; `dailyGoal` must be 10, 20 or 30 and `lessonLanguage` `en` or `hinglish` (400 otherwise)                                                                                                                                                               |
+
+- **Lesson language (ADR-042):** `GET /lessons/:id`, the cheat sheet, the bug hunt and practice answer in the caller's `lessonLanguage`: card titles and bodies, bug fixes, the quick check's question, explanation and word options, and the exercise prompt. Code, outputs and answers are the same in both. A lesson without Hinglish yet comes back in English. The response shapes don't change, and the stored Hinglish is never sent as such.
 
 ### Lessons — S2
 

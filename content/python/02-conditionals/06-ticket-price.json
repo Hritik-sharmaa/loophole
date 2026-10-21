@@ -9,13 +9,21 @@
         "body": "To sort a value into ranges, check one edge at a time. Because the first match wins, each elif needs only one comparison.",
         "code": "hour = int(input())\nif hour < 12:\n    print(\"morning\")\nelif hour < 18:\n    print(\"afternoon\")\nelse:\n    print(\"evening\")\n",
         "input": "15\n",
-        "output": "afternoon"
+        "output": "afternoon",
+        "hi": {
+          "title": "Ranges mein baantna",
+          "body": "Kisi value ko ranges mein baantne ke liye ek baar mein ek edge check karo. Pehla match jeet jaata hai, isliye har elif ko sirf ek comparison chahiye."
+        }
       },
       {
         "title": "Checking a range in one go",
         "body": "Python can chain comparisons: `3 <= age <= 12` is True when age is from 3 to 12, both included.",
         "code": "age = 8\nprint(3 <= age <= 12)\n",
-        "output": "True"
+        "output": "True",
+        "hi": {
+          "title": "Ek baar mein range check karna",
+          "body": "Python comparisons ko chain kar sakta hai: `3 <= age <= 12` True hai jab age 3 se 12 tak ho, dono shaamil."
+        }
       },
       {
         "title": "Spot the bug",
@@ -24,6 +32,11 @@
         "bug": {
           "line": 6,
           "fix": "`hour > 18` skips 18 itself. Use `else:` to catch everything left, or `hour >= 18`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Theek 18 baje yeh kuch bhi print nahi karta. Bug par tap karo.",
+          "fix": "`hour > 18` khud 18 ko chhod deta hai. Baaki sab pakadne ke liye `else:` use karo, ya `hour >= 18`."
         }
       }
     ],
@@ -32,11 +45,16 @@
       "code": "age = 12\nif age < 12:\n    print(\"child\")\nelse:\n    print(\"teen\")\n",
       "options": ["child", "teen"],
       "answer": 1,
-      "explanation": "12 < 12 is False, so 12 goes to else. Edges are where < and <= differ, so test them."
+      "explanation": "12 < 12 is False, so 12 goes to else. Edges are where < and <= differ, so test them.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "12 < 12 False hai, isliye 12 else mein jaata hai. Edges par hi < aur <= ka farak padta hai, isliye unhe test karo."
+      }
     }
   },
   "exercise": {
     "prompt": "Read an age and print the ticket price: `0` for under 3, `5` for ages 3 to 12, `10` for 13 to 64, and `6` for 65 and over.",
+    "promptHi": "Ek age padho aur ticket price print karo: 3 se kam ke liye `0`, 3 se 12 ke liye `5`, 13 se 64 ke liye `10`, aur 65 ya usse zyada ke liye `6`.",
     "starterCode": "age = int(input())\n# print the ticket price below\n",
     "sampleTests": [
       {

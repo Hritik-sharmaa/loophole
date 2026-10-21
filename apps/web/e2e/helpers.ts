@@ -21,14 +21,18 @@ export async function signUp(page: Page, prefix: string): Promise<string> {
   return email;
 }
 
-// The welcome: pick a course and a goal, then meet the guide.
+// The welcome: pick a course, a goal and a lesson language (ADR-042),
+// then meet the guide.
 export async function finishWelcome(
   page: Page,
   course = 'Python Basics',
   goal = 'Regular',
+  language: 'English' | 'Hinglish' = 'English',
 ): Promise<void> {
   await page.getByRole('button', { name: new RegExp(course) }).click();
   await page.getByRole('button', { name: new RegExp(`^${goal}`) }).click();
+  await page.getByRole('button', { name: 'Continue' }).click();
+  await page.getByRole('button', { name: new RegExp(`^${language}`) }).click();
   await page.getByRole('button', { name: 'Continue' }).click();
   await expect(page.getByRole('heading', { name: /I'm / })).toBeVisible();
 }

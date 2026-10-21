@@ -8,19 +8,31 @@
         "title": "Define a function",
         "body": "`def` creates a function: a named block of code that runs whenever you call it by name. The body is indented.",
         "code": "def say_hi():\n    print(\"hi!\")\n\n\nsay_hi()\nsay_hi()\n",
-        "output": "hi!\nhi!"
+        "output": "hi!\nhi!",
+        "hi": {
+          "title": "Function define karo",
+          "body": "`def` ek function banata hai: code ka ek naam wala block jo jab bhi uska naam call karo, chalta hai. Body indented hoti hai."
+        }
       },
       {
         "title": "Parameters and return",
         "body": "Values go in through parameters in the brackets. `return` sends a result back to whoever called the function.",
         "code": "def double(n):\n    return n * 2\n\n\nprint(double(5))\nprint(double(21))\n",
-        "output": "10\n42"
+        "output": "10\n42",
+        "hi": {
+          "title": "Parameters aur return",
+          "body": "Values brackets ke andar parameters se andar aati hain. `return` result ko wapas usko bhejta hai jisne function call kiya."
+        }
       },
       {
         "title": "return is not print",
         "body": "`print` only shows a value. `return` hands it back, so the caller can keep using it, for example in more maths.",
         "code": "def add_one(n):\n    return n + 1\n\n\nx = add_one(4) * 10\nprint(x)\n",
-        "output": "50"
+        "output": "50",
+        "hi": {
+          "title": "return, print nahi hai",
+          "body": "`print` value sirf dikhata hai. `return` use wapas deta hai, taaki call karne wala use aage use kar sake, jaise aur maths mein."
+        }
       },
       {
         "title": "Spot the bug",
@@ -29,6 +41,11 @@
         "bug": {
           "line": 2,
           "fix": "`print` only shows the value, so `double` gives back `None`. Line 2 should be `return n * 2`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Isse 11 print karna chahiye, par yeh 10 print karta hai aur phir `TypeError` dekar crash hota hai. Kaunsi line galat hai?",
+          "fix": "`print` sirf value dikhata hai, isliye `double` wapas `None` deta hai. Line 2 `return n * 2` honi chahiye."
         }
       }
     ],
@@ -37,11 +54,16 @@
       "code": "def f(n):\n    return n + 3\n\n\nprint(f(2) * 2)\n",
       "options": ["10", "7", "8"],
       "answer": 0,
-      "explanation": "f(2) returns 5, and 5 * 2 is 10."
+      "explanation": "f(2) returns 5, and 5 * 2 is 10.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "f(2) 5 return karta hai, aur 5 * 2 = 10."
+      }
     }
   },
   "exercise": {
     "prompt": "Finish the function `square(n)` so it returns `n * n`. The code below reads a number and prints `square` of it.",
+    "promptHi": "Function `square(n)` poora karo taaki woh `n * n` return kare. Neeche ka code ek number padhta hai aur uska `square` print karta hai.",
     "starterCode": "def square(n):\n    # return n times n\n    pass\n\n\nn = int(input())\nprint(square(n))\n",
     "sampleTests": [
       {

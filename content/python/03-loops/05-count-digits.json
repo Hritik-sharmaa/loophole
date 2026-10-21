@@ -8,17 +8,29 @@
         "title": "Shrinking a number",
         "body": "`n // 10` drops the last digit. Do it again and again, and the number shrinks until it reaches 0.",
         "code": "n = 345\nwhile n > 0:\n    print(n)\n    n = n // 10\n",
-        "output": "345\n34\n3"
+        "output": "345\n34\n3",
+        "hi": {
+          "title": "Number ko chhota karna",
+          "body": "`n // 10` last digit hata deta hai. Ise baar baar karo, toh number chhota hote hote 0 tak pahunch jaata hai."
+        }
       },
       {
         "title": "Counting rounds",
         "body": "Add 1 to a counter each time the loop runs to find out how many rounds it took.",
         "code": "n = 50\nsteps = 0\nwhile n > 1:\n    n = n // 2\n    steps += 1\nprint(steps)\n",
-        "output": "5"
+        "output": "5",
+        "hi": {
+          "title": "Rounds ginna",
+          "body": "Har baar loop chalne par counter mein 1 jodo, toh pata chal jaayega kitne rounds lage."
+        }
       },
       {
         "title": "Test the edge cases",
-        "body": "Always try the smallest input too. What does your loop do when the number is 0, and how many digits does 0 have?"
+        "body": "Always try the smallest input too. What does your loop do when the number is 0, and how many digits does 0 have?",
+        "hi": {
+          "title": "Edge cases test karo",
+          "body": "Hamesha sabse chhota input bhi try karo. Number 0 ho toh aapka loop kya karta hai, aur 0 mein kitne digits hain?"
+        }
       },
       {
         "title": "Spot the bug",
@@ -27,6 +39,11 @@
         "bug": {
           "line": 5,
           "fix": "`n % 10` keeps the last digit, so `n` never reaches 0. Line 5 should drop it instead: `n = n // 10`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Isse 123 ke digits jodkar 6 print karna chahiye, par yeh kabhi khatam nahi hota. Kaunsi line galat hai?",
+          "fix": "`n % 10` last digit rakhta hai, isliye `n` kabhi 0 tak nahi pahunchta. Line 5 ko use hatana chahiye: `n = n // 10`."
         }
       }
     ],
@@ -35,11 +52,16 @@
       "code": "n = 7\ncount = 0\nwhile n > 0:\n    n //= 10\n    count += 1\nprint(count)\n",
       "options": ["1", "0", "7"],
       "answer": 0,
-      "explanation": "7 // 10 is 0, so the loop runs exactly once."
+      "explanation": "7 // 10 is 0, so the loop runs exactly once.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "7 // 10 ka matlab 0, isliye loop theek ek baar chalta hai."
+      }
     }
   },
   "exercise": {
     "prompt": "Read a whole number (0 or more) and print how many digits it has. Do it with arithmetic: keep dividing by 10 with `//` in a loop.",
+    "promptHi": "Ek whole number padho (0 ya usse bada) aur print karo ki usme kitne digits hain. Arithmetic se karo: loop mein `//` se baar baar 10 se divide karte raho.",
     "starterCode": "n = int(input())\ndigits = 0\n# count the digits of n\nprint(digits)\n",
     "sampleTests": [
       {
