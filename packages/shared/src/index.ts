@@ -298,6 +298,36 @@ export type WeeklyLeaderboard = {
   me: { rank: number | null; xp: number };
 };
 
+// Weekly leagues (ADR-038). Where a learner ends the week: the top of a
+// group moves up a tier, the bottom moves down.
+export type LeagueZone = 'up' | 'down' | 'stay';
+
+// GET /leagues/current: the caller's league group this week. `joined` is
+// false until they earn XP this week; `tier` is then the one they will
+// join. Tiers: 0 Bronze, 1 Silver, 2 Gold, 3 Diamond.
+export type LeagueResponse = {
+  weekStart: string;
+  endsAt: string;
+  tier: { level: number; name: string };
+  joined: boolean;
+  // How many will move up and down from this group (both may be 0).
+  zones: { up: number; down: number };
+  members: {
+    rank: number;
+    userId: string;
+    username: string;
+    xp: number;
+    zone: LeagueZone;
+  }[];
+  // How the learner's last league week ended; null if they have none.
+  lastWeek: {
+    tier: { level: number; name: string };
+    rank: number;
+    size: number;
+    zone: LeagueZone;
+  } | null;
+};
+
 // GET /leaderboard/rating. Duel Elo, highest first (FR-24). Only players
 // who have finished a duel are listed; `me.rank` is null until then.
 export type RatingLeaderboard = {

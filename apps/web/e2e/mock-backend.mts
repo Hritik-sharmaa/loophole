@@ -25,6 +25,7 @@ import type {
   ExplainResponse,
   GitCheck,
   HintResponse,
+  LeagueResponse,
   LearnCard,
   LessonDetail,
   LessonLearn,
@@ -469,6 +470,49 @@ function weekly(user: UserState): WeeklyLeaderboard {
   };
 }
 
+// Weekly leagues (ADR-038), simplified: a learner with XP this week is in
+// a Silver group (they "moved up" from Bronze) with four fixed rivals.
+function league(user: UserState): LeagueResponse {
+  const start = weekStart(new Date());
+  const from = new Date(`${start}T00:00:00+05:30`);
+  const mine = xpSince(user, start);
+  const base = {
+    weekStart: from.toISOString(),
+    endsAt: new Date(from.getTime() + 7 * 86_400_000).toISOString(),
+    tier: { level: 1, name: 'Silver' },
+    lastWeek: {
+      tier: { level: 0, name: 'Bronze' },
+      rank: 1,
+      size: 5,
+      zone: 'up' as const,
+    },
+  };
+  if (mine === 0) {
+    return { ...base, joined: false, zones: { up: 0, down: 0 }, members: [] };
+  }
+  const rivals = [
+    { username: 'ananya', xp: 40 },
+    { username: 'rohan', xp: 25 },
+    { username: 'diya', xp: 15 },
+    { username: 'kabir', xp: 5 },
+  ].map((r, i) => ({ ...r, userId: `rival-${i}` }));
+  const ranked = [
+    ...rivals,
+    { userId: user.id, username: user.username, xp: mine },
+  ].sort((a, b) => b.xp - a.xp);
+  const up = Math.ceil(ranked.length / 4);
+  return {
+    ...base,
+    joined: true,
+    zones: { up, down: 0 },
+    members: ranked.map((m, i) => ({
+      ...m,
+      rank: i + 1,
+      zone: i < up ? ('up' as const) : ('stay' as const),
+    })),
+  };
+}
+
 function ratings(user: UserState): RatingLeaderboard {
   const ranked = [...users.values()]
     .filter((u) => u.dueled)
@@ -860,6 +904,7 @@ const apiRoutes: [
       return { status: 201, body: result };
     },
   ],
+  ['GET', /^\/leagues\/current$/, (_m, u) => ok(league(u))],
   ['GET', /^\/leaderboard\/weekly$/, (_m, u) => ok(weekly(u))],
   ['GET', /^\/leaderboard\/rating$/, (_m, u) => ok(ratings(u))],
 ];

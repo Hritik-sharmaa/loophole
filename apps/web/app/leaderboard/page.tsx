@@ -5,25 +5,30 @@ import { Swords, Zap } from 'lucide-react';
 import { useState, type ReactNode } from 'react';
 import { AppHeader } from '@/components/app-header';
 import { Guide } from '@/components/guide';
+import { LeagueBoard } from '@/components/league-board';
 import {
+  useLeague,
   useRatingLeaderboard,
   useWeeklyLeaderboard,
 } from '@/lib/queries/use-leaderboard';
 import { useMe } from '@/lib/queries/use-me';
 import { useRequireSession } from '@/lib/use-require-session';
 
-type Tab = 'weekly' | 'rating';
+type Tab = 'league' | 'weekly' | 'rating';
 
-// Two boards: this week's XP (FR-11, resets Monday 00:00 IST) and duel
-// rating (FR-24).
+// Three boards: the learner's weekly league (ADR-038), everyone's XP
+// this week (FR-11, resets Monday 00:00 IST) and duel rating (FR-24).
 export default function LeaderboardPage() {
   const { loading } = useRequireSession();
-  const [tab, setTab] = useState<Tab>('weekly');
+  const [tab, setTab] = useState<Tab>('league');
+  // For the league's "time left"; read once when the page opens.
+  const [now] = useState(() => Date.now());
+  const league = useLeague(!loading && tab === 'league');
   const weekly = useWeeklyLeaderboard(!loading && tab === 'weekly');
   const rating = useRatingLeaderboard(!loading && tab === 'rating');
   // Only to highlight the user's own row.
   const me = useMe(!loading);
-  const board = tab === 'weekly' ? weekly : rating;
+  const board = tab === 'league' ? league : tab === 'weekly' ? weekly : rating;
 
   return (
     <>
@@ -36,6 +41,9 @@ export default function LeaderboardPage() {
           aria-label="Leaderboard"
           className="mt-4 inline-flex gap-1 rounded-card border-2 border-ink bg-paper p-1"
         >
+          <TabButton active={tab === 'league'} onClick={() => setTab('league')}>
+            League
+          </TabButton>
           <TabButton active={tab === 'weekly'} onClick={() => setTab('weekly')}>
             This week
           </TabButton>
@@ -50,6 +58,8 @@ export default function LeaderboardPage() {
           <p role="alert" className="mt-6">
             ✕ Could not load the leaderboard: {board.error.message}
           </p>
+        ) : tab === 'league' && league.data ? (
+          <LeagueBoard league={league.data} myId={me.data?.id} now={now} />
         ) : tab === 'weekly' && weekly.data ? (
           <WeeklyBoard board={weekly.data} myId={me.data?.id} />
         ) : rating.data ? (

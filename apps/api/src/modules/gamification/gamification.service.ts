@@ -6,6 +6,7 @@ import type {
 } from '@loophole/shared';
 import { and, asc, eq, gte, sql } from 'drizzle-orm';
 import { DbService } from '../../db/db.service.js';
+import { LeaguesService } from '../leagues/leagues.service.js';
 import { profiles, streaks, xpEvents } from '../../db/schema/index.js';
 import {
   addDays,
@@ -30,7 +31,10 @@ export const DAILY_BUG_XP = 20;
 
 @Injectable()
 export class GamificationService {
-  constructor(private readonly db: DbService) {}
+  constructor(
+    private readonly db: DbService,
+    private readonly leagues: LeaguesService,
+  ) {}
 
   // Pays a lesson's XP and counts today toward the streak, once per lesson
   // per user (FR-09, NFR-12). Safe to call on every passing submission: the
@@ -41,7 +45,7 @@ export class GamificationService {
     lessonId: string,
     now = new Date(),
   ): Promise<number> {
-    return this.db.drizzle.transaction(async (tx) => {
+    const paid = await this.db.drizzle.transaction(async (tx) => {
       const [paid] = await tx
         .insert(xpEvents)
         .values({
@@ -70,6 +74,9 @@ export class GamificationService {
         .onConflictDoUpdate({ target: streaks.userId, set: values });
       return LESSON_XP;
     });
+    // The week's first XP puts the learner in a league group (ADR-038).
+    if (paid > 0) await this.leagues.join(userId, now);
+    return paid;
   }
 
   // Pays the bug of the day's XP (ADR-035), once per play: the xp_events
@@ -92,7 +99,9 @@ export class GamificationService {
       })
       .onConflictDoNothing()
       .returning({ id: xpEvents.id });
-    return paid ? DAILY_BUG_XP : 0;
+    if (!paid) return 0;
+    await this.leagues.join(userId, now);
+    return DAILY_BUG_XP;
   }
 
   // Total XP and the streak as GET /me shows it.

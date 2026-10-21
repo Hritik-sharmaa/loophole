@@ -198,6 +198,28 @@ Conventions: `uuid` primary keys (`gen_random_uuid()`), `timestamptz` in UTC, sn
 
 `xp_events.source` is `lesson` or `daily-bug` (migration 0013 adds the table; the source column is plain text).
 
+### league_groups — Phase 3 (ADR-038)
+
+| Column     | Type        | Notes                                             |
+| ---------- | ----------- | ------------------------------------------------- |
+| id         | uuid PK     |                                                   |
+| week_start | date        | the IST Monday the week starts on                 |
+| tier       | smallint    | 0 Bronze, 1 Silver, 2 Gold, 3 Diamond (check 0–3) |
+| created_at | timestamptz | groups in a tier fill oldest first                |
+|            |             | index (week_start, tier)                          |
+
+### league_members — Phase 3 (ADR-038)
+
+| Column     | Type                    | Notes                                                  |
+| ---------- | ----------------------- | ------------------------------------------------------ |
+| week_start | date                    | the same as the group's                                |
+| user_id    | uuid FK → profiles      |                                                        |
+| group_id   | uuid FK → league_groups |                                                        |
+| joined_at  | timestamptz             | the first XP of the week; breaks ties in the standings |
+|            |                         | PK (week_start, user_id); index (group_id)             |
+
+Standings aren't stored: each member's XP for the week is summed from `xp_events` on read (migration 0014 adds both tables).
+
 ## Relationships
 
 ```
@@ -209,6 +231,7 @@ profiles 1─1 streaks, ratings
 duel_problems 1─* duels *─2 profiles
 duels 1─* duel_submissions
 profiles 1─* daily_bug_plays *─1 duel_problems
+league_groups 1─* league_members *─1 profiles
 ```
 
 ## Rules that live in the database
@@ -222,6 +245,7 @@ profiles 1─* daily_bug_plays *─1 duel_problems
 | One certificate per course per user | unique on certificates                           |
 | One bug-of-the-day play a day       | unique (user_id, day) on daily_bug_plays         |
 | One solve time per play             | conditional update `where solved_at is null`     |
+| One league group per user per week  | PK (week_start, user_id) on league_members       |
 
 ## Row-level security
 

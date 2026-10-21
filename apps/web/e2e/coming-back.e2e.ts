@@ -34,8 +34,19 @@ test('J-4: a returning learner sees their streak, goal and rank', async ({
   ).toBeVisible();
   await expect(page.getByText(/2 of 2/)).toBeVisible();
 
-  // The learner's own row on this week's board, marked "(you)".
+  // The leaderboard opens on their league (ADR-038): last week's move up,
+  // and their row in this week's group.
   await page.goto('/leaderboard');
+  await expect(
+    page.getByRole('heading', { name: 'Silver league' }),
+  ).toBeVisible();
+  await expect(page.getByText(/moved up to Silver!/)).toBeVisible();
+  await expect(
+    page.getByRole('listitem').filter({ hasText: '(you)' }),
+  ).toContainText('10 XP');
+
+  // The learner's own row on this week's board, marked "(you)".
+  await page.getByRole('tab', { name: 'This week' }).click();
   await expect(
     page.getByRole('listitem').filter({ hasText: '(you)' }),
   ).toContainText('10 XP');

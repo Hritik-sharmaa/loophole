@@ -132,7 +132,7 @@ Ideas from comparing Duolingo, Coddy and Codédex, kept here so none get lost. B
 - [x] First-run welcome: pick a course and a daily goal (5 / 10 / 15 minutes); the guide says hello (M, ADR-033)
 - [x] Daily goal ring in the header and a streak calendar on the profile (M, ADR-033)
 - [x] Bug of the day: one buggy program a day for everyone, with a small board (M, FR-28, ADR-035)
-- [ ] Weekly leagues of ~20 learners with promotion and demotion (L; new tables and a weekly job)
+- [x] Weekly leagues of ~20 learners with promotion and demotion (L, ADR-038; no weekly job: results are worked out when a learner joins)
 
 **3. More ways to learn in a lesson**
 

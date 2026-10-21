@@ -121,6 +121,16 @@ Hidden test results show only `passed`, never input or expected output. Throttle
 - Equal XP shares a rank (1, 1, 3); ties are listed by username. `me` is always present: `{ rank: null, xp: 0 }` with no XP this week.
 - `GET /me` gives all-time `xp`. `streak.current` shows 0 once more days are missed than the saved freezes cover, even before the next lesson resets it; `freezes` is how many streak freezes are saved (ADR-019).
 
+### Leagues — Phase 3 (ADR-038)
+
+| Method | Path               | Response                                                                                                                                                                                                              |
+| ------ | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET    | `/leagues/current` | `{ weekStart, endsAt, tier: { level, name }, joined, zones: { up, down }, members: [{ rank, userId, username, xp, zone }], lastWeek: { tier, rank, size, zone } \| null }` — the caller's group this IST week, ranked |
+
+- `zone` is `up`, `down` or `stay`: where the member would go if the week ended now. `zones` are the counts: up is a quarter of the group rounded up (at most 5, 0 in Diamond); down is the same, but only in groups of 10 or more and never in Bronze.
+- `joined` is false until the caller earns XP this week; then `members` is empty and `tier` is the one they will join (from `lastWeek`, else Bronze).
+- Members are ranked by XP earned this week, then by who joined the group first. `lastWeek` is the caller's most recent league week before this one, whenever it was.
+
 ### AI tutor — S5
 
 | Method | Path               | Body                                 | Response                                                                                                                                 |
