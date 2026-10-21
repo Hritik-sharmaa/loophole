@@ -8,14 +8,22 @@
         "title": "Comparisons",
         "body": "`>`, `<`, `>=` and `<=` compare two values and give `true` or `false`.",
         "code": "console.log(5 > 3);\nconsole.log(2 >= 3);\n",
-        "output": "true\nfalse"
+        "output": "true\nfalse",
+        "hi": {
+          "title": "Comparisons",
+          "body": "`>`, `<`, `>=` aur `<=` do values compare karte hain aur `true` ya `false` dete hain."
+        }
       },
       {
         "title": "if, else if, else",
         "body": "`if` runs the code in its braces only when the condition is true. `else if` tries another condition, and `else` catches the rest. Only the first match runs.",
         "code": "const n = Number(prompt());\nif (n > 100) {\n  console.log(\"big\");\n} else if (n > 10) {\n  console.log(\"medium\");\n} else {\n  console.log(\"small\");\n}\n",
         "input": "42\n",
-        "output": "medium"
+        "output": "medium",
+        "hi": {
+          "title": "if, else if, else",
+          "body": "`if` apne braces ka code tabhi chalata hai jab condition true ho. `else if` ek aur condition try karta hai, aur `else` baaki sab pakad leta hai. Sirf pehla match chalta hai."
+        }
       },
       {
         "title": "Spot the bug",
@@ -24,6 +32,11 @@
         "bug": {
           "line": 6,
           "fix": "`else` takes no condition: it catches everything left. Write `} else {`, or `} else if (temp > 0) {`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "JavaScript kuch bhi chalane se pehle `SyntaxError` dekar ruk jaata hai. Kaunsi line galat hai?",
+          "fix": "`else` koi condition nahi leta: woh baaki sab pakad leta hai. `} else {` likho, ya `} else if (temp > 0) {`."
         }
       }
     ],
@@ -32,11 +45,16 @@
       "code": "const x = 0;\nif (x > 0) {\n  console.log(\"A\");\n} else if (x === 0) {\n  console.log(\"B\");\n} else {\n  console.log(\"C\");\n}\n",
       "options": ["A", "B", "C"],
       "answer": 1,
-      "explanation": "`x > 0` is false, so JavaScript tries `x === 0`, which is true."
+      "explanation": "`x > 0` is false, so JavaScript tries `x === 0`, which is true.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "`x > 0` false hai, isliye JavaScript `x === 0` try karta hai, jo true hai."
+      }
     }
   },
   "exercise": {
     "prompt": "Read a whole number. Print `positive` if it is greater than 0, `negative` if it is less than 0, and `zero` otherwise.",
+    "promptHi": "Ek whole number padho. Agar woh 0 se bada hai toh `positive`, 0 se chhota hai toh `negative`, warna `zero` print karo.",
     "starterCode": "const n = Number(prompt());\n// use if / else if / else below\n",
     "sampleTests": [
       {

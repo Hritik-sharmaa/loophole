@@ -8,14 +8,22 @@
         "title": "Running totals",
         "body": "Start a total at 0 before the loop, then add to it each time round.",
         "code": "let total = 0;\nfor (let i = 1; i <= 4; i++) {\n  total += i;\n}\nconsole.log(total);\n",
-        "output": "10"
+        "output": "10",
+        "hi": {
+          "title": "Running total",
+          "body": "Loop se pehle total 0 se shuru karo, phir har round mein usme jodte jao."
+        }
       },
       {
         "title": "Reading inside a loop",
         "body": "Each `prompt()` reads the next line, so calling it inside a loop reads one line per round.",
         "code": "for (let i = 0; i < 2; i++) {\n  const word = prompt();\n  console.log(\"got\", word);\n}\n",
         "input": "apple\npear\n",
-        "output": "got apple\ngot pear"
+        "output": "got apple\ngot pear",
+        "hi": {
+          "title": "Loop ke andar padhna",
+          "body": "Har `prompt()` agli line padhta hai, isliye loop ke andar call karne par har round mein ek line padhi jaati hai."
+        }
       },
       {
         "title": "Spot the bug",
@@ -24,6 +32,11 @@
         "bug": {
           "line": 2,
           "fix": "Line 2 makes a new `total` inside the loop every round, and it is gone after the loop. Declare it once, before the loop."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Isse 10 print karna chahiye, par yeh `ReferenceError: total is not defined` dekar crash hota hai. Kaunsi line galat hai?",
+          "fix": "Line 2 har round mein loop ke andar naya `total` banati hai, aur loop ke baad woh gayab ho jaata hai. Use ek baar, loop se pehle declare karo."
         }
       }
     ],
@@ -32,11 +45,16 @@
       "code": "let total = 0;\nfor (let i = 0; i < 3; i++) {\n  total += 2;\n}\nconsole.log(total);\n",
       "options": ["6", "2", "3"],
       "answer": 0,
-      "explanation": "The loop runs 3 times and adds 2 each time."
+      "explanation": "The loop runs 3 times and adds 2 each time.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "Loop 3 baar chalta hai aur har baar 2 jodta hai."
+      }
     }
   },
   "exercise": {
     "prompt": "The first line is a count N; then N lines follow, each with one whole number. Print their sum.",
+    "promptHi": "Pehli line mein count N hai; phir N lines aati hain, har ek mein ek whole number. Unka sum print karo.",
     "starterCode": "const n = Number(prompt());\nlet total = 0;\n// read n more numbers and add each to total\nconsole.log(total);\n",
     "sampleTests": [
       {

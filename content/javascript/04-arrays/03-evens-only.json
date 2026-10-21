@@ -8,19 +8,31 @@
         "title": "filter() keeps some items",
         "body": "`nums.filter(x => x > 10)` makes a new array with only the items where the test is true.",
         "code": "const big = [5, 12, 8, 20].filter(x => x > 10);\nconsole.log(big.join(\" \"));\n",
-        "output": "12 20"
+        "output": "12 20",
+        "hi": {
+          "title": "filter() kuch items rakhta hai",
+          "body": "`nums.filter(x => x > 10)` ek naya array banata hai jismein sirf woh items hain jinke liye test true hai."
+        }
       },
       {
         "title": "Arrow functions",
         "body": "`x => x > 10` is a short function: it takes `x` and gives back `x > 10`.",
         "code": "const isBig = x => x > 10;\nconsole.log(isBig(15), isBig(3));\n",
-        "output": "true false"
+        "output": "true false",
+        "hi": {
+          "title": "Arrow functions",
+          "body": "`x => x > 10` ek chhota function hai: yeh `x` leta hai aur `x > 10` wapas deta hai."
+        }
       },
       {
         "title": "join() makes text",
         "body": "`join(\" \")` glues an array's items into one string, with the separator between them.",
         "code": "console.log([1, 2, 3].join(\" \"));\nconsole.log([1, 2, 3].join(\", \"));\n",
-        "output": "1 2 3\n1, 2, 3"
+        "output": "1 2 3\n1, 2, 3",
+        "hi": {
+          "title": "join() text banata hai",
+          "body": "`join(\" \")` array ke items ko ek string mein jodta hai, beech mein separator ke saath."
+        }
       },
       {
         "title": "Spot the bug",
@@ -29,6 +41,11 @@
         "bug": {
           "line": 1,
           "fix": "`map` turns every item into the answer of its test. To keep only some items, use `filter`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Isse sirf 10 se bade numbers, `12 20`, print karne chahiye, par yeh `false true false true` print karta hai. Bug par tap karo.",
+          "fix": "`map` har item ko uske test ke jawab mein badal deta hai. Sirf kuch items rakhne hon toh `filter` use karo."
         }
       }
     ],
@@ -37,11 +54,16 @@
       "code": "console.log([1, 2, 3, 4].filter(x => x % 2 === 1).join(\" \"));\n",
       "options": ["1 3", "2 4", "1 2 3 4"],
       "answer": 0,
-      "explanation": "`x % 2 === 1` is true for odd numbers, so only 1 and 3 are kept."
+      "explanation": "`x % 2 === 1` is true for odd numbers, so only 1 and 3 are kept.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "`x % 2 === 1` odd numbers ke liye true hai, isliye sirf 1 aur 3 rakhe jaate hain."
+      }
     }
   },
   "exercise": {
     "prompt": "Read whole numbers on one line and print only the even ones, in the same order, separated by spaces. If there are none, print an empty line.",
+    "promptHi": "Ek line mein whole numbers padho aur sirf even waale print karo, usi order mein, spaces se alag. Agar ek bhi nahi hai, toh khaali line print karo.",
     "starterCode": "const nums = prompt().split(\" \").map(Number);\n// keep the even numbers and print them\n",
     "sampleTests": [
       {

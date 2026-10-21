@@ -678,12 +678,15 @@ describe('Hinglish (ADR-042)', () => {
     }
   });
 
-  it('every Python lesson has Hinglish', () => {
-    const python = loadAllContent(REAL_CONTENT).find(
-      (c) => c.slug === 'python',
-    )!;
-    const lessons = python.units.flatMap((u) => u.lessons);
-    expect(lessons).toHaveLength(40);
+  // The batches done so far (web: HINGLISH_COURSES in
+  // components/lesson-language-picker.tsx).
+  it.each([
+    ['python', 40],
+    ['javascript', 20],
+  ])('every %s lesson has Hinglish', (slug, total) => {
+    const course = loadAllContent(REAL_CONTENT).find((c) => c.slug === slug)!;
+    const lessons = course.units.flatMap((u) => u.lessons);
+    expect(lessons).toHaveLength(total);
     for (const lesson of lessons) {
       expect(lesson.exercise.promptHi, lesson.slug).not.toBeNull();
     }

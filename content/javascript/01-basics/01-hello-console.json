@@ -8,17 +8,29 @@
         "title": "console.log() prints",
         "body": "`console.log()` shows a value in the console, the text window where programs print. Text goes in quotes.",
         "code": "console.log(\"Hello!\");\n",
-        "output": "Hello!"
+        "output": "Hello!",
+        "hi": {
+          "title": "console.log() print karta hai",
+          "body": "`console.log()` console mein ek value dikhata hai, yaani woh text window jahan programs print karte hain. Text quotes mein jaata hai."
+        }
       },
       {
         "title": "One line each",
         "body": "Each `console.log()` prints on its own line. The semicolon at the end marks the end of a statement.",
         "code": "console.log(\"First line\");\nconsole.log(\"Second line\");\n",
-        "output": "First line\nSecond line"
+        "output": "First line\nSecond line",
+        "hi": {
+          "title": "Har ek apni line par",
+          "body": "Har `console.log()` apni alag line par print karta hai. Aakhir ka semicolon batata hai ki statement yahan khatam hua."
+        }
       },
       {
         "title": "Every character counts",
-        "body": "The grader compares your output letter by letter, so capitals, commas and spaces all matter. `Hello` and `hello` are different."
+        "body": "The grader compares your output letter by letter, so capitals, commas and spaces all matter. `Hello` and `hello` are different.",
+        "hi": {
+          "title": "Har character matter karta hai",
+          "body": "Grader aapka output letter by letter compare karta hai, isliye capitals, commas aur spaces sab matter karte hain. `Hello` aur `hello` alag hain."
+        }
       },
       {
         "title": "Spot the bug",
@@ -27,6 +39,11 @@
         "bug": {
           "line": 2,
           "fix": "JavaScript cares about capitals: it is `console.log`, not `console.Log`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Inmein se ek line `TypeError` dekar crash hoti hai. Us par tap karo.",
+          "fix": "JavaScript capitals ka dhyan rakhta hai: sahi hai `console.log`, `console.Log` nahi."
         }
       }
     ],
@@ -35,11 +52,16 @@
       "code": "console.log(\"Hi, \" + \"there!\");\n",
       "options": ["Hi, there!", "\"Hi, \" + \"there!\"", "Hi,there!"],
       "answer": 0,
-      "explanation": "`+` joins the two strings exactly as they are, then `console.log()` prints the result without quotes."
+      "explanation": "`+` joins the two strings exactly as they are, then `console.log()` prints the result without quotes.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "`+` dono strings ko bilkul waise hi jodta hai jaise woh hain, phir `console.log()` result ko bina quotes ke print karta hai."
+      }
     }
   },
   "exercise": {
     "prompt": "Every programmer starts here. Print exactly `Hello, JavaScript!`",
+    "promptHi": "Har programmer yahin se shuru karta hai. Bilkul `Hello, JavaScript!` print karo.",
     "starterCode": "// Print the greeting below\n",
     "sampleTests": [
       {

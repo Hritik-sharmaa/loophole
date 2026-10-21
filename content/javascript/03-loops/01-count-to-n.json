@@ -8,13 +8,21 @@
         "title": "for loops",
         "body": "A `for` loop has three parts: where to start, when to keep going, and how to step.",
         "code": "for (let i = 1; i <= 3; i++) {\n  console.log(\"round\", i);\n}\n",
-        "output": "round 1\nround 2\nround 3"
+        "output": "round 1\nround 2\nround 3",
+        "hi": {
+          "title": "for loops",
+          "body": "`for` loop ke teen hisse hote hain: kahan se shuru karna hai, kab tak chalna hai, aur kaise aage badhna hai."
+        }
       },
       {
         "title": "Other steps",
         "body": "Change the step to count by 2, or count down with `i--` or `i -= 2`.",
         "code": "for (let i = 10; i >= 6; i -= 2) {\n  console.log(i);\n}\n",
-        "output": "10\n8\n6"
+        "output": "10\n8\n6",
+        "hi": {
+          "title": "Doosre steps",
+          "body": "Step badal kar 2-2 se gino, ya `i--` ya `i -= 2` se ulti ginti karo."
+        }
       },
       {
         "title": "Spot the bug",
@@ -23,6 +31,11 @@
         "bug": {
           "line": 1,
           "fix": "`i < 5` stops before 5. Use `i <= 5` to include it."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Isse laps 1 se 5 tak print karne chahiye, par yeh lap 4 par ruk jaata hai. Bug par tap karo.",
+          "fix": "`i < 5` 5 se pehle ruk jaata hai. 5 ko shaamil karne ke liye `i <= 5` use karo."
         }
       }
     ],
@@ -31,11 +44,16 @@
       "code": "for (let i = 0; i < 3; i++) {\n  console.log(i);\n}\n",
       "options": ["0\n1\n2", "1\n2\n3", "0\n1\n2\n3"],
       "answer": 0,
-      "explanation": "It starts at 0 and stops before 3, because the condition is `i < 3`."
+      "explanation": "It starts at 0 and stops before 3, because the condition is `i < 3`.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "Yeh 0 se shuru hota hai aur 3 se pehle ruk jaata hai, kyunki condition `i < 3` hai."
+      }
     }
   },
   "exercise": {
     "prompt": "Read N and print the numbers from 1 to N, one per line. Use a `for` loop.",
+    "promptHi": "N padho aur 1 se N tak ke numbers print karo, har line mein ek. `for` loop use karo.",
     "starterCode": "const n = Number(prompt());\n// print 1 to n, one per line\n",
     "sampleTests": [
       {

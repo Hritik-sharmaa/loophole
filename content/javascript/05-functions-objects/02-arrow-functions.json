@@ -8,19 +8,31 @@
         "title": "A shorter way",
         "body": "`const double = n => n * 2;` does the same as a `function` that returns `n * 2`.",
         "code": "const double = n => n * 2;\nconsole.log(double(7));\n",
-        "output": "14"
+        "output": "14",
+        "hi": {
+          "title": "Chhota tareeka",
+          "body": "`const double = n => n * 2;` wahi karta hai jo `n * 2` return karne wala `function` karta hai."
+        }
       },
       {
         "title": "More parameters",
         "body": "With two or more parameters, wrap them in brackets: `(a, b) => a + b`.",
         "code": "const add = (a, b) => a + b;\nconsole.log(add(2, 3));\n",
-        "output": "5"
+        "output": "5",
+        "hi": {
+          "title": "Zyada parameters",
+          "body": "Do ya zyada parameters hon toh unhe brackets mein rakho: `(a, b) => a + b`."
+        }
       },
       {
         "title": "Returning true or false",
         "body": "A comparison gives `true` or `false`, so a function can return one directly.",
         "code": "const isBig = n => n > 100;\nconsole.log(isBig(500));\nconsole.log(isBig(7));\n",
-        "output": "true\nfalse"
+        "output": "true\nfalse",
+        "hi": {
+          "title": "true ya false return karna",
+          "body": "Comparison `true` ya `false` deta hai, isliye function use seedha return kar sakta hai."
+        }
       },
       {
         "title": "Spot the bug",
@@ -29,6 +41,11 @@
         "bug": {
           "line": 1,
           "fix": "With two parameters, wrap them in brackets: `const add = (a, b) => a + b;`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "JavaScript `SyntaxError` dekar ruk jaata hai. Kaunsi line galat hai?",
+          "fix": "Do parameters hon toh unhe brackets mein rakho: `const add = (a, b) => a + b;`."
         }
       }
     ],
@@ -37,11 +54,16 @@
       "code": "const odd = n => n % 2 === 1;\nconsole.log(odd(8));\n",
       "options": ["false", "true", "0"],
       "answer": 0,
-      "explanation": "8 % 2 is 0, and `0 === 1` is false."
+      "explanation": "8 % 2 is 0, and `0 === 1` is false.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "8 % 2 ka matlab 0, aur `0 === 1` false hai."
+      }
     }
   },
   "exercise": {
     "prompt": "Fix the arrow function `isEven` so it returns `true` when n is even and `false` otherwise. The code below prints `even` or `odd` based on it.",
+    "promptHi": "Arrow function `isEven` theek karo taaki n even ho toh `true` aur warna `false` return kare. Neeche ka code uske hisaab se `even` ya `odd` print karta hai.",
     "starterCode": "const isEven = n => false; // fix this\n\nconst n = Number(prompt());\nif (isEven(n)) {\n  console.log(\"even\");\n} else {\n  console.log(\"odd\");\n}\n",
     "sampleTests": [
       {

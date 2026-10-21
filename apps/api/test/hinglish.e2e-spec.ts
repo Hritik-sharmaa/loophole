@@ -165,6 +165,17 @@ describe('Hinglish lessons (e2e, ADR-042)', () => {
     expect(bobs.lessons[0].cards[0].title).toBe('Your first line of Python');
   });
 
+  it('JavaScript lessons are in Hinglish too', async () => {
+    const js = await get<CoursePath>('ada', '/courses/javascript/path');
+    const lesson = await get<LessonDetail>(
+      'ada',
+      `/lessons/${js.units[0].lessons[0].id}`,
+    );
+    expect(lesson.learn?.cards[0].title).toBe('console.log() print karta hai');
+    expect(lesson.exercise.prompt).toContain('`Hello, JavaScript!`');
+    expect(lesson.exercise.prompt).toContain('Har programmer');
+  });
+
   it('switching back gives English again', async () => {
     await setLanguage('ada', 'en');
     const lesson = await get<LessonDetail>('ada', `/lessons/${firstLesson()}`);

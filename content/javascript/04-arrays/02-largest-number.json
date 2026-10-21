@@ -8,11 +8,19 @@
         "title": "Math.max and Math.min",
         "body": "`Math.max(4, 9, 2)` gives the biggest number. Put `...` before an array to pass its items: `Math.max(...nums)`.",
         "code": "const nums = [7, 2, 9, 4];\nconsole.log(Math.max(...nums));\nconsole.log(Math.min(...nums));\n",
-        "output": "9\n2"
+        "output": "9\n2",
+        "hi": {
+          "title": "Math.max aur Math.min",
+          "body": "`Math.max(4, 9, 2)` sabse bada number deta hai. Array ke items bhejne ke liye uske aage `...` lagao: `Math.max(...nums)`."
+        }
       },
       {
         "title": "Spreading an array",
-        "body": "`...nums` spreads an array out into separate values, as if you had typed them one by one."
+        "body": "`...nums` spreads an array out into separate values, as if you had typed them one by one.",
+        "hi": {
+          "title": "Array ko spread karna",
+          "body": "`...nums` array ko alag alag values mein faila deta hai, jaise aapne unhe ek ek karke type kiya ho."
+        }
       },
       {
         "title": "Spot the bug",
@@ -21,6 +29,11 @@
         "bug": {
           "line": 2,
           "fix": "`Math.max` wants separate numbers, not an array. Spread it: `Math.max(...nums)`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Isse 9 print karna chahiye, par yeh `NaN` print karta hai. Kaunsi line galat hai?",
+          "fix": "`Math.max` ko alag alag numbers chahiye, array nahi. Spread karo: `Math.max(...nums)`."
         }
       }
     ],
@@ -29,11 +42,16 @@
       "code": "console.log(Math.max(...[-5, -1, -9]));\n",
       "options": ["-1", "-9", "-5"],
       "answer": 0,
-      "explanation": "Among negative numbers, the one closest to zero is the largest."
+      "explanation": "Among negative numbers, the one closest to zero is the largest.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "Negative numbers mein jo zero ke sabse paas hai, wahi sabse bada hai."
+      }
     }
   },
   "exercise": {
     "prompt": "Read whole numbers on one line, separated by spaces, and print the largest.",
+    "promptHi": "Ek line mein spaces se alag kiye whole numbers padho aur sabse bada print karo.",
     "starterCode": "const nums = prompt().split(\" \").map(Number);\n// print the largest number\n",
     "sampleTests": [
       {

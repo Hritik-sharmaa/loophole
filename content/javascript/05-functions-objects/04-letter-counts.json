@@ -8,19 +8,31 @@
         "title": "Objects hold named values",
         "body": "An object stores values under names called keys. Read one with a dot, or with the key in square brackets.",
         "code": "const person = { name: \"Ada\", age: 36 };\nconsole.log(person.name);\nconsole.log(person[\"age\"]);\n",
-        "output": "Ada\n36"
+        "output": "Ada\n36",
+        "hi": {
+          "title": "Objects naam wali values rakhte hain",
+          "body": "Object values ko naamon ke neeche store karta hai jinhe keys kehte hain. Ek value dot se padho, ya key ko square brackets mein likh kar."
+        }
       },
       {
         "title": "Adding and updating keys",
         "body": "Assign to a key to add it, or to change it if it is already there. `?? 0` gives 0 when a key is missing.",
         "code": "const counts = {};\nfor (const ch of \"aab\") {\n  counts[ch] = (counts[ch] ?? 0) + 1;\n}\nconsole.log(counts.a, counts.b);\n",
-        "output": "2 1"
+        "output": "2 1",
+        "hi": {
+          "title": "Keys jodna aur update karna",
+          "body": "Kisi key ko value assign karo toh woh jud jaati hai, ya pehle se ho toh badal jaati hai. `?? 0` key na ho toh 0 deta hai."
+        }
       },
       {
         "title": "Keys in order",
         "body": "`Object.keys(obj)` gives an array of the keys, and `.sort()` puts text in alphabetical order.",
         "code": "const scores = { cy: 5, ada: 9, bo: 7 };\nfor (const key of Object.keys(scores).sort()) {\n  console.log(key, scores[key]);\n}\n",
-        "output": "ada 9\nbo 7\ncy 5"
+        "output": "ada 9\nbo 7\ncy 5",
+        "hi": {
+          "title": "Order mein keys",
+          "body": "`Object.keys(obj)` keys ka array deta hai, aur `.sort()` text ko alphabetical order mein rakhta hai."
+        }
       },
       {
         "title": "Spot the bug",
@@ -29,6 +41,11 @@
         "bug": {
           "line": 3,
           "fix": "`ages.key` looks for a key literally named `key`. To use the variable's value, write `ages[key]`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Isse 36 print karna chahiye, par yeh `undefined` print karta hai. Kaunsi line galat hai?",
+          "fix": "`ages.key` sach mein `key` naam ki key dhoondta hai. Variable ki value use karni ho toh `ages[key]` likho."
         }
       }
     ],
@@ -37,11 +54,16 @@
       "code": "const d = { x: 1 };\nd.x = 5;\nconsole.log(d.x);\n",
       "options": ["5", "1", "6"],
       "answer": 0,
-      "explanation": "Assigning to an existing key replaces its value."
+      "explanation": "Assigning to an existing key replaces its value.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "Pehle se maujood key ko assign karne par uski value badal jaati hai."
+      }
     }
   },
   "exercise": {
     "prompt": "Read a word in lowercase letters and print how many times each letter appears, one per line as `letter count`, in alphabetical order.",
+    "promptHi": "Lowercase letters ka ek word padho aur print karo ki har letter kitni baar aata hai, har line mein `letter count`, alphabetical order mein.",
     "starterCode": "const word = prompt();\nconst counts = {};\n// count each letter, then print them in alphabetical order\n",
     "sampleTests": [
       {

@@ -8,13 +8,21 @@
         "title": "=== compares",
         "body": "`===` is true when two values are exactly the same, type included. `!==` means \"not equal\".",
         "code": "console.log(\"cat\" === \"cat\");\nconsole.log(\"cat\" === \"Cat\");\nconsole.log(3 !== 4);\n",
-        "output": "true\nfalse\ntrue"
+        "output": "true\nfalse\ntrue",
+        "hi": {
+          "title": "=== compare karta hai",
+          "body": "`===` tab true hai jab do values bilkul same hon, type ke saath. `!==` ka matlab \"barabar nahi\"."
+        }
       },
       {
         "title": "Why not ==",
         "body": "`==` converts types before comparing, so `\"1\" == 1` is true. That causes surprises, so use `===`.",
         "code": "console.log(\"1\" == 1);\nconsole.log(\"1\" === 1);\n",
-        "output": "true\nfalse"
+        "output": "true\nfalse",
+        "hi": {
+          "title": "== kyun nahi",
+          "body": "`==` compare karne se pehle types badal deta hai, isliye `\"1\" == 1` true hai. Isse surprises aate hain, isliye `===` use karo."
+        }
       },
       {
         "title": "Spot the bug",
@@ -23,6 +31,11 @@
         "bug": {
           "line": 2,
           "fix": "`=` stores `\"blue\"` in `color`, so the condition is always true. Compare with `===`: `if (color === \"blue\")`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Aap koi bhi colour type karo, yeh hamesha `My favourite too!` bolta hai. Bug par tap karo.",
+          "fix": "`=` `color` mein `\"blue\"` store kar deta hai, isliye condition hamesha true hai. `===` se compare karo: `if (color === \"blue\")`."
         }
       }
     ],
@@ -31,11 +44,17 @@
       "code": "console.log(5 === \"5\");\n",
       "options": ["false", "true", "An error"],
       "answer": 0,
-      "explanation": "One is a number and the other is text, so `===` says they are not the same."
+      "explanation": "One is a number and the other is text, so `===` says they are not the same.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "options": ["false", "true", "Error aayega"],
+        "explanation": "Ek number hai aur doosra text, isliye `===` kehta hai ki dono same nahi hain."
+      }
     }
   },
   "exercise": {
     "prompt": "Read a password. Print `Welcome!` if it is exactly `open sesame`, otherwise print `Wrong password`.",
+    "promptHi": "Ek password padho. Agar woh bilkul `open sesame` hai toh `Welcome!` print karo, warna `Wrong password` print karo.",
     "starterCode": "const password = prompt();\n// compare it with ===\n",
     "sampleTests": [
       {

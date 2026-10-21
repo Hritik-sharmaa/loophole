@@ -8,17 +8,29 @@
         "title": "let can change",
         "body": "A `const` never changes. Use `let` for a variable you will update later.",
         "code": "let score = 10;\nscore = score + 5;\nconsole.log(score);\n",
-        "output": "15"
+        "output": "15",
+        "hi": {
+          "title": "let badal sakta hai",
+          "body": "`const` kabhi nahi badalta. Jo variable baad mein update karna ho, uske liye `let` use karo."
+        }
       },
       {
         "title": "Shortcuts",
         "body": "`score += 5` is short for `score = score + 5`, and `count++` adds 1.",
         "code": "let count = 0;\ncount += 3;\ncount++;\nconsole.log(count);\n",
-        "output": "4"
+        "output": "4",
+        "hi": {
+          "title": "Shortcuts",
+          "body": "`score += 5` ka matlab `score = score + 5`, aur `count++` 1 jodta hai."
+        }
       },
       {
         "title": "const protects values",
-        "body": "Assigning to a `const` again is an error. Use `const` for values you never mean to change, and `let` only when you do."
+        "body": "Assigning to a `const` again is an error. Use `const` for values you never mean to change, and `let` only when you do.",
+        "hi": {
+          "title": "const values ko bachata hai",
+          "body": "`const` ko dobara value dena error hai. Jo values kabhi nahi badalni unke liye `const` use karo, aur `let` sirf tab jab badalni hon."
+        }
       },
       {
         "title": "Spot the bug",
@@ -27,6 +39,11 @@
         "bug": {
           "line": 1,
           "fix": "A `const` can never get a new value, and line 2 changes `score`. Line 1 should use `let`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Yeh `TypeError: Assignment to constant variable.` dekar ruk jaata hai. Kaunsi line badalni chahiye?",
+          "fix": "`const` ko kabhi nayi value nahi mil sakti, aur line 2 `score` ko badalti hai. Line 1 mein `let` hona chahiye."
         }
       }
     ],
@@ -35,11 +52,16 @@
       "code": "let x = 2;\nx *= 5;\nx++;\nconsole.log(x);\n",
       "options": ["11", "10", "7"],
       "answer": 0,
-      "explanation": "`x *= 5` makes x 10, then `x++` adds 1."
+      "explanation": "`x *= 5` makes x 10, then `x++` adds 1.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "`x *= 5` se x 10 ho jaata hai, phir `x++` 1 jodta hai."
+      }
     }
   },
   "exercise": {
     "prompt": "Read a starting balance, then a deposit, then a withdrawal (whole numbers, one per line). Add the deposit, take away the withdrawal, and print the final balance.",
+    "promptHi": "Pehle starting balance padho, phir ek deposit, phir ek withdrawal (whole numbers, har line mein ek). Deposit jodo, withdrawal ghatao, aur final balance print karo.",
     "starterCode": "let balance = Number(prompt());\nconst deposit = Number(prompt());\nconst withdrawal = Number(prompt());\n// update balance, then print it\n",
     "sampleTests": [
       {

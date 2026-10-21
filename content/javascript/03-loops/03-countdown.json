@@ -8,13 +8,21 @@
         "title": "while loops",
         "body": "A `while` loop repeats as long as its condition is true. Something inside must change, or it never stops.",
         "code": "let n = 1;\nwhile (n <= 3) {\n  console.log(n);\n  n++;\n}\n",
-        "output": "1\n2\n3"
+        "output": "1\n2\n3",
+        "hi": {
+          "title": "while loops",
+          "body": "`while` loop tab tak repeat karta hai jab tak uski condition true hai. Andar kuch badalna chahiye, warna woh kabhi nahi rukta."
+        }
       },
       {
         "title": "break",
         "body": "`break` leaves a loop straight away.",
         "code": "let n = 1;\nwhile (true) {\n  if (n > 2) {\n    break;\n  }\n  console.log(n);\n  n++;\n}\n",
-        "output": "1\n2"
+        "output": "1\n2",
+        "hi": {
+          "title": "break",
+          "body": "`break` loop se turant bahar nikal jaata hai."
+        }
       },
       {
         "title": "Spot the bug",
@@ -23,6 +31,11 @@
         "bug": {
           "line": 4,
           "fix": "`n * 2` works out a value and throws it away, so `n` never changes. Line 4 should be `n = n * 2;`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Isse 1, 2, 4 … 64 tak print karna chahiye, par yeh hamesha 1 print karta rehta hai. Bug par tap karo.",
+          "fix": "`n * 2` ek value nikalta hai aur phenk deta hai, isliye `n` kabhi nahi badalta. Line 4 `n = n * 2;` honi chahiye."
         }
       }
     ],
@@ -31,11 +44,16 @@
       "code": "let n = 2;\nwhile (n > 0) {\n  n--;\n}\nconsole.log(n);\n",
       "options": ["0", "1", "-1"],
       "answer": 0,
-      "explanation": "The loop stops when `n > 0` is first false, at 0. The `console.log` is after the loop, so it runs once."
+      "explanation": "The loop stops when `n > 0` is first false, at 0. The `console.log` is after the loop, so it runs once.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "Loop tab rukta hai jab `n > 0` pehli baar false hota hai, yaani 0 par. `console.log` loop ke baad hai, isliye ek hi baar chalta hai."
+      }
     }
   },
   "exercise": {
     "prompt": "Read N and count down from N to 1, one number per line, then print `Liftoff!`. Use a `while` loop.",
+    "promptHi": "N padho aur N se 1 tak ulti ginti karo, har line mein ek number, phir `Liftoff!` print karo. `while` loop use karo.",
     "starterCode": "let n = Number(prompt());\n// count down with a while loop\nconsole.log(\"Liftoff!\");\n",
     "sampleTests": [
       {

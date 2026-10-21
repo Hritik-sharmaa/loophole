@@ -8,19 +8,31 @@
         "title": "Rounding down",
         "body": "`/` gives a decimal: `7 / 2` is `3.5`. `Math.floor()` rounds down to the whole number below.",
         "code": "console.log(7 / 2);\nconsole.log(Math.floor(7 / 2));\n",
-        "output": "3.5\n3"
+        "output": "3.5\n3",
+        "hi": {
+          "title": "Neeche round karna",
+          "body": "`/` decimal deta hai: `7 / 2` ka matlab `3.5`. `Math.floor()` neeche wale whole number tak round karta hai."
+        }
       },
       {
         "title": "The remainder %",
         "body": "`%` gives what is left over after dividing. 17 split into groups of 5 leaves 2.",
         "code": "console.log(17 % 5);\nconsole.log(10 % 2);\n",
-        "output": "2\n0"
+        "output": "2\n0",
+        "hi": {
+          "title": "Remainder %",
+          "body": "`%` batata hai divide karne ke baad kitna bacha. 17 ko 5-5 ke groups mein baanto toh 2 bachte hain."
+        }
       },
       {
         "title": "Printing several values",
         "body": "Give `console.log()` several values separated by commas and it prints them with one space between each.",
         "code": "const weeks = Math.floor(10 / 7);\nconst days = 10 % 7;\nconsole.log(weeks, \"week\", days, \"days\");\n",
-        "output": "1 week 3 days"
+        "output": "1 week 3 days",
+        "hi": {
+          "title": "Kai values print karna",
+          "body": "`console.log()` ko commas se alag karke kai values do, woh unhe beech mein ek space ke saath print karta hai."
+        }
       },
       {
         "title": "Spot the bug",
@@ -29,6 +41,11 @@
         "bug": {
           "line": 2,
           "fix": "`total / 60` keeps the decimals. Round down with `Math.floor(total / 60)`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "150 seconds ke liye isse `2 30` print karna chahiye, par yeh `2.5 30` print karta hai. Bug par tap karo.",
+          "fix": "`total / 60` decimals rakhta hai. `Math.floor(total / 60)` se neeche round karo."
         }
       }
     ],
@@ -37,11 +54,16 @@
       "code": "console.log(Math.floor(100 / 60), 100 % 60);\n",
       "options": ["1 40", "1.6666666666666667 40", "40 1"],
       "answer": 0,
-      "explanation": "100 / 60 rounds down to 1 whole minute, and 100 % 60 is the 40 seconds left over."
+      "explanation": "100 / 60 rounds down to 1 whole minute, and 100 % 60 is the 40 seconds left over.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "100 / 60 neeche round hokar 1 poora minute banta hai, aur 100 % 60 bache hue 40 seconds hain."
+      }
     }
   },
   "exercise": {
     "prompt": "Read a number of seconds and print it as `M min S s`. For `135`, print `2 min 15 s`",
+    "promptHi": "Seconds ki ek sankhya padho aur use `M min S s` ki tarah print karo. `135` ke liye `2 min 15 s` print karo.",
     "starterCode": "const seconds = Number(prompt());\n// work out the whole minutes and the seconds left over\n",
     "sampleTests": [
       {

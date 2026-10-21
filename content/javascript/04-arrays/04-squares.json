@@ -8,13 +8,21 @@
         "title": "map() changes every item",
         "body": "`nums.map(x => x * 2)` makes a new array where every item has been changed by the function.",
         "code": "const doubled = [1, 2, 3].map(x => x * 2);\nconsole.log(doubled.join(\" \"));\n",
-        "output": "2 4 6"
+        "output": "2 4 6",
+        "hi": {
+          "title": "map() har item badalta hai",
+          "body": "`nums.map(x => x * 2)` ek naya array banata hai jismein har item function se badla gaya hai."
+        }
       },
       {
         "title": "Chaining",
         "body": "Array methods give back arrays, so you can chain them: filter first, then map.",
         "code": "const result = [1, 2, 3, 4].filter(x => x > 2).map(x => x * 10);\nconsole.log(result.join(\" \"));\n",
-        "output": "30 40"
+        "output": "30 40",
+        "hi": {
+          "title": "Chaining",
+          "body": "Array methods arrays wapas dete hain, isliye unhe chain kar sakte ho: pehle filter, phir map."
+        }
       },
       {
         "title": "Spot the bug",
@@ -23,6 +31,11 @@
         "bug": {
           "line": 2,
           "fix": "`map` makes a new array and leaves `nums` alone, so line 2 throws its result away. Keep it: `const tens = nums.map(x => x * 10);`, then print `tens`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Isse `10 20 30` print karna chahiye, par yeh `1 2 3` print karta hai. Kaunsi line galat hai?",
+          "fix": "`map` naya array banata hai aur `nums` ko waisa hi chhod deta hai, isliye line 2 apna result phenk deti hai. Use rakho: `const tens = nums.map(x => x * 10);`, phir `tens` print karo."
         }
       }
     ],
@@ -31,11 +44,16 @@
       "code": "console.log([1, 2, 3].map(x => x + 1).join(\" \"));\n",
       "options": ["2 3 4", "1 2 3", "3 4 5"],
       "answer": 0,
-      "explanation": "`map` adds 1 to every item."
+      "explanation": "`map` adds 1 to every item.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "`map` har item mein 1 jodta hai."
+      }
     }
   },
   "exercise": {
     "prompt": "Read whole numbers on one line and print each one squared, in the same order, separated by spaces.",
+    "promptHi": "Ek line mein whole numbers padho aur har ek ka square print karo, usi order mein, spaces se alag.",
     "starterCode": "const nums = prompt().split(\" \").map(Number);\n// square every number and print them\n",
     "sampleTests": [
       {

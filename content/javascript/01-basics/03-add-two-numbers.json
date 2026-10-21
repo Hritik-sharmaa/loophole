@@ -9,20 +9,32 @@
         "body": "`prompt()` always gives back text, even when the user types digits. Adding two pieces of text with `+` glues them together.",
         "code": "const a = prompt();\nconst b = prompt();\nconsole.log(a + b);\n",
         "input": "2\n3\n",
-        "output": "23"
+        "output": "23",
+        "hi": {
+          "title": "prompt() text deta hai",
+          "body": "`prompt()` hamesha text hi deta hai, chahe user digits type kare. Do text ko `+` se jodo toh woh bas chipak jaate hain."
+        }
       },
       {
         "title": "Number() makes a number",
         "body": "Wrap the text in `Number()` to turn it into a number. Then the maths works.",
         "code": "const a = Number(prompt());\nconst b = Number(prompt());\nconsole.log(a - b);\n",
         "input": "10\n4\n",
-        "output": "6"
+        "output": "6",
+        "hi": {
+          "title": "Number() number banata hai",
+          "body": "Text ko `Number()` mein wrap karo toh woh number ban jaata hai. Phir maths sahi chalega."
+        }
       },
       {
         "title": "Maths operators",
         "body": "`+`, `-`, `*` and `/` add, subtract, multiply and divide. As in school maths, `*` and `/` happen first; brackets change the order.",
         "code": "console.log(2 + 3 * 4);\nconsole.log((2 + 3) * 4);\n",
-        "output": "14\n20"
+        "output": "14\n20",
+        "hi": {
+          "title": "Maths operators",
+          "body": "`+`, `-`, `*` aur `/` add, subtract, multiply aur divide karte hain. School maths ki tarah `*` aur `/` pehle hote hain; brackets order badal dete hain."
+        }
       },
       {
         "title": "Spot the bug",
@@ -31,6 +43,11 @@
         "bug": {
           "line": 2,
           "fix": "`prompt()` gives text, and `+` with text joins instead of adding. Line 2 needs `Number(prompt())`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "2 aur 3 type karo toh yeh `5` ki jagah `23` print karta hai. Kaunsi line galat hai?",
+          "fix": "`prompt()` text deta hai, aur text ke saath `+` add karne ki jagah jodta hai. Line 2 ko `Number(prompt())` chahiye."
         }
       }
     ],
@@ -39,11 +56,17 @@
       "code": "console.log(\"4\" + \"4\");\n",
       "options": ["8", "44", "An error"],
       "answer": 1,
-      "explanation": "Both values are strings in quotes, so `+` glues them into 44."
+      "explanation": "Both values are strings in quotes, so `+` glues them into 44.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "options": ["8", "44", "Error aayega"],
+        "explanation": "Dono values quotes mein strings hain, isliye `+` unhe chipka kar 44 bana deta hai."
+      }
     }
   },
   "exercise": {
     "prompt": "Read two whole numbers, one per line, and print their sum.",
+    "promptHi": "Do whole numbers padho, har line mein ek, aur unka sum print karo.",
     "starterCode": "const a = Number(prompt());\nconst b = Number(prompt());\n// print the sum below\n",
     "sampleTests": [
       {

@@ -8,20 +8,32 @@
         "title": "Arrays hold lists",
         "body": "An array keeps values in order inside square brackets. `nums[0]` is the first item and `nums.length` is how many there are.",
         "code": "const nums = [4, 8, 15];\nconsole.log(nums[0]);\nconsole.log(nums.length);\n",
-        "output": "4\n3"
+        "output": "4\n3",
+        "hi": {
+          "title": "Arrays lists rakhte hain",
+          "body": "Array values ko square brackets ke andar order mein rakhta hai. `nums[0]` pehla item hai aur `nums.length` batata hai kitne items hain."
+        }
       },
       {
         "title": "Reading a line of numbers",
         "body": "`split(\" \")` cuts text at spaces into an array of pieces, and `.map(Number)` turns each piece into a number.",
         "code": "const nums = prompt().split(\" \").map(Number);\nconsole.log(nums[1] + nums[2]);\n",
         "input": "3 1 2\n",
-        "output": "3"
+        "output": "3",
+        "hi": {
+          "title": "Numbers ki ek line padhna",
+          "body": "`split(\" \")` text ko spaces par kaat kar tukdon ka array banata hai, aur `.map(Number)` har tukde ko number bana deta hai."
+        }
       },
       {
         "title": "for...of",
         "body": "`for (const x of nums)` visits each item of an array in order.",
         "code": "let total = 0;\nfor (const x of [10, 20, 5]) {\n  total += x;\n}\nconsole.log(total);\n",
-        "output": "35"
+        "output": "35",
+        "hi": {
+          "title": "for...of",
+          "body": "`for (const x of nums)` array ke har item par order mein jaata hai."
+        }
       },
       {
         "title": "Spot the bug",
@@ -30,6 +42,11 @@
         "bug": {
           "line": 2,
           "fix": "Indexes start at 0, so the last one is `nums.length - 1`: `nums[nums.length - 1]`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Isse aakhri item 15 print karna chahiye, par yeh `undefined` print karta hai. Bug par tap karo.",
+          "fix": "Indexes 0 se shuru hote hain, isliye aakhri `nums.length - 1` hai: `nums[nums.length - 1]`."
         }
       }
     ],
@@ -38,11 +55,16 @@
       "code": "const a = [5, 6, 7];\nconsole.log(a[a.length - 1]);\n",
       "options": ["7", "3", "5"],
       "answer": 0,
-      "explanation": "`a.length` is 3, so `a[2]` is the last item, 7. Indexes start at 0."
+      "explanation": "`a.length` is 3, so `a[2]` is the last item, 7. Indexes start at 0.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "`a.length` 3 hai, isliye `a[2]` aakhri item hai, 7. Indexes 0 se shuru hote hain."
+      }
     }
   },
   "exercise": {
     "prompt": "Read whole numbers on one line, separated by spaces, and print their total.",
+    "promptHi": "Ek line mein spaces se alag kiye whole numbers padho aur unka total print karo.",
     "starterCode": "const nums = prompt().split(\" \").map(Number);\n// print the total of nums\n",
     "sampleTests": [
       {

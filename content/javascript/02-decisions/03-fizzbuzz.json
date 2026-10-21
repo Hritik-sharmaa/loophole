@@ -8,13 +8,21 @@
         "title": "&&, || and !",
         "body": "`&&` (and) is true only when both sides are. `||` (or) is true when at least one side is. `!` flips true and false.",
         "code": "console.log(true && false);\nconsole.log(true || false);\nconsole.log(!true);\n",
-        "output": "false\ntrue\nfalse"
+        "output": "false\ntrue\nfalse",
+        "hi": {
+          "title": "&&, || aur !",
+          "body": "`&&` (and) tabhi true hai jab dono side true hon. `||` (or) true hai jab kam se kam ek side true ho. `!` true aur false ko palat deta hai."
+        }
       },
       {
         "title": "Strictest check first",
         "body": "With `else if`, the first true condition wins, so put the strictest check first or a broader one will catch it.",
         "code": "const n = 30;\nif (n % 2 === 0 && n % 3 === 0) {\n  console.log(\"both\");\n} else if (n % 2 === 0) {\n  console.log(\"even\");\n} else {\n  console.log(\"neither\");\n}\n",
-        "output": "both"
+        "output": "both",
+        "hi": {
+          "title": "Sabse sakht check pehle",
+          "body": "`else if` ke saath pehli true condition jeet jaati hai, isliye sabse sakht check pehle rakho, warna koi badi condition use pakad legi."
+        }
       },
       {
         "title": "Spot the bug",
@@ -23,6 +31,11 @@
         "bug": {
           "line": 3,
           "fix": "`||` needs just one side to be true. Both must be true here, so use `&&`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Sirf adult members free mein andar aate hain, par 25 saal ka non-member bhi aa jaata hai. Kaunsi line galat hai?",
+          "fix": "`||` ko sirf ek side true chahiye. Yahan dono true honi chahiye, isliye `&&` use karo."
         }
       }
     ],
@@ -31,11 +44,16 @@
       "code": "const n = 10;\nconsole.log(n > 5 && n % 2 === 1);\n",
       "options": ["false", "true"],
       "answer": 0,
-      "explanation": "`n > 5` is true, but 10 is even, so `n % 2 === 1` is false, and `&&` needs both."
+      "explanation": "`n > 5` is true, but 10 is even, so `n % 2 === 1` is false, and `&&` needs both.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "`n > 5` true hai, par 10 even hai, isliye `n % 2 === 1` false hai, aur `&&` ko dono chahiye."
+      }
     }
   },
   "exercise": {
     "prompt": "Read a whole number. Print `FizzBuzz` if it divides by both 3 and 5, `Fizz` if only by 3, `Buzz` if only by 5, and the number itself otherwise.",
+    "promptHi": "Ek whole number padho. Agar woh 3 aur 5 dono se divide hota hai toh `FizzBuzz`, sirf 3 se toh `Fizz`, sirf 5 se toh `Buzz`, warna number khud print karo.",
     "starterCode": "const n = Number(prompt());\n// check the strictest case first\n",
     "sampleTests": [
       {

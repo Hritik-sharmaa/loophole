@@ -17,7 +17,10 @@ import {
   guideFor,
 } from '@/components/guide';
 import { LanguageTile } from '@/components/language-logo';
-import { LessonLanguagePicker } from '@/components/lesson-language-picker';
+import {
+  HINGLISH_COURSES,
+  LessonLanguagePicker,
+} from '@/components/lesson-language-picker';
 import { Logo } from '@/components/logo';
 import { ProgressBar } from '@/components/progress-bar';
 import { primaryButton, secondaryButton } from '@/components/ui/buttons';
@@ -198,11 +201,11 @@ export default function WelcomePage() {
               disabled={update.isPending}
             />
             {course &&
-              course.language !== 'python' &&
+              !HINGLISH_COURSES.includes(course.language) &&
               language === 'hinglish' && (
                 <p className="text-sm font-bold text-text-secondary">
-                  {course.title} is still in English for now: Python is the
-                  first course in Hinglish, and the others follow.
+                  {course.title} is still in English for now: Python and
+                  JavaScript are in Hinglish, and the others follow.
                 </p>
               )}
             {update.isError && (

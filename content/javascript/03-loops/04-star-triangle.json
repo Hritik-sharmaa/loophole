@@ -8,13 +8,21 @@
         "title": "repeat()",
         "body": "`text.repeat(n)` gives the text n times in a row.",
         "code": "console.log(\"ab\".repeat(3));\nconsole.log(\"-\".repeat(5));\n",
-        "output": "ababab\n-----"
+        "output": "ababab\n-----",
+        "hi": {
+          "title": "repeat()",
+          "body": "`text.repeat(n)` text ko lagatar n baar deta hai."
+        }
       },
       {
         "title": "Lines that grow",
         "body": "Use the loop counter to make each line longer than the last.",
         "code": "for (let i = 1; i <= 3; i++) {\n  console.log(\"o\".repeat(i * 2));\n}\n",
-        "output": "oo\noooo\noooooo"
+        "output": "oo\noooo\noooooo",
+        "hi": {
+          "title": "Badhti hui lines",
+          "body": "Loop counter use karo taaki har line pichli se lambi ho."
+        }
       },
       {
         "title": "Spot the bug",
@@ -23,6 +31,11 @@
         "bug": {
           "line": 2,
           "fix": "JavaScript cannot multiply text, so `\"ab\" * i` is `NaN` (not a number). Repeat it instead: `\"ab\".repeat(i)`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Isse `ab`, `abab`, `ababab` print karna chahiye, par yeh teen baar `NaN` print karta hai. Kaunsi line galat hai?",
+          "fix": "JavaScript text ko multiply nahi kar sakta, isliye `\"ab\" * i` ka result `NaN` (not a number) hai. Repeat karo: `\"ab\".repeat(i)`."
         }
       }
     ],
@@ -31,11 +44,16 @@
       "code": "for (let i = 0; i < 2; i++) {\n  console.log(\"*\".repeat(i + 1));\n}\n",
       "options": ["*\n**", "**\n**", "\n*"],
       "answer": 0,
-      "explanation": "i is 0 and then 1, so the lines have 1 and then 2 stars."
+      "explanation": "i is 0 and then 1, so the lines have 1 and then 2 stars.",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "i pehle 0 aur phir 1 hai, isliye lines mein pehle 1 aur phir 2 stars hain."
+      }
     }
   },
   "exercise": {
     "prompt": "Read N and print a triangle of N rows: row 1 has one `*`, row 2 has two, and so on, with no spaces.",
+    "promptHi": "N padho aur N rows ka triangle print karo: row 1 mein ek `*`, row 2 mein do, aur aise hi aage, bina spaces ke.",
     "starterCode": "const n = Number(prompt());\n// print the triangle, one row per line\n",
     "sampleTests": [
       {

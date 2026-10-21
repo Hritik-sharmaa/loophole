@@ -8,21 +8,33 @@
         "title": "Variables",
         "body": "`const` creates a variable: a name for a value. Use the name later to get the value back.",
         "code": "const city = \"Paris\";\nconsole.log(city);\n",
-        "output": "Paris"
+        "output": "Paris",
+        "hi": {
+          "title": "Variables",
+          "body": "`const` ek variable banata hai: kisi value ka naam. Baad mein woh naam likho aur value wapas mil jaayegi."
+        }
       },
       {
         "title": "Reading input with prompt()",
         "body": "On Loophole, `prompt()` reads one line of input as text, just like `prompt()` asks the user for text in a browser.",
         "code": "const name = prompt();\nconsole.log(name);\n",
         "input": "Ada\n",
-        "output": "Ada"
+        "output": "Ada",
+        "hi": {
+          "title": "prompt() se input padhna",
+          "body": "Loophole par `prompt()` input ki ek line text ki tarah padhta hai, bilkul waise jaise browser mein `prompt()` user se text maangta hai."
+        }
       },
       {
         "title": "Dropping values into text",
         "body": "A string between backticks (the key left of 1) can drop in values with `${...}`. It reads more easily than gluing pieces with `+`.",
         "code": "const name = prompt();\nconsole.log(`Hello, ${name}.`);\n",
         "input": "Grace\n",
-        "output": "Hello, Grace."
+        "output": "Hello, Grace.",
+        "hi": {
+          "title": "Text mein values daalna",
+          "body": "Backticks (1 ke left wali key) ke beech ki string mein `${...}` se values daal sakte ho. Yeh `+` se tukde jodne se zyada aasaani se padha jaata hai."
+        }
       },
       {
         "title": "Spot the bug",
@@ -31,6 +43,11 @@
         "bug": {
           "line": 2,
           "fix": "Only backtick strings fill in `${name}`. Line 2 uses double quotes, so it prints the letters exactly as typed."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "`Asha` type karo toh yeh `Hi, Asha!` ki jagah `Hi, ${name}!` print karta hai. Kaunsi line galat hai?",
+          "fix": "Sirf backtick strings hi `${name}` bharti hain. Line 2 double quotes use karti hai, isliye letters bilkul waise hi print hote hain jaise type kiye."
         }
       }
     ],
@@ -39,11 +56,16 @@
       "code": "const animal = \"cat\";\nconsole.log(`I love ${animal}s`);\n",
       "options": ["I love cats", "I love ${animal}s", "I love animals"],
       "answer": 0,
-      "explanation": "Inside backticks, `${animal}` is replaced by the value of `animal`, which is \"cat\"."
+      "explanation": "Inside backticks, `${animal}` is replaced by the value of `animal`, which is \"cat\".",
+      "hi": {
+        "question": "Yeh kya print karega?",
+        "explanation": "Backticks ke andar `${animal}` ki jagah `animal` ki value aa jaati hai, jo \"cat\" hai."
+      }
     }
   },
   "exercise": {
     "prompt": "Read a name and print `Hi, <name>!`. For `Ada`, print `Hi, Ada!`",
+    "promptHi": "Ek naam padho aur `Hi, <name>!` print karo. `Ada` ke liye `Hi, Ada!` print karo.",
     "starterCode": "const name = prompt();\n// print the greeting below\n",
     "sampleTests": [
       {
