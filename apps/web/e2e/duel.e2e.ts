@@ -27,6 +27,28 @@ test('J-3: a learner wins their first duel', async ({ page }) => {
   await expect(page.getByText('You won!')).toBeVisible();
   await expect(page.getByText('You beat ananya.')).toBeVisible();
   await expect(page.getByText('Rating +16')).toBeVisible();
+
+  // FR-27 (ADR-041): the replay. The start shows the buggy program; the
+  // last attempt shows the learner's fix, and only ananya's score.
+  await page.getByRole('link', { name: 'Watch replay' }).click();
+  await expect(page).toHaveURL(/\/duels\/replay\/[\w-]+$/);
+  await expect(page.getByText(/ananya submitted: 2 \/ 5/)).toBeVisible();
+  await expect(
+    page.getByText('The buggy program, before your first attempt'),
+  ).toBeVisible();
+  await page.getByRole('button', { name: /You submitted: 5 \/ 5/ }).click();
+  await expect(
+    page.getByText(/Your code at \d:\d\d: 5 \/ 5 passing/),
+  ).toBeVisible();
+  await expect(page.getByText('sum(nums) / n')).toBeVisible();
+  await expect(page.getByText('Every test passed: you won!')).toBeVisible();
+  await expect(page.getByText(/ananya's code stays private/)).toBeVisible();
+
+  // And the lobby lists it.
+  await page.goto('/duels');
+  const recent = page.getByRole('region', { name: 'Your recent duels' });
+  await expect(recent.getByText('Average of a list')).toBeVisible();
+  await expect(recent.getByText('Won')).toBeVisible();
 });
 
 // Practice duel against a guide bot (ADR-039), in JavaScript (ADR-040):

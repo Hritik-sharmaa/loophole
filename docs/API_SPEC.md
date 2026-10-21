@@ -121,6 +121,17 @@ Hidden test results show only `passed`, never input or expected output. Throttle
 - Equal XP shares a rank (1, 1, 3); ties are listed by username. `me` is always present: `{ rank: null, xp: 0 }` with no XP this week.
 - `GET /me` gives all-time `xp`. `streak.current` shows 0 once more days are missed than the saved freezes cover, even before the next lesson resets it; `freezes` is how many streak freezes are saved (ADR-019).
 
+### Duel replays — Phase 3 (FR-27, ADR-041)
+
+| Method | Path                | Response                                                                                                                                                                               |
+| ------ | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET    | `/duels/history`    | `[{ id, title, language, opponent, outcome, result, endedAt, myBest, opponentBest, totalTests }]` — the caller's 20 latest finished duels, newest first                                |
+| GET    | `/duels/:id/replay` | `{ id, problem: { title, language, description, buggyCode, sampleTests }, opponent, outcome, result, durationMs, totalTests, events: [{ atMs, who, testsPassed, totalTests, code }] }` |
+
+- `outcome` is `won`, `lost` or `draw` from the caller's side; `result` is how it ended (`win`, `draw`, `forfeit`).
+- `events` are the graded submissions in time order; `atMs` is measured from the start and capped at `durationMs`. `who` is `me` or `opponent`. `code` is the caller's own code, and always `null` for the opponent (hard rule 2).
+- 404 if the caller didn't play the duel (or it doesn't exist); 409 `ILLEGAL_TRANSITION` while it is still running; 400 for a bad id.
+
 ### Bot duels — Phase 3 (ADR-039)
 
 | Method | Path                         | Body                     | Response                                                                                                                                                               |

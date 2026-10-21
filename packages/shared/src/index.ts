@@ -425,6 +425,59 @@ export type DuelEnd = {
 export type DuelOpponentStatus = { userId: string; connected: boolean };
 export type SocketError = { code: string; message: string };
 
+// ---- Duel replays (FR-27, ADR-041) ----
+
+// How a finished duel went for the caller.
+export type MyDuelOutcome = 'won' | 'lost' | 'draw';
+
+// GET /duels/history: the caller's finished duels, newest first.
+export type DuelHistoryEntry = {
+  id: string;
+  title: string;
+  language: DuelLanguage;
+  opponent: string;
+  outcome: MyDuelOutcome;
+  // How it ended: a full pass ('win'), the clock ('draw' or 'win' on most
+  // tests), or giving up / leaving ('forfeit').
+  result: DuelResultKind;
+  endedAt: string;
+  // Each side's best graded attempt.
+  myBest: number;
+  opponentBest: number;
+  totalTests: number;
+};
+
+// One graded attempt in a replay. `code` is the caller's own code, and
+// always null for the opponent's: their fix would be a solution to a
+// problem the caller may meet again (hard rule 2).
+export type DuelReplayEvent = {
+  // Milliseconds after the duel started.
+  atMs: number;
+  who: 'me' | 'opponent';
+  testsPassed: number;
+  totalTests: number;
+  code: string | null;
+};
+
+// GET /duels/:id/replay: a finished duel the caller played.
+export type DuelReplay = {
+  id: string;
+  problem: {
+    title: string;
+    language: DuelLanguage;
+    description: string;
+    buggyCode: string;
+    sampleTests: TestCase[];
+  };
+  opponent: string;
+  outcome: MyDuelOutcome;
+  result: DuelResultKind;
+  // From the start to the end of the duel.
+  durationMs: number;
+  totalTests: number;
+  events: DuelReplayEvent[];
+};
+
 // ---- Bug of the day (FR-28, ADR-035) ----
 
 // The caller's play of today's bug. The clock starts on their first

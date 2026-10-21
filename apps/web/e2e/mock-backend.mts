@@ -22,7 +22,10 @@ import type {
   DailyBugToday,
   DailyGoal,
   DuelEnd,
+  DuelHistoryEntry,
   DuelLanguage,
+  DuelReplay,
+  DuelReplayEvent,
   DuelStart,
   DuelSubmissionResult,
   ExplainCardResponse,
@@ -610,6 +613,12 @@ function botDuel(u: UserState, id: string): BotDuel | null {
   return { ...duel };
 }
 
+// Finished live duels, for history and replays (ADR-041).
+const replays = new Map<
+  string,
+  { owner: string; endedAt: string; replay: DuelReplay }
+>();
+
 type Reply = { status: number; body: unknown };
 const ok = (body: unknown): Reply => ({ status: 200, body });
 const fail = (status: number, code: string, message: string): Reply => ({
@@ -1015,6 +1024,47 @@ const apiRoutes: [
       return { status: 201, body: botDuel(u, m[1]) };
     },
   ],
+  [
+    'GET',
+    /^\/duels\/history$/,
+    (_m, u) => {
+      const entries: DuelHistoryEntry[] = [...replays.values()]
+        .filter((r) => r.owner === u.id)
+        .reverse()
+        .map(({ endedAt, replay }) => {
+          const best = (who: DuelReplayEvent['who']) =>
+            Math.max(
+              0,
+              ...replay.events
+                .filter((e) => e.who === who)
+                .map((e) => e.testsPassed),
+            );
+          return {
+            id: replay.id,
+            title: replay.problem.title,
+            language: replay.problem.language,
+            opponent: replay.opponent,
+            outcome: replay.outcome,
+            result: replay.result,
+            endedAt,
+            myBest: best('me'),
+            opponentBest: best('opponent'),
+            totalTests: replay.totalTests,
+          };
+        });
+      return ok(entries);
+    },
+  ],
+  [
+    'GET',
+    /^\/duels\/([^/]+)\/replay$/,
+    (m, u) => {
+      const found = replays.get(m[1]);
+      return found && found.owner === u.id
+        ? ok(found.replay)
+        : fail(404, 'NOT_FOUND', 'Duel not found.');
+    },
+  ],
   ['GET', /^\/leagues\/current$/, (_m, u) => ok(league(u))],
   ['GET', /^\/leaderboard\/weekly$/, (_m, u) => ok(weekly(u))],
   ['GET', /^\/leaderboard\/rating$/, (_m, u) => ok(ratings(u))],
@@ -1096,6 +1146,9 @@ io.of('/duels')
     const user = socket.data.user as UserState;
     let duelId: string | null = null;
     let problem = duelProblem;
+    // This duel's attempts, for its replay.
+    let startedAt = 0;
+    let events: DuelReplayEvent[] = [];
 
     socket.on('queue:join', (data?: QueueJoinRequest) => {
       problem = duelProblems[data?.language ?? 'python'];
@@ -1112,6 +1165,17 @@ io.of('/duels')
           endsAt: new Date(Date.now() + 5 * 60_000).toISOString(),
         };
         socket.emit('duel:start', start);
+        startedAt = Date.now();
+        // The opponent's 2 / 5, sent just below.
+        events = [
+          {
+            atMs: 400,
+            who: 'opponent',
+            testsPassed: 2,
+            totalTests: TOTAL,
+            code: null,
+          },
+        ];
         setTimeout(
           () =>
             socket.emit('duel:progress', {
@@ -1142,6 +1206,13 @@ io.of('/duels')
         stderr: '',
       };
       socket.emit('duel:result', result);
+      events.push({
+        atMs: Date.now() - startedAt,
+        who: 'me',
+        testsPassed,
+        totalTests: TOTAL,
+        code: data.code,
+      });
       socket.emit('duel:progress', {
         userId: user.id,
         testsPassed,
@@ -1157,6 +1228,23 @@ io.of('/duels')
           ratingChange: { [user.id]: 16, [OPPONENT.id]: -16 },
         };
         socket.emit('duel:end', end);
+        const durationMs = Date.now() - startedAt;
+        replays.set(duelId, {
+          owner: user.id,
+          endedAt: new Date().toISOString(),
+          replay: {
+            id: duelId,
+            problem: problemView(problem),
+            opponent: OPPONENT.username,
+            outcome: 'won',
+            result: 'win',
+            durationMs,
+            totalTests: TOTAL,
+            events: events
+              .map((e) => ({ ...e, atMs: Math.min(e.atMs, durationMs) }))
+              .sort((a, b) => a.atMs - b.atMs),
+          },
+        });
         duelId = null;
       }
     });

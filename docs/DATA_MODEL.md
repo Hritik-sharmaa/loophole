@@ -151,15 +151,15 @@ Conventions: `uuid` primary keys (`gen_random_uuid()`), `timestamptz` in UTC, sn
 
 ### duel_submissions — S7
 
-| Column       | Type               | Notes                                                 |
-| ------------ | ------------------ | ----------------------------------------------------- |
-| id           | uuid PK            |                                                       |
-| duel_id      | uuid FK → duels    |                                                       |
-| user_id      | uuid FK → profiles |                                                       |
-| code         | text               |                                                       |
-| tests_passed | int                |                                                       |
-| total_tests  | int                |                                                       |
-| submitted_at | timestamptz        | index (duel_id, submitted_at) — used for replay later |
+| Column       | Type               | Notes                                                     |
+| ------------ | ------------------ | --------------------------------------------------------- |
+| id           | uuid PK            |                                                           |
+| duel_id      | uuid FK → duels    |                                                           |
+| user_id      | uuid FK → profiles |                                                           |
+| code         | text               |                                                           |
+| tests_passed | int                |                                                           |
+| total_tests  | int                |                                                           |
+| submitted_at | timestamptz        | index (duel_id, submitted_at) — read by replays (ADR-041) |
 
 ### ratings — S8
 

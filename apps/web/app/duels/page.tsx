@@ -7,6 +7,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { AppHeader } from '@/components/app-header';
 import { BotOpponents } from '@/components/bot-opponents';
+import { DuelHistory } from '@/components/duel-history';
 import { Guide, guideFor } from '@/components/guide';
 import { CodeEditor } from '@/components/code-editor';
 import { DuelCountdown } from '@/components/duel-countdown';
@@ -53,6 +54,7 @@ export default function DuelsPage() {
     if (state.end.winnerId !== null && state.end.winnerId === myId) celebrate();
     void queryClient.invalidateQueries({ queryKey: ['me'] });
     void queryClient.invalidateQueries({ queryKey: ['leaderboard'] });
+    void queryClient.invalidateQueries({ queryKey: ['duel-history'] });
   }, [state.end, myId, queryClient]);
 
   return (
@@ -95,6 +97,7 @@ export default function DuelsPage() {
             the daily bug (ADR-035) train the same skill solo. Both are
             plain HTTP, so they work without the duel socket. */}
         {outOfDuel && <BotOpponents language={language} />}
+        {outOfDuel && <DuelHistory enabled={!loading} />}
         {outOfDuel && (
           <p className="mt-6 text-center">
             <Link
@@ -359,6 +362,10 @@ function Outcome({
         <button type="button" onClick={onPlayAgain} className={primaryButton}>
           Play again
         </button>
+        {/* FR-27: the duel just played, step by step (ADR-041). */}
+        <Link href={`/duels/replay/${end.duelId}`} className={secondaryButton}>
+          Watch replay
+        </Link>
         <Link href="/learn" className={secondaryButton}>
           Back to lessons
         </Link>

@@ -39,19 +39,21 @@ export type EditorLanguage = keyof typeof EXTENSIONS;
 // Tab indents inside the editor; Esc then Tab moves focus out (CodeMirror's
 // built-in escape hatch), so it stays keyboard-reachable both ways.
 // `compact`: a smaller editor with no sticker shadow, for Learn examples
-// inside a card.
+// inside a card. `readOnly`: code to read, not edit (duel replays).
 export function CodeEditor({
   value,
   onChange,
   fileName,
   compact = false,
   language = 'python',
+  readOnly = false,
 }: {
   value: string;
-  onChange: (value: string) => void;
+  onChange?: (value: string) => void;
   fileName: string;
   compact?: boolean;
   language?: EditorLanguage;
+  readOnly?: boolean;
 }) {
   return (
     <section
@@ -64,12 +66,19 @@ export function CodeEditor({
           <span className="size-2.5 rounded-full bg-pink" />
         </span>
         <h2 className="font-mono text-sm font-bold text-paper">{fileName}</h2>
+        {readOnly && (
+          <span className="ml-auto text-xs font-bold text-border-muted">
+            read only
+          </span>
+        )}
       </div>
       <CodeMirror
         value={value}
         onChange={onChange}
         extensions={EXTENSIONS[language]}
         theme="light"
+        editable={!readOnly}
+        readOnly={readOnly}
         minHeight={compact ? '4rem' : '12rem'}
         basicSetup={{ foldGutter: false }}
       />
