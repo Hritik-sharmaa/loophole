@@ -8,6 +8,7 @@ import { DbModule } from './db/db.module.js';
 import type { AuthedRequest } from './modules/auth/current-user.decorator.js';
 import { AiModule } from './modules/ai/ai.module.js';
 import { AuthModule } from './modules/auth/auth.module.js';
+import { BotDuelsModule } from './modules/bot-duels/bot-duels.module.js';
 import { CertificatesModule } from './modules/certificates/certificates.module.js';
 import { DailyBugModule } from './modules/daily-bug/daily-bug.module.js';
 import { DuelsModule } from './modules/duels/duels.module.js';
@@ -49,6 +50,7 @@ import { UsersModule } from './modules/users/users.module.js';
     RatingsModule,
     CertificatesModule,
     DailyBugModule,
+    BotDuelsModule,
   ],
   // Registered here rather than in main.ts so e2e tests get them too.
   providers: [

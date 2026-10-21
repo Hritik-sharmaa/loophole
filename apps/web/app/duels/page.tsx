@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { AppHeader } from '@/components/app-header';
+import { BotOpponents } from '@/components/bot-opponents';
 import { Guide } from '@/components/guide';
 import { CodeEditor } from '@/components/code-editor';
 import { DuelCountdown } from '@/components/duel-countdown';
@@ -67,8 +68,12 @@ export default function DuelsPage() {
             onPlayAgain={findDuel}
           />
         )}
-        {/* Out of a duel, or the server is away: the solo daily bug
-            (ADR-035) trains the same skill. */}
+        {/* Out of a duel, or the server is away: the crew (ADR-039) and
+            the daily bug (ADR-035) train the same skill solo. Both are
+            plain HTTP, so they work without the duel socket. */}
+        {(state.phase === 'offline' ||
+          state.phase === 'idle' ||
+          state.phase === 'queued') && <BotOpponents />}
         {(state.phase === 'offline' ||
           state.phase === 'idle' ||
           state.phase === 'queued') && (
@@ -77,7 +82,7 @@ export default function DuelsPage() {
               href="/bug-of-the-day"
               className="rounded-badge text-sm font-bold text-text-secondary underline hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
             >
-              No one around? Warm up with today&apos;s bug of the day
+              Or warm up with today&apos;s bug of the day
             </Link>
           </p>
         )}

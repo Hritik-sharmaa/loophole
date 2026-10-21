@@ -10,3 +10,4 @@ export * from './ratings.js';
 export * from './certificates.js';
 export * from './daily-bug.js';
 export * from './leagues.js';
+export * from './bot-duels.js';

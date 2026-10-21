@@ -11,6 +11,9 @@
 
 import type {
   ActivityResponse,
+  BotDuel,
+  BotDuelSubmission,
+  BotOpponent,
   CourseOverview,
   CoursePath,
   DailyBugBoard,
@@ -575,6 +578,20 @@ function dailyBoard(user: UserState): DailyBugBoard {
 
 // ---- HTTP ----
 
+// Practice duels against a guide bot (ADR-039). The bot is slow here (it
+// finishes after four minutes), so a test always outruns it.
+const BOT_SCHEDULE = [60_000, 90_000, 120_000, 150_000, 240_000];
+const botDuels = new Map<string, BotDuel>();
+const botDuelOwners = new Map<string, string>();
+
+function botDuel(u: UserState, id: string): BotDuel | null {
+  const duel = botDuels.get(id);
+  if (!duel || botDuelOwners.get(id) !== u.id) return null;
+  const finish = Date.parse(duel.startedAt) + BOT_SCHEDULE.at(-1)!;
+  if (duel.result === null && Date.now() >= finish) duel.result = 'lost';
+  return { ...duel };
+}
+
 type Reply = { status: number; body: unknown };
 const ok = (body: unknown): Reply => ({ status: 200, body });
 const fail = (status: number, code: string, message: string): Reply => ({
@@ -902,6 +919,85 @@ const apiRoutes: [
         solvers: board.solvers,
       };
       return { status: 201, body: result };
+    },
+  ],
+  [
+    'POST',
+    /^\/bot-duels$/,
+    (_m, u, { body }) => {
+      const now = Date.now();
+      const duel: BotDuel = {
+        id: randomUUID(),
+        opponent: body.opponent as BotOpponent,
+        problem: {
+          title: duelProblem.title,
+          description: duelProblem.description,
+          buggyCode: duelProblem.buggyCode,
+          sampleTests: duelProblem.sampleTests,
+        },
+        startedAt: new Date(now).toISOString(),
+        endsAt: new Date(now + 300_000).toISOString(),
+        totalTests: BOT_SCHEDULE.length,
+        botSchedule: BOT_SCHEDULE,
+        result: null,
+        timeMs: null,
+        attempts: 0,
+      };
+      botDuels.set(duel.id, duel);
+      botDuelOwners.set(duel.id, u.id);
+      return { status: 201, body: botDuel(u, duel.id) };
+    },
+  ],
+  [
+    'GET',
+    /^\/bot-duels\/([^/]+)$/,
+    (m, u) => {
+      const duel = botDuel(u, m[1]);
+      return duel ? ok(duel) : fail(404, 'NOT_FOUND', 'Duel not found.');
+    },
+  ],
+  [
+    'POST',
+    /^\/bot-duels\/([^/]+)\/submissions$/,
+    (m, u, { body }) => {
+      const view = botDuel(u, m[1]);
+      if (!view) return fail(404, 'NOT_FOUND', 'Duel not found.');
+      if (view.result) {
+        return fail(409, 'ILLEGAL_TRANSITION', 'This duel is over.');
+      }
+      const duel = botDuels.get(m[1])!;
+      duel.attempts++;
+      const fixed =
+        String(body.code ?? '').trim() !== duelProblem.buggyCode.trim();
+      if (fixed) {
+        duel.result = 'won';
+        duel.timeMs = Date.now() - Date.parse(duel.startedAt);
+      }
+      const result: BotDuelSubmission = {
+        status: fixed ? 'passed' : 'failed',
+        testsPassed: fixed ? 5 : 1,
+        totalTests: 5,
+        results: Array.from({ length: 5 }, (_, i) => ({
+          kind: 'hidden' as const,
+          passed: fixed || i === 0,
+        })),
+        stderr: '',
+        duel: botDuel(u, m[1])!,
+      };
+      return { status: 201, body: result };
+    },
+  ],
+  [
+    'POST',
+    /^\/bot-duels\/([^/]+)\/forfeit$/,
+    (m, u) => {
+      const view = botDuel(u, m[1]);
+      if (!view) return fail(404, 'NOT_FOUND', 'Duel not found.');
+      if (view.result) {
+        return fail(409, 'ILLEGAL_TRANSITION', 'This duel is over.');
+      }
+      botDuels.get(m[1])!.result = 'gave-up';
+      return { status: 201, body: botDuel(u, m[1]) };
     },
   ],
   ['GET', /^\/leagues\/current$/, (_m, u) => ok(league(u))],

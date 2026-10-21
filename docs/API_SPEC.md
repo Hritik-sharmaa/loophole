@@ -121,6 +121,19 @@ Hidden test results show only `passed`, never input or expected output. Throttle
 - Equal XP shares a rank (1, 1, 3); ties are listed by username. `me` is always present: `{ rank: null, xp: 0 }` with no XP this week.
 - `GET /me` gives all-time `xp`. `streak.current` shows 0 once more days are missed than the saved freezes cover, even before the next lesson resets it; `freezes` is how many streak freezes are saved (ADR-019).
 
+### Bot duels — Phase 3 (ADR-039)
+
+| Method | Path                         | Body           | Response                                                                                                                                                     |
+| ------ | ---------------------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| POST   | `/bot-duels`                 | `{ opponent }` | `BotDuel`: `{ id, opponent, problem: { title, description, buggyCode, sampleTests }, startedAt, endsAt, totalTests, botSchedule, result, timeMs, attempts }` |
+| GET    | `/bot-duels/:id`             | —              | `BotDuel`; 404 for someone else's                                                                                                                            |
+| POST   | `/bot-duels/:id/submissions` | `{ code }`     | `{ status, testsPassed, totalTests, results, stderr, duel: BotDuel }` — 409 `ILLEGAL_TRANSITION` once the race is over; 10 a minute per user                 |
+| POST   | `/bot-duels/:id/forfeit`     | —              | `BotDuel` with `result: "gave-up"`; 409 once over                                                                                                            |
+
+- `opponent` is `meera`, `arjun` or `harpreet` (else 400). Starting is limited to 10 a minute. The problem is random from the Python duel pool.
+- `botSchedule` is the ms after `startedAt` at which the bot passes each test; its last entry is when the bot finishes. `result` is `null`, `won`, `lost` or `gave-up`; `timeMs` is set when won.
+- Any read after the bot's finish marks the race `lost`. A full pass received before the bot's finish wins, even if a read marked the race lost while that pass was being graded. No rating or XP changes.
+
 ### Leagues — Phase 3 (ADR-038)
 
 | Method | Path               | Response                                                                                                                                                                                                              |

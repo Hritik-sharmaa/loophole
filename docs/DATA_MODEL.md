@@ -198,6 +198,23 @@ Conventions: `uuid` primary keys (`gen_random_uuid()`), `timestamptz` in UTC, sn
 
 `xp_events.source` is `lesson` or `daily-bug` (migration 0013 adds the table; the source column is plain text).
 
+### bot_duels — Phase 3 (ADR-039)
+
+| Column       | Type                    | Notes                                                                     |
+| ------------ | ----------------------- | ------------------------------------------------------------------------- |
+| id           | uuid PK                 |                                                                           |
+| user_id      | uuid FK → profiles      |                                                                           |
+| problem_id   | uuid FK → duel_problems |                                                                           |
+| opponent     | text                    | check: meera, arjun or harpreet                                           |
+| started_at   | timestamptz             |                                                                           |
+| ends_at      | timestamptz             | started_at + 5 minutes                                                    |
+| bot_schedule | jsonb (int[])           | ms after started_at when the bot passes each test; the last is its finish |
+| result       | text                    | nullable; won, lost or gave-up; set once by a conditional update          |
+| finished_at  | timestamptz             | nullable; the winning pass, the bot's finish, or giving up                |
+| attempts     | int                     | graded submissions                                                        |
+
+Migration 0015 adds it.
+
 ### league_groups — Phase 3 (ADR-038)
 
 | Column     | Type        | Notes                                             |
@@ -232,6 +249,7 @@ duel_problems 1─* duels *─2 profiles
 duels 1─* duel_submissions
 profiles 1─* daily_bug_plays *─1 duel_problems
 league_groups 1─* league_members *─1 profiles
+profiles 1─* bot_duels *─1 duel_problems
 ```
 
 ## Rules that live in the database
@@ -246,6 +264,7 @@ league_groups 1─* league_members *─1 profiles
 | One bug-of-the-day play a day       | unique (user_id, day) on daily_bug_plays         |
 | One solve time per play             | conditional update `where solved_at is null`     |
 | One league group per user per week  | PK (week_start, user_id) on league_members       |
+| One result per bot duel             | conditional update `where result is null`        |
 
 ## Row-level security
 

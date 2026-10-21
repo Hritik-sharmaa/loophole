@@ -484,6 +484,57 @@ export type DailyBugResult = {
   solvers: number;
 };
 
+// ---- Practice duels against a guide bot (ADR-039) ----
+
+// The crew members a learner can race. Each fixes a bug at their own pace.
+export type BotOpponent = 'meera' | 'arjun' | 'harpreet';
+
+// POST /bot-duels body.
+export type StartBotDuelRequest = { opponent: BotOpponent };
+
+// 'won': the learner's fix passed before the bot finished; 'lost': the bot
+// finished first; 'gave-up': the learner gave up.
+export type BotDuelResult = 'won' | 'lost' | 'gave-up';
+
+// POST /bot-duels and GET /bot-duels/:id. Sample tests only; hidden tests
+// never leave the server (hard rule 2).
+export type BotDuel = {
+  id: string;
+  opponent: BotOpponent;
+  problem: {
+    title: string;
+    description: string;
+    buggyCode: string;
+    sampleTests: TestCase[];
+  };
+  startedAt: string;
+  endsAt: string;
+  totalTests: number;
+  // Milliseconds after startedAt at which the bot passes its 1st, 2nd, …
+  // test; the last entry is when it finishes. The client draws the bot's
+  // progress from it; the server decides the result.
+  botSchedule: number[];
+  // null while the race is on.
+  result: BotDuelResult | null;
+  // How long the learner took, once they won.
+  timeMs: number | null;
+  attempts: number;
+};
+
+// POST /bot-duels/:id/submissions
+export type BotDuelSubmitRequest = { code: string };
+
+// The graded attempt, plus the race after it. Hidden tests report only
+// pass/fail.
+export type BotDuelSubmission = {
+  status: SubmissionStatus;
+  testsPassed: number;
+  totalTests: number;
+  results: TestResult[];
+  stderr: string;
+  duel: BotDuel;
+};
+
 // ---- Certificates (FR-15) ----
 
 // GET /certificates — the signed-in user's own.
