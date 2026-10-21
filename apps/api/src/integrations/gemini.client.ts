@@ -28,6 +28,12 @@ const EXPLAIN_SCHEMA: Schema = {
   required: ['explanation', 'line'],
 };
 
+const CARD_SCHEMA: Schema = {
+  type: Type.OBJECT,
+  properties: { explanation: { type: Type.STRING } },
+  required: ['explanation'],
+};
+
 const HINT_SCHEMA: Schema = {
   type: Type.OBJECT,
   properties: { hint: { type: Type.STRING } },
@@ -54,6 +60,16 @@ export type HintInput = {
   language: string;
   exercisePrompt: string;
   code: string;
+};
+
+// A Learn card the learner asked to have explained again (ADR-036).
+export type CardInput = {
+  language: string;
+  lessonTitle: string;
+  title: string;
+  body: string;
+  // The card's example, if it has one.
+  code?: string;
 };
 
 // The only file in the API that imports @google/genai (AGENTS.md rule 5).
@@ -94,6 +110,14 @@ export class GeminiClient {
       throw this.unavailable('hint: unexpected JSON shape');
     }
     return { hint: out.hint };
+  }
+
+  async explainCard(input: CardInput): Promise<{ explanation: string }> {
+    const out = await this.generate('card', cardPrompt(input), CARD_SCHEMA);
+    if (!isRecord(out) || typeof out.explanation !== 'string') {
+      throw this.unavailable('card: unexpected JSON shape');
+    }
+    return { explanation: out.explanation };
   }
 
   // One single-shot call returning parsed JSON. Any failure (network,
@@ -179,6 +203,20 @@ export function hintPrompt(input: HintInput): string {
     input.code,
     '',
     'Give one hint that moves the learner one step forward. Ask a guiding question or name the concept to look at. Do not give the answer.',
+  ].join('\n');
+}
+
+// docs/AI_TUTOR.md §3, "Explain it differently" (ADR-036).
+export function cardPrompt(input: CardInput): string {
+  return [
+    `Language: ${input.language}`,
+    `Lesson: ${input.lessonTitle}`,
+    'The learner read this card and did not understand it.',
+    `Card title: ${input.title}`,
+    `Card text: ${input.body}`,
+    ...(input.code ? ['Card example:', input.code] : []),
+    '',
+    'Explain the same idea again in different, simpler words, with an everyday comparison if it helps. You may show one short example line. Teach only what the card teaches.',
   ].join('\n');
 }
 

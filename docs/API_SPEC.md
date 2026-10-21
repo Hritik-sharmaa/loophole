@@ -122,10 +122,11 @@ Hidden test results show only `passed`, never input or expected output. Throttle
 
 ### AI tutor — S5
 
-| Method | Path          | Body                                 | Response                                                |
-| ------ | ------------- | ------------------------------------ | ------------------------------------------------------- |
-| POST   | `/ai/explain` | `{ submissionId: uuid }`             | `{ explanation, line: number \| null, remainingToday }` |
-| POST   | `/ai/hint`    | `{ exerciseId: uuid, code: string }` | `{ hint, remainingToday }`                              |
+| Method | Path               | Body                                 | Response                                                                                                                                 |
+| ------ | ------------------ | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| POST   | `/ai/explain`      | `{ submissionId: uuid }`             | `{ explanation, line: number \| null, remainingToday }`                                                                                  |
+| POST   | `/ai/hint`         | `{ exerciseId: uuid, code: string }` | `{ hint, remainingToday }`                                                                                                               |
+| POST   | `/ai/explain-card` | `{ lessonId: uuid, card: 0–4 }`      | `{ explanation, remainingToday }` — a teaching card explained again (ADR-036); 404 for a bug card or a missing card, 403 `LESSON_LOCKED` |
 
 The server loads the exercise, failing test and stderr itself; the client sends only IDs and current code.
 

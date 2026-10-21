@@ -1,6 +1,8 @@
 'use client';
 
 import type {
+  ExplainCardRequest,
+  ExplainCardResponse,
   ExplainRequest,
   ExplainResponse,
   HintRequest,
@@ -25,6 +27,17 @@ export function useHint() {
   return useMutation({
     mutationFn: (body: HintRequest) =>
       apiFetch<HintResponse>('/ai/hint', {
+        method: 'POST',
+        body: JSON.stringify(body),
+      }),
+  });
+}
+
+// POST /ai/explain-card (ADR-036): a Learn card explained again.
+export function useExplainCard() {
+  return useMutation({
+    mutationFn: (body: ExplainCardRequest) =>
+      apiFetch<ExplainCardResponse>('/ai/explain-card', {
         method: 'POST',
         body: JSON.stringify(body),
       }),

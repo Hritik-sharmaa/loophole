@@ -3,6 +3,7 @@
 import type { ExerciseKind, LearnCard } from '@loophole/shared';
 import { ArrowLeft } from 'lucide-react';
 import { ActionBar } from '@/components/action-bar';
+import { ExplainDifferently } from '@/components/explain-differently';
 import { GuideSays, type GuideId } from '@/components/guide';
 import { InlineCode } from '@/components/inline-code';
 import { LearnExample } from '@/components/learn-example';
@@ -67,6 +68,7 @@ export function LearnCards({
             <InlineCode text={card.body} />
           </p>
         </GuideSays>
+        <ExplainDifferently guide={guide} lessonId={lessonId} card={index} />
         {card.code && (
           <LearnExample
             kind={kind}

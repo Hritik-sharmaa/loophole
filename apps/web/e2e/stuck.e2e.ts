@@ -9,6 +9,15 @@ test('J-2: a stuck learner gets an explanation and a hint, then passes', async (
   await signUp(page, 'j2');
   await finishWelcome(page);
   await page.getByRole('link', { name: 'Start my first lesson' }).click();
+
+  // The first card didn't land: the guide says it another way (ADR-036).
+  await page
+    .getByRole('button', { name: /Explain it differently/ })
+    .first()
+    .click();
+  await expect(page.getByText('In other words')).toBeVisible();
+  await expect(page.getByText(/Think of it like this/)).toBeVisible();
+
   await page.getByRole('button', { name: /^Skip/ }).click();
 
   // A typo: the run fails with a NameError.

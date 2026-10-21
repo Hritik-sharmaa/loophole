@@ -21,6 +21,7 @@ import type {
   DuelEnd,
   DuelStart,
   DuelSubmissionResult,
+  ExplainCardResponse,
   ExplainResponse,
   GitCheck,
   HintResponse,
@@ -724,6 +725,23 @@ const apiRoutes: [
         remainingToday: u.aiLeft,
       };
       return { status: 201, body: answer };
+    },
+  ],
+  // ADR-036: a teaching card explained again; bug cards are refused.
+  [
+    'POST',
+    /^\/ai\/explain-card$/,
+    (_m, u, { body }) => {
+      const card = lessonsById.get(String(body.lessonId))?.learn?.cards[
+        Number(body.card)
+      ];
+      if (!card || card.bug) return fail(404, 'NOT_FOUND', 'Card not found.');
+      u.aiLeft--;
+      const answer: ExplainCardResponse = {
+        explanation: `Think of it like this: ${card.title.toLowerCase()} is a small idea you will use every day.`,
+        remainingToday: u.aiLeft,
+      };
+      return { status: 200, body: answer };
     },
   ],
   [

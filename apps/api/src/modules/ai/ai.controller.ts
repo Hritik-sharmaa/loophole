@@ -1,13 +1,18 @@
 import { Body, Controller, HttpCode, Post } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
-import type { ExplainResponse, HintResponse } from '@loophole/shared';
+import type {
+  ExplainCardResponse,
+  ExplainResponse,
+  HintResponse,
+} from '@loophole/shared';
 import type { AuthUser } from '../../integrations/supabase-auth.client.js';
 import { CurrentUser } from '../auth/current-user.decorator.js';
 import { AiService } from './ai.service.js';
+import { ExplainCardDto } from './dto/explain-card.dto.js';
 import { ExplainDto } from './dto/explain.dto.js';
 import { HintDto } from './dto/hint.dto.js';
 
-// The AI tutor (docs/AI_TUTOR.md). Both routes count toward the daily cap:
+// The AI tutor (docs/AI_TUTOR.md). Every route counts toward the daily cap:
 // 429 DAILY_LIMIT_REACHED once it is used up, 502 AI_UNAVAILABLE if Gemini
 // fails (that request is not counted).
 // On top of the daily cap, at most 10 a minute per user, so a script can't
@@ -25,6 +30,16 @@ export class AiController {
     @Body() { submissionId }: ExplainDto,
   ): Promise<ExplainResponse> {
     return this.ai.explain(user, submissionId);
+  }
+
+  // A Learn card explained again in other words (ADR-036).
+  @Post('explain-card')
+  @HttpCode(200)
+  explainCard(
+    @CurrentUser() user: AuthUser,
+    @Body() dto: ExplainCardDto,
+  ): Promise<ExplainCardResponse> {
+    return this.ai.explainCard(user, dto);
   }
 
   @Post('hint')

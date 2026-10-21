@@ -137,7 +137,7 @@ Ideas from comparing Duolingo, Coddy and Codédex, kept here so none get lost. B
 **3. More ways to learn in a lesson**
 
 - [x] Read aloud: a speaker button on guide bubbles, using the browser's speech (S, ADR-032)
-- [ ] "Explain it differently" on Learn cards, through the AI tutor and its daily cap (S–M)
+- [x] "Explain it differently" on Learn cards, through the AI tutor and its daily cap (S–M, ADR-036)
 - [ ] Practice stop: mixes earlier quick checks and bug cards (spaced repetition) (M)
 - [ ] Hinglish mode for cards and guide lines (L; doubles the writing)
 

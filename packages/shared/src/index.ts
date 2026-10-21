@@ -314,6 +314,15 @@ export type ExplainResponse = {
 export type HintRequest = { exerciseId: string; code: string };
 export type HintResponse = { hint: string; remainingToday: number };
 
+// POST /ai/explain-card (ADR-036): explain one Learn card again in other
+// words. `card` is its index in the lesson's cards; the server reads the
+// card itself. Teaching cards only, not spot-the-bug cards.
+export type ExplainCardRequest = { lessonId: string; card: number };
+export type ExplainCardResponse = {
+  explanation: string;
+  remainingToday: number;
+};
+
 // ---- Duels (S7), Socket.io namespace /duels (docs/API_SPEC.md) ----
 
 export type DuelStatus = 'matched' | 'in_progress' | 'completed';

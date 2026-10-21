@@ -6,7 +6,11 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import type { ExplainResponse, HintResponse } from '@loophole/shared';
+import type {
+  ExplainCardResponse,
+  ExplainResponse,
+  HintResponse,
+} from '@loophole/shared';
 import { and, eq, gt, sql } from 'drizzle-orm';
 import { istDate } from '../../common/ist-calendar.js';
 import type { EnvironmentVariables } from '../../config/env.validation.js';
@@ -23,6 +27,7 @@ import { GeminiClient } from '../../integrations/gemini.client.js';
 import type { AuthUser } from '../../integrations/supabase-auth.client.js';
 import { LessonsService } from '../lessons/lessons.service.js';
 import { UsersService } from '../users/users.service.js';
+import type { ExplainCardDto } from './dto/explain-card.dto.js';
 import type { HintDto } from './dto/hint.dto.js';
 import {
   GENERIC_HINT,
@@ -148,6 +153,46 @@ export class AiService {
         return { hint: GENERIC_HINT, remainingToday };
       }
       return { hint: limitWords(hint), remainingToday };
+    });
+  }
+
+  // ADR-036: one Learn card explained again in other words. The card text
+  // comes from the lesson on the server, never from the browser; only
+  // teaching cards, since a spot-the-bug card's code holds its answer.
+  async explainCard(
+    user: AuthUser,
+    { lessonId, card }: ExplainCardDto,
+  ): Promise<ExplainCardResponse> {
+    const [lesson] = await this.db.drizzle
+      .select({
+        title: lessons.title,
+        learn: lessons.learn,
+        courseId: units.courseId,
+        language: courses.language,
+      })
+      .from(lessons)
+      .innerJoin(units, eq(lessons.unitId, units.id))
+      .innerJoin(courses, eq(units.courseId, courses.id))
+      .where(eq(lessons.id, lessonId));
+    const found = lesson?.learn?.cards[card];
+    if (!lesson || !found || found.bug) {
+      throw new NotFoundException({
+        code: 'NOT_FOUND',
+        message: 'Card not found.',
+      });
+    }
+    await this.lessons.assertUnlocked(user.id, lessonId, lesson.courseId);
+    await this.users.ensureProfile(user);
+
+    return this.withDailyCap(user.id, async (remainingToday) => {
+      const { explanation } = await this.gemini.explainCard({
+        language: lesson.language,
+        lessonTitle: lesson.title,
+        title: found.title,
+        body: found.body,
+        code: found.code,
+      });
+      return { explanation: limitWords(explanation), remainingToday };
     });
   }
 

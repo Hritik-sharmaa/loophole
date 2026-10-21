@@ -95,6 +95,22 @@ Response schema: `{ explanation: string, line: integer | null }`
 
 For a web exercise (ADR-024) the `Failing test` line becomes `Failing check: {{label}}`, the first check the page failed, as the learner saw it in the checklist; `language` is `html` and `Error output` holds any CSS syntax errors. A git exercise (ADR-026) works the same way with `language` `git`: the "code" is the learner's terminal commands, one per line, and the lesson's hidden setup is never sent.
 
+### Explain it differently (ADR-036)
+
+```
+Language: {{language}}
+Lesson: {{lessonTitle}}
+The learner read this card and did not understand it.
+Card title: {{title}}
+Card text: {{body}}
+Card example:            (only when the card has one)
+{{code}}
+
+Explain the same idea again in different, simpler words, with an everyday comparison if it helps. You may show one short example line. Teach only what the card teaches.
+```
+
+Response schema: `{ explanation: string }`. The card comes from the lesson in the database, never from the browser; spot-the-bug cards are refused. Post-check: cut to 120 words.
+
 ### Hint
 
 ```

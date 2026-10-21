@@ -2,6 +2,7 @@ import { BadGatewayException, type INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import type {
   CoursePath,
+  ExplainCardResponse,
   ExplainResponse,
   HintResponse,
   SubmissionResult,
@@ -16,6 +17,7 @@ import { aiUsage, exercises } from '../src/db/schema/index.js';
 import { seedContent } from '../src/db/seed/seed-content.js';
 import {
   GeminiClient,
+  type CardInput,
   type ExplainInput,
   type HintInput,
 } from '../src/integrations/gemini.client.js';
@@ -46,6 +48,12 @@ const USERS: Record<string, AuthUser> = {
     email: 'other@example.com',
     name: 'Other',
   },
+  // Its own throttle and cap, for the explain-card tests (ADR-036).
+  reader: {
+    id: 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
+    email: 'reader@example.com',
+    name: 'Reader',
+  },
 };
 
 // Every program "prints" this and complains on stderr, so it fails.
@@ -72,6 +80,8 @@ describe('AI tutor (e2e)', () => {
       ) => Promise<{ explanation: string; line: number | null }>
     >();
   const giveHint = vi.fn<(input: HintInput) => Promise<{ hint: string }>>();
+  const explainCard =
+    vi.fn<(input: CardInput) => Promise<{ explanation: string }>>();
 
   const post = (who: string, url: string, body: object) =>
     request(app.getHttpServer())
@@ -102,7 +112,7 @@ describe('AI tutor (e2e)', () => {
       .overrideProvider(PistonClient)
       .useValue({ run: () => Promise.resolve(wrongRun) })
       .overrideProvider(GeminiClient)
-      .useValue({ explainError, giveHint })
+      .useValue({ explainError, giveHint, explainCard })
       .compile();
     app = moduleRef.createNestApplication();
     await app.init();
@@ -134,6 +144,7 @@ describe('AI tutor (e2e)', () => {
   beforeEach(() => {
     explainError.mockReset();
     giveHint.mockReset();
+    explainCard.mockReset();
   });
 
   it('explain sends only what the learner saw, and points at a line (J-2)', async () => {
@@ -254,6 +265,49 @@ describe('AI tutor (e2e)', () => {
       400,
     );
     await post('other', '/ai/explain', { submissionId: 'nope' }).expect(400);
+  });
+
+  it('explain-card sends the card as stored, not anything from the browser (ADR-036)', async () => {
+    explainCard.mockResolvedValue({
+      explanation: 'Think of print() as a loudspeaker for your program.',
+    });
+    const res = await post('reader', '/ai/explain-card', {
+      lessonId: lessonIds[0],
+      card: 0,
+    }).expect(200);
+    const body = res.body as ExplainCardResponse;
+
+    expect(body.explanation).toContain('loudspeaker');
+    expect(body.remainingToday).toBe(19);
+    expect(explainCard).toHaveBeenCalledWith({
+      language: 'python',
+      lessonTitle: 'Hello, world',
+      title: 'Your first line of Python',
+      body: expect.stringContaining('print()') as string,
+      code: 'print("Hello!")\n',
+    });
+  });
+
+  it('explain-card refuses a bug card, a missing card and a locked lesson, uncounted', async () => {
+    // Hello, world: three teaching cards, then its spot-the-bug card.
+    await post('reader', '/ai/explain-card', {
+      lessonId: lessonIds[0],
+      card: 3,
+    }).expect(404);
+    await post('reader', '/ai/explain-card', {
+      lessonId: '00000000-0000-4000-8000-000000000000',
+      card: 0,
+    }).expect(404);
+    const locked = await post('reader', '/ai/explain-card', {
+      lessonId: lessonIds[5],
+      card: 0,
+    }).expect(403);
+    expect(locked.body).toMatchObject({ error: { code: 'LESSON_LOCKED' } });
+    await post('reader', '/ai/explain-card', {
+      lessonId: lessonIds[0],
+      card: 9,
+    }).expect(400);
+    expect(explainCard).not.toHaveBeenCalled();
   });
 
   it('more than 10 tutor requests in a minute returns 429 RATE_LIMITED', async () => {

@@ -6,6 +6,12 @@ Format: **ADR-NNN · Title** — Status (Accepted / Superseded by ADR-NNN) · Da
 
 ---
 
+**ADR-036 · "Explain it differently" on Learn cards** — Accepted · 2026-10-21
+
+- Decision: under each teaching card a quiet link, "Didn't get it? Explain it differently", calls `POST /ai/explain-card { lessonId, card }`. The server reads the card (title, body, example) from the lesson itself, checks the lesson is unlocked, and asks Gemini (`GeminiClient.explainCard`) to explain the same idea again in simpler words with an everyday comparison; the answer is cut to 120 words and shown as the guide's second bubble ("In other words"), with read aloud. It counts toward the same daily cap (20) and the 10-a-minute limit as Hint and Explain my error. Spot-the-bug cards are refused (404), since their code holds the answer.
+- Why: from the ideas backlog: Coddy offers "Ask AI" on every lesson, and a beginner stuck on a card had no help until the exercise. Reusing the tutor keeps one AI path, one cap and one set of guards.
+- Trade-off: costs Gemini quota per tap; the answer is not cached, so asking again on the same card makes a new request. Only the card's index travels from the browser, so a learner can't make the tutor explain arbitrary text.
+
 **ADR-035 · Bug of the day: one buggy program a day, a daily board** — Accepted · 2026-10-20
 
 - Decision: every IST day, everyone gets the same bug from the Python duel pool (`content/duels/python`), the problems taken in slug order, one a day, wrapping round (`dailyPick`, pure and unit-tested). `GET /bug-of-the-day` returns it (sample tests only) and, on the caller's first call of the day, starts their clock by inserting a `daily_bug_plays` row (`opened_at`, unique per user and day; migration 0013). `POST /bug-of-the-day/submissions` grades with the duel grading path (Piston, sample and hidden tests, hidden ones only as pass/fail); the first pass sets `solved_at` with a conditional update, and the time is `solved_at − opened_at`, both server times. The first solve pays 20 XP once per play (`xp_events` source `daily-bug`): it counts toward the weekly board and the daily goal, not the streak. `GET /bug-of-the-day/board` ranks today's solves by time (then who finished first, then name), top 10 plus the caller's place, and never starts a clock. FR-28's "bracket" is built as this daily board. Web: `/bug-of-the-day` (Priya hosts; running clock, countdown to the next bug, a finish card with time, place and XP), a Pink card on the signed-in home and a link on the duels page.

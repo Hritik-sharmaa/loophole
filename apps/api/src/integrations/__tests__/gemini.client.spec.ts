@@ -3,6 +3,7 @@ import type { ConfigService } from '@nestjs/config';
 import type { EnvironmentVariables } from '../../config/env.validation.js';
 import {
   GeminiClient,
+  cardPrompt,
   explainPrompt,
   type ExplainInput,
 } from '../gemini.client.js';
@@ -108,5 +109,25 @@ describe('explainPrompt', () => {
     const prompt = explainPrompt({ ...explainInput, failingTest: null });
     expect(prompt).toContain('the shown example passes');
     expect(prompt).not.toContain('input=');
+  });
+});
+
+describe('cardPrompt (ADR-036)', () => {
+  const card = {
+    language: 'python',
+    lessonTitle: 'Hello, world',
+    title: 'Text goes in quotes',
+    body: 'Wrap text in quotes.',
+  };
+
+  it('sends the card and its example, and asks for simpler words', () => {
+    const prompt = cardPrompt({ ...card, code: 'print("hi")' });
+    expect(prompt).toContain('Card title: Text goes in quotes');
+    expect(prompt).toContain('Card example:\nprint("hi")');
+    expect(prompt).toContain('different, simpler words');
+  });
+
+  it('leaves the example out for a text-only card', () => {
+    expect(cardPrompt(card)).not.toContain('Card example');
   });
 });
