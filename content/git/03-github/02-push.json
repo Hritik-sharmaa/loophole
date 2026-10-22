@@ -6,11 +6,19 @@
     "cards": [
       {
         "title": "git push",
-        "body": "`git push` uploads your commits to the remote. The first time, `git push -u origin main` also remembers where `main` goes."
+        "body": "`git push` uploads your commits to the remote. The first time, `git push -u origin main` also remembers where `main` goes.",
+        "hi": {
+          "title": "git push",
+          "body": "`git push` aapke commits remote par upload karta hai. Pehli baar `git push -u origin main` yeh bhi yaad rakhta hai ki `main` kahan jaata hai."
+        }
       },
       {
         "title": "Next time, just push",
-        "body": "After that first `-u`, `git status` tells you when you are ahead of GitHub, and a plain `git push` sends your new commits."
+        "body": "After that first `-u`, `git status` tells you when you are ahead of GitHub, and a plain `git push` sends your new commits.",
+        "hi": {
+          "title": "Agli baar, bas push",
+          "body": "Pehle `-u` ke baad `git status` batata hai jab aap GitHub se aage ho, aur saada `git push` aapke naye commits bhej deta hai."
+        }
       },
       {
         "title": "Spot the bug",
@@ -19,6 +27,11 @@
         "bug": {
           "line": 3,
           "fix": "The remote comes first, then the branch: `git push -u origin main`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Push fail hota hai: Git ko `main` naam ka remote nahi milta. Bug par tap karo.",
+          "fix": "Pehle remote aata hai, phir branch: `git push -u origin main`."
         }
       }
     ],
@@ -26,11 +39,16 @@
       "question": "After `git push -u origin main` once, what can you type next time?",
       "options": ["git push", "git push -u origin main main", "git upload"],
       "answer": 0,
-      "explanation": "`-u` saved `origin main` as the upstream, so `git push` knows where to go."
+      "explanation": "`-u` saved `origin main` as the upstream, so `git push` knows where to go.",
+      "hi": {
+        "question": "Ek baar `git push -u origin main` ke baad agli baar kya type kar sakte ho?",
+        "explanation": "`-u` ne `origin main` ko upstream ki tarah save kar diya, isliye `git push` jaanta hai kahan jaana hai."
+      }
     }
   },
   "exercise": {
     "prompt": "Your repo is connected to GitHub as `origin`. Push `main` and set its upstream.",
+    "promptHi": "Aapka repo GitHub se `origin` ki tarah juda hai. `main` ko push karo aur uska upstream set karo.",
     "starterCode": "",
     "setup": [
       "@github https://github.com/you/site.git",
@@ -44,6 +62,7 @@
       {
         "type": "pushed",
         "label": "GitHub has your `main`",
+        "labelHi": "GitHub par aapka `main` hai",
         "remote": "origin",
         "branch": "main"
       }

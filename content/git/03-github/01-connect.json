@@ -7,11 +7,19 @@
       {
         "title": "Remotes",
         "body": "GitHub keeps a copy of your repository online. A remote is Git's name for that copy; the usual name is `origin`.",
-        "code": "git init\ngit remote add origin https://github.com/you/demo.git\ngit remote -v"
+        "code": "git init\ngit remote add origin https://github.com/you/demo.git\ngit remote -v",
+        "hi": {
+          "title": "Remotes",
+          "body": "GitHub aapki repository ki ek copy online rakhta hai. Remote us copy ke liye Git ka naam hai; aam taur par naam `origin` hota hai."
+        }
       },
       {
         "title": "Creating the GitHub side",
-        "body": "On github.com you create an empty repository and copy its URL. In these lessons, that repository already exists for you."
+        "body": "On github.com you create an empty repository and copy its URL. In these lessons, that repository already exists for you.",
+        "hi": {
+          "title": "GitHub wali side banana",
+          "body": "github.com par aap ek khaali repository banate ho aur uska URL copy karte ho. In lessons mein woh repository aapke liye pehle se bani hai."
+        }
       },
       {
         "title": "Spot the bug",
@@ -20,6 +28,11 @@
         "bug": {
           "line": 2,
           "fix": "`git remote add` needs a name before the URL: `git remote add origin https://github.com/you/notes.git`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Doosri command fail hoti hai. Kaunsi line galat hai?",
+          "fix": "`git remote add` ko URL se pehle ek naam chahiye: `git remote add origin https://github.com/you/notes.git`."
         }
       }
     ],
@@ -31,11 +44,17 @@
         "Your username"
       ],
       "answer": 0,
-      "explanation": "After this, `origin` stands for the URL in every command."
+      "explanation": "After this, `origin` stands for the URL in every command.",
+      "hi": {
+        "question": "`git remote add origin <url>` mein `origin` kya hai?",
+        "options": ["GitHub URL ka chhota naam", "Ek branch", "Aapka username"],
+        "explanation": "Iske baad har command mein `origin` us URL ki jagah kaam karta hai."
+      }
     }
   },
   "exercise": {
     "prompt": "An empty repository is waiting at `https://github.com/you/site.git`. Add it as a remote called `origin`.",
+    "promptHi": "`https://github.com/you/site.git` par ek khaali repository intezaar kar rahi hai. Use `origin` naam ke remote ki tarah jodo.",
     "starterCode": "",
     "setup": [
       "@github https://github.com/you/site.git",
@@ -48,6 +67,7 @@
       {
         "type": "remote",
         "label": "`origin` points to `https://github.com/you/site.git`",
+        "labelHi": "`origin` `https://github.com/you/site.git` ki taraf point karta hai",
         "name": "origin",
         "url": "https://github.com/you/site.git"
       }

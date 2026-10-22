@@ -7,11 +7,19 @@
       {
         "title": "Bringing work back",
         "body": "To bring a branch's commits into `main`, switch to `main`, then run `git merge <branch>`.",
-        "code": "git init\ntouch index.html\ngit add .\ngit commit -m \"Start\"\ngit switch -c footer\ntouch footer.html\ngit add .\ngit commit -m \"Add footer\"\ngit switch main\ngit merge footer\nls"
+        "code": "git init\ntouch index.html\ngit add .\ngit commit -m \"Start\"\ngit switch -c footer\ntouch footer.html\ngit add .\ngit commit -m \"Add footer\"\ngit switch main\ngit merge footer\nls",
+        "hi": {
+          "title": "Kaam wapas laana",
+          "body": "Branch ke commits `main` mein laane ke liye `main` par switch karo, phir `git merge <branch>` chalao."
+        }
       },
       {
         "title": "Fast-forward",
-        "body": "If `main` hasn't moved since the branch started, Git simply moves `main` forward to the branch's latest commit. That is a fast-forward."
+        "body": "If `main` hasn't moved since the branch started, Git simply moves `main` forward to the branch's latest commit. That is a fast-forward.",
+        "hi": {
+          "title": "Fast-forward",
+          "body": "Agar branch shuru hone ke baad `main` aage nahi badha, toh Git bas `main` ko branch ke latest commit tak aage le jaata hai. Ise fast-forward kehte hain."
+        }
       },
       {
         "title": "Spot the bug",
@@ -20,6 +28,11 @@
         "bug": {
           "line": 9,
           "fix": "You are still on `footer`, so this merges `footer` into itself. Run `git switch main` first, then `git merge footer`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Merge kehta hai `Already up to date.` aur `main` ko footer kabhi nahi milta. Kaunsi line galat hai?",
+          "fix": "Aap abhi bhi `footer` par ho, isliye yeh `footer` ko khud mein hi merge karta hai. Pehle `git switch main` chalao, phir `git merge footer`."
         }
       }
     ],
@@ -27,11 +40,16 @@
       "question": "You are on `footer` and want its work in `main`. What do you run first?",
       "options": ["git switch main", "git merge main", "git branch -d footer"],
       "answer": 0,
-      "explanation": "Merging brings work INTO the branch you are on, so go to `main` first."
+      "explanation": "Merging brings work INTO the branch you are on, so go to `main` first.",
+      "hi": {
+        "question": "Aap `footer` par ho aur uska kaam `main` mein chahiye. Pehle kya chalaoge?",
+        "explanation": "Merge kaam ko usi branch MEIN laata hai jahan aap ho, isliye pehle `main` par jao."
+      }
     }
   },
   "exercise": {
     "prompt": "The `footer` branch has a finished footer. Merge it into `main`.",
+    "promptHi": "`footer` branch mein footer tayyar hai. Use `main` mein merge karo.",
     "starterCode": "",
     "setup": [
       "git init",
@@ -47,17 +65,20 @@
       {
         "type": "current-branch",
         "label": "You are on `main`",
+        "labelHi": "Aap `main` par ho",
         "name": "main"
       },
       {
         "type": "merged",
         "label": "`footer` is merged into `main`",
+        "labelHi": "`footer` `main` mein merge ho chuki hai",
         "branch": "footer",
         "into": "main"
       },
       {
         "type": "committed-file",
         "label": "`main` has `footer.html`",
+        "labelHi": "`main` mein `footer.html` hai",
         "path": "footer.html",
         "branch": "main"
       }

@@ -139,7 +139,7 @@ Ideas from comparing Duolingo, Coddy and Codédex, kept here so none get lost. B
 - [x] Read aloud: a speaker button on guide bubbles, using the browser's speech (S, ADR-032)
 - [x] "Explain it differently" on Learn cards, through the AI tutor and its daily cap (S–M, ADR-036)
 - [x] Practice stop: mixes earlier quick checks and bug cards (spaced repetition) (M, ADR-037)
-- [ ] Hinglish mode for cards and guide lines (L; doubles the writing). Built with the Python, JavaScript and HTML & CSS courses (ADR-042); Git still to write
+- [x] Hinglish mode for cards and guide lines (L, ADR-042): all four courses, 90 lessons
 
 **4. Duels**
 

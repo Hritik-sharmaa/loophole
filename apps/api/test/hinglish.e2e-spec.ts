@@ -208,6 +208,21 @@ describe('Hinglish lessons (e2e, ADR-042)', () => {
     ]);
   });
 
+  it('a Git lesson’s checklist is in Hinglish', async () => {
+    const git = await get<CoursePath>('ada', '/courses/git-github/path');
+    const lesson = await get<LessonDetail>(
+      'ada',
+      `/lessons/${git.units[0].lessons[0].id}`,
+    );
+    expect(lesson.learn?.cards[0].title).toBe(
+      'Git yaad rakhta hai kisne kya kiya',
+    );
+    expect(lesson.exercise.checks).toEqual([
+      '`user.name` set hai',
+      '`user.email` set hai',
+    ]);
+  });
+
   it('switching back gives English again', async () => {
     await setLanguage('ada', 'en');
     const lesson = await get<LessonDetail>('ada', `/lessons/${firstLesson()}`);

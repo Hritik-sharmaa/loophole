@@ -7,11 +7,19 @@
       {
         "title": "Git remembers who did what",
         "body": "Git saves snapshots of your project, called commits, and records who made each one. So first, tell Git your name and email. Type a command and press Enter.",
-        "code": "git config --global user.name \"Ada Lovelace\"\ngit config --global user.email ada@example.com\ngit config user.name"
+        "code": "git config --global user.name \"Ada Lovelace\"\ngit config --global user.email ada@example.com\ngit config user.name",
+        "hi": {
+          "title": "Git yaad rakhta hai kisne kya kiya",
+          "body": "Git aapke project ke snapshots save karta hai, jinhe commits kehte hain, aur likhta hai ki har ek kisne banaya. Isliye pehle Git ko apna naam aur email batao. Command type karo aur Enter dabao."
+        }
       },
       {
         "title": "This is a practice terminal",
-        "body": "Nothing here touches your computer: Loophole simulates the folder and Git for you, so you can try anything. Words with spaces go in quotes."
+        "body": "Nothing here touches your computer: Loophole simulates the folder and Git for you, so you can try anything. Words with spaces go in quotes.",
+        "hi": {
+          "title": "Yeh practice terminal hai",
+          "body": "Yahan kuch bhi aapke computer ko nahi chhoota: Loophole aapke liye folder aur Git simulate karta hai, toh aap kuch bhi try kar sakte ho. Spaces wale words quotes mein jaate hain."
+        }
       },
       {
         "title": "Spot the bug",
@@ -20,6 +28,11 @@
         "bug": {
           "line": 2,
           "fix": "The setting is called `user.email`, not `user.mail`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Git yahan set kiya gaya email use nahi karega. Galat line par tap karo.",
+          "fix": "Setting ka naam `user.email` hai, `user.mail` nahi."
         }
       }
     ],
@@ -31,22 +44,34 @@
         "Git needs quotes around every word"
       ],
       "answer": 0,
-      "explanation": "Without quotes, the space would split it into two separate words."
+      "explanation": "Without quotes, the space would split it into two separate words.",
+      "hi": {
+        "question": "\"Ada Lovelace\" ko quotes kyun chahiye?",
+        "options": [
+          "Taaki Git naam ko ek hi value ki tarah padhe",
+          "Quotes naam ko bold karte hain",
+          "Git ko har word ke aas paas quotes chahiye"
+        ],
+        "explanation": "Quotes ke bina space use do alag words mein tod deta."
+      }
     }
   },
   "exercise": {
     "prompt": "Git doesn't know who you are yet. Set your `user.name` and `user.email` with `git config --global` (any name and email you like).",
+    "promptHi": "Git abhi nahi jaanta aap kaun ho. `git config --global` se apna `user.name` aur `user.email` set karo (koi bhi naam aur email jo aapko pasand ho).",
     "starterCode": "",
     "setup": ["@config-reset"],
     "checks": [
       {
         "type": "config",
         "label": "`user.name` is set",
+        "labelHi": "`user.name` set hai",
         "key": "user.name"
       },
       {
         "type": "config",
         "label": "`user.email` is set",
+        "labelHi": "`user.email` set hai",
         "key": "user.email"
       }
     ]

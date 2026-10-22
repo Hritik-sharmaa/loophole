@@ -7,11 +7,19 @@
       {
         "title": "git log",
         "body": "`git log` lists commits, newest first. `git log --oneline` shows one short line per commit.",
-        "code": "git init\ntouch a.txt\ngit add .\ngit commit -m \"First\"\ntouch b.txt\ngit add .\ngit commit -m \"Second\"\ngit log --oneline"
+        "code": "git init\ntouch a.txt\ngit add .\ngit commit -m \"First\"\ntouch b.txt\ngit add .\ngit commit -m \"Second\"\ngit log --oneline",
+        "hi": {
+          "title": "git log",
+          "body": "`git log` commits ki list dikhata hai, sabse naya pehle. `git log --oneline` har commit ki ek chhoti line dikhata hai."
+        }
       },
       {
         "title": "The edit, add, commit loop",
-        "body": "Working with Git is a loop: change files, `git add` them, `git commit`. Each round adds a snapshot you can come back to."
+        "body": "Working with Git is a loop: change files, `git add` them, `git commit`. Each round adds a snapshot you can come back to.",
+        "hi": {
+          "title": "Edit, add, commit ka loop",
+          "body": "Git ke saath kaam ek loop hai: files badlo, unhe `git add` karo, `git commit` karo. Har round ek snapshot jodta hai jis par aap wapas aa sakte ho."
+        }
       },
       {
         "title": "Spot the bug",
@@ -20,6 +28,11 @@
         "bug": {
           "line": 3,
           "fix": "The history command is `git log`, with no s."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Aakhri command fail hoti hai. Us par tap karo.",
+          "fix": "History wali command `git log` hai, bina s ke."
         }
       }
     ],
@@ -27,11 +40,16 @@
       "question": "Which command shows one short line per commit?",
       "options": ["git log --oneline", "git status", "git show --short"],
       "answer": 0,
-      "explanation": "`git log --oneline` prints each commit as a short id and its message."
+      "explanation": "`git log --oneline` prints each commit as a short id and its message.",
+      "hi": {
+        "question": "Kaunsi command har commit ki ek chhoti line dikhati hai?",
+        "explanation": "`git log --oneline` har commit ko ek chhoti id aur uske message ke saath print karta hai."
+      }
     }
   },
   "exercise": {
     "prompt": "This repo already has one commit. Create `about.html` with `touch about.html`, then stage it and commit it with the message `Add about page`.",
+    "promptHi": "Is repo mein pehle se ek commit hai. `touch about.html` se `about.html` banao, phir use stage karo aur message `Add about page` ke saath commit karo.",
     "starterCode": "",
     "setup": [
       "git init",
@@ -43,21 +61,25 @@
       {
         "type": "commits",
         "label": "There are at least two commits",
+        "labelHi": "Kam se kam do commits hain",
         "min": 2
       },
       {
         "type": "committed-file",
         "label": "`about.html` is committed",
+        "labelHi": "`about.html` commit ho chuki hai",
         "path": "about.html"
       },
       {
         "type": "commit-message",
         "label": "A commit says `Add about page`",
+        "labelHi": "Ek commit `Add about page` kehta hai",
         "text": "Add about page"
       },
       {
         "type": "clean",
-        "label": "Nothing is left to commit"
+        "label": "Nothing is left to commit",
+        "labelHi": "Commit karne ko kuch nahi bacha"
       }
     ]
   }

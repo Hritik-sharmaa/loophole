@@ -7,7 +7,11 @@
       {
         "title": "Pull, change, add, commit, push",
         "body": "Most days with Git look the same: pull, change files, `git add`, `git commit`, `git push`. Here is the middle of the loop.",
-        "code": "git init\necho \"hello\" > notes.txt\ngit add notes.txt\ngit commit -m \"Add notes\"\ngit log --oneline"
+        "code": "git init\necho \"hello\" > notes.txt\ngit add notes.txt\ngit commit -m \"Add notes\"\ngit log --oneline",
+        "hi": {
+          "title": "Pull, change, add, commit, push",
+          "body": "Git ke saath zyada tar din ek jaise hote hain: pull, files badlo, `git add`, `git commit`, `git push`. Yeh raha loop ka beech wala hissa."
+        }
       },
       {
         "title": "Spot the bug",
@@ -16,6 +20,11 @@
         "bug": {
           "line": 3,
           "fix": "A push sends commits, and nothing is committed yet. Commit first, then `git push`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "GitHub ko nayi file kabhi nahi milti. Kaunsi line galat jagah par hai?",
+          "fix": "Push commits bhejta hai, aur abhi kuch commit nahi hua. Pehle commit karo, phir `git push`."
         }
       }
     ],
@@ -23,11 +32,16 @@
       "question": "In the everyday loop, what comes right after editing your files?",
       "options": ["git add", "git push", "git clone"],
       "answer": 0,
-      "explanation": "Stage your changes first, then commit, then push."
+      "explanation": "Stage your changes first, then commit, then push.",
+      "hi": {
+        "question": "Roz ke loop mein files edit karne ke turant baad kya aata hai?",
+        "explanation": "Pehle apne changes stage karo, phir commit, phir push."
+      }
     }
   },
   "exercise": {
     "prompt": "You are in your clone of `blog`. Create `post.md` with `echo \"# My first post\" > post.md`, commit it with the message `Add first post`, and push it to GitHub.",
+    "promptHi": "Aap `blog` ke apne clone mein ho. `echo \"# My first post\" > post.md` se `post.md` banao, use message `Add first post` ke saath commit karo, aur GitHub par push karo.",
     "starterCode": "",
     "setup": [
       "@github https://github.com/you/blog.git",
@@ -48,16 +62,19 @@
       {
         "type": "committed-file",
         "label": "`post.md` is committed",
+        "labelHi": "`post.md` commit ho chuki hai",
         "path": "post.md"
       },
       {
         "type": "commit-message",
         "label": "A commit says `Add first post`",
+        "labelHi": "Ek commit `Add first post` kehta hai",
         "text": "Add first post"
       },
       {
         "type": "pushed",
         "label": "GitHub has your new commit",
+        "labelHi": "GitHub par aapka naya commit hai",
         "remote": "origin",
         "branch": "main"
       }

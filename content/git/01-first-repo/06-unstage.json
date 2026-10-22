@@ -7,11 +7,19 @@
       {
         "title": "Taking a file back out",
         "body": "Staged something by mistake? `git restore --staged <file>` takes it out of the staging area. The file itself stays as it is.",
-        "code": "git init\ntouch index.html secret.txt\ngit add .\ngit restore --staged secret.txt\ngit status"
+        "code": "git init\ntouch index.html secret.txt\ngit add .\ngit restore --staged secret.txt\ngit status",
+        "hi": {
+          "title": "File ko wapas bahar nikalna",
+          "body": "Galti se kuch stage ho gaya? `git restore --staged <file>` use staging area se bahar nikal deta hai. File khud waisi hi rehti hai."
+        }
       },
       {
         "title": "Keep secrets out",
-        "body": "Passwords and keys must never be committed: once a commit is shared, everyone can read it, forever."
+        "body": "Passwords and keys must never be committed: once a commit is shared, everyone can read it, forever.",
+        "hi": {
+          "title": "Secrets bahar rakho",
+          "body": "Passwords aur keys kabhi commit nahi hone chahiye: commit share hote hi sab use padh sakte hain, hamesha ke liye."
+        }
       },
       {
         "title": "Spot the bug",
@@ -20,6 +28,11 @@
         "bug": {
           "line": 4,
           "fix": "To unstage a file, add `--staged`: `git restore --staged secret.txt`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Isse `secret.txt` ko staging se wapas bahar nikalna chahiye, par aisa nahi hota. Bug par tap karo.",
+          "fix": "File unstage karne ke liye `--staged` jodo: `git restore --staged secret.txt`."
         }
       }
     ],
@@ -31,11 +44,21 @@
         "Commits secret.txt"
       ],
       "answer": 0,
-      "explanation": "It only unstages the file. The file and its contents are untouched."
+      "explanation": "It only unstages the file. The file and its contents are untouched.",
+      "hi": {
+        "question": "`git restore --staged secret.txt` kya karta hai?",
+        "options": [
+          "secret.txt ko staging area se bahar nikalta hai",
+          "secret.txt ko delete karta hai",
+          "secret.txt ko commit karta hai"
+        ],
+        "explanation": "Yeh sirf file ko unstage karta hai. File aur uska content waise hi rehte hain."
+      }
     }
   },
   "exercise": {
     "prompt": "Both files are staged, but `passwords.txt` must not be committed. Unstage it, then commit `index.html` with the message `Add home page`.",
+    "promptHi": "Dono files staged hain, par `passwords.txt` commit nahi honi chahiye. Use unstage karo, phir `index.html` ko message `Add home page` ke saath commit karo.",
     "starterCode": "",
     "setup": [
       "git init",
@@ -47,16 +70,19 @@
       {
         "type": "commit-message",
         "label": "A commit says `Add home page`",
+        "labelHi": "Ek commit `Add home page` kehta hai",
         "text": "Add home page"
       },
       {
         "type": "committed-file",
         "label": "`index.html` is committed",
+        "labelHi": "`index.html` commit ho chuki hai",
         "path": "index.html"
       },
       {
         "type": "committed-file",
         "label": "`passwords.txt` is not committed",
+        "labelHi": "`passwords.txt` commit nahi hui",
         "path": "passwords.txt",
         "present": false
       }

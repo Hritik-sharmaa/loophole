@@ -6,11 +6,19 @@
     "cards": [
       {
         "title": "git clone",
-        "body": "`git clone <url>` downloads a whole repository from GitHub into a new folder named after it, with `origin` already set up."
+        "body": "`git clone <url>` downloads a whole repository from GitHub into a new folder named after it, with `origin` already set up.",
+        "hi": {
+          "title": "git clone",
+          "body": "`git clone <url>` GitHub se poori repository ek naye folder mein download karta hai jiska naam repository jaisa hota hai, `origin` pehle se set ke saath."
+        }
       },
       {
         "title": "Then go inside",
-        "body": "The clone is a folder like any other: `cd` into it to start working."
+        "body": "The clone is a folder like any other: `cd` into it to start working.",
+        "hi": {
+          "title": "Phir andar jao",
+          "body": "Clone bhi kisi aur folder jaisa hi hai: kaam shuru karne ke liye `cd` se uske andar jao."
+        }
       },
       {
         "title": "Spot the bug",
@@ -19,6 +27,11 @@
         "bug": {
           "line": 2,
           "fix": "The new folder is named after the repository, without `.git`: `cd recipes`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Clone ke turant baad `cd` fail hota hai. Kaunsi line galat hai?",
+          "fix": "Naye folder ka naam repository ke naam par hota hai, bina `.git` ke: `cd recipes`."
         }
       }
     ],
@@ -26,11 +39,16 @@
       "question": "You run `git clone https://github.com/ada/notes.git`. Which folder appears?",
       "options": ["notes", "ada", "github"],
       "answer": 0,
-      "explanation": "The folder takes the repository's name, without `.git`."
+      "explanation": "The folder takes the repository's name, without `.git`.",
+      "hi": {
+        "question": "Aap `git clone https://github.com/ada/notes.git` chalate ho. Kaunsa folder banta hai?",
+        "explanation": "Folder ko repository ka naam milta hai, bina `.git` ke."
+      }
     }
   },
   "exercise": {
     "prompt": "Clone `https://github.com/loophole/demo.git`, then go into its folder.",
+    "promptHi": "`https://github.com/loophole/demo.git` ko clone karo, phir uske folder mein jao.",
     "starterCode": "",
     "setup": [
       "@github https://github.com/loophole/demo.git",
@@ -49,15 +67,18 @@
       {
         "type": "folder",
         "label": "You are inside the `demo` folder",
+        "labelHi": "Aap `demo` folder ke andar ho",
         "path": "demo"
       },
       {
         "type": "repo",
-        "label": "`demo` is a Git repository"
+        "label": "`demo` is a Git repository",
+        "labelHi": "`demo` ek Git repository hai"
       },
       {
         "type": "file",
         "label": "`README.md` came down with it",
+        "labelHi": "`README.md` bhi saath mein aayi",
         "path": "README.md"
       }
     ]

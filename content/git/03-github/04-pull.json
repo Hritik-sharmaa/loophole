@@ -6,11 +6,19 @@
     "cards": [
       {
         "title": "git pull",
-        "body": "When someone else pushes to GitHub, your copy falls behind. `git pull` downloads their commits and merges them into your branch."
+        "body": "When someone else pushes to GitHub, your copy falls behind. `git pull` downloads their commits and merges them into your branch.",
+        "hi": {
+          "title": "git pull",
+          "body": "Jab koi aur GitHub par push karta hai, aapki copy peeche reh jaati hai. `git pull` unke commits download karke aapki branch mein merge kar deta hai."
+        }
       },
       {
         "title": "Pull before you push",
-        "body": "If GitHub has work you don't, Git rejects your push until you pull it first."
+        "body": "If GitHub has work you don't, Git rejects your push until you pull it first.",
+        "hi": {
+          "title": "Push se pehle pull",
+          "body": "Agar GitHub par aisa kaam hai jo aapke paas nahi, toh Git aapka push tab tak reject karta hai jab tak aap pehle pull na karo."
+        }
       },
       {
         "title": "Spot the bug",
@@ -19,6 +27,11 @@
         "bug": {
           "line": 3,
           "fix": "When GitHub has work you do not, pull first: `git pull`, then `git push`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Ek teammate ne pehle push kar diya, isliye GitHub yeh push reject karta hai. Us line par tap karo jisse pehle ek step chahiye.",
+          "fix": "Jab GitHub par aisa kaam ho jo aapke paas nahi, pehle pull karo: `git pull`, phir `git push`."
         }
       }
     ],
@@ -30,11 +43,21 @@
         "Never push again"
       ],
       "answer": 0,
-      "explanation": "Pulling brings in the other commits; then your push goes through."
+      "explanation": "Pulling brings in the other commits; then your push goes through.",
+      "hi": {
+        "question": "Git ne \"fetch first\" ke saath aapka push reject kar diya. Aap kya karoge?",
+        "options": [
+          "git pull, phir dobara push",
+          "Repository delete kar do",
+          "Phir kabhi push mat karo"
+        ],
+        "explanation": "Pull karne se doosre commits aa jaate hain; phir aapka push chala jaata hai."
+      }
     }
   },
   "exercise": {
     "prompt": "A teammate pushed a new commit to GitHub. You are in your copy, `notes`. Pull their work.",
+    "promptHi": "Ek teammate ne GitHub par naya commit push kiya. Aap apni copy, `notes`, mein ho. Unka kaam pull karo.",
     "starterCode": "",
     "setup": [
       "@github https://github.com/you/notes.git",
@@ -62,11 +85,13 @@
       {
         "type": "commit-message",
         "label": "You have your teammate's `Add a shopping list` commit",
+        "labelHi": "Aapke paas teammate ka `Add a shopping list` commit hai",
         "text": "Add a shopping list"
       },
       {
         "type": "file",
         "label": "`README.md` has the shopping list",
+        "labelHi": "`README.md` mein shopping list hai",
         "path": "README.md",
         "content": "# Notes\n- buy milk"
       }

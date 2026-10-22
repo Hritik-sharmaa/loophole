@@ -7,7 +7,11 @@
       {
         "title": "Commits stay on their branch",
         "body": "A commit on a branch exists only there until you merge it, so `main` stays exactly as it was. Watch `header.html` disappear when we switch back.",
-        "code": "git init\ntouch index.html\ngit add .\ngit commit -m \"Start\"\ngit switch -c header\ntouch header.html\ngit add .\ngit commit -m \"Add header\"\ngit switch main\nls"
+        "code": "git init\ntouch index.html\ngit add .\ngit commit -m \"Start\"\ngit switch -c header\ntouch header.html\ngit add .\ngit commit -m \"Add header\"\ngit switch main\nls",
+        "hi": {
+          "title": "Commits apni branch par rehte hain",
+          "body": "Branch par kiya commit merge hone tak sirf wahin rehta hai, isliye `main` bilkul waisa hi rehta hai. Wapas switch karne par `header.html` ko gayab hote dekho."
+        }
       },
       {
         "title": "Spot the bug",
@@ -16,6 +20,11 @@
         "bug": {
           "line": 5,
           "fix": "`git branch menu` only creates the branch; you stay on `main`. `git switch -c menu` creates it and moves you there."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "`menu.html` `menu` branch par commit honi chahiye, par woh `main` par pahunch jaati hai. Bug par tap karo.",
+          "fix": "`git branch menu` sirf branch banata hai; aap `main` par hi rehte ho. `git switch -c menu` use banata hai aur aapko wahan le jaata hai."
         }
       }
     ],
@@ -27,11 +36,21 @@
         "It is deleted for good"
       ],
       "answer": 0,
-      "explanation": "Each branch has its own commits. Switch back to `header` and the file returns."
+      "explanation": "Each branch has its own commits. Switch back to `header` and the file returns.",
+      "hi": {
+        "question": "Aap `header` branch par header.html commit karte ho, phir `git switch main` karte ho. Kya header.html wahan hai?",
+        "options": [
+          "Nahi, woh header branch par rehti hai",
+          "Haan, har branch ko milti hai",
+          "Woh hamesha ke liye delete ho jaati hai"
+        ],
+        "explanation": "Har branch ke apne commits hote hain. Wapas `header` par switch karo aur file laut aati hai."
+      }
     }
   },
   "exercise": {
     "prompt": "Create a branch `header`, add a file `header.html` on it, and commit it with the message `Add header`. Leave `main` without it.",
+    "promptHi": "`header` branch banao, us par `header.html` file jodo, aur use message `Add header` ke saath commit karo. `main` ko uske bina chhodo.",
     "starterCode": "",
     "setup": [
       "git init",
@@ -43,18 +62,21 @@
       {
         "type": "committed-file",
         "label": "`header.html` is committed on `header`",
+        "labelHi": "`header.html` `header` par commit hai",
         "path": "header.html",
         "branch": "header"
       },
       {
         "type": "commit-message",
         "label": "A commit on `header` says `Add header`",
+        "labelHi": "`header` par ek commit `Add header` kehta hai",
         "text": "Add header",
         "branch": "header"
       },
       {
         "type": "committed-file",
         "label": "`main` does not have `header.html`",
+        "labelHi": "`main` mein `header.html` nahi hai",
         "path": "header.html",
         "branch": "main",
         "present": false

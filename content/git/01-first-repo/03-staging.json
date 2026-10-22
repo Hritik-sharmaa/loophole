@@ -7,12 +7,20 @@
       {
         "title": "git status",
         "body": "`git status` tells you what Git sees: untracked files (new to Git), changes, and what is staged.",
-        "code": "git init\ntouch index.html\ngit status"
+        "code": "git init\ntouch index.html\ngit status",
+        "hi": {
+          "title": "git status",
+          "body": "`git status` batata hai Git kya dekh raha hai: untracked files (Git ke liye nayi), changes, aur kya staged hai."
+        }
       },
       {
         "title": "Staging with git add",
         "body": "`git add <file>` puts a file in the staging area, the list of changes for your next commit. `git add .` stages everything.",
-        "code": "git init\ntouch index.html notes.txt\ngit add index.html\ngit status"
+        "code": "git init\ntouch index.html notes.txt\ngit add index.html\ngit status",
+        "hi": {
+          "title": "git add se staging",
+          "body": "`git add <file>` file ko staging area mein daalta hai, yaani agle commit ke changes ki list. `git add .` sab kuch stage kar deta hai."
+        }
       },
       {
         "title": "Spot the bug",
@@ -21,6 +29,11 @@
         "bug": {
           "line": 3,
           "fix": "The file is called `notes.txt`, and `git add` needs its full name: `git add notes.txt`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "`git status` abhi bhi file ko not staged dikhata hai. Bug par tap karo.",
+          "fix": "File ka naam `notes.txt` hai, aur `git add` ko poora naam chahiye: `git add notes.txt`."
         }
       }
     ],
@@ -32,11 +45,21 @@
         "Uploaded to GitHub"
       ],
       "answer": 0,
-      "explanation": "Staging only marks it for the next commit. Nothing is saved or uploaded yet."
+      "explanation": "Staging only marks it for the next commit. Nothing is saved or uploaded yet.",
+      "hi": {
+        "question": "`git add index.html` ke baad index.html kahan hai?",
+        "options": [
+          "Staging area mein, commit ke liye ready",
+          "Ek commit mein save",
+          "GitHub par upload"
+        ],
+        "explanation": "Staging sirf use agle commit ke liye mark karta hai. Abhi kuch save ya upload nahi hua."
+      }
     }
   },
   "exercise": {
     "prompt": "This repository has two new files. Stage only `index.html`, and leave `notes.txt` unstaged.",
+    "promptHi": "Is repository mein do nayi files hain. Sirf `index.html` ko stage karo, aur `notes.txt` ko unstaged chhodo.",
     "starterCode": "",
     "setup": [
       "git init",
@@ -47,11 +70,13 @@
       {
         "type": "staged",
         "label": "`index.html` is staged",
+        "labelHi": "`index.html` staged hai",
         "path": "index.html"
       },
       {
         "type": "staged",
         "label": "`notes.txt` is not staged",
+        "labelHi": "`notes.txt` staged nahi hai",
         "path": "notes.txt",
         "staged": false
       }

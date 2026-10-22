@@ -7,11 +7,19 @@
       {
         "title": "A commit is a snapshot",
         "body": "`git commit -m \"message\"` saves everything staged as a commit. The message says what changed.",
-        "code": "git init\ntouch index.html\ngit add index.html\ngit commit -m \"Add home page\""
+        "code": "git init\ntouch index.html\ngit add index.html\ngit commit -m \"Add home page\"",
+        "hi": {
+          "title": "Commit ek snapshot hai",
+          "body": "`git commit -m \"message\"` jo kuch staged hai use ek commit ki tarah save karta hai. Message batata hai kya badla."
+        }
       },
       {
         "title": "Good messages",
-        "body": "Write messages that finish the sentence \"This commit will…\": `Add home page`, `Fix the menu link`. Short and specific beats \"stuff\"."
+        "body": "Write messages that finish the sentence \"This commit will…\": `Add home page`, `Fix the menu link`. Short and specific beats \"stuff\".",
+        "hi": {
+          "title": "Acche messages",
+          "body": "Aise messages likho jo \"This commit will…\" wala sentence poora karein: `Add home page`, `Fix the menu link`. Chhota aur saaf message \"stuff\" se behtar hai."
+        }
       },
       {
         "title": "Spot the bug",
@@ -20,6 +28,11 @@
         "bug": {
           "line": 4,
           "fix": "The message goes after `-m`: `git commit -m \"Add home page\"`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Git yeh commit lene se mana kar deta hai. Kaunsi line galat hai?",
+          "fix": "Message `-m` ke baad aata hai: `git commit -m \"Add home page\"`."
         }
       }
     ],
@@ -31,27 +44,40 @@
         "Git deletes your changes"
       ],
       "answer": 0,
-      "explanation": "A commit only saves what is staged. With nothing staged, there is nothing to save."
+      "explanation": "A commit only saves what is staged. With nothing staged, there is nothing to save.",
+      "hi": {
+        "question": "Kuch bhi staged nahi hai aur aap `git commit -m \"Add logo\"` chalate ho. Kya hota hai?",
+        "options": [
+          "Git kehta hai commit karne ko kuch nahi hai",
+          "Git phir bhi har file commit kar deta hai",
+          "Git aapke changes delete kar deta hai"
+        ],
+        "explanation": "Commit sirf wahi save karta hai jo staged hai. Kuch staged na ho toh save karne ko kuch nahi."
+      }
     }
   },
   "exercise": {
     "prompt": "Stage `index.html` and commit it with the message `Add home page`.",
+    "promptHi": "`index.html` ko stage karo aur use message `Add home page` ke saath commit karo.",
     "starterCode": "",
     "setup": ["git init", "echo '<h1>Hi</h1>' > index.html"],
     "checks": [
       {
         "type": "commit-message",
         "label": "A commit says `Add home page`",
+        "labelHi": "Ek commit `Add home page` kehta hai",
         "text": "Add home page"
       },
       {
         "type": "committed-file",
         "label": "`index.html` is in the commit",
+        "labelHi": "`index.html` commit mein hai",
         "path": "index.html"
       },
       {
         "type": "clean",
-        "label": "Nothing is left to commit"
+        "label": "Nothing is left to commit",
+        "labelHi": "Commit karne ko kuch nahi bacha"
       }
     ]
   }

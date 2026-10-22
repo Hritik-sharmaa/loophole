@@ -692,6 +692,7 @@ describe('Hinglish (ADR-042)', () => {
     ['python', 40],
     ['javascript', 20],
     ['html-css', 15],
+    ['git-github', 15],
   ])('every %s lesson has Hinglish', (slug, total) => {
     const course = loadAllContent(REAL_CONTENT).find((c) => c.slug === slug)!;
     const lessons = course.units.flatMap((u) => u.lessons);

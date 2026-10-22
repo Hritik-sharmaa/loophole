@@ -126,8 +126,8 @@ function LanguageSetting({ current }: { current: LessonLanguage }) {
         disabled={update.isPending}
       />
       <p className="text-sm text-text-secondary">
-        Cards, quick checks and tasks switch; code stays the same. Python,
-        JavaScript and HTML &amp; CSS are in Hinglish; Git follows.
+        Cards, quick checks, tasks and checklists switch, in every course; code
+        stays the same.
       </p>
       {update.isError && (
         <p role="alert" className="text-sm font-semibold">

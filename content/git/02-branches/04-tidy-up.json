@@ -7,11 +7,19 @@
       {
         "title": "Deleting a merged branch",
         "body": "Once a branch is merged, `git branch -d <name>` deletes it. Its commits stay safe in `main`.",
-        "code": "git init\ntouch a.txt\ngit add .\ngit commit -m \"Start\"\ngit switch -c extra\ntouch b.txt\ngit add .\ngit commit -m \"Add b\"\ngit switch main\ngit merge extra\ngit branch -d extra\ngit branch"
+        "code": "git init\ntouch a.txt\ngit add .\ngit commit -m \"Start\"\ngit switch -c extra\ntouch b.txt\ngit add .\ngit commit -m \"Add b\"\ngit switch main\ngit merge extra\ngit branch -d extra\ngit branch",
+        "hi": {
+          "title": "Merge ho chuki branch delete karna",
+          "body": "Branch merge ho jaaye toh `git branch -d <name>` use delete karta hai. Uske commits `main` mein safe rehte hain."
+        }
       },
       {
         "title": "Git protects unmerged work",
-        "body": "`-d` refuses to delete a branch whose commits aren't merged yet, so you can't lose work by accident."
+        "body": "`-d` refuses to delete a branch whose commits aren't merged yet, so you can't lose work by accident.",
+        "hi": {
+          "title": "Git unmerged kaam ko bachata hai",
+          "body": "`-d` us branch ko delete karne se mana kar deta hai jiske commits abhi merge nahi hue, taaki galti se kaam na kho jaaye."
+        }
       },
       {
         "title": "Spot the bug",
@@ -20,6 +28,11 @@
         "bug": {
           "line": 10,
           "fix": "`extra` is not merged yet, so `-d` protects its work. Run `git merge extra` first, then delete the branch."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Git `extra` ko delete karne se mana karta hai. Us line par tap karo jo bahut jaldi chalti hai.",
+          "fix": "`extra` abhi merge nahi hui, isliye `-d` uska kaam bachata hai. Pehle `git merge extra` chalao, phir branch delete karo."
         }
       }
     ],
@@ -31,11 +44,21 @@
         "You spelled it wrong"
       ],
       "answer": 0,
-      "explanation": "Deleting it now would lose those commits, so Git stops you."
+      "explanation": "Deleting it now would lose those commits, so Git stops you.",
+      "hi": {
+        "question": "`git branch -d footer` kehta hai branch \"not fully merged\" hai. Iska matlab kya hai?",
+        "options": [
+          "Uske commits abhi aapki current branch mein nahi hain",
+          "Branch khaali hai",
+          "Aapne spelling galat likhi"
+        ],
+        "explanation": "Abhi delete karne se woh commits kho jaate, isliye Git aapko rok deta hai."
+      }
     }
   },
   "exercise": {
     "prompt": "`footer` is already merged into `main`. Delete the `footer` branch.",
+    "promptHi": "`footer` pehle se `main` mein merge ho chuki hai. `footer` branch delete karo.",
     "starterCode": "",
     "setup": [
       "git init",
@@ -53,12 +76,14 @@
       {
         "type": "branch",
         "label": "The `footer` branch is gone",
+        "labelHi": "`footer` branch chali gayi",
         "name": "footer",
         "exists": false
       },
       {
         "type": "committed-file",
         "label": "`main` still has `footer.html`",
+        "labelHi": "`main` mein abhi bhi `footer.html` hai",
         "path": "footer.html",
         "branch": "main"
       }

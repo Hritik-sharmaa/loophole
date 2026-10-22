@@ -7,12 +7,20 @@
       {
         "title": "A repository",
         "body": "A repository (repo) is a project folder that Git keeps track of. `git init` turns the folder you are in into one.",
-        "code": "mkdir site\ncd site\ngit init"
+        "code": "mkdir site\ncd site\ngit init",
+        "hi": {
+          "title": "Repository",
+          "body": "Repository (repo) ek project folder hai jise Git track karta hai. `git init` aap jis folder mein ho use repo bana deta hai."
+        }
       },
       {
         "title": "Looking around",
         "body": "`ls` lists what is in the folder you are in, `pwd` shows where you are, and `cd` moves into a folder (`cd ..` goes back out).",
-        "code": "mkdir demo\ncd demo\npwd\ntouch index.html\nls"
+        "code": "mkdir demo\ncd demo\npwd\ntouch index.html\nls",
+        "hi": {
+          "title": "Aas paas dekhna",
+          "body": "`ls` batata hai folder mein kya hai, `pwd` dikhata hai aap kahan ho, aur `cd` kisi folder ke andar le jaata hai (`cd ..` wapas bahar)."
+        }
       },
       {
         "title": "Spot the bug",
@@ -21,6 +29,11 @@
         "bug": {
           "line": 3,
           "fix": "There is no `git int`. To start a repository, type `git init`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Yahan ek command Git command hai hi nahi. Us par tap karo.",
+          "fix": "`git int` jaisa kuch nahi hota. Repository shuru karne ke liye `git init` type karo."
         }
       }
     ],
@@ -28,11 +41,16 @@
       "question": "Which command turns the current folder into a Git repository?",
       "options": ["git init", "git start", "git new"],
       "answer": 0,
-      "explanation": "`git init` creates the hidden `.git` folder where Git keeps its history."
+      "explanation": "`git init` creates the hidden `.git` folder where Git keeps its history.",
+      "hi": {
+        "question": "Kaunsi command current folder ko Git repository banati hai?",
+        "explanation": "`git init` chhupa hua `.git` folder banata hai jahan Git apni history rakhta hai."
+      }
     }
   },
   "exercise": {
     "prompt": "Your website's files are in the folder `site`. Go into it with `cd`, then turn it into a Git repository.",
+    "promptHi": "Aapki website ki files `site` folder mein hain. `cd` se uske andar jao, phir use Git repository banao.",
     "starterCode": "",
     "setup": [
       "mkdir site",
@@ -44,11 +62,13 @@
       {
         "type": "folder",
         "label": "You are inside the `site` folder",
+        "labelHi": "Aap `site` folder ke andar ho",
         "path": "site"
       },
       {
         "type": "repo",
-        "label": "`site` is a Git repository"
+        "label": "`site` is a Git repository",
+        "labelHi": "`site` ek Git repository hai"
       }
     ]
   }

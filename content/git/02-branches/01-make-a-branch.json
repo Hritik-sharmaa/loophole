@@ -7,12 +7,20 @@
       {
         "title": "Branches are parallel versions",
         "body": "A branch lets you try something without touching `main`. `git branch` lists branches; the one with `*` is where you are.",
-        "code": "git init\ntouch a.txt\ngit add .\ngit commit -m \"Start\"\ngit branch idea\ngit branch"
+        "code": "git init\ntouch a.txt\ngit add .\ngit commit -m \"Start\"\ngit branch idea\ngit branch",
+        "hi": {
+          "title": "Branches parallel versions hain",
+          "body": "Branch se aap `main` ko chhue bina kuch try kar sakte ho. `git branch` branches ki list dikhata hai; `*` wali woh hai jahan aap ho."
+        }
       },
       {
         "title": "Switching",
         "body": "`git switch <name>` moves you to a branch. `git switch -c <name>` creates one and moves you there in one step.",
-        "code": "git init\ntouch a.txt\ngit add .\ngit commit -m \"Start\"\ngit switch -c idea\ngit branch"
+        "code": "git init\ntouch a.txt\ngit add .\ngit commit -m \"Start\"\ngit switch -c idea\ngit branch",
+        "hi": {
+          "title": "Switch karna",
+          "body": "`git switch <name>` aapko ek branch par le jaata hai. `git switch -c <name>` ek hi step mein branch banata hai aur aapko wahan le jaata hai."
+        }
       },
       {
         "title": "Spot the bug",
@@ -21,6 +29,11 @@
         "bug": {
           "line": 5,
           "fix": "`git switch` only moves to a branch that exists. `git switch -c idea` creates it and moves you there."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Aakhri command fail hoti hai: jaane ke liye koi branch nahi hai. Kaunsi line galat hai?",
+          "fix": "`git switch` sirf maujood branch par le jaata hai. `git switch -c idea` use banata hai aur aapko wahan le jaata hai."
         }
       }
     ],
@@ -32,11 +45,16 @@
         "git commit dark-mode"
       ],
       "answer": 0,
-      "explanation": "`-c` means create. `git branch -d` would delete a branch instead."
+      "explanation": "`-c` means create. `git branch -d` would delete a branch instead.",
+      "hi": {
+        "question": "Kaunsi command `dark-mode` naam ki branch banati hai aur us par switch karti hai?",
+        "explanation": "`-c` ka matlab create. `git branch -d` ulta branch delete kar deta."
+      }
     }
   },
   "exercise": {
     "prompt": "Create a branch called `dark-mode` and switch to it.",
+    "promptHi": "`dark-mode` naam ki branch banao aur us par switch karo.",
     "starterCode": "",
     "setup": [
       "git init",
@@ -48,11 +66,13 @@
       {
         "type": "branch",
         "label": "The `dark-mode` branch exists",
+        "labelHi": "`dark-mode` branch maujood hai",
         "name": "dark-mode"
       },
       {
         "type": "current-branch",
         "label": "You are on `dark-mode`",
+        "labelHi": "Aap `dark-mode` par ho",
         "name": "dark-mode"
       }
     ]
