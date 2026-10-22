@@ -5,7 +5,7 @@ import type { LessonLanguage } from '@loophole/shared';
 // The course languages whose lessons have Hinglish so far (ADR-042); the
 // rest show English until their batch lands. Matches content/: the loader
 // and content-files.spec.ts check every lesson of these courses.
-export const HINGLISH_COURSES = ['python', 'javascript'];
+export const HINGLISH_COURSES = ['python', 'javascript', 'html'];
 
 // The two lesson languages (ADR-042), each with a line from the first
 // Python lesson so the learner sees what they are choosing.

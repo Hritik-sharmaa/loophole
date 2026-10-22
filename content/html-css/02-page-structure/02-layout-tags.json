@@ -7,11 +7,19 @@
       {
         "title": "Tags that say what they are",
         "body": "`<header>`, `<main>` and `<footer>` look like plain boxes, but they tell browsers and screen readers which part of the page is which.",
-        "code": "<header><h1>My blog</h1></header>\n<main><p>Today I learned HTML.</p></main>\n<footer><p>Made by me</p></footer>"
+        "code": "<header><h1>My blog</h1></header>\n<main><p>Today I learned HTML.</p></main>\n<footer><p>Made by me</p></footer>",
+        "hi": {
+          "title": "Tags jo batate hain woh kya hain",
+          "body": "`<header>`, `<main>` aur `<footer>` saade boxes jaise dikhte hain, par browsers aur screen readers ko batate hain ki page ka kaunsa hissa kya hai."
+        }
       },
       {
         "title": "Tags inside tags",
-        "body": "Tags can hold other tags. Indent the inner ones so you can see the structure at a glance."
+        "body": "Tags can hold other tags. Indent the inner ones so you can see the structure at a glance.",
+        "hi": {
+          "title": "Tags ke andar tags",
+          "body": "Tags doosre tags rakh sakte hain. Andar wale tags ko indent karo taaki structure ek nazar mein dikh jaaye."
+        }
       },
       {
         "title": "Spot the bug",
@@ -20,6 +28,11 @@
         "bug": {
           "line": 2,
           "fix": "Line 2 opens `<main>` but closes `</header>`. Close what you open: `</main>`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Is page ka ek hissa galat tag se band kiya gaya hai. Kaunsi line?",
+          "fix": "Line 2 `<main>` kholti hai par `</header>` se band karti hai. Jo kholo wahi band karo: `</main>`."
         }
       }
     ],
@@ -27,26 +40,34 @@
       "question": "Which tag holds the page's main content?",
       "options": ["<main>", "<header>", "<footer>"],
       "answer": 0,
-      "explanation": "`<main>` is the main content. The header comes before it and the footer after it."
+      "explanation": "`<main>` is the main content. The header comes before it and the footer after it.",
+      "hi": {
+        "question": "Kaunsa tag page ka main content rakhta hai?",
+        "explanation": "`<main>` main content hai. Header usse pehle aata hai aur footer uske baad."
+      }
     }
   },
   "exercise": {
     "prompt": "Give your page a `<header>` with an `<h1>` inside, a `<main>` with a paragraph inside, and a `<footer>`.",
+    "promptHi": "Apne page ko ek `<header>` do jiske andar ek `<h1>` ho, ek `<main>` jiske andar ek paragraph ho, aur ek `<footer>`.",
     "starterCode": "<!-- header (with an h1), main (with a p), footer -->\n",
     "checks": [
       {
         "type": "element",
         "label": "A `<header>` holds an `<h1>`",
+        "labelHi": "Ek `<header>` mein ek `<h1>` hai",
         "selector": "header h1"
       },
       {
         "type": "element",
         "label": "A `<main>` holds a `<p>`",
+        "labelHi": "Ek `<main>` mein ek `<p>` hai",
         "selector": "main p"
       },
       {
         "type": "element",
         "label": "There is a `<footer>`",
+        "labelHi": "Ek `<footer>` hai",
         "selector": "footer"
       }
     ]

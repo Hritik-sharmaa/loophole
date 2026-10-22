@@ -7,12 +7,20 @@
       {
         "title": "CSS styles your page",
         "body": "CSS sets how things look. Put it in a `<style>` tag. A rule names what to style, then sets properties inside `{ }`.",
-        "code": "<style>\n  p { color: blue; }\n</style>\n<p>I am blue.</p>"
+        "code": "<style>\n  p { color: blue; }\n</style>\n<p>I am blue.</p>",
+        "hi": {
+          "title": "CSS aapke page ko style karta hai",
+          "body": "CSS batata hai cheezein kaisi dikhengi. Ise `<style>` tag mein rakho. Rule pehle batata hai kya style karna hai, phir `{ }` ke andar properties set karta hai."
+        }
       },
       {
         "title": "property: value;",
         "body": "Each line inside the braces is `property: value;`. Don't forget the colon and the semicolon.",
-        "code": "<style>\n  h1 { color: purple; background-color: yellow; }\n</style>\n<h1>Loud heading</h1>"
+        "code": "<style>\n  h1 { color: purple; background-color: yellow; }\n</style>\n<h1>Loud heading</h1>",
+        "hi": {
+          "title": "property: value;",
+          "body": "Braces ke andar har line `property: value;` hoti hai. Colon aur semicolon mat bhoolna."
+        }
       },
       {
         "title": "Spot the bug",
@@ -21,6 +29,11 @@
         "bug": {
           "line": 2,
           "fix": "Each line in a rule is `property: value;`. Line 2 is missing the colon: `color: purple;`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Heading purple honi chahiye, par kaali hi rehti hai. Bug par tap karo.",
+          "fix": "Rule ki har line `property: value;` hoti hai. Line 2 mein colon missing hai: `color: purple;`."
         }
       }
     ],
@@ -32,21 +45,28 @@
         "<p color=\"red\">"
       ],
       "answer": 0,
-      "explanation": "A CSS rule is a selector, then `property: value;` inside curly braces."
+      "explanation": "A CSS rule is a selector, then `property: value;` inside curly braces.",
+      "hi": {
+        "question": "Kaunsa rule paragraphs ko laal banata hai?",
+        "explanation": "CSS rule ek selector hai, phir curly braces ke andar `property: value;`."
+      }
     }
   },
   "exercise": {
     "prompt": "Add a `<style>` tag and make the `<h1>` orange with the `color` property.",
+    "promptHi": "Ek `<style>` tag jodo aur `color` property se `<h1>` ko orange banao.",
     "starterCode": "<h1>Welcome</h1>\n<!-- add a style tag that makes the h1 orange -->\n",
     "checks": [
       {
         "type": "element",
         "label": "There is a `<style>` tag",
+        "labelHi": "Ek `<style>` tag hai",
         "selector": "style"
       },
       {
         "type": "style",
         "label": "The `<h1>` has `color: orange`",
+        "labelHi": "`<h1>` mein `color: orange` hai",
         "selector": "h1",
         "property": "color",
         "value": ["orange", "#ffa500"]

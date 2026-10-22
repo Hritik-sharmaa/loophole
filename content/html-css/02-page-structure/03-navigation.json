@@ -7,11 +7,19 @@
       {
         "title": "Navigation with <nav>",
         "body": "`<nav>` wraps the main links of a site, like its menu.",
-        "code": "<nav>\n  <a href=\"/\">Home</a>\n  <a href=\"/blog\">Blog</a>\n</nav>"
+        "code": "<nav>\n  <a href=\"/\">Home</a>\n  <a href=\"/blog\">Blog</a>\n</nav>",
+        "hi": {
+          "title": "<nav> se navigation",
+          "body": "`<nav>` site ke main links ko gherta hai, jaise uska menu."
+        }
       },
       {
         "title": "Links inside your site",
-        "body": "An `href` that starts with `/` goes to another page on the same site, like `/about`."
+        "body": "An `href` that starts with `/` goes to another page on the same site, like `/about`.",
+        "hi": {
+          "title": "Apni site ke andar links",
+          "body": "Jo `href` `/` se shuru hota hai woh usi site ke doosre page par jaata hai, jaise `/about`."
+        }
       },
       {
         "title": "Spot the bug",
@@ -20,6 +28,11 @@
         "bug": {
           "line": 4,
           "fix": "A link needs an `href` to know where to go, like `<a href=\"/contact\">Contact</a>`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Contact link dikhta hai, par click karne par kahin nahi jaata. Bug par tap karo.",
+          "fix": "Link ko pata hona chahiye kahan jaana hai, iske liye `href` chahiye, jaise `<a href=\"/contact\">Contact</a>`."
         }
       }
     ],
@@ -27,34 +40,43 @@
       "question": "Where should a site's main menu links go?",
       "options": ["<nav>", "<footer>", "<title>"],
       "answer": 0,
-      "explanation": "`<nav>` is made for the main navigation links."
+      "explanation": "`<nav>` is made for the main navigation links.",
+      "hi": {
+        "question": "Site ke main menu links kahan jaane chahiye?",
+        "explanation": "`<nav>` main navigation links ke liye hi bana hai."
+      }
     }
   },
   "exercise": {
     "prompt": "Make a `<nav>` with three links that say `Home`, `Blog` and `About`.",
+    "promptHi": "Ek `<nav>` banao jismein teen links hon jo `Home`, `Blog` aur `About` kahen.",
     "starterCode": "<!-- a nav with three links -->\n",
     "checks": [
       {
         "type": "element",
         "label": "The `<nav>` has at least three links",
+        "labelHi": "`<nav>` mein kam se kam teen links hain",
         "selector": "nav a",
         "min": 3
       },
       {
         "type": "element",
         "label": "One link says `Home`",
+        "labelHi": "Ek link mein `Home` likha hai",
         "selector": "nav a",
         "text": "Home"
       },
       {
         "type": "element",
         "label": "One link says `Blog`",
+        "labelHi": "Ek link mein `Blog` likha hai",
         "selector": "nav a",
         "text": "Blog"
       },
       {
         "type": "element",
         "label": "One link says `About`",
+        "labelHi": "Ek link mein `About` likha hai",
         "selector": "nav a",
         "text": "About"
       }

@@ -668,6 +668,14 @@ describe('Hinglish (ADR-042)', () => {
           expect(spans(card.hi.body), where).toBe(spans(card.body));
           expect(spans(card.hi.fix), where).toBe(spans(card.bug?.fix));
         }
+        for (const rule of [
+          ...(lesson.exercise.checks ?? []),
+          ...(lesson.exercise.gitScenario?.checks ?? []),
+        ]) {
+          if (rule.labelHi !== undefined) {
+            expect(spans(rule.labelHi), where).toBe(spans(rule.label));
+          }
+        }
         const check = lesson.learn?.check;
         if (check?.hi) {
           expect(spans(check.hi.explanation), where).toBe(
@@ -683,6 +691,7 @@ describe('Hinglish (ADR-042)', () => {
   it.each([
     ['python', 40],
     ['javascript', 20],
+    ['html-css', 15],
   ])('every %s lesson has Hinglish', (slug, total) => {
     const course = loadAllContent(REAL_CONTENT).find((c) => c.slug === slug)!;
     const lessons = course.units.flatMap((u) => u.lessons);

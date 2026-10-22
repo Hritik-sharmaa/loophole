@@ -7,11 +7,19 @@
       {
         "title": "Head and body",
         "body": "A full page starts with `<!DOCTYPE html>`, then `<html>` holding a `<head>` (facts about the page) and a `<body>` (what you see).",
-        "code": "<!DOCTYPE html>\n<html>\n  <head>\n    <title>Tab title</title>\n  </head>\n  <body>\n    <h1>On the page</h1>\n  </body>\n</html>"
+        "code": "<!DOCTYPE html>\n<html>\n  <head>\n    <title>Tab title</title>\n  </head>\n  <body>\n    <h1>On the page</h1>\n  </body>\n</html>",
+        "hi": {
+          "title": "Head aur body",
+          "body": "Poora page `<!DOCTYPE html>` se shuru hota hai, phir `<html>` jismein ek `<head>` (page ke baare mein jaankari) aur ek `<body>` (jo aap dekhte ho) hote hain."
+        }
       },
       {
         "title": "The title",
-        "body": "`<title>` goes in the `<head>`. It doesn't show on the page: it is the name on the browser tab and in search results."
+        "body": "`<title>` goes in the `<head>`. It doesn't show on the page: it is the name on the browser tab and in search results.",
+        "hi": {
+          "title": "Title",
+          "body": "`<title>` `<head>` mein jaata hai. Yeh page par nahi dikhta: yeh browser tab aur search results mein dikhne wala naam hai."
+        }
       },
       {
         "title": "Spot the bug",
@@ -20,6 +28,11 @@
         "bug": {
           "line": 6,
           "fix": "`<title>` belongs in the `<head>`, not the `<body>`. Move it between `<head>` and `</head>`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Browser tab `My recipes` nahi dikhata. Galat jagah wali line par tap karo.",
+          "fix": "`<title>` `<head>` mein aata hai, `<body>` mein nahi. Use `<head>` aur `</head>` ke beech le jao."
         }
       }
     ],
@@ -27,22 +40,30 @@
       "question": "Where does `<title>` go?",
       "options": ["Inside <head>", "Inside <body>", "After </html>"],
       "answer": 0,
-      "explanation": "The title is information about the page, so it goes in the `<head>`."
+      "explanation": "The title is information about the page, so it goes in the `<head>`.",
+      "hi": {
+        "question": "`<title>` kahan jaata hai?",
+        "options": ["<head> ke andar", "<body> ke andar", "</html> ke baad"],
+        "explanation": "Title page ke baare mein jaankari hai, isliye woh `<head>` mein jaata hai."
+      }
     }
   },
   "exercise": {
     "prompt": "Write a full page: a `<head>` with the title `My Page`, and a `<body>` with an `<h1>`.",
+    "promptHi": "Poora page likho: ek `<head>` jismein title `My Page` ho, aur ek `<body>` jismein ek `<h1>` ho.",
     "starterCode": "<!DOCTYPE html>\n<html>\n  <!-- add a head with a title, and a body with an h1 -->\n</html>\n",
     "checks": [
       {
         "type": "element",
         "label": "The `<head>` has a `<title>` that says `My Page`",
+        "labelHi": "`<head>` mein ek `<title>` hai jismein `My Page` likha hai",
         "selector": "head > title",
         "text": "My Page"
       },
       {
         "type": "element",
         "label": "The `<body>` has an `<h1>`",
+        "labelHi": "`<body>` mein ek `<h1>` hai",
         "selector": "body h1"
       }
     ]

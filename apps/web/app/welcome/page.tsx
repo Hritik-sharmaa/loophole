@@ -204,8 +204,8 @@ export default function WelcomePage() {
               !HINGLISH_COURSES.includes(course.language) &&
               language === 'hinglish' && (
                 <p className="text-sm font-bold text-text-secondary">
-                  {course.title} is still in English for now: Python and
-                  JavaScript are in Hinglish, and the others follow.
+                  {course.title} is still in English for now: Python, JavaScript
+                  and HTML &amp; CSS are in Hinglish, and Git follows.
                 </p>
               )}
             {update.isError && (

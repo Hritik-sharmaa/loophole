@@ -7,12 +7,20 @@
       {
         "title": "Links with <a>",
         "body": "`<a>` makes a link. Its `href` says where the link goes, and the text between the tags is what people click.",
-        "code": "<a href=\"https://developer.mozilla.org\">Read the docs</a>"
+        "code": "<a href=\"https://developer.mozilla.org\">Read the docs</a>",
+        "hi": {
+          "title": "<a> se links",
+          "body": "`<a>` link banata hai. Uska `href` batata hai link kahan jaata hai, aur tags ke beech ka text woh hai jis par log click karte hain."
+        }
       },
       {
         "title": "Attributes",
         "body": "Attributes add details to a tag. They go inside the opening tag as `name=\"value\"`. One tag can have several.",
-        "code": "<a href=\"https://example.com\" title=\"An example site\">Example</a>"
+        "code": "<a href=\"https://example.com\" title=\"An example site\">Example</a>",
+        "hi": {
+          "title": "Attributes",
+          "body": "Attributes tag mein details jodte hain. Woh opening tag ke andar `name=\"value\"` ki tarah jaate hain. Ek tag mein kai ho sakte hain."
+        }
       },
       {
         "title": "Spot the bug",
@@ -21,6 +29,11 @@
         "bug": {
           "line": 2,
           "fix": "A link's address goes in the `href` attribute, not `link`: `<a href=\"https://example.com\">`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Link dikhta hai, par click karne par kahin nahi jaata. Bug par tap karo.",
+          "fix": "Link ka address `href` attribute mein jaata hai, `link` mein nahi: `<a href=\"https://example.com\">`."
         }
       }
     ],
@@ -29,16 +42,22 @@
       "code": "<a href=\"/about\">About us</a>",
       "options": ["About us", "/about", "href"],
       "answer": 0,
-      "explanation": "The text between `<a>` and `</a>` is what shows. The `href` is where it goes."
+      "explanation": "The text between `<a>` and `</a>` is what shows. The `href` is where it goes.",
+      "hi": {
+        "question": "Logon ko page par kya dikhega?",
+        "explanation": "`<a>` aur `</a>` ke beech ka text dikhta hai. `href` batata hai woh kahan jaata hai."
+      }
     }
   },
   "exercise": {
     "prompt": "Add a link that goes to `https://example.com` and says `Visit Example`.",
+    "promptHi": "Ek link jodo jo `https://example.com` par jaaye aur `Visit Example` kahe.",
     "starterCode": "<h1>Links</h1>\n<!-- add your link below -->\n",
     "checks": [
       {
         "type": "attribute",
         "label": "A link goes to `https://example.com`",
+        "labelHi": "Ek link `https://example.com` par jaata hai",
         "selector": "a",
         "name": "href",
         "value": "https://example.com"
@@ -46,6 +65,7 @@
       {
         "type": "element",
         "label": "The link says `Visit Example`",
+        "labelHi": "Link mein `Visit Example` likha hai",
         "selector": "a",
         "text": "Visit Example"
       }

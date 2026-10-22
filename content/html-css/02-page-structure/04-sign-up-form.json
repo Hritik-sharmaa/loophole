@@ -7,17 +7,29 @@
       {
         "title": "Inputs",
         "body": "`<input>` is a box people type into. Its `type` sets the kind: `text`, `email`, `password` and more.",
-        "code": "<input type=\"text\" placeholder=\"Your name\">\n<input type=\"email\" placeholder=\"you@example.com\">"
+        "code": "<input type=\"text\" placeholder=\"Your name\">\n<input type=\"email\" placeholder=\"you@example.com\">",
+        "hi": {
+          "title": "Inputs",
+          "body": "`<input>` ek box hai jismein log type karte hain. Uska `type` batata hai kis tarah ka: `text`, `email`, `password` aur aur bhi."
+        }
       },
       {
         "title": "Labels",
         "body": "`<label>` names an input. Give the input an `id` and the label the same `for`, and clicking the label jumps into the box.",
-        "code": "<label for=\"name\">Name</label>\n<input id=\"name\" type=\"text\">"
+        "code": "<label for=\"name\">Name</label>\n<input id=\"name\" type=\"text\">",
+        "hi": {
+          "title": "Labels",
+          "body": "`<label>` input ko naam deta hai. Input ko ek `id` do aur label ko wahi `for`, toh label par click karne se cursor box mein chala jaata hai."
+        }
       },
       {
         "title": "Buttons",
         "body": "`<button>` makes a button. Inside a `<form>`, a `type=\"submit\"` button sends the form.",
-        "code": "<form>\n  <input type=\"text\">\n  <button type=\"submit\">Send</button>\n</form>"
+        "code": "<form>\n  <input type=\"text\">\n  <button type=\"submit\">Send</button>\n</form>",
+        "hi": {
+          "title": "Buttons",
+          "body": "`<button>` button banata hai. `<form>` ke andar `type=\"submit\"` wala button form bhejta hai."
+        }
       },
       {
         "title": "Spot the bug",
@@ -26,6 +38,11 @@
         "bug": {
           "line": 4,
           "fix": "`type=\"reset\"` clears the form. To send it, the button needs `type=\"submit\"`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Button dabane par form bhejne ki jagah box khaali ho jaata hai. Kaunsi line galat hai?",
+          "fix": "`type=\"reset\"` form ko saaf kar deta hai. Bhejne ke liye button ko `type=\"submit\"` chahiye."
         }
       }
     ],
@@ -37,21 +54,28 @@
         "<input type=\"mail\">"
       ],
       "answer": 0,
-      "explanation": "`type=\"email\"` checks the address and shows the right keyboard on phones. `mail` is not a real type."
+      "explanation": "`type=\"email\"` checks the address and shows the right keyboard on phones. `mail` is not a real type.",
+      "hi": {
+        "question": "Email address ke liye kaunsa input sabse accha hai?",
+        "explanation": "`type=\"email\"` address check karta hai aur phones par sahi keyboard dikhata hai. `mail` asli type nahi hai."
+      }
     }
   },
   "exercise": {
     "prompt": "Make a sign-up `<form>` with a `<label>`, an email `<input>`, and a submit button that says `Sign up`.",
+    "promptHi": "Ek sign-up `<form>` banao jismein ek `<label>`, ek email `<input>`, aur ek submit button ho jo `Sign up` kahe.",
     "starterCode": "<h1>Join us</h1>\n<!-- a form with a label, an email input and a submit button -->\n",
     "checks": [
       {
         "type": "element",
         "label": "There is a `<form>` with a `<label>`",
+        "labelHi": "Ek `<form>` mein `<label>` hai",
         "selector": "form label"
       },
       {
         "type": "attribute",
         "label": "The form has an `<input>` with `type=\"email\"`",
+        "labelHi": "Form mein `type=\"email\"` wala `<input>` hai",
         "selector": "form input",
         "name": "type",
         "value": "email"
@@ -59,6 +83,7 @@
       {
         "type": "attribute",
         "label": "The form has a button with `type=\"submit\"`",
+        "labelHi": "Form mein `type=\"submit\"` wala button hai",
         "selector": "form button",
         "name": "type",
         "value": "submit"
@@ -66,6 +91,7 @@
       {
         "type": "element",
         "label": "The button says `Sign up`",
+        "labelHi": "Button mein `Sign up` likha hai",
         "selector": "form button",
         "text": "Sign up"
       }

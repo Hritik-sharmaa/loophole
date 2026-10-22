@@ -5,6 +5,7 @@ import type {
   LessonDetail,
   MeResponse,
   PracticeSet,
+  SubmissionResult,
   UnitBugHunt,
   UnitCheatSheet,
 } from '@loophole/shared';
@@ -176,6 +177,37 @@ describe('Hinglish lessons (e2e, ADR-042)', () => {
     expect(lesson.exercise.prompt).toContain('Har programmer');
   });
 
+  it('an HTML lesson’s checklist and its graded results are in Hinglish', async () => {
+    const web = await get<CoursePath>('ada', '/courses/html-css/path');
+    const lesson = await get<LessonDetail>(
+      'ada',
+      `/lessons/${web.units[0].lessons[0].id}`,
+    );
+    expect(lesson.exercise.checks).toEqual([
+      'Ek `<h1>` heading hai',
+      '`<h1>` mein `Hello, web!` likha hai',
+    ]);
+    const res = await http()
+      .post('/submissions')
+      .set('Authorization', 'Bearer ada')
+      .send({
+        exerciseId: lesson.exercise.id,
+        code: '<h1>Hello, web!</h1>',
+      })
+      .expect(201);
+    bodies.push({ who: 'ada', body: res.body });
+    const result = res.body as SubmissionResult;
+    expect(result.status).toBe('passed');
+    expect(result.results).toEqual([
+      { kind: 'check', passed: true, label: 'Ek `<h1>` heading hai' },
+      {
+        kind: 'check',
+        passed: true,
+        label: '`<h1>` mein `Hello, web!` likha hai',
+      },
+    ]);
+  });
+
   it('switching back gives English again', async () => {
     await setLanguage('ada', 'en');
     const lesson = await get<LessonDetail>('ada', `/lessons/${firstLesson()}`);
@@ -191,6 +223,7 @@ describe('Hinglish lessons (e2e, ADR-042)', () => {
       const json = JSON.stringify(body);
       expect(json).not.toContain('"hi":');
       expect(json).not.toContain('promptHi');
+      expect(json).not.toContain('labelHi');
       expect(json).not.toMatch(/hidden_?tests/i);
     }
   });

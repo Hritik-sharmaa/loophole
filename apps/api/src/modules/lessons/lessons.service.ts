@@ -20,6 +20,7 @@ import { exerciseKind } from '../../common/exercise-kind.js';
 import {
   localizeCard,
   localizeCheck,
+  localizeLabels,
   localizeLearn,
   localizePrompt,
 } from '../../common/lesson-text.js';
@@ -246,7 +247,7 @@ export class LessonsService {
 
   // The language this user reads lessons in (ADR-042); English until
   // they pick, or before their profile exists.
-  private async lessonLanguage(userId: string): Promise<LessonLanguage> {
+  async lessonLanguage(userId: string): Promise<LessonLanguage> {
     const [row] = await this.db.drizzle
       .select({ language: profiles.lessonLanguage })
       .from(profiles)
@@ -320,9 +321,10 @@ export class LessonsService {
           language,
         ),
         kind: exerciseKind(lesson.language),
-        checks: (lesson.checks ?? lesson.gitScenario?.checks ?? []).map(
-          (c) => c.label,
-        ),
+        checks: localizeLabels<{ label: string }>(
+          lesson.checks ?? lesson.gitScenario?.checks ?? [],
+          language,
+        ).map((c) => c.label),
       },
     };
   }

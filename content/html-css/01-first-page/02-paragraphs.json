@@ -7,12 +7,20 @@
       {
         "title": "Paragraphs with <p>",
         "body": "`<p>` holds a paragraph of text. Each paragraph starts on a new line, with space around it.",
-        "code": "<p>Hello there.</p>\n<p>This is a second paragraph.</p>"
+        "code": "<p>Hello there.</p>\n<p>This is a second paragraph.</p>",
+        "hi": {
+          "title": "<p> se paragraphs",
+          "body": "`<p>` text ka ek paragraph rakhta hai. Har paragraph nayi line se shuru hota hai, aas paas thodi jagah ke saath."
+        }
       },
       {
         "title": "Spaces get squashed",
         "body": "HTML turns extra spaces and line breaks into a single space. To start a new paragraph, use a new `<p>`.",
-        "code": "<p>This    has     lots\nof    spaces.</p>"
+        "code": "<p>This    has     lots\nof    spaces.</p>",
+        "hi": {
+          "title": "Spaces dab jaate hain",
+          "body": "HTML extra spaces aur line breaks ko ek hi space bana deta hai. Naya paragraph shuru karne ke liye naya `<p>` use karo."
+        }
       },
       {
         "title": "Spot the bug",
@@ -21,6 +29,11 @@
         "bug": {
           "line": 3,
           "fix": "There is no `<h>` tag. A paragraph is `<p>`, so line 3 should be `<p>Cook for two minutes.</p>`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Ek line aisa tag use karti hai jo exist hi nahi karta. Us par tap karo.",
+          "fix": "`<h>` naam ka koi tag nahi hai. Paragraph `<p>` hota hai, isliye line 3 `<p>Cook for two minutes.</p>` honi chahiye."
         }
       }
     ],
@@ -29,22 +42,29 @@
       "code": "<p>One</p>\n<p>Two</p>\n<p>Three</p>",
       "options": ["3", "1", "6"],
       "answer": 0,
-      "explanation": "Each `<p>` is one paragraph, and there are three."
+      "explanation": "Each `<p>` is one paragraph, and there are three.",
+      "hi": {
+        "question": "Yeh kitne paragraphs dikhata hai?",
+        "explanation": "Har `<p>` ek paragraph hai, aur yahan teen hain."
+      }
     }
   },
   "exercise": {
     "prompt": "Under the heading `About me`, add at least two paragraphs about yourself.",
+    "promptHi": "`About me` heading ke neeche apne baare mein kam se kam do paragraphs jodo.",
     "starterCode": "<h1>About me</h1>\n<!-- add two paragraphs below -->\n",
     "checks": [
       {
         "type": "element",
         "label": "The `<h1>` says `About me`",
+        "labelHi": "`<h1>` mein `About me` likha hai",
         "selector": "h1",
         "text": "About me"
       },
       {
         "type": "element",
         "label": "There are at least two `<p>` paragraphs",
+        "labelHi": "Kam se kam do `<p>` paragraphs hain",
         "selector": "p",
         "min": 2
       }

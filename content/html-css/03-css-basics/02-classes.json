@@ -7,11 +7,19 @@
       {
         "title": "Classes pick some elements",
         "body": "Give elements a `class`, then style that class with a dot, like `.note`. Only elements with the class change.",
-        "code": "<style>\n  .note { background-color: lightblue; }\n</style>\n<p>A plain paragraph.</p>\n<p class=\"note\">A paragraph with a class.</p>"
+        "code": "<style>\n  .note { background-color: lightblue; }\n</style>\n<p>A plain paragraph.</p>\n<p class=\"note\">A paragraph with a class.</p>",
+        "hi": {
+          "title": "Classes kuch elements chunti hain",
+          "body": "Elements ko ek `class` do, phir us class ko dot ke saath style karo, jaise `.note`. Sirf us class wale elements badlenge."
+        }
       },
       {
         "title": "One class, many elements",
-        "body": "Many elements can share a class, so one rule styles all of them at once."
+        "body": "Many elements can share a class, so one rule styles all of them at once.",
+        "hi": {
+          "title": "Ek class, kai elements",
+          "body": "Kai elements ek hi class share kar sakte hain, isliye ek rule sabko ek saath style kar deta hai."
+        }
       },
       {
         "title": "Spot the bug",
@@ -20,6 +28,11 @@
         "bug": {
           "line": 2,
           "fix": "A class rule starts with a dot: `.note`. Without it, CSS looks for a `<note>` tag, and there is none."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Paragraph halka neela hona chahiye, par kuch nahi badalta. Kaunsi line galat hai?",
+          "fix": "Class rule dot se shuru hota hai: `.note`. Uske bina CSS `<note>` tag dhoondta hai, jo hai hi nahi."
         }
       }
     ],
@@ -27,21 +40,28 @@
       "question": "Which selector styles elements with `class=\"tip\"`?",
       "options": [".tip", "#tip", "tip"],
       "answer": 0,
-      "explanation": "A dot means a class. `#tip` would mean an id, and `tip` would mean a `<tip>` tag."
+      "explanation": "A dot means a class. `#tip` would mean an id, and `tip` would mean a `<tip>` tag.",
+      "hi": {
+        "question": "Kaunsa selector `class=\"tip\"` wale elements ko style karta hai?",
+        "explanation": "Dot ka matlab class. `#tip` ka matlab id hota, aur `tip` ka matlab `<tip>` tag."
+      }
     }
   },
   "exercise": {
     "prompt": "Give the second paragraph the class `highlight`, and make `.highlight` have a yellow `background-color`.",
+    "promptHi": "Doosre paragraph ko class `highlight` do, aur `.highlight` ko peela `background-color` do.",
     "starterCode": "<p>Normal text.</p>\n<p>Important text.</p>\n",
     "checks": [
       {
         "type": "element",
         "label": "A paragraph has the class `highlight`",
+        "labelHi": "Ek paragraph mein class `highlight` hai",
         "selector": "p.highlight"
       },
       {
         "type": "style",
         "label": "`.highlight` has a yellow `background-color`",
+        "labelHi": "`.highlight` ka `background-color` peela hai",
         "selector": "p.highlight",
         "property": "background-color",
         "value": ["yellow", "#ffff00", "#ff0"]

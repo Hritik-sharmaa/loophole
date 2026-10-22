@@ -35,7 +35,7 @@ Base URL: `https://api.<domain>` (local: `http://localhost:3001`). All bodies ar
 | GET    | `/me/activity` | —                                                        | `{ from, today, days: [{ date, xp }] }` — XP per IST day from `from` (Monday four weeks ago) to `today`; days without XP are left out (ADR-033)                                                                                                                         |
 | PATCH  | `/me`          | `{ username?, avatarUrl?, dailyGoal?, lessonLanguage? }` | updated profile; `dailyGoal` must be 10, 20 or 30 and `lessonLanguage` `en` or `hinglish` (400 otherwise)                                                                                                                                                               |
 
-- **Lesson language (ADR-042):** `GET /lessons/:id`, the cheat sheet, the bug hunt and practice answer in the caller's `lessonLanguage`: card titles and bodies, bug fixes, the quick check's question, explanation and word options, and the exercise prompt. Code, outputs and answers are the same in both. A lesson without Hinglish yet comes back in English. The response shapes don't change, and the stored Hinglish is never sent as such.
+- **Lesson language (ADR-042):** `GET /lessons/:id`, the cheat sheet, the bug hunt and practice answer in the caller's `lessonLanguage`: card titles and bodies, bug fixes, the quick check's question, explanation and word options, the exercise prompt, and web and git checklist labels (also in `POST /submissions` results). Code, outputs and answers are the same in both. A lesson without Hinglish yet comes back in English. The response shapes don't change, and the stored Hinglish is never sent as such.
 
 ### Lessons — S2
 

@@ -50,17 +50,17 @@ Conventions: `uuid` primary keys (`gen_random_uuid()`), `timestamptz` in UTC, sn
 
 ### exercises — S2
 
-| Column       | Type              | Notes                                                                                                                                  |
-| ------------ | ----------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| id           | uuid PK           |                                                                                                                                        |
-| lesson_id    | uuid FK → lessons | one exercise per lesson in v1                                                                                                          |
-| prompt       | text              | Markdown                                                                                                                               |
-| prompt_hi    | text              | nullable; the prompt in Hinglish (ADR-042, migration 0016). `lessons.learn` cards and check carry their own `hi`                       |
-| starter_code | text              |                                                                                                                                        |
-| sample_tests | jsonb             | `[{ input, expectedOutput }]` — shown to learner                                                                                       |
-| hidden_tests | jsonb             | `[{ input, expectedOutput }]` — **never returned by the API**                                                                          |
-| checks       | jsonb, nullable   | web exercises only (ADR-024): `[{ type, label, selector, … }]`; tests are `[]` then. Only labels are returned                          |
-| git_scenario | jsonb, nullable   | git exercises only (ADR-026): `{ setup: [command], checks: [{ type, label, … }] }`. The setup is never returned; only check labels are |
+| Column       | Type              | Notes                                                                                                                                                                |
+| ------------ | ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| id           | uuid PK           |                                                                                                                                                                      |
+| lesson_id    | uuid FK → lessons | one exercise per lesson in v1                                                                                                                                        |
+| prompt       | text              | Markdown                                                                                                                                                             |
+| prompt_hi    | text              | nullable; the prompt in Hinglish (ADR-042, migration 0016). `lessons.learn` cards and check carry their own `hi`; `checks` and `git_scenario.checks` carry `labelHi` |
+| starter_code | text              |                                                                                                                                                                      |
+| sample_tests | jsonb             | `[{ input, expectedOutput }]` — shown to learner                                                                                                                     |
+| hidden_tests | jsonb             | `[{ input, expectedOutput }]` — **never returned by the API**                                                                                                        |
+| checks       | jsonb, nullable   | web exercises only (ADR-024): `[{ type, label, selector, … }]`; tests are `[]` then. Only labels are returned                                                        |
+| git_scenario | jsonb, nullable   | git exercises only (ADR-026): `{ setup: [command], checks: [{ type, label, … }] }`. The setup is never returned; only check labels are                               |
 
 ### user_progress — S2
 

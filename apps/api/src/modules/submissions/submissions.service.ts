@@ -20,6 +20,7 @@ import type { CreateSubmissionDto } from './dto/create-submission.dto.js';
 import { exerciseKind } from '../../common/exercise-kind.js';
 import { grade } from './grading.js';
 import { runTests } from './run-tests.js';
+import { localizeLabels } from '../../common/lesson-text.js';
 import { gradeGit } from '../git/git-checks.js';
 import { checkPage, gradeChecks } from './web-checks.js';
 
@@ -77,11 +78,23 @@ export class SubmissionsService {
     // git commands are replayed on a simulated repository (ADR-026); a
     // program runs in Piston against its tests.
     const kind = exerciseKind(exercise.language);
+    // Check labels come back in the results, so they are put in the
+    // learner's lesson language first (ADR-042).
+    const language = await this.lessons.lessonLanguage(user.id);
+    const scenario = exercise.gitScenario ?? { setup: [], checks: [] };
     const result =
       kind === 'web'
-        ? gradeChecks(checkPage(code, exercise.checks ?? []))
+        ? gradeChecks(
+            checkPage(code, localizeLabels(exercise.checks ?? [], language)),
+          )
         : kind === 'git'
-          ? gradeGit(exercise.gitScenario ?? { setup: [], checks: [] }, code)
+          ? gradeGit(
+              {
+                ...scenario,
+                checks: localizeLabels(scenario.checks, language),
+              },
+              code,
+            )
           : grade(
               await runTests(
                 this.piston,

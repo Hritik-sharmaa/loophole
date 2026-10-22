@@ -130,10 +130,10 @@ A lesson may carry Hinglish next to its English. It is all or nothing: every car
 }
 ```
 
-- A card's `hi` has `title` and `body`, plus `fix` on a bug card (and only there). The check's `hi` has `question` and `explanation`, and `options` only when the options are words ("An error" → "Error aayega"), one per English option in the same order; output options stay as they are. The exercise has `promptHi` next to `prompt`.
+- A card's `hi` has `title` and `body`, plus `fix` on a bug card (and only there). The check's `hi` has `question` and `explanation`, and `options` only when the options are words ("An error" → "Error aayega"), one per English option in the same order; output options stay as they are. The exercise has `promptHi` next to `prompt`, and every web or git check has `labelHi` next to its `label` (the checklist, which also comes back in graded results).
 - Never translate code, inputs, outputs or tests. Every `code` span must appear in the Hinglish exactly as in the English: `content-files.spec.ts` checks it, because prompts hold the exact output the grader compares.
 - Style: Roman script, friendly, "aap"; keep programming words in English (string, variable, loop, list, function, input, output) the way Indian teachers say them. "Spot the bug" is "Bug dhoondo"; "What does this print?" is "Yeh kya print karega?".
-- Done: `content/python` (40 lessons) and `content/javascript` (20). HTML & CSS and Git are next; when a course is done, add it to `HINGLISH_COURSES` (web) and to the "every lesson has Hinglish" test.
+- Done: `content/python` (40 lessons), `content/javascript` (20) and `content/html-css` (15). Git is next; when a course is done, add it to `HINGLISH_COURSES` (web) and to the "every lesson has Hinglish" test.
 
 ### Grading rule
 

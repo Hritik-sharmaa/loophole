@@ -7,16 +7,28 @@
       {
         "title": "Pages are made of tags",
         "body": "A web page is written in HTML. Tags in angle brackets wrap your content: `<h1>` starts a heading and `</h1>` ends it. Edit the example and watch the preview change.",
-        "code": "<h1>My first page</h1>"
+        "code": "<h1>My first page</h1>",
+        "hi": {
+          "title": "Pages tags se bante hain",
+          "body": "Web page HTML mein likha jaata hai. Angle brackets wale tags aapke content ko gherte hain: `<h1>` heading shuru karta hai aur `</h1>` use khatam karta hai. Example badlo aur preview badalta dekho."
+        }
       },
       {
         "title": "Bigger and smaller headings",
         "body": "There are six heading levels, from `<h1>` (biggest) to `<h6>` (smallest). Try changing the numbers.",
-        "code": "<h1>Big news</h1>\n<h2>Smaller news</h2>\n<h3>Even smaller</h3>"
+        "code": "<h1>Big news</h1>\n<h2>Smaller news</h2>\n<h3>Even smaller</h3>",
+        "hi": {
+          "title": "Badi aur chhoti headings",
+          "body": "Heading ke chhe levels hote hain, `<h1>` (sabse badi) se `<h6>` (sabse chhoti) tak. Numbers badal kar dekho."
+        }
       },
       {
         "title": "Close what you open",
-        "body": "Every opening tag like `<h1>` needs its closing tag `</h1>`, with a slash. Browsers try to fix mistakes, but don't rely on it."
+        "body": "Every opening tag like `<h1>` needs its closing tag `</h1>`, with a slash. Browsers try to fix mistakes, but don't rely on it.",
+        "hi": {
+          "title": "Jo kholo, use band karo",
+          "body": "Har opening tag jaise `<h1>` ko apna closing tag `</h1>` chahiye, slash ke saath. Browsers galtiyan theek karne ki koshish karte hain, par us par bharosa mat karo."
+        }
       },
       {
         "title": "Spot the bug",
@@ -25,6 +37,11 @@
         "bug": {
           "line": 2,
           "fix": "Line 2 opens `<h2>` a second time instead of closing it. The end tag needs a slash: `</h2>`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Doosri heading kabhi khatam nahi hoti, isliye uske baad sab kuch bada ho jaata hai. Tooti hui line par tap karo.",
+          "fix": "Line 2 `<h2>` ko band karne ki jagah dobara kholti hai. End tag ko slash chahiye: `</h2>`."
         }
       }
     ],
@@ -36,21 +53,28 @@
         "<heading>Hello</heading>"
       ],
       "answer": 0,
-      "explanation": "`<h1>` is a heading. `<head>` is a different part of a page, and `<heading>` is not an HTML tag."
+      "explanation": "`<h1>` is a heading. `<head>` is a different part of a page, and `<heading>` is not an HTML tag.",
+      "hi": {
+        "question": "Kaunsi line heading banati hai?",
+        "explanation": "`<h1>` heading hai. `<head>` page ka ek alag hissa hai, aur `<heading>` koi HTML tag hi nahi hai."
+      }
     }
   },
   "exercise": {
     "prompt": "Make a page with one main heading that says exactly `Hello, web!`",
+    "promptHi": "Ek page banao jismein ek main heading ho jo bilkul `Hello, web!` kahe.",
     "starterCode": "<!-- Write your heading below -->\n",
     "checks": [
       {
         "type": "element",
         "label": "There is an `<h1>` heading",
+        "labelHi": "Ek `<h1>` heading hai",
         "selector": "h1"
       },
       {
         "type": "element",
         "label": "The `<h1>` says `Hello, web!`",
+        "labelHi": "`<h1>` mein `Hello, web!` likha hai",
         "selector": "h1",
         "text": "Hello, web!"
       }

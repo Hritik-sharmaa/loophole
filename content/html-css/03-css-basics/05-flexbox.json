@@ -7,12 +7,20 @@
       {
         "title": "display: flex",
         "body": "Boxes normally stack on top of each other. Give the box that holds them `display: flex` and they line up in a row.",
-        "code": "<style>\n  .row { display: flex; }\n  .row div { background-color: pink; padding: 10px; }\n</style>\n<div class=\"row\">\n  <div>One</div>\n  <div>Two</div>\n  <div>Three</div>\n</div>"
+        "code": "<style>\n  .row { display: flex; }\n  .row div { background-color: pink; padding: 10px; }\n</style>\n<div class=\"row\">\n  <div>One</div>\n  <div>Two</div>\n  <div>Three</div>\n</div>",
+        "hi": {
+          "title": "display: flex",
+          "body": "Boxes normally ek ke upar ek stack hote hain. Jo box unhe rakhta hai use `display: flex` do, toh woh ek row mein lag jaate hain."
+        }
       },
       {
         "title": "gap",
         "body": "`gap` adds space between the boxes in a flex row.",
-        "code": "<style>\n  .row { display: flex; gap: 12px; }\n  .row div { background-color: pink; padding: 10px; }\n</style>\n<div class=\"row\">\n  <div>One</div>\n  <div>Two</div>\n  <div>Three</div>\n</div>"
+        "code": "<style>\n  .row { display: flex; gap: 12px; }\n  .row div { background-color: pink; padding: 10px; }\n</style>\n<div class=\"row\">\n  <div>One</div>\n  <div>Two</div>\n  <div>Three</div>\n</div>",
+        "hi": {
+          "title": "gap",
+          "body": "`gap` flex row ke boxes ke beech jagah jodta hai."
+        }
       },
       {
         "title": "Spot the bug",
@@ -21,6 +29,11 @@
         "bug": {
           "line": 2,
           "fix": "`display: flex` goes on the box that holds them, `.row`, not on each box inside it."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Boxes ko agal bagal hona chahiye, par woh abhi bhi stack hote hain. Bug par tap karo.",
+          "fix": "`display: flex` us box par jaata hai jo unhe rakhta hai, `.row` par, uske andar ke har box par nahi."
         }
       }
     ],
@@ -32,22 +45,34 @@
         "On the <style> tag"
       ],
       "answer": 0,
-      "explanation": "Flexbox is set on the parent. Its children then line up."
+      "explanation": "Flexbox is set on the parent. Its children then line up.",
+      "hi": {
+        "question": "Teen boxes ko ek row mein lagane ke liye `display: flex` kahan jaata hai?",
+        "options": [
+          "Us box par jo unhe rakhta hai",
+          "Teeno boxes mein se har ek par",
+          "<style> tag par"
+        ],
+        "explanation": "Flexbox parent par set hota hai. Phir uske children line mein lag jaate hain."
+      }
     }
   },
   "exercise": {
     "prompt": "Put the three `.item` boxes in a row: give `.row` `display: flex` and a `gap` of `16px`.",
+    "promptHi": "Teen `.item` boxes ko ek row mein lagao: `.row` ko `display: flex` aur `16px` ka `gap` do.",
     "starterCode": "<div class=\"row\">\n  <div class=\"item\">A</div>\n  <div class=\"item\">B</div>\n  <div class=\"item\">C</div>\n</div>\n",
     "checks": [
       {
         "type": "element",
         "label": "`.row` still holds three `.item` boxes",
+        "labelHi": "`.row` mein abhi bhi teen `.item` boxes hain",
         "selector": ".row > .item",
         "min": 3
       },
       {
         "type": "style",
         "label": "`.row` has `display: flex`",
+        "labelHi": "`.row` mein `display: flex` hai",
         "selector": ".row",
         "property": "display",
         "value": "flex"
@@ -55,6 +80,7 @@
       {
         "type": "style",
         "label": "`.row` has `gap: 16px`",
+        "labelHi": "`.row` mein `gap: 16px` hai",
         "selector": ".row",
         "property": "gap",
         "value": "16px"

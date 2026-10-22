@@ -417,6 +417,11 @@ function localLearn(
   };
 }
 
+// A web or git check's label in the learner's language (ADR-042).
+const labelOf = (check: { label: string }, language: LessonLanguage) =>
+  (language === 'hinglish' && (check as { labelHi?: string }).labelHi) ||
+  check.label;
+
 function lessonDetail(
   lesson: Lesson,
   language: LessonLanguage = 'en',
@@ -438,8 +443,8 @@ function lessonDetail(
       prompt: language === 'hinglish' && promptHi ? promptHi : exercise.prompt,
       starterCode: exercise.starterCode,
       sampleTests: exercise.sampleTests ?? [],
-      checks: (exercise.checks ?? exercise.gitScenario?.checks ?? []).map(
-        (c) => c.label,
+      checks: (exercise.checks ?? exercise.gitScenario?.checks ?? []).map((c) =>
+        labelOf(c, language),
       ),
     },
   };
@@ -484,7 +489,7 @@ function grade(
       lesson.exercise.checks ??
       lesson.exercise.gitScenario?.checks ??
       []
-    ).map((c) => c.label);
+    ).map((c) => labelOf(c, user.lessonLanguage));
     const passed = code.trim() !== lesson.exercise.starterCode.trim();
     results = labels.map((label) => ({
       kind: 'check' as const,

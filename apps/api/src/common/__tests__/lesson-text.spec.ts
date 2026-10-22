@@ -1,6 +1,7 @@
 import {
   localizeCard,
   localizeCheck,
+  localizeLabels,
   localizeLearn,
   localizePrompt,
   type StoredLearn,
@@ -100,5 +101,32 @@ describe('localizePrompt', () => {
     );
     expect(localizePrompt('Print it', 'Print karo', 'en')).toBe('Print it');
     expect(localizePrompt('Print it', null, 'hinglish')).toBe('Print it');
+  });
+});
+
+describe('localizeLabels', () => {
+  const checks = [
+    {
+      type: 'element' as const,
+      label: 'There is an `<h1>` heading',
+      labelHi: 'Ek `<h1>` heading hai',
+      selector: 'h1',
+    },
+    { type: 'element' as const, label: 'No Hinglish yet', selector: 'p' },
+  ];
+
+  it('swaps in the Hinglish label and keeps the rule', () => {
+    expect(localizeLabels(checks, 'hinglish')).toEqual([
+      { type: 'element', label: 'Ek `<h1>` heading hai', selector: 'h1' },
+      { type: 'element', label: 'No Hinglish yet', selector: 'p' },
+    ]);
+  });
+
+  it('English keeps the label and drops labelHi', () => {
+    expect(localizeLabels(checks, 'en')[0]).toEqual({
+      type: 'element',
+      label: 'There is an `<h1>` heading',
+      selector: 'h1',
+    });
   });
 });

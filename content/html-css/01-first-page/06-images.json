@@ -7,12 +7,20 @@
       {
         "title": "Images with <img>",
         "body": "`<img>` shows a picture. `src` is the address of the picture. It has no closing tag.",
-        "code": "<img src=\"https://picsum.photos/240/140\" alt=\"A random photo\">"
+        "code": "<img src=\"https://picsum.photos/240/140\" alt=\"A random photo\">",
+        "hi": {
+          "title": "<img> se images",
+          "body": "`<img>` ek picture dikhata hai. `src` picture ka address hai. Iska koi closing tag nahi hota."
+        }
       },
       {
         "title": "Always write alt text",
         "body": "`alt` describes the picture for people who can't see it, and shows when the picture fails to load.",
-        "code": "<img src=\"missing.png\" alt=\"A cat asleep on a laptop\">"
+        "code": "<img src=\"missing.png\" alt=\"A cat asleep on a laptop\">",
+        "hi": {
+          "title": "Hamesha alt text likho",
+          "body": "`alt` picture ko un logon ke liye describe karta hai jo use dekh nahi sakte, aur tab dikhta hai jab picture load nahi hoti."
+        }
       },
       {
         "title": "Spot the bug",
@@ -21,6 +29,11 @@
         "bug": {
           "line": 2,
           "fix": "Every image needs `alt` text for people who can't see it, like `<img src=\"cat.jpg\" alt=\"My cat asleep on a chair\">`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Picture dikhti hai, par page is lesson ka ek rule todta hai. Kaunsi line?",
+          "fix": "Har image ko `alt` text chahiye un logon ke liye jo dekh nahi sakte, jaise `<img src=\"cat.jpg\" alt=\"My cat asleep on a chair\">`."
         }
       }
     ],
@@ -32,22 +45,34 @@
         "Choosing a second picture"
       ],
       "answer": 0,
-      "explanation": "Screen readers read the `alt` text aloud, and browsers show it when the picture is missing."
+      "explanation": "Screen readers read the `alt` text aloud, and browsers show it when the picture is missing.",
+      "hi": {
+        "question": "`alt` kis liye hai?",
+        "options": [
+          "Jo log dekh nahi sakte unke liye picture describe karna",
+          "Picture ko bada karna",
+          "Ek doosri picture chunna"
+        ],
+        "explanation": "Screen readers `alt` text bol kar padhte hain, aur picture missing ho toh browsers use dikhate hain."
+      }
     }
   },
   "exercise": {
     "prompt": "Add an image with any `src`, and an `alt` that describes it.",
+    "promptHi": "Koi bhi `src` wali ek image jodo, aur ek `alt` jo use describe kare.",
     "starterCode": "<h1>My pet</h1>\n<!-- add an img with src and alt -->\n",
     "checks": [
       {
         "type": "attribute",
         "label": "An `<img>` has a `src`",
+        "labelHi": "Ek `<img>` mein `src` hai",
         "selector": "img",
         "name": "src"
       },
       {
         "type": "attribute",
         "label": "The `<img>` has `alt` text",
+        "labelHi": "`<img>` mein `alt` text hai",
         "selector": "img",
         "name": "alt"
       }

@@ -7,11 +7,19 @@
       {
         "title": "One h1, then h2s",
         "body": "A page usually has one `<h1>` for its title, then `<h2>` headings for its sections, like chapters in a book.",
-        "code": "<h1>Cooking</h1>\n<h2>Breakfast</h2>\n<p>Eggs and toast.</p>\n<h2>Dinner</h2>\n<p>Pasta.</p>"
+        "code": "<h1>Cooking</h1>\n<h2>Breakfast</h2>\n<p>Eggs and toast.</p>\n<h2>Dinner</h2>\n<p>Pasta.</p>",
+        "hi": {
+          "title": "Ek h1, phir h2s",
+          "body": "Page mein aksar title ke liye ek `<h1>` hota hai, phir sections ke liye `<h2>` headings, jaise kitaab ke chapters."
+        }
       },
       {
         "title": "Pick by meaning, not size",
-        "body": "Screen readers and search engines use your headings to understand the page. Choose the level for what the heading is, and change its size later with CSS."
+        "body": "Screen readers and search engines use your headings to understand the page. Choose the level for what the heading is, and change its size later with CSS.",
+        "hi": {
+          "title": "Size nahi, matlab dekh kar chuno",
+          "body": "Screen readers aur search engines page samajhne ke liye aapki headings use karte hain. Level wahi chuno jo heading sach mein hai, aur size baad mein CSS se badlo."
+        }
       },
       {
         "title": "Spot the bug",
@@ -20,6 +28,11 @@
         "bug": {
           "line": 3,
           "fix": "A page has just one `<h1>`. Day two is a section like day one, so it is an `<h2>`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Yeh page heading ka rule todta hai. Jo line theek karni hai us par tap karo.",
+          "fix": "Page mein sirf ek `<h1>` hota hai. Day two bhi day one jaisa ek section hai, isliye woh `<h2>` hai."
         }
       }
     ],
@@ -27,28 +40,36 @@
       "question": "Which heading should a page's main title use?",
       "options": ["<h1>", "<h2>", "<h6>"],
       "answer": 0,
-      "explanation": "The main title is the most important heading on the page, so it gets `<h1>`."
+      "explanation": "The main title is the most important heading on the page, so it gets `<h1>`.",
+      "hi": {
+        "question": "Page ke main title ke liye kaunsi heading honi chahiye?",
+        "explanation": "Main title page ki sabse important heading hai, isliye use `<h1>` milta hai."
+      }
     }
   },
   "exercise": {
     "prompt": "Make a page titled `My hobbies` with an `<h1>`, then two sections. Each section has an `<h2>` and a paragraph.",
+    "promptHi": "`My hobbies` title wala page banao, ek `<h1>` ke saath, phir do sections. Har section mein ek `<h2>` aur ek paragraph ho.",
     "starterCode": "<!-- an h1, then two sections: an h2 and a p each -->\n",
     "checks": [
       {
         "type": "element",
         "label": "The `<h1>` says `My hobbies`",
+        "labelHi": "`<h1>` mein `My hobbies` likha hai",
         "selector": "h1",
         "text": "My hobbies"
       },
       {
         "type": "element",
         "label": "There are at least two `<h2>` headings",
+        "labelHi": "Kam se kam do `<h2>` headings hain",
         "selector": "h2",
         "min": 2
       },
       {
         "type": "element",
         "label": "There are at least two `<p>` paragraphs",
+        "labelHi": "Kam se kam do `<p>` paragraphs hain",
         "selector": "p",
         "min": 2
       }

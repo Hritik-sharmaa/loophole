@@ -7,12 +7,20 @@
       {
         "title": "Bulleted lists",
         "body": "`<ul>` makes a bulleted list. Each item goes in its own `<li>`.",
-        "code": "<ul>\n  <li>Milk</li>\n  <li>Eggs</li>\n</ul>"
+        "code": "<ul>\n  <li>Milk</li>\n  <li>Eggs</li>\n</ul>",
+        "hi": {
+          "title": "Bullet wali lists",
+          "body": "`<ul>` bullet wali list banata hai. Har item apne `<li>` mein jaata hai."
+        }
       },
       {
         "title": "Numbered lists",
         "body": "Swap `<ul>` for `<ol>` and the items get numbers instead of bullets.",
-        "code": "<ol>\n  <li>Wake up</li>\n  <li>Code</li>\n  <li>Sleep</li>\n</ol>"
+        "code": "<ol>\n  <li>Wake up</li>\n  <li>Code</li>\n  <li>Sleep</li>\n</ol>",
+        "hi": {
+          "title": "Number wali lists",
+          "body": "`<ul>` ki jagah `<ol>` likho, toh items ko bullets ki jagah numbers milte hain."
+        }
       },
       {
         "title": "Spot the bug",
@@ -21,6 +29,11 @@
         "bug": {
           "line": 3,
           "fix": "Everything inside `<ul>` should be a list item. Line 3 should be `<li>Bread</li>`."
+        },
+        "hi": {
+          "title": "Bug dhoondo",
+          "body": "Ek item bullet point ki tarah nahi dikhta. Kaunsi line?",
+          "fix": "`<ul>` ke andar sab kuch list item hona chahiye. Line 3 `<li>Bread</li>` honi chahiye."
         }
       }
     ],
@@ -28,22 +41,29 @@
       "question": "Which tag holds one item of a list?",
       "options": ["<li>", "<ul>", "<item>"],
       "answer": 0,
-      "explanation": "`<li>` is one list item. `<ul>` holds the whole list, and `<item>` is not an HTML tag."
+      "explanation": "`<li>` is one list item. `<ul>` holds the whole list, and `<item>` is not an HTML tag.",
+      "hi": {
+        "question": "Kaunsa tag list ka ek item rakhta hai?",
+        "explanation": "`<li>` ek list item hai. `<ul>` poori list rakhta hai, aur `<item>` koi HTML tag nahi hai."
+      }
     }
   },
   "exercise": {
     "prompt": "Make a heading `Shopping list` and a bulleted list with at least three items.",
+    "promptHi": "`Shopping list` heading banao aur kam se kam teen items wali bullet list.",
     "starterCode": "<!-- a heading, then a ul with three li items -->\n",
     "checks": [
       {
         "type": "element",
         "label": "The `<h1>` says `Shopping list`",
+        "labelHi": "`<h1>` mein `Shopping list` likha hai",
         "selector": "h1",
         "text": "Shopping list"
       },
       {
         "type": "element",
         "label": "A `<ul>` holds at least three `<li>` items",
+        "labelHi": "Ek `<ul>` mein kam se kam teen `<li>` items hain",
         "selector": "ul > li",
         "min": 3
       }

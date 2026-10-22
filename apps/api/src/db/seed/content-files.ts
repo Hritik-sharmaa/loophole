@@ -1,7 +1,6 @@
 import type {
   ExerciseKind,
   GitCheck,
-  GitScenario,
   TestCase,
   WebCheck,
 } from '@loophole/shared';
@@ -12,9 +11,12 @@ import { exerciseKind } from '../../common/exercise-kind.js';
 import type {
   CardHinglish,
   CheckHinglish,
+  LabelHinglish,
   StoredCard,
   StoredCheck,
+  StoredGitScenario,
   StoredLearn,
+  StoredWebCheck,
 } from '../../common/lesson-text.js';
 import { newWorld, runCommands } from '../../modules/git/git-sim.js';
 
@@ -35,8 +37,8 @@ export type LessonContent = {
     starterCode: string;
     sampleTests: TestCase[];
     hiddenTests: TestCase[];
-    checks: WebCheck[] | null;
-    gitScenario: GitScenario | null;
+    checks: StoredWebCheck[] | null;
+    gitScenario: StoredGitScenario | null;
   };
 };
 
@@ -236,7 +238,12 @@ export function parseLesson(
   }
 
   const learn = o.learn === undefined ? null : parseLearn(o.learn, file, kind);
-  assertHinglishComplete(learn, promptHi, file);
+  assertHinglishComplete(
+    learn,
+    promptHi,
+    exercise.checks ?? exercise.gitScenario?.checks ?? [],
+    file,
+  );
   return {
     slug: asSlug(o.slug, file, 'slug'),
     title: asText(o.title, file, 'title'),
@@ -251,6 +258,7 @@ export function parseLesson(
 function assertHinglishComplete(
   learn: StoredLearn | null,
   promptHi: string | null,
+  checks: LabelHinglish[],
   file: string,
 ): void {
   const parts = [
@@ -258,13 +266,26 @@ function assertHinglishComplete(
     ...(learn
       ? [...learn.cards, learn.check].map((x) => x.hi !== undefined)
       : []),
+    ...checks.map((c) => c.labelHi !== undefined),
   ];
   if (parts.some(Boolean) && !parts.every(Boolean)) {
     throw new ContentError(
       file,
-      'Hinglish is all or nothing: every card, the check and exercise.promptHi',
+      'Hinglish is all or nothing: every card, the check, exercise.promptHi and every check labelHi',
     );
   }
+}
+
+// A web or git check's label in Hinglish (ADR-042), when given.
+function withLabelHi<T extends object>(
+  check: T,
+  json: Record<string, unknown>,
+  file: string,
+  at: string,
+): T & LabelHinglish {
+  return json.labelHi === undefined
+    ? check
+    : { ...check, labelHi: asText(json.labelHi, file, `${at}.labelHi`) };
 }
 
 // ADR-026. The setup is replayed here, so a broken one fails CI: any
@@ -310,7 +331,10 @@ const GIT_CHECK_FIELDS: Record<GitCheck['type'], string[]> = {
 
 // ADR-026. Checks the type and its required fields; optional fields keep
 // the types the shared GitCheck type gives them.
-function asGitChecks(value: unknown, file: string): GitCheck[] {
+function asGitChecks(
+  value: unknown,
+  file: string,
+): StoredGitScenario['checks'] {
   const field = 'exercise.checks';
   if (!Array.isArray(value) || value.length === 0) {
     throw new ContentError(file, `${field} needs at least 1 check`);
@@ -339,12 +363,12 @@ function asGitChecks(value: unknown, file: string): GitCheck[] {
       throw new ContentError(file, `${at}.key must be user.name or user.email`);
     }
     if (o.type === 'commits') asIntIn(o.min, 1, 100, file, `${at}.min`);
-    return o as GitCheck;
+    return withLabelHi(o as GitCheck, o, file, at);
   });
 }
 
 // ADR-024. Selectors are parsed here so a typo fails CI, not a learner.
-function asWebChecks(value: unknown, file: string): WebCheck[] {
+function asWebChecks(value: unknown, file: string): StoredWebCheck[] {
   const field = 'exercise.checks';
   if (!Array.isArray(value) || value.length < MIN_WEB_CHECKS) {
     throw new ContentError(
@@ -352,7 +376,7 @@ function asWebChecks(value: unknown, file: string): WebCheck[] {
       `${field} needs at least ${MIN_WEB_CHECKS} check(s)`,
     );
   }
-  return value.map((json, i): WebCheck => {
+  const checks = value.map((json, i): WebCheck => {
     const at = `${field}[${i}]`;
     const o = asObject(json, file, at);
     const label = asText(o.label, file, `${at}.label`);
@@ -404,6 +428,14 @@ function asWebChecks(value: unknown, file: string): WebCheck[] {
         );
     }
   });
+  return checks.map((check, i) =>
+    withLabelHi(
+      check,
+      value[i] as Record<string, unknown>,
+      file,
+      `${field}[${i}]`,
+    ),
+  );
 }
 
 export function parseLearn(
