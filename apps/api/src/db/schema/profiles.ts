@@ -20,6 +20,9 @@ export const profiles = pgTable(
       .references(() => authUsers.id, { onDelete: 'cascade' }),
     username: text('username').notNull().unique(),
     avatarUrl: text('avatar_url'),
+    // A preset avatar id (ADR-044); null until picked, then a default
+    // from avatarOf() is shown.
+    avatar: text('avatar'),
     // XP a day the learner aims for, picked in the welcome (ADR-033);
     // null until then.
     dailyGoal: smallint('daily_goal'),

@@ -1,0 +1,62 @@
+{
+  "slug": "project-event-page",
+  "title": "Project: Event page",
+  "position": 5,
+  "project": true,
+  "exercise": {
+    "prompt": "Make a full page for a coding meetup.\n1. A `<head>` with a `<title>`, and a `<body>` for everything else.\n2. A `<header>` with an `<h1>` and a `<nav>` holding at least two links.\n3. A `<main>` with a paragraph about the event.\n4. A sign-up `<form>` with a `<label>`, an `<input>` with `type=\"email\"` and a button with `type=\"submit\"`.\n5. A `<footer>` at the end.",
+    "promptHi": "Ek coding meetup ke liye poora page banao.\n1. Ek `<head>` jismein `<title>` ho, aur baaki sab ke liye ek `<body>`.\n2. Ek `<header>` jismein `<h1>` aur kam se kam do links wala `<nav>` ho.\n3. Ek `<main>` jismein event ke baare mein paragraph ho.\n4. Ek sign-up `<form>` jismein `<label>`, `type=\"email\"` wala `<input>` aur `type=\"submit\"` wala button ho.\n5. Aakhir mein ek `<footer>`.",
+    "starterCode": "<!DOCTYPE html>\n<html>\n  <!-- Add the head and body here -->\n</html>\n",
+    "checks": [
+      {
+        "type": "element",
+        "label": "The `<head>` has a `<title>`",
+        "labelHi": "`<head>` mein ek `<title>` hai",
+        "selector": "head > title"
+      },
+      {
+        "type": "element",
+        "label": "A `<header>` holds an `<h1>`",
+        "labelHi": "Ek `<header>` mein ek `<h1>` hai",
+        "selector": "header h1"
+      },
+      {
+        "type": "element",
+        "label": "The `<nav>` has at least two links",
+        "labelHi": "`<nav>` mein kam se kam do links hain",
+        "selector": "nav a",
+        "min": 2
+      },
+      {
+        "type": "element",
+        "label": "A `<main>` holds a `<p>`",
+        "labelHi": "Ek `<main>` mein ek `<p>` hai",
+        "selector": "main p"
+      },
+      {
+        "type": "element",
+        "label": "The form has a `<label>`",
+        "labelHi": "Form mein ek `<label>` hai",
+        "selector": "form label"
+      },
+      {
+        "type": "element",
+        "label": "The form has an `<input>` with `type=\"email\"`",
+        "labelHi": "Form mein `type=\"email\"` wala `<input>` hai",
+        "selector": "form input[type=\"email\"]"
+      },
+      {
+        "type": "element",
+        "label": "The form has a button with `type=\"submit\"`",
+        "labelHi": "Form mein `type=\"submit\"` wala button hai",
+        "selector": "form button[type=\"submit\"]"
+      },
+      {
+        "type": "element",
+        "label": "There is a `<footer>`",
+        "labelHi": "Ek `<footer>` hai",
+        "selector": "footer"
+      }
+    ]
+  }
+}

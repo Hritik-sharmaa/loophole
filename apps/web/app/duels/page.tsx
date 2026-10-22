@@ -5,6 +5,7 @@ import { Flag, Swords } from 'lucide-react';
 import Link from 'next/link';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import { Avatar } from '@/components/avatar';
 import { AppHeader } from '@/components/app-header';
 import { BotOpponents } from '@/components/bot-opponents';
 import { DuelHistory } from '@/components/duel-history';
@@ -215,7 +216,8 @@ function Room({
           opponent progress. The opponent's code is never sent (FR-20). */}
       <header className="flex flex-wrap items-center justify-between gap-4 rounded-card border-2 border-ink bg-ink px-5 py-4 text-paper shadow-sticker">
         <div className="flex min-w-48 flex-1 flex-col gap-2" aria-live="polite">
-          <p className="text-sm font-bold">
+          <p className="flex items-center gap-2 text-sm font-bold">
+            {opponent && <Avatar id={opponent.avatar} className="size-8" />}
             vs {opponent?.username ?? 'opponent'}
             <span className="font-medium text-border-muted">
               {' '}

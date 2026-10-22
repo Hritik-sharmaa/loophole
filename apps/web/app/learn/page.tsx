@@ -5,6 +5,7 @@ import { ArrowRight, Lock } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { CareerPaths } from '@/components/career-paths';
 import { AppHeader } from '@/components/app-header';
 import { CourseBanner } from '@/components/course-banner';
 import { DailyBugCard } from '@/components/daily-bug-card';
@@ -84,6 +85,9 @@ export default function LearnPage() {
                 ))}
               </ul>
             </section>
+
+            {/* Job-focused paths through the courses (ADR-045). */}
+            <CareerPaths courses={list} />
           </>
         )}
       </main>

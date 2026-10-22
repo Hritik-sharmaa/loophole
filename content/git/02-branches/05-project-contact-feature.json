@@ -1,0 +1,46 @@
+{
+  "slug": "project-contact-feature",
+  "title": "Project: Contact page feature",
+  "position": 5,
+  "project": true,
+  "exercise": {
+    "prompt": "Add a contact page the way teams do: on its own branch.\n1. Create a branch `contact` and switch to it.\n2. Create `contact.html` with `touch contact.html` and commit it with the message `Add contact page`.\n3. Switch back to `main` and merge `contact` into it.\n4. Delete the `contact` branch.",
+    "promptHi": "Ek contact page waise jodo jaise teams karti hain: uski apni branch par.\n1. `contact` naam ki branch banao aur us par switch karo.\n2. `touch contact.html` se `contact.html` banao aur use message `Add contact page` ke saath commit karo.\n3. Wapas `main` par switch karo aur `contact` ko usme merge karo.\n4. `contact` branch delete karo.",
+    "starterCode": "",
+    "setup": [
+      "git init",
+      "echo '<h1>My site</h1>' > index.html",
+      "git add .",
+      "git commit -m \"Add home page\""
+    ],
+    "checks": [
+      {
+        "type": "current-branch",
+        "label": "You are on `main`",
+        "labelHi": "Aap `main` par ho",
+        "name": "main"
+      },
+      {
+        "type": "committed-file",
+        "label": "`main` has `contact.html`",
+        "labelHi": "`main` mein `contact.html` hai",
+        "path": "contact.html",
+        "branch": "main"
+      },
+      {
+        "type": "commit-message",
+        "label": "A commit on `main` says `Add contact page`",
+        "labelHi": "`main` par ek commit `Add contact page` kehta hai",
+        "text": "Add contact page",
+        "branch": "main"
+      },
+      {
+        "type": "branch",
+        "label": "The `contact` branch is gone",
+        "labelHi": "`contact` branch chali gayi",
+        "name": "contact",
+        "exists": false
+      }
+    ]
+  }
+}

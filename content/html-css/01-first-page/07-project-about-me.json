@@ -1,0 +1,53 @@
+{
+  "slug": "project-about-me",
+  "title": "Project: All about me",
+  "position": 7,
+  "project": true,
+  "exercise": {
+    "prompt": "Build a page about yourself, using everything from this unit.\n1. A main `<h1>` heading with your name.\n2. A paragraph `<p>` that introduces you.\n3. A bulleted list `<ul>` with at least three of your hobbies.\n4. A link `<a>` with an `href` to a site you like.\n5. An image `<img>` with a `src` and `alt` text that describes it.",
+    "promptHi": "Apne baare mein ek page banao, is unit ki har cheez use karke.\n1. Apne naam ke saath ek main `<h1>` heading.\n2. Ek paragraph `<p>` jo aapka introduction de.\n3. Ek bullet list `<ul>` jismein aapki kam se kam teen hobbies hon.\n4. Ek link `<a>` jiska `href` aapki pasand ki kisi site par jaaye.\n5. Ek image `<img>` jismein `src` ho aur use describe karta `alt` text.",
+    "starterCode": "<!-- Build your page about yourself below -->\n",
+    "checks": [
+      {
+        "type": "element",
+        "label": "There is an `<h1>` heading",
+        "labelHi": "Ek `<h1>` heading hai",
+        "selector": "h1"
+      },
+      {
+        "type": "element",
+        "label": "There is a `<p>` paragraph",
+        "labelHi": "Ek `<p>` paragraph hai",
+        "selector": "p"
+      },
+      {
+        "type": "element",
+        "label": "A `<ul>` holds at least three `<li>` items",
+        "labelHi": "Ek `<ul>` mein kam se kam teen `<li>` items hain",
+        "selector": "ul > li",
+        "min": 3
+      },
+      {
+        "type": "attribute",
+        "label": "A link has an `href`",
+        "labelHi": "Ek link mein `href` hai",
+        "selector": "a",
+        "name": "href"
+      },
+      {
+        "type": "attribute",
+        "label": "An `<img>` has a `src`",
+        "labelHi": "Ek `<img>` mein `src` hai",
+        "selector": "img",
+        "name": "src"
+      },
+      {
+        "type": "attribute",
+        "label": "The `<img>` has `alt` text",
+        "labelHi": "`<img>` mein `alt` text hai",
+        "selector": "img",
+        "name": "alt"
+      }
+    ]
+  }
+}

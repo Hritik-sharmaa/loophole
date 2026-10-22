@@ -11,6 +11,7 @@
 
 import type {
   ActivityResponse,
+  AvatarId,
   BotDuel,
   BotDuelSubmission,
   BotOpponent,
@@ -174,6 +175,7 @@ type UserState = {
   username: string;
   dailyGoal: DailyGoal | null;
   lessonLanguage: LessonLanguage;
+  avatar: AvatarId | null;
   rating: number;
   xp: { at: Date; amount: number }[];
   completed: Map<string, Date>;
@@ -203,6 +205,7 @@ function userFor(email: string): UserState {
       username: base.slice(0, 20).padEnd(3, '_'),
       dailyGoal: null,
       lessonLanguage: 'en',
+      avatar: null,
       rating: 1000,
       xp: [],
       completed: new Map(),
@@ -306,6 +309,28 @@ function states(user: UserState, course: Course): Map<string, LessonState> {
   return result;
 }
 
+// Like the API's avatarOf (ADR-044): the pick, or a default per id.
+const AVATAR_IDS: AvatarId[] = [
+  'a1',
+  'a2',
+  'a3',
+  'a4',
+  'a5',
+  'a6',
+  'a7',
+  'a8',
+  'a9',
+  'a10',
+  'a11',
+  'a12',
+];
+function avatarOf(id: string, chosen: AvatarId | null = null): AvatarId {
+  if (chosen) return chosen;
+  let hash = 0;
+  for (const ch of id) hash = (hash * 31 + ch.charCodeAt(0)) >>> 0;
+  return AVATAR_IDS[hash % AVATAR_IDS.length];
+}
+
 function me(user: UserState): MeResponse {
   const days = new Set(user.xp.map((e) => istDate(e.at)));
   let current = 0;
@@ -325,6 +350,7 @@ function me(user: UserState): MeResponse {
     lessonsCompleted: user.completed.size,
     dailyGoal: user.dailyGoal,
     lessonLanguage: user.lessonLanguage,
+    avatar: avatarOf(user.id, user.avatar),
     todayXp: xpSince(user, istDate(new Date())),
   };
 }
@@ -551,7 +577,12 @@ function grade(
 function weekly(user: UserState): WeeklyLeaderboard {
   const start = weekStart(new Date());
   const ranked = [...users.values()]
-    .map((u) => ({ userId: u.id, username: u.username, xp: xpSince(u, start) }))
+    .map((u) => ({
+      userId: u.id,
+      username: u.username,
+      avatar: avatarOf(u.id, u.avatar),
+      xp: xpSince(u, start),
+    }))
     .filter((e) => e.xp > 0)
     .sort((a, b) => b.xp - a.xp || a.username.localeCompare(b.username));
   const entries = ranked.map((e) => ({
@@ -591,10 +622,19 @@ function league(user: UserState): LeagueResponse {
     { username: 'rohan', xp: 25 },
     { username: 'diya', xp: 15 },
     { username: 'kabir', xp: 5 },
-  ].map((r, i) => ({ ...r, userId: `rival-${i}` }));
+  ].map((r, i) => ({
+    ...r,
+    userId: `rival-${i}`,
+    avatar: avatarOf(`rival-${i}`),
+  }));
   const ranked = [
     ...rivals,
-    { userId: user.id, username: user.username, xp: mine },
+    {
+      userId: user.id,
+      username: user.username,
+      avatar: avatarOf(user.id, user.avatar),
+      xp: mine,
+    },
   ].sort((a, b) => b.xp - a.xp);
   const up = Math.ceil(ranked.length / 4);
   return {
@@ -617,6 +657,7 @@ function ratings(user: UserState): RatingLeaderboard {
     rank: i + 1,
     userId: u.id,
     username: u.username,
+    avatar: avatarOf(u.id, u.avatar),
     elo: u.rating,
   }));
   return {
@@ -757,6 +798,12 @@ const apiRoutes: [
           );
         }
         u.lessonLanguage = body.lessonLanguage;
+      }
+      if (body.avatar !== undefined) {
+        if (!AVATAR_IDS.includes(body.avatar as AvatarId)) {
+          return fail(400, 'VALIDATION_FAILED', 'avatar must be a preset');
+        }
+        u.avatar = body.avatar as AvatarId;
       }
       if (typeof body.username === 'string') u.username = body.username;
       return ok(me(u));
@@ -1244,7 +1291,11 @@ io.of('/duels')
         duelId = randomUUID();
         socket.emit('duel:matched', {
           duelId,
-          opponent: { username: OPPONENT.username, elo: 1000 },
+          opponent: {
+            username: OPPONENT.username,
+            avatar: avatarOf(OPPONENT.id),
+            elo: 1000,
+          },
         });
         const start: DuelStart = {
           duelId,

@@ -14,6 +14,22 @@ export type DailyGoal = 10 | 20 | 30;
 // fixes and exercise prompts. Code and outputs are the same in both.
 export type LessonLanguage = 'en' | 'hinglish';
 
+// A learner's avatar (ADR-044): one of the preset illustrations the web
+// app draws. Everyone has one: a default until they pick.
+export type AvatarId =
+  | 'a1'
+  | 'a2'
+  | 'a3'
+  | 'a4'
+  | 'a5'
+  | 'a6'
+  | 'a7'
+  | 'a8'
+  | 'a9'
+  | 'a10'
+  | 'a11'
+  | 'a12';
+
 export type MeResponse = {
   id: string;
   username: string;
@@ -27,6 +43,7 @@ export type MeResponse = {
   // XP earned since 00:00 IST today.
   todayXp: number;
   lessonLanguage: LessonLanguage;
+  avatar: AvatarId;
 };
 
 // PATCH /me body
@@ -35,6 +52,7 @@ export type UpdateMeRequest = {
   avatarUrl?: string;
   dailyGoal?: DailyGoal;
   lessonLanguage?: LessonLanguage;
+  avatar?: AvatarId;
 };
 
 // GET /me/activity (ADR-033): XP per IST day for the streak calendar, the
@@ -308,7 +326,13 @@ export type SubmissionResult = {
 // Equal XP shares a rank (1, 1, 3). `me.rank` is null with no XP this week.
 export type WeeklyLeaderboard = {
   weekStart: string;
-  entries: { rank: number; userId: string; username: string; xp: number }[];
+  entries: {
+    rank: number;
+    userId: string;
+    username: string;
+    avatar: AvatarId;
+    xp: number;
+  }[];
   me: { rank: number | null; xp: number };
 };
 
@@ -330,6 +354,7 @@ export type LeagueResponse = {
     rank: number;
     userId: string;
     username: string;
+    avatar: AvatarId;
     xp: number;
     zone: LeagueZone;
   }[];
@@ -345,7 +370,13 @@ export type LeagueResponse = {
 // GET /leaderboard/rating. Duel Elo, highest first (FR-24). Only players
 // who have finished a duel are listed; `me.rank` is null until then.
 export type RatingLeaderboard = {
-  entries: { rank: number; userId: string; username: string; elo: number }[];
+  entries: {
+    rank: number;
+    userId: string;
+    username: string;
+    avatar: AvatarId;
+    elo: number;
+  }[];
   me: { rank: number | null; elo: number };
 };
 
@@ -399,7 +430,7 @@ export type DuelForfeitRequest = { duelId: string };
 export type QueueJoined = { position: number };
 export type DuelMatched = {
   duelId: string;
-  opponent: { username: string; elo: number };
+  opponent: { username: string; avatar: AvatarId; elo: number };
 };
 // Sample tests only; hidden tests never leave the server.
 export type DuelStart = {

@@ -2,6 +2,7 @@ import type { LeagueResponse } from '@loophole/shared';
 import { ArrowDown, ArrowUp, Zap } from 'lucide-react';
 import Link from 'next/link';
 import { Fragment } from 'react';
+import { Avatar } from '@/components/avatar';
 import { Guide } from '@/components/guide';
 import { primaryButton } from '@/components/ui/buttons';
 import { stickerCard, stickerOutline } from '@/components/ui/card';
@@ -147,6 +148,7 @@ export function LeagueBoard({
                     >
                       {m.rank}
                     </span>
+                    <Avatar id={m.avatar} />
                     <span className="flex-1 truncate font-bold">
                       {m.username}
                       {mine && (

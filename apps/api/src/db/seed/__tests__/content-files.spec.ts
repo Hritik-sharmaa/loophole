@@ -62,9 +62,9 @@ describe('the real content/ folder', () => {
     const git = course('git-github');
     expect(git.language).toBe('git');
     expect(git.units.map((u) => [u.slug, u.lessons.length])).toEqual([
-      ['first-repo', 6],
-      ['branches', 4],
-      ['github', 5],
+      ['first-repo', 7],
+      ['branches', 5],
+      ['github', 6],
     ]);
     for (const lesson of git.units.flatMap((u) => u.lessons)) {
       const scenario = lesson.exercise.gitScenario;
@@ -97,9 +97,9 @@ describe('the real content/ folder', () => {
     const html = course('html-css');
     expect(html.language).toBe('html');
     expect(html.units.map((u) => [u.slug, u.lessons.length])).toEqual([
-      ['first-page', 6],
-      ['page-structure', 4],
-      ['css-basics', 5],
+      ['first-page', 7],
+      ['page-structure', 5],
+      ['css-basics', 6],
     ]);
     for (const lesson of html.units.flatMap((u) => u.lessons)) {
       expect(lesson.exercise.checks?.length, lesson.slug).toBeGreaterThan(0);
@@ -694,8 +694,8 @@ describe('Hinglish (ADR-042)', () => {
   it.each([
     ['python', 47],
     ['javascript', 25],
-    ['html-css', 15],
-    ['git-github', 15],
+    ['html-css', 18],
+    ['git-github', 18],
   ])('every %s lesson has Hinglish', (slug, total) => {
     const course = loadAllContent(REAL_CONTENT).find((c) => c.slug === slug)!;
     const lessons = course.units.flatMap((u) => u.lessons);
@@ -749,7 +749,7 @@ describe('checkpoint projects (ADR-043)', () => {
     }
   });
 
-  it.each(['python', 'javascript'])(
+  it.each(['python', 'javascript', 'html-css', 'git-github'])(
     'every %s unit ends with one project',
     (slug) => {
       const course = loadAllContent(REAL_CONTENT).find((c) => c.slug === slug)!;

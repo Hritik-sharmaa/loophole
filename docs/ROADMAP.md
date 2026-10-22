@@ -149,6 +149,6 @@ Ideas from comparing Duolingo, Coddy and Codédex, kept here so none get lost. B
 
 **5. Later**
 
-- [ ] Small projects between units, like Codédex's checkpoint projects (L). Built for Python and JavaScript (ADR-043); HTML & CSS and Git next
-- [ ] Learner avatars (M)
-- [ ] Job-focused paths, e.g. "Frontend: HTML → CSS → JS → Git" (M)
+- [x] Small projects between units, like Codédex's checkpoint projects (L, ADR-043): one per unit, 18 in all
+- [x] Learner avatars (M, ADR-044)
+- [x] Job-focused paths, e.g. "Frontend: HTML → CSS → JS → Git" (M, ADR-045)

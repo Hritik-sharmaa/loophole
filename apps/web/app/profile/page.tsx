@@ -1,14 +1,19 @@
 'use client';
 
-import type { DailyGoal, LessonLanguage, MeResponse } from '@loophole/shared';
+import type {
+  AvatarId,
+  DailyGoal,
+  LessonLanguage,
+  MeResponse,
+} from '@loophole/shared';
 import { useQueryClient } from '@tanstack/react-query';
 import { Award } from 'lucide-react';
 import Link from 'next/link';
 import { useState, type FormEvent, type ReactNode } from 'react';
+import { Avatar, AvatarPicker } from '@/components/avatar';
 import { AppHeader } from '@/components/app-header';
 import { GoalPicker, StreakCalendar } from '@/components/daily-goal';
 import { LessonLanguagePicker } from '@/components/lesson-language-picker';
-import { CrewLineup } from '@/components/guide';
 import { secondaryButton } from '@/components/ui/buttons';
 import { ApiError } from '@/lib/api';
 import { useMyCertificates } from '@/lib/queries/use-certificates';
@@ -41,7 +46,7 @@ export default function ProfilePage() {
 function Profile({ me }: { me: MeResponse }) {
   return (
     <Centered>
-      <CrewLineup mood="happy" />
+      <Avatar id={me.avatar} className="size-28" />
       <h1 className="font-display text-3xl font-extrabold break-all">
         Hi, {me.username}
       </h1>
@@ -62,6 +67,7 @@ function Profile({ me }: { me: MeResponse }) {
       <StreakSection goal={me.dailyGoal} />
       <GoalSetting current={me.dailyGoal} />
       <LanguageSetting current={me.lessonLanguage} />
+      <AvatarSetting current={me.avatar} />
       <Certificates />
       <UsernameForm current={me.username} />
       <LogoutButton />
@@ -111,6 +117,27 @@ function GoalSetting({ current }: { current: DailyGoal | null }) {
 }
 
 // FR-15: one per finished course, each with its public /c/<slug> page.
+// Pick an avatar (ADR-044). Saved on tap; it shows on the leaderboards,
+// in leagues and to duel opponents.
+function AvatarSetting({ current }: { current: AvatarId }) {
+  const update = useUpdateMe();
+  return (
+    <section className="flex w-full flex-col gap-2 text-left">
+      <h2 className="text-sm font-semibold text-text-secondary">Your avatar</h2>
+      <AvatarPicker
+        value={current}
+        onPick={(avatar) => update.mutate({ avatar })}
+        disabled={update.isPending}
+      />
+      {update.isError && (
+        <p role="alert" className="text-sm font-semibold">
+          ✕ {update.error.message}
+        </p>
+      )}
+    </section>
+  );
+}
+
 // The language lessons are shown in (ADR-042). Saved on tap; lessons
 // already open reload in the new language.
 function LanguageSetting({ current }: { current: LessonLanguage }) {

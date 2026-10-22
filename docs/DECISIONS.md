@@ -6,11 +6,23 @@ Format: **ADR-NNN · Title** — Status (Accepted / Superseded by ADR-NNN) · Da
 
 ---
 
+**ADR-045 · Career paths through the courses** — Accepted · 2026-10-22
+
+- Decision: three job-focused paths on the course catalog, each an ordered list of existing courses: "Frontend developer" (HTML & CSS → JavaScript → Git & GitHub), "Python programmer" (Python → Git & GitHub) and "Programming foundations" (Python → JavaScript → Git & GitHub). Each card shows its goal, the courses as a chain with their logos, progress across them (lessons and projects done out of the total), and a link to the next unfinished course ("Start with …" / "Next: …", or "Path complete!"). They live in the web app (`CAREER_PATHS` in `components/career-paths.tsx`) and are worked out from `GET /courses`; no API or table.
+- Why: from the ideas backlog: a beginner who wants a job doesn't know which course comes first. A path answers that with the courses we already have.
+- Trade-off: paths are not stored, so they can't be chosen, tracked or rewarded on their own (no path certificate yet), and changing them needs a web deploy. The developer didn't pick the paths: these three are the AI's defaults and are a one-line change.
+
+**ADR-044 · Learner avatars** — Accepted · 2026-10-22
+
+- Decision: twelve preset avatars in the crew's flat style (`components/avatar.tsx`): Indian skin tones, short or long hair, a bun, curls, a patka, with a bindi, glasses, a moustache, a beard or earrings. `profiles.avatar` stores the id (migration 0018); `PATCH /me { avatar }` accepts only a preset (400 otherwise). Everyone has one: until a learner picks, `avatarOf()` (`common/avatars.ts`, unit-tested) gives a default from their user id, always the same. The avatar comes with the username in `GET /me`, the weekly and rating leaderboards, league members and `duel:matched`. Web: a large avatar and a picker on the profile, and a small one next to names on the leaderboards, the league board and the live duel header.
+- Why: from the ideas backlog: a face makes rivals in leagues and duels feel like people, and choosing one is a small first act of ownership.
+- Trade-off: presets only, no photo upload (no storage, no moderation; `avatarUrl` stays unused). The developer didn't pick the set: these twelve are the AI's defaults. The daily bug board, duel history and replays still show names only.
+
 **ADR-043 · Checkpoint projects at the end of each unit** — Accepted · 2026-10-22
 
 - Decision: the developer chose graded checkpoints (not open-ended or shareable projects), built first and before avatars and job paths. A project is a lesson file with `"project": true`, last in its unit (the loader allows one per unit, last, with no Learn step): a longer brief in numbered steps (one line each; the task bubble now shows each line as a paragraph), starter code, and tests graded on the server like any exercise, in English and Hinglish. `lessons.is_project` (migration 0017); `CoursePath` lessons and `LessonDetail` carry `project`. A project pays 30 XP (`PROJECT_XP`, three lessons), once. It opens when the lesson before it is done and never holds back the next unit (`lessonStates` skips projects when picking the next lesson), so existing learners aren't stopped mid-course. It counts toward the unit badge and the course certificate like any lesson; the Bug hunt opens with the unit's lessons. Path: a hammer node with a Pink "Project · +30 XP" tag when open; lesson page: "Your project · +30 XP" and "Project complete!". First batch: Python (7) and JavaScript (5); each reference solution was run on every test input (Python 3.12 in Docker, JavaScript in Node with the `prompt()` helper), the expected outputs come from those runs, and every starter fails.
 - Why: from the ideas backlog: Codédex ends chapters with checkpoint projects; combining a unit's skills in one bigger program is where learning sticks, and the graders already exist.
-- Trade-off: a certificate now also needs the projects (learners who already have one keep it). Projects don't gate, so a learner can skip them and still finish every lesson, just without the certificate. HTML & CSS and Git projects come in the next batch. Like lessons, every project is written twice (English and Hinglish).
+- Trade-off: a certificate now also needs the projects (learners who already have one keep it). Projects don't gate, so a learner can skip them and still finish every lesson, just without the certificate. HTML & CSS and Git projects followed the same day (3 each: All about me, Event page, Profile card; Recipe repo, Contact page feature, Ship your portfolio), checked against their reference solutions with the real graders. Like lessons, every project is written twice (English and Hinglish).
 
 **ADR-042 · Hinglish lessons, hand-written, picked on the profile** — Accepted · 2026-10-21
 

@@ -11,6 +11,7 @@ import { count, eq } from 'drizzle-orm';
 import request from 'supertest';
 import type { App } from 'supertest/types.js';
 import { AppModule } from '../src/app.module.js';
+import { avatarOf } from '../src/common/avatars.js';
 import { DbService, type Db } from '../src/db/db.service.js';
 import { exercises, xpEvents } from '../src/db/schema/index.js';
 import { seedContent } from '../src/db/seed/seed-content.js';
@@ -228,9 +229,22 @@ describe('XP, streak and leaderboard (e2e)', () => {
 
     const forAda = await board('ada');
     expect(forAda.weekStart).toBe(ist('2026-10-12T00:00:00').toISOString());
+    // Nobody picked an avatar yet: each shows their default (ADR-044).
     expect(forAda.entries).toEqual([
-      { rank: 1, userId: USERS.ada.id, username: 'ada', xp: 40 },
-      { rank: 2, userId: USERS.bob.id, username: 'bob', xp: 10 },
+      {
+        rank: 1,
+        userId: USERS.ada.id,
+        username: 'ada',
+        avatar: avatarOf(USERS.ada.id, null),
+        xp: 40,
+      },
+      {
+        rank: 2,
+        userId: USERS.bob.id,
+        username: 'bob',
+        avatar: avatarOf(USERS.bob.id, null),
+        xp: 10,
+      },
     ]);
     expect(forAda.me).toEqual({ rank: 1, xp: 40 });
 
@@ -246,6 +260,20 @@ describe('XP, streak and leaderboard (e2e)', () => {
       ['bob', 2],
       ['cara', 2],
     ]);
+  });
+
+  it('a picked avatar shows on /me and the board; an unknown one is refused (ADR-044)', async () => {
+    const patch = (avatar: string) =>
+      request(app.getHttpServer())
+        .patch('/me')
+        .set('Authorization', 'Bearer ada')
+        .send({ avatar });
+    expect((await patch('a5').expect(200)).body).toMatchObject({
+      avatar: 'a5',
+    });
+    const { entries } = await board('bob');
+    expect(entries.find((e) => e.username === 'ada')?.avatar).toBe('a5');
+    await patch('a99').expect(400);
   });
 
   it('?limit caps the entries but me is always filled in', async () => {

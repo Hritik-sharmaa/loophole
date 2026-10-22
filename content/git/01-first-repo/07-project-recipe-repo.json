@@ -1,0 +1,63 @@
+{
+  "slug": "project-recipe-repo",
+  "title": "Project: Recipe repo",
+  "position": 7,
+  "project": true,
+  "exercise": {
+    "prompt": "Put your recipes under Git. They are in the folder `recipes`.\n1. Go into `recipes` and turn it into a repository.\n2. Commit `dal.md` and `poha.md` with the message `Add first recipes`. Keep `private-notes.txt` out of every commit.\n3. Create `chai.md` with `touch chai.md` and commit it with the message `Add chai recipe`.",
+    "promptHi": "Apni recipes ko Git mein rakho. Woh `recipes` folder mein hain.\n1. `recipes` ke andar jao aur use repository banao.\n2. `dal.md` aur `poha.md` ko message `Add first recipes` ke saath commit karo. `private-notes.txt` ko kisi bhi commit se bahar rakho.\n3. `touch chai.md` se `chai.md` banao aur use message `Add chai recipe` ke saath commit karo.",
+    "starterCode": "",
+    "setup": [
+      "mkdir recipes",
+      "cd recipes",
+      "echo '# Dal' > dal.md",
+      "echo '# Poha' > poha.md",
+      "echo 'secret masala' > private-notes.txt",
+      "cd .."
+    ],
+    "checks": [
+      {
+        "type": "repo",
+        "label": "`recipes` is a Git repository",
+        "labelHi": "`recipes` ek Git repository hai"
+      },
+      {
+        "type": "commit-message",
+        "label": "A commit says `Add first recipes`",
+        "labelHi": "Ek commit `Add first recipes` kehta hai",
+        "text": "Add first recipes"
+      },
+      {
+        "type": "committed-file",
+        "label": "`dal.md` is committed",
+        "labelHi": "`dal.md` commit ho chuki hai",
+        "path": "dal.md"
+      },
+      {
+        "type": "committed-file",
+        "label": "`poha.md` is committed",
+        "labelHi": "`poha.md` commit ho chuki hai",
+        "path": "poha.md"
+      },
+      {
+        "type": "commit-message",
+        "label": "A commit says `Add chai recipe`",
+        "labelHi": "Ek commit `Add chai recipe` kehta hai",
+        "text": "Add chai recipe"
+      },
+      {
+        "type": "committed-file",
+        "label": "`chai.md` is committed",
+        "labelHi": "`chai.md` commit ho chuki hai",
+        "path": "chai.md"
+      },
+      {
+        "type": "committed-file",
+        "label": "`private-notes.txt` is not committed",
+        "labelHi": "`private-notes.txt` commit nahi hui",
+        "path": "private-notes.txt",
+        "present": false
+      }
+    ]
+  }
+}

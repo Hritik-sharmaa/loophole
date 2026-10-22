@@ -5,6 +5,7 @@ import type {
   WeeklyLeaderboard,
 } from '@loophole/shared';
 import { and, asc, eq, gte, sql } from 'drizzle-orm';
+import { avatarOf } from '../../common/avatars.js';
 import { DbService } from '../../db/db.service.js';
 import { LeaguesService } from '../leagues/leagues.service.js';
 import { lessons, profiles, streaks, xpEvents } from '../../db/schema/index.js';
@@ -197,6 +198,7 @@ export class GamificationService {
         rank: board.rank,
         userId: board.userId,
         username: profiles.username,
+        chosenAvatar: profiles.avatar,
         xp: board.xp,
       })
       .from(board)
@@ -212,7 +214,10 @@ export class GamificationService {
 
     return {
       weekStart: weekStart.toISOString(),
-      entries,
+      entries: entries.map(({ chosenAvatar, ...e }) => ({
+        ...e,
+        avatar: avatarOf(e.userId, chosenAvatar),
+      })),
       me: me ?? { rank: null, xp: 0 },
     };
   }

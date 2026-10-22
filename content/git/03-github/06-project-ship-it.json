@@ -1,0 +1,46 @@
+{
+  "slug": "project-ship-it",
+  "title": "Project: Ship your portfolio",
+  "position": 6,
+  "project": true,
+  "exercise": {
+    "prompt": "Your portfolio has commits but has never been online. An empty repository waits at `https://github.com/you/portfolio.git`.\n1. Add it as a remote called `origin`.\n2. Push `main` and set its upstream.\n3. Create `about.md` with `echo \"# About me\" > about.md`, commit it with the message `Add about page`, and push again.",
+    "promptHi": "Aapke portfolio mein commits hain par woh kabhi online nahi gaya. `https://github.com/you/portfolio.git` par ek khaali repository intezaar kar rahi hai.\n1. Use `origin` naam ke remote ki tarah jodo.\n2. `main` ko push karo aur uska upstream set karo.\n3. `echo \"# About me\" > about.md` se `about.md` banao, use message `Add about page` ke saath commit karo, aur dobara push karo.",
+    "starterCode": "",
+    "setup": [
+      "@github https://github.com/you/portfolio.git",
+      "git init",
+      "echo '<h1>Portfolio</h1>' > index.html",
+      "git add .",
+      "git commit -m \"Add home page\""
+    ],
+    "checks": [
+      {
+        "type": "remote",
+        "label": "`origin` points to `https://github.com/you/portfolio.git`",
+        "labelHi": "`origin` `https://github.com/you/portfolio.git` ki taraf point karta hai",
+        "name": "origin",
+        "url": "https://github.com/you/portfolio.git"
+      },
+      {
+        "type": "committed-file",
+        "label": "`about.md` is committed",
+        "labelHi": "`about.md` commit ho chuki hai",
+        "path": "about.md"
+      },
+      {
+        "type": "commit-message",
+        "label": "A commit says `Add about page`",
+        "labelHi": "Ek commit `Add about page` kehta hai",
+        "text": "Add about page"
+      },
+      {
+        "type": "pushed",
+        "label": "GitHub has all your commits",
+        "labelHi": "GitHub par aapke saare commits hain",
+        "remote": "origin",
+        "branch": "main"
+      }
+    ]
+  }
+}

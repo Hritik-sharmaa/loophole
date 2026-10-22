@@ -22,6 +22,7 @@ import type {
 } from '@loophole/shared';
 import { and, desc, eq, inArray, isNull, max, or, sql } from 'drizzle-orm';
 import type { Namespace, Socket } from 'socket.io';
+import { avatarOf } from '../../common/avatars.js';
 import { RateLimiter } from '../../common/rate-limiter.js';
 import { DbService } from '../../db/db.service.js';
 import {
@@ -289,7 +290,11 @@ export class DuelsService implements OnApplicationBootstrap, OnModuleDestroy {
     // The seed only loads folders named after a DuelLanguage.
     const problem = { ...row, language: row.language as DuelLanguage };
     const players = await this.db.drizzle
-      .select({ id: profiles.id, username: profiles.username })
+      .select({
+        id: profiles.id,
+        username: profiles.username,
+        avatar: profiles.avatar,
+      })
       .from(profiles)
       .where(inArray(profiles.id, [duel.playerA, duel.playerB]));
     const elos = await this.ratings.elosOf([duel.playerA, duel.playerB]);
@@ -301,6 +306,7 @@ export class DuelsService implements OnApplicationBootstrap, OnModuleDestroy {
         duelId: duel.id,
         opponent: {
           username: opponent?.username ?? 'opponent',
+          avatar: avatarOf(opponentId, opponent?.avatar ?? null),
           elo: elos.get(opponentId) ?? STARTING_ELO,
         },
       };

@@ -29,11 +29,11 @@ Base URL: `https://api.<domain>` (local: `http://localhost:3001`). All bodies ar
 
 ### Users — S1
 
-| Method | Path           | Body                                                     | Response                                                                                                                                                                                                                                                                |
-| ------ | -------------- | -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| GET    | `/me`          | —                                                        | `{ id, username, avatarUrl, xp, streak: { current, longest, freezes }, rating, lessonsCompleted, dailyGoal, todayXp, lessonLanguage }` — `dailyGoal` is 10, 20, 30 or null; `todayXp` is XP since 00:00 IST (ADR-033); `lessonLanguage` is `en` or `hinglish` (ADR-042) |
-| GET    | `/me/activity` | —                                                        | `{ from, today, days: [{ date, xp }] }` — XP per IST day from `from` (Monday four weeks ago) to `today`; days without XP are left out (ADR-033)                                                                                                                         |
-| PATCH  | `/me`          | `{ username?, avatarUrl?, dailyGoal?, lessonLanguage? }` | updated profile; `dailyGoal` must be 10, 20 or 30 and `lessonLanguage` `en` or `hinglish` (400 otherwise)                                                                                                                                                               |
+| Method | Path           | Body                                                              | Response                                                                                                                                                                                                                                                                        |
+| ------ | -------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET    | `/me`          | —                                                                 | `{ id, username, avatarUrl, xp, streak: { current, longest, freezes }, rating, lessonsCompleted, dailyGoal, todayXp, lessonLanguage, avatar }` — `dailyGoal` is 10, 20, 30 or null; `todayXp` is XP since 00:00 IST (ADR-033); `lessonLanguage` is `en` or `hinglish` (ADR-042) |
+| GET    | `/me/activity` | —                                                                 | `{ from, today, days: [{ date, xp }] }` — XP per IST day from `from` (Monday four weeks ago) to `today`; days without XP are left out (ADR-033)                                                                                                                                 |
+| PATCH  | `/me`          | `{ username?, avatarUrl?, dailyGoal?, lessonLanguage?, avatar? }` | updated profile; `dailyGoal` must be 10, 20 or 30 and `lessonLanguage` `en` or `hinglish` (400 otherwise)                                                                                                                                                                       |
 
 - **Lesson language (ADR-042):** `GET /lessons/:id`, the cheat sheet, the bug hunt and practice answer in the caller's `lessonLanguage`: card titles and bodies, bug fixes, the quick check's question, explanation and word options, the exercise prompt, and web and git checklist labels (also in `POST /submissions` results). Code, outputs and answers are the same in both. A lesson without Hinglish yet comes back in English. The response shapes don't change, and the stored Hinglish is never sent as such.
 
@@ -114,10 +114,12 @@ Hidden test results show only `passed`, never input or expected output. Throttle
 
 ### Gamification — S4
 
-| Method | Path                           | Response                                                                     |
-| ------ | ------------------------------ | ---------------------------------------------------------------------------- |
-| GET    | `/leaderboard/weekly?limit=50` | `{ weekStart, entries: [{ rank, userId, username, xp }], me: { rank, xp } }` |
-| GET    | `/leaderboard/rating?limit=50` | `{ entries: [{ rank, userId, username, elo }], me: { rank, elo } }` (S8)     |
+| Method | Path                           | Response                                                                             |
+| ------ | ------------------------------ | ------------------------------------------------------------------------------------ |
+| GET    | `/leaderboard/weekly?limit=50` | `{ weekStart, entries: [{ rank, userId, username, avatar, xp }], me: { rank, xp } }` |
+| GET    | `/leaderboard/rating?limit=50` | `{ entries: [{ rank, userId, username, avatar, elo }], me: { rank, elo } }` (S8)     |
+
+- **Avatars (ADR-044):** `avatar` is a preset id (`a1` to `a12`): the one the user picked with `PATCH /me { avatar }`, or a default worked out from their id. The same field is in `GET /me`, league members and `duel:matched.opponent`. Any other id is 400.
 
 - Rating: only players who have finished a duel are listed; until then `me` is `{ rank: null, elo: 1200 }`. Equal Elo shares a rank. `GET /me` `rating` and `duel:matched` `opponent.elo` use the same numbers.
 
@@ -151,9 +153,9 @@ Hidden test results show only `passed`, never input or expected output. Throttle
 
 ### Leagues — Phase 3 (ADR-038)
 
-| Method | Path               | Response                                                                                                                                                                                                              |
-| ------ | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| GET    | `/leagues/current` | `{ weekStart, endsAt, tier: { level, name }, joined, zones: { up, down }, members: [{ rank, userId, username, xp, zone }], lastWeek: { tier, rank, size, zone } \| null }` — the caller's group this IST week, ranked |
+| Method | Path               | Response                                                                                                                                                                                                                      |
+| ------ | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET    | `/leagues/current` | `{ weekStart, endsAt, tier: { level, name }, joined, zones: { up, down }, members: [{ rank, userId, username, avatar, xp, zone }], lastWeek: { tier, rank, size, zone } \| null }` — the caller's group this IST week, ranked |
 
 - `zone` is `up`, `down` or `stay`: where the member would go if the week ended now. `zones` are the counts: up is a quarter of the group rounded up (at most 5, 0 in Diamond); down is the same, but only in groups of 10 or more and never in Bronze.
 - `joined` is false until the caller earns XP this week; then `members` is empty and `tier` is the one they will join (from `lastWeek`, else Bronze).
@@ -214,7 +216,7 @@ Namespace: `/duels`. Connect with `auth: { token: <supabase access token> }`; th
 | Event           | Payload                                                                                          | Sent to            |
 | --------------- | ------------------------------------------------------------------------------------------------ | ------------------ |
 | `queue:joined`  | `{ position }`                                                                                   | the player         |
-| `duel:matched`  | `{ duelId, opponent: { username, elo } }`                                                        | both players       |
+| `duel:matched`  | `{ duelId, opponent: { username, avatar, elo } }`                                                | both players       |
 | `duel:start`    | `{ duelId, problem: { title, language, description, buggyCode, sampleTests }, endsAt }`          | room `duel:<id>`   |
 | `duel:progress` | `{ userId, testsPassed, totalTests }`                                                            | room               |
 | `duel:result`   | `{ testsPassed, totalTests, results }`                                                           | the submitter only |

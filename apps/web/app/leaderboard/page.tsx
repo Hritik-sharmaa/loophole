@@ -1,8 +1,13 @@
 'use client';
 
-import type { RatingLeaderboard, WeeklyLeaderboard } from '@loophole/shared';
+import type {
+  RatingLeaderboard,
+  WeeklyLeaderboard,
+  AvatarId,
+} from '@loophole/shared';
 import { Swords, Zap } from 'lucide-react';
 import { useState, type ReactNode } from 'react';
+import { Avatar } from '@/components/avatar';
 import { AppHeader } from '@/components/app-header';
 import { Guide } from '@/components/guide';
 import { LeagueBoard } from '@/components/league-board';
@@ -180,6 +185,7 @@ function Rows({
     rank: number;
     userId: string;
     username: string;
+    avatar: AvatarId;
     value: ReactNode;
   }[];
   myId: string | undefined;
@@ -208,6 +214,7 @@ function Rows({
             >
               {e.rank}
             </span>
+            <Avatar id={e.avatar} />
             <span className="flex-1 truncate font-bold">
               {e.username}
               {mine && <span className="text-text-secondary"> (you)</span>}

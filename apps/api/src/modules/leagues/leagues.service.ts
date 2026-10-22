@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import type { LeagueResponse, LeagueZone } from '@loophole/shared';
 import { and, asc, count, desc, eq, gte, inArray, lt, sql } from 'drizzle-orm';
+import { avatarOf } from '../../common/avatars.js';
 import { istDate, istWeekStart } from '../../common/ist-calendar.js';
 import { DbService } from '../../db/db.service.js';
 import {
@@ -146,6 +147,7 @@ export class LeaguesService {
         rank: i + 1,
         userId: m.userId,
         username: m.username,
+        avatar: avatarOf(m.userId, m.chosenAvatar),
         xp: m.xp,
         zone: zoneOf(i + 1, size, mine.tier),
       })),
@@ -200,6 +202,7 @@ export class LeaguesService {
       .select({
         userId: leagueMembers.userId,
         username: profiles.username,
+        chosenAvatar: profiles.avatar,
         joinedAt: leagueMembers.joinedAt,
       })
       .from(leagueMembers)

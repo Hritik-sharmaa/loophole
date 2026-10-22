@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import type { RatingLeaderboard } from '@loophole/shared';
 import { asc, eq, inArray, sql } from 'drizzle-orm';
+import { avatarOf } from '../../common/avatars.js';
 import { DbService, type Db } from '../../db/db.service.js';
 import { profiles, ratings } from '../../db/schema/index.js';
 import { STARTING_ELO, eloChanges } from './elo.js';
@@ -77,6 +78,7 @@ export class RatingsService {
         rank: board.rank,
         userId: board.userId,
         username: profiles.username,
+        chosenAvatar: profiles.avatar,
         elo: board.elo,
       })
       .from(board)
@@ -90,7 +92,13 @@ export class RatingsService {
       .from(board)
       .where(eq(board.userId, userId));
 
-    return { entries, me: me ?? { rank: null, elo: STARTING_ELO } };
+    return {
+      entries: entries.map(({ chosenAvatar, ...e }) => ({
+        ...e,
+        avatar: avatarOf(e.userId, chosenAvatar),
+      })),
+      me: me ?? { rank: null, elo: STARTING_ELO },
+    };
   }
 
   private async record(

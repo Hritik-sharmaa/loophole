@@ -1,0 +1,66 @@
+{
+  "slug": "project-profile-card",
+  "title": "Project: Profile card",
+  "position": 6,
+  "project": true,
+  "exercise": {
+    "prompt": "Style a profile card with what you learned about CSS.\n1. Add a `<style>` tag.\n2. Give `.card` a `padding` of `16px` and a `border-radius` of `12px`.\n3. Make the `<h2>` inside the card orange with `color`.\n4. Put the three `span` tags in `.tags` in a row: `display: flex` with a `gap` of `8px`.",
+    "promptHi": "CSS mein jo seekha uske saath ek profile card style karo.\n1. Ek `<style>` tag jodo.\n2. `.card` ko `16px` ki `padding` aur `12px` ka `border-radius` do.\n3. Card ke andar ke `<h2>` ko `color` se orange banao.\n4. `.tags` ke teen `span` tags ko ek row mein lagao: `display: flex` aur `8px` ka `gap`.",
+    "starterCode": "<div class=\"card\">\n  <h2>Asha Verma</h2>\n  <p>Learning to code, one page at a time.</p>\n  <div class=\"tags\">\n    <span>HTML</span>\n    <span>CSS</span>\n    <span>Python</span>\n  </div>\n</div>\n",
+    "checks": [
+      {
+        "type": "element",
+        "label": "There is a `<style>` tag",
+        "labelHi": "Ek `<style>` tag hai",
+        "selector": "style"
+      },
+      {
+        "type": "element",
+        "label": "`.tags` still holds three `span` tags",
+        "labelHi": "`.tags` mein abhi bhi teen `span` tags hain",
+        "selector": ".tags > span",
+        "min": 3
+      },
+      {
+        "type": "style",
+        "label": "`.card` has `padding: 16px`",
+        "labelHi": "`.card` mein `padding: 16px` hai",
+        "selector": ".card",
+        "property": "padding",
+        "value": "16px"
+      },
+      {
+        "type": "style",
+        "label": "`.card` has `border-radius: 12px`",
+        "labelHi": "`.card` mein `border-radius: 12px` hai",
+        "selector": ".card",
+        "property": "border-radius",
+        "value": "12px"
+      },
+      {
+        "type": "style",
+        "label": "The card's `<h2>` has `color: orange`",
+        "labelHi": "Card ke `<h2>` mein `color: orange` hai",
+        "selector": ".card h2",
+        "property": "color",
+        "value": "orange"
+      },
+      {
+        "type": "style",
+        "label": "`.tags` has `display: flex`",
+        "labelHi": "`.tags` mein `display: flex` hai",
+        "selector": ".tags",
+        "property": "display",
+        "value": "flex"
+      },
+      {
+        "type": "style",
+        "label": "`.tags` has `gap: 8px`",
+        "labelHi": "`.tags` mein `gap: 8px` hai",
+        "selector": ".tags",
+        "property": "gap",
+        "value": "8px"
+      }
+    ]
+  }
+}

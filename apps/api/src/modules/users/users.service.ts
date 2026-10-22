@@ -1,6 +1,7 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import type { ActivityResponse, DailyGoal, MeResponse } from '@loophole/shared';
 import { count, eq } from 'drizzle-orm';
+import { avatarOf } from '../../common/avatars.js';
 import { DbService } from '../../db/db.service.js';
 import { profiles, userProgress, type Profile } from '../../db/schema/index.js';
 import type { AuthUser } from '../../integrations/supabase-auth.client.js';
@@ -40,7 +41,8 @@ export class UsersService {
       dto.username === undefined &&
       dto.avatarUrl === undefined &&
       dto.dailyGoal === undefined &&
-      dto.lessonLanguage === undefined
+      dto.lessonLanguage === undefined &&
+      dto.avatar === undefined
     ) {
       return this.toMe(current);
     }
@@ -53,6 +55,7 @@ export class UsersService {
           avatarUrl: dto.avatarUrl,
           dailyGoal: dto.dailyGoal,
           lessonLanguage: dto.lessonLanguage,
+          avatar: dto.avatar,
         })
         .where(eq(profiles.id, user.id))
         .returning();
@@ -131,6 +134,7 @@ export class UsersService {
       dailyGoal: profile.dailyGoal as DailyGoal | null,
       todayXp,
       lessonLanguage: profile.lessonLanguage,
+      avatar: avatarOf(profile.id, profile.avatar),
     };
   }
 }
