@@ -1,0 +1,35 @@
+{
+  "slug": "project-marks-analyser",
+  "title": "Project: Marks analyser",
+  "position": 7,
+  "project": true,
+  "exercise": {
+    "prompt": "Analyse a class test. Read the marks as whole numbers on one line, separated by spaces.\n1. Print `Highest:` and the highest mark.\n2. Print `Lowest:` and the lowest mark.\n3. Print `Range:` and the difference between them.\n4. Print `Above average:` and how many marks are greater than the average.",
+    "promptHi": "Ek class test ka analysis karo. Marks ek line mein whole numbers ki tarah padho, spaces se alag.\n1. `Highest:` aur sabse zyada mark print karo.\n2. `Lowest:` aur sabse kam mark print karo.\n3. `Range:` aur dono ka farak print karo.\n4. `Above average:` aur kitne marks average se zyada hain, print karo.",
+    "starterCode": "# Read the marks on one line\n",
+    "sampleTests": [
+      {
+        "input": "70 85 90 55\n",
+        "expectedOutput": "Highest: 90\nLowest: 55\nRange: 35\nAbove average: 2"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "50\n",
+        "expectedOutput": "Highest: 50\nLowest: 50\nRange: 0\nAbove average: 0"
+      },
+      {
+        "input": "10 20 30\n",
+        "expectedOutput": "Highest: 30\nLowest: 10\nRange: 20\nAbove average: 1"
+      },
+      {
+        "input": "5 5 5 5\n",
+        "expectedOutput": "Highest: 5\nLowest: 5\nRange: 0\nAbove average: 0"
+      },
+      {
+        "input": "-3 7 2\n",
+        "expectedOutput": "Highest: 7\nLowest: -3\nRange: 10\nAbove average: 1"
+      }
+    ]
+  }
+}

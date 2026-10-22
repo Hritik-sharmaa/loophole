@@ -128,6 +128,7 @@ export class LessonsService {
         id: row.lessonId,
         title: row.lessonTitle,
         state: states.get(row.lessonId) ?? 'locked',
+        project: row.isProject,
       });
     }
 
@@ -279,6 +280,7 @@ export class LessonsService {
       .select({
         id: lessons.id,
         title: lessons.title,
+        isProject: lessons.isProject,
         learn: lessons.learn,
         courseId: units.courseId,
         course: {
@@ -311,6 +313,7 @@ export class LessonsService {
     return {
       id: lesson.id,
       title: lesson.title,
+      project: lesson.isProject,
       course: lesson.course,
       learn: localizeLearn(lesson.learn, language),
       exercise: {
@@ -392,6 +395,7 @@ export class LessonsService {
         unitTitle: units.title,
         lessonId: lessons.id,
         lessonTitle: lessons.title,
+        isProject: lessons.isProject,
       })
       .from(units)
       .innerJoin(lessons, eq(lessons.unitId, units.id))
@@ -401,7 +405,7 @@ export class LessonsService {
 
   private async statesFor(
     userId: string,
-    rows: { lessonId: string }[],
+    rows: { lessonId: string; isProject: boolean }[],
   ): Promise<Map<string, LessonState>> {
     const ids = rows.map((r) => r.lessonId);
     const done = ids.length
@@ -415,7 +419,11 @@ export class LessonsService {
             ),
           )
       : [];
-    return lessonStates(ids, new Set(done.map((d) => d.lessonId)));
+    return lessonStates(
+      ids,
+      new Set(done.map((d) => d.lessonId)),
+      new Set(rows.filter((r) => r.isProject).map((r) => r.lessonId)),
+    );
   }
 }
 

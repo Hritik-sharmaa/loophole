@@ -5,6 +5,7 @@ import type {
   StoredWebCheck,
 } from '../../common/lesson-text.js';
 import {
+  boolean,
   integer,
   jsonb,
   pgTable,
@@ -58,6 +59,9 @@ export const lessons = pgTable(
     // The Learn step's cards and quick check (ADR-021), with their Hinglish
     // (ADR-042). Null for a lesson that goes straight to the exercise.
     learn: jsonb('learn').$type<StoredLearn>(),
+    // The unit's checkpoint project (ADR-043): last in its unit, no Learn
+    // step, pays PROJECT_XP, and doesn't hold back the next unit.
+    isProject: boolean('is_project').notNull().default(false),
   },
   (t) => [
     unique('lessons_unit_slug').on(t.unitId, t.slug),

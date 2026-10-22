@@ -130,6 +130,7 @@ async function seedCourse(
           title: lesson.title,
           position: lesson.position,
           learn: lesson.learn,
+          isProject: lesson.project,
         })
         .onConflictDoUpdate({
           target: [lessons.unitId, lessons.slug],
@@ -137,6 +138,7 @@ async function seedCourse(
             title: lesson.title,
             position: lesson.position,
             learn: lesson.learn,
+            isProject: lesson.project,
           },
         })
         .returning({ id: lessons.id });

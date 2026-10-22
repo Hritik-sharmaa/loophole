@@ -1,0 +1,39 @@
+{
+  "slug": "project-report-card",
+  "title": "Project: Report card",
+  "position": 7,
+  "project": true,
+  "exercise": {
+    "prompt": "Make a report card. Read three marks from 0 to 100, one per line.\n1. Print `Total:` and the sum of the marks.\n2. Print `Average:` and the whole-number average (use `//`).\n3. Print `Result:` and then `Fail` if any single mark is below 35. Otherwise print `Distinction` for an average of 75 or more, `First class` for 60 or more, and `Pass` for the rest.",
+    "promptHi": "Ek report card banao. 0 se 100 tak ke teen marks padho, har line mein ek.\n1. `Total:` aur marks ka sum print karo.\n2. `Average:` aur whole-number average print karo (`//` use karo).\n3. `Result:` print karo, phir agar koi bhi ek mark 35 se kam hai toh `Fail`. Warna 75 ya usse zyada average par `Distinction`, 60 ya usse zyada par `First class`, aur baaki sab par `Pass`.",
+    "starterCode": "# Read three marks, one per line\n",
+    "sampleTests": [
+      {
+        "input": "80\n70\n60\n",
+        "expectedOutput": "Total: 210\nAverage: 70\nResult: First class"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "90\n85\n80\n",
+        "expectedOutput": "Total: 255\nAverage: 85\nResult: Distinction"
+      },
+      {
+        "input": "34\n90\n90\n",
+        "expectedOutput": "Total: 214\nAverage: 71\nResult: Fail"
+      },
+      {
+        "input": "40\n40\n40\n",
+        "expectedOutput": "Total: 120\nAverage: 40\nResult: Pass"
+      },
+      {
+        "input": "75\n75\n75\n",
+        "expectedOutput": "Total: 225\nAverage: 75\nResult: Distinction"
+      },
+      {
+        "input": "60\n59\n61\n",
+        "expectedOutput": "Total: 180\nAverage: 60\nResult: First class"
+      }
+    ]
+  }
+}

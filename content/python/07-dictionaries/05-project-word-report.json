@@ -1,0 +1,35 @@
+{
+  "slug": "project-word-report",
+  "title": "Project: Word report",
+  "position": 5,
+  "project": true,
+  "exercise": {
+    "prompt": "Report the most used words in a message. Read one line of text.\n1. Count each word in a dictionary, ignoring capitals.\n2. Print the three most common words, most common first, one per line as `word count` in lowercase.\n3. When two words have the same count, the one that appeared first comes first. With fewer than three different words, print them all.",
+    "promptHi": "Ek message mein sabse zyada use hue words batao. Text ki ek line padho.\n1. Har word ko dictionary mein gino, capitals ignore karke.\n2. Teen sabse common words print karo, sabse common pehle, har line mein `word count`, lowercase mein.\n3. Agar do words ki ginti same ho, toh jo pehle aaya woh pehle aayega. Teen se kam alag words hon toh sab print karo.",
+    "starterCode": "# Read one line of text and count its words\n",
+    "sampleTests": [
+      {
+        "input": "the cat and the hat and the bat\n",
+        "expectedOutput": "the 3\nand 2\ncat 1"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "Go go GO stop\n",
+        "expectedOutput": "go 3\nstop 1"
+      },
+      {
+        "input": "a b c d\n",
+        "expectedOutput": "a 1\nb 1\nc 1"
+      },
+      {
+        "input": "one\n",
+        "expectedOutput": "one 1"
+      },
+      {
+        "input": "x y y z z z\n",
+        "expectedOutput": "z 3\ny 2\nx 1"
+      }
+    ]
+  }
+}

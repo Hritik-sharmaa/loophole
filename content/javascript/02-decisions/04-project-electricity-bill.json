@@ -1,0 +1,39 @@
+{
+  "slug": "project-electricity-bill",
+  "title": "Project: Electricity bill",
+  "position": 4,
+  "project": true,
+  "exercise": {
+    "prompt": "Work out an electricity bill. Read the units used (a whole number).\n1. The first 100 units cost 3 each, units 101 to 200 cost 5 each, and every unit above 200 costs 8. Add a fixed charge of 50.\n2. Print `Bill:` and the total.\n3. Print `Slab:` and then `low` for up to 100 units, `medium` for up to 200, and `high` above that.",
+    "promptHi": "Bijli ka bill nikaalo. Kitne units use hue, padho (whole number).\n1. Pehle 100 units 3 ke hisaab se, 101 se 200 tak 5 ke hisaab se, aur 200 se upar har unit 8 ki. Upar se 50 ka fixed charge jodo.\n2. `Bill:` aur total print karo.\n3. `Slab:` print karo, phir 100 units tak `low`, 200 tak `medium`, aur usse upar `high`.",
+    "starterCode": "// Read the units used\n",
+    "sampleTests": [
+      {
+        "input": "150\n",
+        "expectedOutput": "Bill: 600\nSlab: medium"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "80\n",
+        "expectedOutput": "Bill: 290\nSlab: low"
+      },
+      {
+        "input": "100\n",
+        "expectedOutput": "Bill: 350\nSlab: low"
+      },
+      {
+        "input": "200\n",
+        "expectedOutput": "Bill: 850\nSlab: medium"
+      },
+      {
+        "input": "250\n",
+        "expectedOutput": "Bill: 1250\nSlab: high"
+      },
+      {
+        "input": "0\n",
+        "expectedOutput": "Bill: 50\nSlab: low"
+      }
+    ]
+  }
+}

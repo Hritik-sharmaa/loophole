@@ -7,7 +7,7 @@ import type {
 import { and, asc, eq, gte, sql } from 'drizzle-orm';
 import { DbService } from '../../db/db.service.js';
 import { LeaguesService } from '../leagues/leagues.service.js';
-import { profiles, streaks, xpEvents } from '../../db/schema/index.js';
+import { lessons, profiles, streaks, xpEvents } from '../../db/schema/index.js';
 import {
   addDays,
   istDate,
@@ -23,6 +23,9 @@ import {
 
 // ADR-012: 10 XP per lesson.
 export const LESSON_XP = 10;
+
+// ADR-043: a unit's checkpoint project is worth three lessons.
+export const PROJECT_XP = 30;
 
 // ADR-035: the bug of the day pays like two lessons. A duel problem hides
 // one to three bugs in a whole program, so it takes longer than a lesson,
@@ -45,12 +48,17 @@ export class GamificationService {
     lessonId: string,
     now = new Date(),
   ): Promise<number> {
+    const [lesson] = await this.db.drizzle
+      .select({ isProject: lessons.isProject })
+      .from(lessons)
+      .where(eq(lessons.id, lessonId));
+    const amount = lesson?.isProject ? PROJECT_XP : LESSON_XP;
     const paid = await this.db.drizzle.transaction(async (tx) => {
       const [paid] = await tx
         .insert(xpEvents)
         .values({
           userId,
-          amount: LESSON_XP,
+          amount,
           source: 'lesson',
           sourceId: lessonId,
           // From the app clock, so the week it lands in matches istWeekStart.
@@ -72,7 +80,7 @@ export class GamificationService {
         .insert(streaks)
         .values({ userId, ...values })
         .onConflictDoUpdate({ target: streaks.userId, set: values });
-      return LESSON_XP;
+      return amount;
     });
     // The week's first XP puts the learner in a league group (ADR-038).
     if (paid > 0) await this.leagues.join(userId, now);

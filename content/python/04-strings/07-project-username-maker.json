@@ -1,0 +1,35 @@
+{
+  "slug": "project-username-maker",
+  "title": "Project: Username maker",
+  "position": 7,
+  "project": true,
+  "exercise": {
+    "prompt": "Make usernames for a new app. Read a first and last name on one line (there may be extra spaces and any capitals), then a four-digit birth year.\n1. Print `Username:` and the first name in lowercase, then the first letter of the last name in lowercase, then the last two digits of the year. `Ada Lovelace` born `1815` gets `adal15`.\n2. Print `Initials:` and the capital initials, each followed by a dot: `A.L.`\n3. Print `Letters:` and how many letters the name has, without spaces.",
+    "promptHi": "Ek naye app ke liye usernames banao. Ek line mein first aur last name padho (extra spaces aur koi bhi capitals ho sakte hain), phir chaar digit ka birth year.\n1. `Username:` print karo, phir first name lowercase mein, phir last name ka pehla letter lowercase mein, phir saal ke aakhri do digits. `1815` mein paida hui `Ada Lovelace` ko milta hai `adal15`.\n2. `Initials:` aur capital initials print karo, har ek ke baad dot: `A.L.`\n3. `Letters:` aur naam mein kitne letters hain, bina spaces ke, print karo.",
+    "starterCode": "# Read the full name, then the birth year\n",
+    "sampleTests": [
+      {
+        "input": "Ada Lovelace\n1815\n",
+        "expectedOutput": "Username: adal15\nInitials: A.L.\nLetters: 11"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "  grace   HOPPER \n1906\n",
+        "expectedOutput": "Username: graceh06\nInitials: G.H.\nLetters: 11"
+      },
+      {
+        "input": "Ravi Kumar\n2004\n",
+        "expectedOutput": "Username: ravik04\nInitials: R.K.\nLetters: 9"
+      },
+      {
+        "input": "priya sharma\n1999\n",
+        "expectedOutput": "Username: priyas99\nInitials: P.S.\nLetters: 11"
+      },
+      {
+        "input": "Al Ng\n2010\n",
+        "expectedOutput": "Username: aln10\nInitials: A.N.\nLetters: 4"
+      }
+    ]
+  }
+}

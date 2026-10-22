@@ -1,0 +1,35 @@
+{
+  "slug": "project-leaderboard",
+  "title": "Project: Leaderboard",
+  "position": 5,
+  "project": true,
+  "exercise": {
+    "prompt": "Make a quiz leaderboard. Read the scores as whole numbers on one line, separated by spaces.\n1. Print the top three scores, highest first, as `1. 90`, `2. 72` and so on (fewer if there are fewer scores). Hint: `nums.sort((a, b) => b - a)` sorts from highest to lowest.\n2. Print `Average:` and the average with one decimal place, using `.toFixed(1)`.\n3. Print `Passed:` and how many scores are 40 or more.",
+    "promptHi": "Ek quiz leaderboard banao. Scores ek line mein whole numbers ki tarah padho, spaces se alag.\n1. Top teen scores print karo, sabse zyada pehle, `1. 90`, `2. 72` aise (scores kam hon toh kam). Hint: `nums.sort((a, b) => b - a)` sabse zyada se sabse kam tak sort karta hai.\n2. `Average:` aur average ek decimal place ke saath print karo, `.toFixed(1)` se.\n3. `Passed:` aur kitne scores 40 ya usse zyada hain, print karo.",
+    "starterCode": "// Read the scores on one line\n",
+    "sampleTests": [
+      {
+        "input": "55 90 72 38\n",
+        "expectedOutput": "1. 90\n2. 72\n3. 55\nAverage: 63.8\nPassed: 3"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "40\n",
+        "expectedOutput": "1. 40\nAverage: 40.0\nPassed: 1"
+      },
+      {
+        "input": "10 20\n",
+        "expectedOutput": "1. 20\n2. 10\nAverage: 15.0\nPassed: 0"
+      },
+      {
+        "input": "100 100 99 1\n",
+        "expectedOutput": "1. 100\n2. 100\n3. 99\nAverage: 75.0\nPassed: 3"
+      },
+      {
+        "input": "5 15 25 35 45 55\n",
+        "expectedOutput": "1. 55\n2. 45\n3. 35\nAverage: 30.0\nPassed: 2"
+      }
+    ]
+  }
+}

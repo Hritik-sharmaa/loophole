@@ -63,6 +63,11 @@ export function LessonPath({
   const earned = path.units.map((unit) =>
     unit.lessons.every((l) => l.state === 'completed'),
   );
+  // The Bug hunt reviews the lessons' bug cards, so it opens with them done,
+  // whether or not the unit's project is (ADR-043).
+  const lessonsDone = path.units.map((unit) =>
+    unit.lessons.every((l) => l.project || l.state === 'completed'),
+  );
 
   return (
     <div className="flex flex-col gap-12">
@@ -182,6 +187,7 @@ export function LessonPath({
                       <LessonNode
                         state={lesson.state}
                         pop={popping.has(lesson.id)}
+                        project={lesson.project}
                       />
                       <span
                         className={`rounded-badge bg-canvas px-1 text-center text-sm leading-tight font-bold ${lesson.state === 'locked' ? 'text-text-secondary' : 'text-ink'}`}
@@ -203,7 +209,11 @@ export function LessonPath({
                       {lesson.state === 'locked' ? (
                         <div
                           aria-disabled="true"
-                          title="Finish the previous lesson first"
+                          title={
+                            lesson.project
+                              ? 'Finish this unit to open its project'
+                              : 'Finish the previous lesson first'
+                          }
                           className="flex flex-col items-center gap-2"
                         >
                           {node}
@@ -226,7 +236,7 @@ export function LessonPath({
               <BugHuntStop
                 href={`/learn/${path.course.slug}/bug-hunt/${unit.id}`}
                 bugs={unit.bugs}
-                open={earned[u]}
+                open={lessonsDone[u]}
               />
             )}
           </section>

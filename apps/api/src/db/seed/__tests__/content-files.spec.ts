@@ -43,15 +43,16 @@ describe('the real content/ folder', () => {
 
   it('loads without errors', () => {
     const python = course('python');
-    // The full v1 track (docs/CONTENT_GUIDE.md §4, goal G-1): 40 lessons.
+    // The full v1 track (docs/CONTENT_GUIDE.md §4, goal G-1): 40 lessons,
+    // plus one checkpoint project per unit (ADR-043).
     expect(python.units.map((u) => [u.slug, u.lessons.length])).toEqual([
-      ['basics', 6],
-      ['conditionals', 6],
-      ['loops', 7],
-      ['strings', 6],
-      ['lists', 6],
-      ['functions', 5],
-      ['dictionaries', 4],
+      ['basics', 7],
+      ['conditionals', 7],
+      ['loops', 8],
+      ['strings', 7],
+      ['lists', 7],
+      ['functions', 6],
+      ['dictionaries', 5],
     ]);
   });
 
@@ -80,11 +81,11 @@ describe('the real content/ folder', () => {
     const js = course('javascript');
     expect(js.language).toBe('javascript');
     expect(js.units.map((u) => [u.slug, u.lessons.length])).toEqual([
-      ['basics', 5],
-      ['decisions', 3],
-      ['loops', 4],
-      ['arrays', 4],
-      ['functions-objects', 4],
+      ['basics', 6],
+      ['decisions', 4],
+      ['loops', 5],
+      ['arrays', 5],
+      ['functions-objects', 5],
     ]);
     for (const lesson of js.units.flatMap((u) => u.lessons)) {
       expect(lesson.exercise.checks, lesson.slug).toBeNull();
@@ -123,6 +124,8 @@ describe('the real content/ folder', () => {
   it('gives every lesson one spot-the-bug card, last', () => {
     for (const course of loadAllContent(REAL_CONTENT)) {
       for (const lesson of course.units.flatMap((u) => u.lessons)) {
+        // A project (ADR-043) has no Learn step.
+        if (lesson.project) continue;
         const where = `${course.slug}/${lesson.slug}`;
         const bugs = lesson.learn?.cards.filter((c) => c.bug) ?? [];
         expect(bugs, where).toHaveLength(1);
@@ -135,7 +138,7 @@ describe('the real content/ folder', () => {
   it('gives every lesson a Learn step', () => {
     for (const course of loadAllContent(REAL_CONTENT)) {
       for (const unit of course.units) {
-        for (const lesson of unit.lessons) {
+        for (const lesson of unit.lessons.filter((l) => !l.project)) {
           expect(lesson.learn, `${course.slug}/${lesson.slug}`).not.toBeNull();
         }
       }
@@ -689,8 +692,8 @@ describe('Hinglish (ADR-042)', () => {
   // The batches done so far (web: HINGLISH_COURSES in
   // components/lesson-language-picker.tsx).
   it.each([
-    ['python', 40],
-    ['javascript', 20],
+    ['python', 47],
+    ['javascript', 25],
     ['html-css', 15],
     ['git-github', 15],
   ])('every %s lesson has Hinglish', (slug, total) => {
@@ -701,4 +704,62 @@ describe('Hinglish (ADR-042)', () => {
       expect(lesson.exercise.promptHi, lesson.slug).not.toBeNull();
     }
   });
+});
+
+describe('checkpoint projects (ADR-043)', () => {
+  const project = {
+    ...validLesson,
+    slug: 'project-sum',
+    title: 'Project: Sum',
+    position: 2,
+    project: true,
+  };
+
+  it('a lesson is a project only when it says so', () => {
+    expect(parseLesson(validLesson, 'x.json').project).toBe(false);
+    expect(parseLesson(project, 'x.json').project).toBe(true);
+  });
+
+  it('a project has no Learn step', () => {
+    expect(() =>
+      parseLesson({ ...project, learn: validLearn }, 'x.json'),
+    ).toThrow(/no learn step/);
+  });
+
+  it('a project is the last lesson of its unit, and there is only one', () => {
+    const root = mkdtempSync(join(tmpdir(), 'projects-'));
+    const write = (name: string, json: object) =>
+      writeFileSync(join(root, 'course', 'unit', name), JSON.stringify(json));
+    try {
+      mkdirSync(join(root, 'course', 'unit'), { recursive: true });
+      writeFileSync(
+        join(root, 'course', 'course.json'),
+        JSON.stringify({ slug: 'c', title: 'C', language: 'python' }),
+      );
+      write('unit.json', { slug: 'u', title: 'U', position: 1 });
+      write('a.json', { ...validLesson, position: 1 });
+      write('b.json', { ...project, position: 3 });
+      expect(loadAllContent(root)[0].units[0].lessons.at(-1)?.project).toBe(
+        true,
+      );
+      write('c.json', { ...validLesson, slug: 'later', position: 4 });
+      expect(() => loadAllContent(root)).toThrow(/at most one project/);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
+
+  it.each(['python', 'javascript'])(
+    'every %s unit ends with one project',
+    (slug) => {
+      const course = loadAllContent(REAL_CONTENT).find((c) => c.slug === slug)!;
+      for (const unit of course.units) {
+        expect(
+          unit.lessons.filter((l) => l.project),
+          unit.slug,
+        ).toHaveLength(1);
+        expect(unit.lessons.at(-1)?.project, unit.slug).toBe(true);
+      }
+    },
+  );
 });

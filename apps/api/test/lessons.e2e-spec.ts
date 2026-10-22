@@ -99,14 +99,16 @@ describe('Lessons (e2e)', () => {
       expect.objectContaining({
         slug: 'javascript',
         language: 'javascript',
-        lessonCount: 20,
+        // 20 lessons and 5 projects (ADR-043).
+        lessonCount: 25,
         completedCount: 0,
         lastActivityAt: null,
       }),
       expect.objectContaining({
         slug: 'python',
         language: 'python',
-        lessonCount: 40,
+        // 40 lessons and 7 projects (ADR-043).
+        lessonCount: 47,
         completedCount: 0,
         lastActivityAt: null,
       }),
@@ -127,7 +129,7 @@ describe('Lessons (e2e)', () => {
       'Dictionaries',
     ]);
     const states = path.units.flatMap((u) => u.lessons.map((l) => l.state));
-    expect(states).toHaveLength(40);
+    expect(states).toHaveLength(47);
     expect(states[0]).toBe('active');
     expect(states.slice(1).every((s) => s === 'locked')).toBe(true);
     expect(path.units[0].lessons[0].title).toBe('Hello, world');
@@ -166,9 +168,10 @@ describe('Lessons (e2e)', () => {
 
   it('GET /courses/:slug/units/:unitId/bug-hunt lists the unit’s bug cards (ADR-031)', async () => {
     // The path says how long each unit's Bug hunt is.
-    // Every lesson has one bug card, so every unit has a full hunt.
+    // Every lesson has one bug card, so every unit has a full hunt; its
+    // project (ADR-043) has none.
     for (const unit of path.units) {
-      expect(unit.bugs).toBe(unit.lessons.length);
+      expect(unit.bugs).toBe(unit.lessons.filter((l) => !l.project).length);
     }
 
     const hunt = (await get(
@@ -299,9 +302,9 @@ describe('Lessons (e2e)', () => {
     const summary = await seedContent(db, CONTENT_DIR);
 
     expect(await counts()).toEqual(before);
-    // Python 7 units / 40 lessons, HTML & CSS 3 / 15, JavaScript 5 / 20,
-    // Git & GitHub 3 / 15.
-    expect(before).toEqual({ units: 18, lessons: 90, exercises: 90 });
+    // Python 7 units / 40 lessons + 7 projects, HTML & CSS 3 / 15,
+    // JavaScript 5 / 20 + 5 projects, Git & GitHub 3 / 15 (ADR-043).
+    expect(before).toEqual({ units: 18, lessons: 102, exercises: 102 });
     expect(summary.stale).toEqual([]);
     // Progress survives a re-seed because lesson ids are kept.
     const [{ n }] = await db.select({ n: count() }).from(userProgress);

@@ -1,0 +1,35 @@
+{
+  "slug": "project-samosa-party",
+  "title": "Project: Samosa party",
+  "position": 7,
+  "project": true,
+  "exercise": {
+    "prompt": "Plan the snacks for a party. Read the number of guests, then how many samosas each guest eats (whole numbers, one per line). Samosas come in packs of 6.\n1. Print `Samosas:` and the total number needed.\n2. Print `Packs:` and how many packs to buy. Hint: `(total + 5) // 6` rounds up to whole packs.\n3. Print `Spare:` and how many samosas are left over.",
+    "promptHi": "Party ke snacks plan karo. Guests ki sankhya padho, phir har guest kitne samose khaata hai (whole numbers, har line mein ek). Samose 6 ke pack mein aate hain.\n1. `Samosas:` aur kul kitne samose chahiye, print karo.\n2. `Packs:` aur kitne pack khareedne hain, print karo. Hint: `(total + 5) // 6` poore packs tak round up karta hai.\n3. `Spare:` aur kitne samose bachenge, print karo.",
+    "starterCode": "# Read the guests, then how many samosas each eats\n",
+    "sampleTests": [
+      {
+        "input": "4\n3\n",
+        "expectedOutput": "Samosas: 12\nPacks: 2\nSpare: 0"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "5\n2\n",
+        "expectedOutput": "Samosas: 10\nPacks: 2\nSpare: 2"
+      },
+      {
+        "input": "1\n1\n",
+        "expectedOutput": "Samosas: 1\nPacks: 1\nSpare: 5"
+      },
+      {
+        "input": "7\n4\n",
+        "expectedOutput": "Samosas: 28\nPacks: 5\nSpare: 2"
+      },
+      {
+        "input": "0\n5\n",
+        "expectedOutput": "Samosas: 0\nPacks: 0\nSpare: 0"
+      }
+    ]
+  }
+}

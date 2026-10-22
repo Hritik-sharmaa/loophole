@@ -1,0 +1,31 @@
+{
+  "slug": "project-guessing-game",
+  "title": "Project: Guessing game",
+  "position": 5,
+  "project": true,
+  "exercise": {
+    "prompt": "Referee a guessing game. The first line is the secret number; then come guesses, one per line, until one is right.\n1. For each wrong guess, print `Too high` or `Too low`.\n2. For the right guess, print `Got it in N tries`, or `Got it in 1 try` when the first guess was right.\nHint: keep reading guesses with `prompt()` inside a `while` loop.",
+    "promptHi": "Ek guessing game ke referee bano. Pehli line secret number hai; phir guesses aate hain, har line mein ek, jab tak ek sahi na ho.\n1. Har galat guess par `Too high` ya `Too low` print karo.\n2. Sahi guess par `Got it in N tries` print karo, ya agar pehla guess hi sahi tha toh `Got it in 1 try`.\nHint: `while` loop ke andar `prompt()` se guesses padhte raho.",
+    "starterCode": "// Read the secret, then guesses until one is right\n",
+    "sampleTests": [
+      {
+        "input": "42\n50\n25\n42\n",
+        "expectedOutput": "Too high\nToo low\nGot it in 3 tries"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "7\n7\n",
+        "expectedOutput": "Got it in 1 try"
+      },
+      {
+        "input": "100\n1\n50\n99\n100\n",
+        "expectedOutput": "Too low\nToo low\nToo low\nGot it in 4 tries"
+      },
+      {
+        "input": "1\n2\n1\n",
+        "expectedOutput": "Too high\nGot it in 2 tries"
+      }
+    ]
+  }
+}

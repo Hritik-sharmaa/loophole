@@ -1,0 +1,35 @@
+{
+  "slug": "project-number-pyramid",
+  "title": "Project: Number pyramid",
+  "position": 8,
+  "project": true,
+  "exercise": {
+    "prompt": "Build a number pyramid. Read N.\n1. Print N rows. Row 1 is `1`, row 2 is `1 2`, row 3 is `1 2 3`, and so on: the numbers separated by single spaces, with no space at the end.\n2. Then print `Sum:` and the total of every number you printed.\nHint: build each row as a string with an f-string, starting from `\"1\"`.",
+    "promptHi": "Ek number pyramid banao. N padho.\n1. N rows print karo. Row 1 hai `1`, row 2 hai `1 2`, row 3 hai `1 2 3`, aur aise hi aage: numbers single spaces se alag, aakhir mein koi space nahi.\n2. Phir `Sum:` aur jo bhi numbers print kiye unka total print karo.\nHint: har row ko f-string se string ki tarah banao, `\"1\"` se shuru karke.",
+    "starterCode": "# Read N, then print the rows and the sum\n",
+    "sampleTests": [
+      {
+        "input": "3\n",
+        "expectedOutput": "1\n1 2\n1 2 3\nSum: 10"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "1\n",
+        "expectedOutput": "1\nSum: 1"
+      },
+      {
+        "input": "4\n",
+        "expectedOutput": "1\n1 2\n1 2 3\n1 2 3 4\nSum: 20"
+      },
+      {
+        "input": "5\n",
+        "expectedOutput": "1\n1 2\n1 2 3\n1 2 3 4\n1 2 3 4 5\nSum: 35"
+      },
+      {
+        "input": "0\n",
+        "expectedOutput": "Sum: 0"
+      }
+    ]
+  }
+}

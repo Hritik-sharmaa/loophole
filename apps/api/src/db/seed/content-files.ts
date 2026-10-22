@@ -29,6 +29,8 @@ export type LessonContent = {
   slug: string;
   title: string;
   position: number;
+  // A checkpoint project (ADR-043).
+  project: boolean;
   // With the Hinglish next to the English (ADR-042).
   learn: StoredLearn | null;
   exercise: {
@@ -130,7 +132,16 @@ function loadUnit(
 
   assertUnique(lessons, 'slug', label(unitDir, root), 'lesson');
   assertUnique(lessons, 'position', label(unitDir, root), 'lesson');
-  return { ...unit, lessons: sortByPosition(lessons) };
+  const sorted = sortByPosition(lessons);
+  // ADR-043: at most one project per unit, and it comes last.
+  const projects = sorted.filter((l) => l.project);
+  if (projects.length > 1 || (projects[0] && sorted.at(-1) !== projects[0])) {
+    throw new ContentError(
+      label(unitDir, root),
+      'a unit has at most one project, and it is its last lesson',
+    );
+  }
+  return { ...unit, lessons: sorted };
 }
 
 export function parseCourse(
@@ -237,6 +248,14 @@ export function parseLesson(
     };
   }
 
+  const project = o.project === undefined ? false : o.project === true;
+  if (o.project !== undefined && typeof o.project !== 'boolean') {
+    throw new ContentError(file, 'project must be true or false');
+  }
+  // A project tests what the unit taught: no Learn step of its own.
+  if (project && o.learn !== undefined) {
+    throw new ContentError(file, 'a project has no learn step');
+  }
   const learn = o.learn === undefined ? null : parseLearn(o.learn, file, kind);
   assertHinglishComplete(
     learn,
@@ -248,6 +267,7 @@ export function parseLesson(
     slug: asSlug(o.slug, file, 'slug'),
     title: asText(o.title, file, 'title'),
     position: asPosition(o.position, file),
+    project,
     learn,
     exercise,
   };

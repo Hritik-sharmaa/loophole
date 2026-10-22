@@ -6,7 +6,7 @@
 //
 // Run with Node's built-in TypeScript support: node e2e/mock-backend.mts
 // Not a grader: a program passes when it calls no unknown function and
-// contains every sample test's expected output (enough for "print exactly
+// contains every line of each sample test's expected output (enough for "print exactly
 // ..." lessons); a duel or the bug of the day passes once the code changes.
 
 import type {
@@ -79,6 +79,8 @@ type ExerciseFile = {
 };
 type LessonFile = {
   title: string;
+  // A checkpoint project (ADR-043).
+  project?: boolean;
   learn?: LessonLearn;
   exercise: ExerciseFile;
 };
@@ -284,19 +286,24 @@ const xpSince = (user: UserState, day: string) =>
 
 // ---- Answers ----
 
+// Like the API's lessonStates (ADR-043): a project opens once the lesson
+// before it is done and never holds back the next lesson.
 function states(user: UserState, course: Course): Map<string, LessonState> {
-  const all = course.units.flatMap((u) => u.lessons);
-  const firstOpen = all.findIndex((l) => !user.completed.has(l.id));
-  return new Map(
-    all.map((l, i) => [
-      l.id,
-      user.completed.has(l.id)
-        ? 'completed'
-        : i === firstOpen
-          ? 'active'
-          : 'locked',
-    ]),
-  );
+  const result = new Map<string, LessonState>();
+  let activeGiven = false;
+  let lessonBeforeDone = true;
+  for (const l of course.units.flatMap((u) => u.lessons)) {
+    const done = user.completed.has(l.id);
+    if (done) result.set(l.id, 'completed');
+    else if (l.project)
+      result.set(l.id, lessonBeforeDone ? 'active' : 'locked');
+    else if (!activeGiven) {
+      result.set(l.id, 'active');
+      activeGiven = true;
+    } else result.set(l.id, 'locked');
+    if (!l.project) lessonBeforeDone = done;
+  }
+  return result;
 }
 
 function me(user: UserState): MeResponse {
@@ -366,6 +373,7 @@ function path(user: UserState, course: Course): CoursePath {
         id: l.id,
         title: l.title,
         state: st.get(l.id) ?? 'locked',
+        project: l.project ?? false,
       })),
     })),
     certificateSlug: null,
@@ -431,6 +439,7 @@ function lessonDetail(
   return {
     id: lesson.id,
     title: lesson.title,
+    project: lesson.project ?? false,
     course: {
       slug: lesson.course.slug,
       title: lesson.course.title,
@@ -472,8 +481,16 @@ function grade(
   let stderr = '';
   if (kind === 'program') {
     stderr = nameError(code);
+    // Every line of each expected output appears in the code (a project's
+    // output has several lines, ADR-043).
     const passed =
-      !stderr && samples.every((t) => code.includes(t.expectedOutput.trim()));
+      !stderr &&
+      samples.every((t) =>
+        t.expectedOutput
+          .trim()
+          .split('\n')
+          .every((line) => code.includes(line)),
+      );
     results = [
       ...samples.map((t) => ({
         kind: 'sample' as const,
@@ -504,8 +521,8 @@ function grade(
   if (lessonCompleted && !user.completed.has(lesson.id)) {
     const now = new Date();
     user.completed.set(lesson.id, now);
-    user.xp.push({ at: now, amount: 10 });
-    xpAwarded = 10;
+    xpAwarded = lesson.project ? 30 : 10;
+    user.xp.push({ at: now, amount: xpAwarded });
   }
   const id = randomUUID();
   const history = user.submissions.get(lesson.exerciseId) ?? [];

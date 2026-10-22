@@ -75,7 +75,13 @@ export type CoursePath = {
   units: {
     id: string;
     title: string;
-    lessons: { id: string; title: string; state: LessonState }[];
+    // `project`: the unit's checkpoint project (ADR-043), its last stop.
+    lessons: {
+      id: string;
+      title: string;
+      state: LessonState;
+      project: boolean;
+    }[];
     // How many bug cards the unit has: its Bug hunt's length (ADR-031).
     bugs: number;
   }[];
@@ -236,6 +242,8 @@ export type WebCheck =
 export type LessonDetail = {
   id: string;
   title: string;
+  // A checkpoint project (ADR-043): no Learn step, a longer task, more XP.
+  project: boolean;
   // The course it belongs to: the way back to its path, and its language
   // for the editor's highlighting and file name.
   course: { slug: string; title: string; language: string };

@@ -1,0 +1,35 @@
+{
+  "slug": "project-shop-receipt",
+  "title": "Project: Shop receipt",
+  "position": 6,
+  "project": true,
+  "exercise": {
+    "prompt": "Print a shop receipt. The first line is a count N; then N lines of `item price quantity` (whole numbers).\n1. Finish `line_total(price, qty)` so it returns the price times the quantity.\n2. Finish `discount(subtotal)` so it returns 10% of the subtotal rounded down (`subtotal // 10`) when the subtotal is 1000 or more, and 0 otherwise.\n3. For each line, print `item: line total`, like `chai: 60`.\n4. Then print `Subtotal:`, `Discount:` and `Total:` (the subtotal minus the discount), each with its number.",
+    "promptHi": "Dukaan ki receipt print karo. Pehli line mein count N hai; phir `item price quantity` ki N lines (whole numbers).\n1. `line_total(price, qty)` poora karo taaki woh price guna quantity return kare.\n2. `discount(subtotal)` poora karo taaki subtotal 1000 ya usse zyada ho toh woh subtotal ka 10% neeche round karke (`subtotal // 10`) return kare, warna 0.\n3. Har line ke liye `item: line total` print karo, jaise `chai: 60`.\n4. Phir `Subtotal:`, `Discount:` aur `Total:` (subtotal minus discount) print karo, har ek apne number ke saath.",
+    "starterCode": "def line_total(price, qty):\n    # Return the price times the quantity\n    pass\n\n\ndef discount(subtotal):\n    # Return subtotal // 10 when subtotal is 1000 or more, else 0\n    pass\n\n\n# Read N, then N lines of item, price and quantity\n",
+    "sampleTests": [
+      {
+        "input": "2\nchai 20 3\nsamosa 15 4\n",
+        "expectedOutput": "chai: 60\nsamosa: 60\nSubtotal: 120\nDiscount: 0\nTotal: 120"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "1\nshoes 1200 1\n",
+        "expectedOutput": "shoes: 1200\nSubtotal: 1200\nDiscount: 120\nTotal: 1080"
+      },
+      {
+        "input": "3\npen 10 5\nbook 300 3\nbag 55 1\n",
+        "expectedOutput": "pen: 50\nbook: 900\nbag: 55\nSubtotal: 1005\nDiscount: 100\nTotal: 905"
+      },
+      {
+        "input": "1\nmug 999 1\n",
+        "expectedOutput": "mug: 999\nSubtotal: 999\nDiscount: 0\nTotal: 999"
+      },
+      {
+        "input": "2\nlamp 500 1\nfan 500 1\n",
+        "expectedOutput": "lamp: 500\nfan: 500\nSubtotal: 1000\nDiscount: 100\nTotal: 900"
+      }
+    ]
+  }
+}

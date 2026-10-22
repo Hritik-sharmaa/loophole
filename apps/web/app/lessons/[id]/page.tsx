@@ -267,11 +267,14 @@ function Exercise({
         speak={prompt}
       >
         <p className="text-xs font-bold tracking-wide text-text-secondary uppercase">
-          Your task
+          {lesson.project ? 'Your project · +30 XP' : 'Your task'}
         </p>
-        <p className="text-lg">
-          <InlineCode text={prompt} />
-        </p>
+        {/* A project's brief is a few lines: one paragraph each (ADR-043). */}
+        {prompt.split('\n').map((line, i) => (
+          <p key={i} className={`text-lg ${i > 0 ? 'mt-2' : ''}`}>
+            <InlineCode text={line} />
+          </p>
+        ))}
       </GuideSays>
       {onReviewCards && (
         <button
@@ -357,7 +360,7 @@ function Exercise({
           className={`${stickerOutline} flex flex-wrap items-center justify-between gap-4 bg-lemon px-5 py-3`}
         >
           <p className="font-display text-xl font-extrabold">
-            Lesson complete!
+            {lesson.project ? 'Project complete!' : 'Lesson complete!'}
           </p>
           <Link
             href={
@@ -433,7 +436,9 @@ function LessonComplete({
           className="h-48 w-[137px]"
         />
       </div>
-      <h1 className="font-display text-4xl font-extrabold">Lesson complete!</h1>
+      <h1 className="font-display text-4xl font-extrabold">
+        {lesson.project ? 'Project complete!' : 'Lesson complete!'}
+      </h1>
       <p className="text-lg">
         <span className="font-bold">{name}:</span> “{cheer} {words.finished[0]}
         <span className="font-bold">{lesson.title}</span>

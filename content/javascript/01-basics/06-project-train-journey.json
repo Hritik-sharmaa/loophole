@@ -1,0 +1,35 @@
+{
+  "slug": "project-train-journey",
+  "title": "Project: Train journey",
+  "position": 6,
+  "project": true,
+  "exercise": {
+    "prompt": "Plan a train journey. Read the distance in km, then the speed in km/h (whole numbers, one per line).\n1. Work out the travel time in whole minutes: `Math.floor(distance * 60 / speed)`.\n2. Print it as `Time: H h M min`, like `Time: 2 h 30 min`.\n3. The fare is 50 plus 2 for every km. Print `Fare:` and the fare.",
+    "promptHi": "Ek train journey plan karo. Doori km mein padho, phir speed km/h mein (whole numbers, har line mein ek).\n1. Safar ka time poore minutes mein nikaalo: `Math.floor(distance * 60 / speed)`.\n2. Use `Time: H h M min` ki tarah print karo, jaise `Time: 2 h 30 min`.\n3. Kiraya 50 plus har km ke 2 hai. `Fare:` aur kiraya print karo.",
+    "starterCode": "// Read the distance, then the speed\n",
+    "sampleTests": [
+      {
+        "input": "150\n60\n",
+        "expectedOutput": "Time: 2 h 30 min\nFare: 350"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "100\n100\n",
+        "expectedOutput": "Time: 1 h 0 min\nFare: 250"
+      },
+      {
+        "input": "45\n90\n",
+        "expectedOutput": "Time: 0 h 30 min\nFare: 140"
+      },
+      {
+        "input": "500\n80\n",
+        "expectedOutput": "Time: 6 h 15 min\nFare: 1050"
+      },
+      {
+        "input": "1\n7\n",
+        "expectedOutput": "Time: 0 h 8 min\nFare: 52"
+      }
+    ]
+  }
+}

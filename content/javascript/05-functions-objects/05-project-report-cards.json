@@ -1,0 +1,31 @@
+{
+  "slug": "project-report-cards",
+  "title": "Project: Report cards",
+  "position": 5,
+  "project": true,
+  "exercise": {
+    "prompt": "Grade a whole class. The first line is a count N; then N lines of `name mark`.\n1. Write a function `gradeOf(mark)` that returns `A` for 90 or more, `B` for 75 or more, `C` for 50 or more, and `F` below that.\n2. For each student, print `name: grade`, like `asha: A`.\n3. Count the grades in an object. Then print each grade that at least one student got, in the order A, B, C, F, as `A: 2`.",
+    "promptHi": "Poori class ko grade do. Pehli line mein count N hai; phir `name mark` ki N lines.\n1. Ek function `gradeOf(mark)` likho jo 90 ya usse zyada par `A`, 75 ya usse zyada par `B`, 50 ya usse zyada par `C`, aur usse kam par `F` return kare.\n2. Har student ke liye `name: grade` print karo, jaise `asha: A`.\n3. Grades ko ek object mein gino. Phir har woh grade jo kam se kam ek student ko mila, A, B, C, F ke order mein, `A: 2` ki tarah print karo.",
+    "starterCode": "function gradeOf(mark) {\n  // Return \"A\", \"B\", \"C\" or \"F\"\n}\n\n// Read N, then N lines of name and mark\n",
+    "sampleTests": [
+      {
+        "input": "3\nasha 95\nravi 72\nmeera 88\n",
+        "expectedOutput": "asha: A\nravi: C\nmeera: B\nA: 1\nB: 1\nC: 1"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "2\nx 10\ny 49\n",
+        "expectedOutput": "x: F\ny: F\nF: 2"
+      },
+      {
+        "input": "4\na 90\nb 75\nc 50\nd 89\n",
+        "expectedOutput": "a: A\nb: B\nc: C\nd: B\nA: 1\nB: 2\nC: 1"
+      },
+      {
+        "input": "1\nsolo 100\n",
+        "expectedOutput": "solo: A\nA: 1"
+      }
+    ]
+  }
+}

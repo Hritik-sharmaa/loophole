@@ -39,14 +39,15 @@ Conventions: `uuid` primary keys (`gen_random_uuid()`), `timestamptz` in UTC, sn
 
 ### lessons — S2
 
-| Column   | Type            | Notes                                                                                      |
-| -------- | --------------- | ------------------------------------------------------------------------------------------ |
-| id       | uuid PK         |                                                                                            |
-| unit_id  | uuid FK → units |                                                                                            |
-| slug     | text            | unique per unit                                                                            |
-| title    | text            |                                                                                            |
-| position | int             | unique (unit_id, position)                                                                 |
-| learn    | jsonb, nullable | Learn step: `{ cards, check }` (ADR-021, CONTENT_GUIDE §3); returned by `GET /lessons/:id` |
+| Column     | Type            | Notes                                                                                      |
+| ---------- | --------------- | ------------------------------------------------------------------------------------------ |
+| id         | uuid PK         |                                                                                            |
+| unit_id    | uuid FK → units |                                                                                            |
+| slug       | text            | unique per unit                                                                            |
+| title      | text            |                                                                                            |
+| position   | int             | unique (unit_id, position)                                                                 |
+| learn      | jsonb, nullable | Learn step: `{ cards, check }` (ADR-021, CONTENT_GUIDE §3); returned by `GET /lessons/:id` |
+| is_project | boolean         | default false; the unit's checkpoint project, its last lesson (ADR-043, migration 0017)    |
 
 ### exercises — S2
 

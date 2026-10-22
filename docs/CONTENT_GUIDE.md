@@ -113,6 +113,31 @@ A card with a `bug` is a spot-the-bug card: short code with exactly one wrong li
 - Put it last, after the teaching cards, so it practises what they just taught. It counts toward the 1–5 cards.
 - Bug cards stay out of the unit's cheat sheet and make up its **Bug hunt**, the review at the end of the unit. Every lesson has exactly one, as its last card; `content-files.spec.ts` checks that.
 
+### Checkpoint projects (ADR-043)
+
+The last lesson of a unit can be a project: a bigger exercise that combines what the unit taught. It is a lesson file with `"project": true` and no `learn`:
+
+```json
+{
+  "slug": "project-samosa-party",
+  "title": "Project: Samosa party",
+  "position": 7,
+  "project": true,
+  "exercise": {
+    "prompt": "Plan the snacks for a party. ...\n1. Print `Samosas:` and the total number needed.\n2. ...",
+    "promptHi": "Party ke snacks plan karo. ...\n1. ...",
+    "starterCode": "# Read the guests, then how many samosas each eats\n",
+    "sampleTests": [{ "input": "4\n3\n", "expectedOutput": "Samosas: 12\nPacks: 2\nSpare: 0" }],
+    "hiddenTests": [ ... ]
+  }
+}
+```
+
+- One per unit, last. Title it `Project: <name>`. The prompt is a short scene, then numbered steps, one per line (each line shows as its own paragraph). It may give a hint for one thing the unit didn't teach.
+- Use only what the course has taught so far. Several output lines are fine; spell out every label exactly.
+- Keep the reference solution in `content-solutions/<course>/<unit>/<file>.py` or `.js`, and produce the expected outputs by running it on the inputs; the starter code must fail. At least 3 hidden tests, edge cases included (zero, one item, ties).
+- Write the Hinglish `promptHi` too, with the same `code` spans.
+
 ### Hinglish (ADR-042)
 
 A lesson may carry Hinglish next to its English. It is all or nothing: every card, the check and the exercise, or none of them (the loader refuses half).

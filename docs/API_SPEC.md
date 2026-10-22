@@ -50,6 +50,8 @@ Base URL: `https://api.<domain>` (local: `http://localhost:3001`). All bodies ar
 
 `hidden_tests` must never appear in any of these responses. `test/lessons.e2e-spec.ts` searches every response body for it.
 
+**Projects (ADR-043):** each unit's last lesson may be a checkpoint project: `project: true` in `GET /courses/:slug/path` lessons and in `GET /lessons/:id`, `learn: null`, and a prompt of several lines (one step each). A project opens when the lesson before it is done and doesn't lock the lessons after it; a first pass pays 30 XP instead of 10.
+
 `learn` is the Learn step (ADR-021), or `null` for a lesson without one: `{ cards: [{ title, body, code?, input?, output? }], check: { question, code?, options, answer, explanation } }`. The quick check's `answer` is sent on purpose: the check is ungraded, pays no XP and records nothing.
 
 ### Runs — Learn step (ADR-021)
