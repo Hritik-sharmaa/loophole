@@ -95,7 +95,8 @@ describe('duel-soak script (e2e)', () => {
     // NFR-10 on a local stack: delivery well under 500 ms.
     expect(Math.max(...report.deliveryMs)).toBeLessThan(500);
 
-    // A won all five: its rating went up, B's went down by the same.
+    // A won all five, but only the first counts: the same pair's rematches
+    // within a day are unrated (ADR-054). A went up, B down by the same.
     const [a] = await db
       .select()
       .from(ratings)
@@ -104,8 +105,7 @@ describe('duel-soak script (e2e)', () => {
       .select()
       .from(ratings)
       .where(eq(ratings.userId, USERS.botB.id));
-    expect(a).toMatchObject({ wins: 5, losses: 0 });
-    expect(b).toMatchObject({ wins: 0, losses: 5 });
-    expect(a.elo - 1200).toBe(1200 - b.elo);
+    expect(a).toMatchObject({ wins: 1, losses: 0, elo: 1216 });
+    expect(b).toMatchObject({ wins: 0, losses: 1, elo: 1184 });
   });
 });

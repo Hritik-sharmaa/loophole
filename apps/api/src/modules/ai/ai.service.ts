@@ -30,6 +30,7 @@ import { UsersService } from '../users/users.service.js';
 import type { ExplainCardDto } from './dto/explain-card.dto.js';
 import type { HintDto } from './dto/hint.dto.js';
 import {
+  GENERIC_EXPLANATION,
   GENERIC_HINT,
   containsCodeBlock,
   limitWords,
@@ -103,6 +104,14 @@ export class AiService {
           failingCheck?.kind === 'check' ? failingCheck.label : undefined,
         stderr: row.stderr,
       });
+      // The learner's code is in the prompt, so it can try to talk the
+      // tutor into writing the answer; the same check as hints.
+      if (containsCodeBlock(out.explanation)) {
+        this.logger.warn(
+          'Explanation contained a code block; sent the generic one',
+        );
+        return { explanation: GENERIC_EXPLANATION, line: null, remainingToday };
+      }
       return {
         explanation: limitWords(out.explanation),
         line: validLine(out.line, row.code),

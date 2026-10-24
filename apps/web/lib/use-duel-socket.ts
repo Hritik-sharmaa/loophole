@@ -181,6 +181,12 @@ export function useDuelSocket(myId: string | null, enabled: boolean) {
     socket.on('error', (e: SocketError) =>
       dispatch({ type: 'error', error: e }),
     );
+    // The server closes a socket whose token expired; Socket.io doesn't
+    // retry that on its own. Reconnecting fetches a fresh token, and a
+    // live duel resumes.
+    socket.on('disconnect', (reason) => {
+      if (reason === 'io server disconnect') socket.connect();
+    });
 
     return () => {
       socket.disconnect();

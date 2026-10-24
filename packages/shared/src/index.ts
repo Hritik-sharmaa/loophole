@@ -86,7 +86,6 @@ export type MeResponse = {
 // PATCH /me body
 export type UpdateMeRequest = {
   username?: string;
-  avatarUrl?: string;
   dailyGoal?: DailyGoal;
   lessonLanguage?: LessonLanguage;
   avatar?: AvatarCode;

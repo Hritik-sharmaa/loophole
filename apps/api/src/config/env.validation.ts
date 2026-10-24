@@ -36,10 +36,11 @@ export class EnvironmentVariables {
   @IsUrl({ require_protocol: true, protocols: ['https', 'http'] })
   SUPABASE_URL: string;
 
-  // Server-only. Never sent to the web app (AGENTS.md hard rule 3).
+  // The project's public anon key (the web app has it too). Enough to
+  // verify tokens; the service key is never needed here.
   @IsString()
   @IsNotEmpty()
-  SUPABASE_SERVICE_KEY: string;
+  SUPABASE_ANON_KEY: string;
 
   // Local Piston (http://localhost:2000) or the Compose service name in
   // production (http://piston:2000). Server-only, like the keys above.

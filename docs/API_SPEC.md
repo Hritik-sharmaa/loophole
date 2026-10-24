@@ -7,17 +7,18 @@ Base URL: `https://api.<domain>` (local: `http://localhost:3001`). All bodies ar
 - **Auth:** `Authorization: Bearer <supabase access token>` on every route unless marked Public.
 - **Errors:** `{ "error": { "code": "LESSON_LOCKED", "message": "Finish the previous lesson first." } }`
 
-| HTTP | code                                      | When                                 |
-| ---- | ----------------------------------------- | ------------------------------------ |
-| 400  | `VALIDATION_FAILED`                       | DTO validation failed                |
-| 401  | `UNAUTHENTICATED`                         | Missing or invalid token             |
-| 403  | `LESSON_LOCKED`                           | Lesson not yet unlocked              |
-| 404  | `NOT_FOUND`                               | Resource does not exist              |
-| 409  | `ILLEGAL_TRANSITION`                      | Duel action not allowed in its state |
-| 409  | `USERNAME_TAKEN`                          | `PATCH /me` with a username in use   |
-| 429  | `RATE_LIMITED` / `DAILY_LIMIT_REACHED`    | Throttle or AI cap                   |
-| 500  | `INTERNAL_ERROR`                          | Unexpected server error              |
-| 502  | `EXECUTOR_UNAVAILABLE` / `AI_UNAVAILABLE` | Piston or Gemini down                |
+| HTTP | code                                      | When                                                                              |
+| ---- | ----------------------------------------- | --------------------------------------------------------------------------------- |
+| 400  | `VALIDATION_FAILED`                       | DTO validation failed                                                             |
+| 401  | `UNAUTHENTICATED`                         | Missing or invalid token                                                          |
+| 403  | `LESSON_LOCKED`                           | Lesson not yet unlocked                                                           |
+| 404  | `NOT_FOUND`                               | Resource does not exist                                                           |
+| 409  | `ILLEGAL_TRANSITION`                      | Duel action not allowed in its state                                              |
+| 409  | `USERNAME_TAKEN`                          | `PATCH /me` with a username in use                                                |
+| 429  | `RATE_LIMITED` / `DAILY_LIMIT_REACHED`    | Throttle, AI cap, or a run of yours still going (one at a time per user, ADR-054) |
+| 500  | `INTERNAL_ERROR`                          | Unexpected server error                                                           |
+| 502  | `EXECUTOR_UNAVAILABLE` / `AI_UNAVAILABLE` | Piston or Gemini down                                                             |
+| 503  | `EXECUTOR_BUSY`                           | Piston's queue is full (20 runs waiting)                                          |
 
 ## REST endpoints
 
@@ -29,11 +30,11 @@ Base URL: `https://api.<domain>` (local: `http://localhost:3001`). All bodies ar
 
 ### Users — S1
 
-| Method | Path           | Body                                                              | Response                                                                                                                                                                                                                                                                        |
-| ------ | -------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| GET    | `/me`          | —                                                                 | `{ id, username, avatarUrl, xp, streak: { current, longest, freezes }, rating, lessonsCompleted, dailyGoal, todayXp, lessonLanguage, avatar }` — `dailyGoal` is 10, 20, 30 or null; `todayXp` is XP since 00:00 IST (ADR-033); `lessonLanguage` is `en` or `hinglish` (ADR-042) |
-| GET    | `/me/activity` | —                                                                 | `{ from, today, days: [{ date, xp }] }` — XP per IST day from `from` (Monday four weeks ago) to `today`; days without XP are left out (ADR-033)                                                                                                                                 |
-| PATCH  | `/me`          | `{ username?, avatarUrl?, dailyGoal?, lessonLanguage?, avatar? }` | updated profile; `dailyGoal` must be 10, 20 or 30 and `lessonLanguage` `en` or `hinglish` (400 otherwise)                                                                                                                                                                       |
+| Method | Path           | Body                                                  | Response                                                                                                                                                                                                                                                                        |
+| ------ | -------------- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET    | `/me`          | —                                                     | `{ id, username, avatarUrl, xp, streak: { current, longest, freezes }, rating, lessonsCompleted, dailyGoal, todayXp, lessonLanguage, avatar }` — `dailyGoal` is 10, 20, 30 or null; `todayXp` is XP since 00:00 IST (ADR-033); `lessonLanguage` is `en` or `hinglish` (ADR-042) |
+| GET    | `/me/activity` | —                                                     | `{ from, today, days: [{ date, xp }] }` — XP per IST day from `from` (Monday four weeks ago) to `today`; days without XP are left out (ADR-033)                                                                                                                                 |
+| PATCH  | `/me`          | `{ username?, dailyGoal?, lessonLanguage?, avatar? }` | updated profile; `dailyGoal` must be 10, 20 or 30 and `lessonLanguage` `en` or `hinglish` (400 otherwise); `avatarUrl` is no longer accepted (ADR-054)                                                                                                                          |
 
 - **Lesson language (ADR-042):** `GET /lessons/:id`, the cheat sheet, the bug hunt and practice answer in the caller's `lessonLanguage`: card titles and bodies, bug fixes, the quick check's question, explanation and word options, the exercise prompt, and web and git checklist labels (also in `POST /submissions` results). Code, outputs and answers are the same in both. A lesson without Hinglish yet comes back in English. The response shapes don't change, and the stored Hinglish is never sent as such.
 
@@ -226,7 +227,9 @@ Namespace: `/duels`. Connect with `auth: { token: <supabase access token> }`; th
 
 Rules: the opponent's code is never sent; `endsAt` is an ISO timestamp the client counts down to; duel submissions are throttled to 1 every 3 s per player.
 
-- **Connect:** a missing or bad token fails the handshake with `connect_error`, `err.data = { code: "UNAUTHENTICATED", message }`. A player mid-duel who reconnects (reload, second tab) gets `duel:matched` and `duel:start` again for that duel.
+- **Connect:** a missing or bad token fails the handshake with `connect_error`, `err.data = { code: "UNAUTHENTICATED", message }`; a sixth open socket for one user fails with `RATE_LIMITED` (ADR-054). A player mid-duel who reconnects (reload, second tab) gets `duel:matched` and `duel:start` again for that duel.
+- **Expired token (ADR-054):** the first event after the connect token's expiry closes the socket (`io server disconnect`); the web app reconnects with a fresh token.
+- **Rematches (ADR-054):** a duel between two players who finished a duel together in the last 24 hours is unrated: `ratingChange` is 0 for both.
 - **Errors** arrive as `error` events with the REST codes: `VALIDATION_FAILED` (bad payload), `NOT_FOUND` (unknown duel or not a player), `ILLEGAL_TRANSITION` (duel not running, or `queue:join` while in a duel), `RATE_LIMITED` (throttle).
 - **Languages (ADR-040):** `queue:join` takes `language`, `python` or `javascript` (no payload means `python`; anything else is `VALIDATION_FAILED`). Only players who picked the same language are paired, and the duel's problem comes from that pool. `queue:joined.position` is the place among players waiting for that language. Queueing again from another tab may switch language and keeps the wait.
 - `duel:result` uses the lesson grading (hidden tests report only `passed`); `duel:progress` goes to both players.

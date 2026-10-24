@@ -98,6 +98,7 @@ export class SubmissionsService {
           : grade(
               await runTests(
                 this.piston,
+                user.id,
                 exercise.language,
                 code,
                 exercise.sampleTests,

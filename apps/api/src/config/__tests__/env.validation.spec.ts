@@ -5,7 +5,7 @@ describe('validateEnv', () => {
     CORS_ORIGIN: 'http://localhost:3000',
     DATABASE_URL: 'postgresql://postgres:pw@localhost:5432/postgres',
     SUPABASE_URL: 'https://abc.supabase.co',
-    SUPABASE_SERVICE_KEY: 'service-key',
+    SUPABASE_ANON_KEY: 'anon-key',
     PISTON_URL: 'http://localhost:2000',
     GEMINI_API_KEY: 'test-gemini-key',
   };
@@ -46,9 +46,9 @@ describe('validateEnv', () => {
       /SUPABASE_URL/,
     ],
     [
-      'SUPABASE_SERVICE_KEY is empty',
-      { ...valid, SUPABASE_SERVICE_KEY: '' },
-      /SUPABASE_SERVICE_KEY/,
+      'SUPABASE_ANON_KEY is empty',
+      { ...valid, SUPABASE_ANON_KEY: '' },
+      /SUPABASE_ANON_KEY/,
     ],
     [
       'PISTON_URL is missing',

@@ -1,4 +1,9 @@
-import { BadGatewayException, Injectable, Logger } from '@nestjs/common';
+import {
+  BadGatewayException,
+  Injectable,
+  Logger,
+  ServiceUnavailableException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import type { EnvironmentVariables } from '../config/env.validation.js';
 
@@ -12,6 +17,11 @@ const MEMORY_LIMIT_BYTES = 256 * 1024 * 1024;
 // so a slow program shows up as timedOut, not as Piston being down.
 const REQUEST_TIMEOUT_MS = 10_000;
 const HEALTH_TIMEOUT_MS = 2_000;
+
+// Runs waiting or running at once, across all users. Each user grades one
+// program at a time (oneRunAtATime), so this is about one per active user;
+// past it, a run is refused with 503 instead of waiting minutes in line.
+export const MAX_PENDING_RUNS = 20;
 
 // The file name Piston saves the code under, per language.
 const FILE_NAMES: Record<string, string> = {
@@ -54,6 +64,7 @@ export class PistonClient {
   private readonly baseUrl: string;
   // Settles when the previous run finishes; each run waits for it.
   private queue: Promise<unknown> = Promise.resolve();
+  private pending = 0;
 
   constructor(config: ConfigService<EnvironmentVariables, true>) {
     this.baseUrl = `${config.get('PISTON_URL', { infer: true })}/api/v2`;
@@ -78,7 +89,18 @@ export class PistonClient {
   }
 
   run(language: string, code: string, stdin: string): Promise<RunResult> {
-    const job = this.queue.then(() => this.execute(language, code, stdin));
+    if (this.pending >= MAX_PENDING_RUNS) {
+      return Promise.reject(
+        new ServiceUnavailableException({
+          code: 'EXECUTOR_BUSY',
+          message: 'The code runner is busy right now. Try again in a minute.',
+        }),
+      );
+    }
+    this.pending++;
+    const job = this.queue
+      .then(() => this.execute(language, code, stdin))
+      .finally(() => this.pending--);
     // A failed run must not block the ones behind it.
     this.queue = job.catch(() => undefined);
     return job;

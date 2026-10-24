@@ -1,11 +1,4 @@
-import {
-  IsIn,
-  IsOptional,
-  IsString,
-  IsUrl,
-  Length,
-  Matches,
-} from 'class-validator';
+import { IsIn, IsOptional, IsString, Length, Matches } from 'class-validator';
 import type {
   AvatarCode,
   DailyGoal,
@@ -24,10 +17,6 @@ export class UpdateMeDto implements UpdateMeRequest {
     message: 'username may only use lowercase letters, digits and _',
   })
   username?: string;
-
-  @IsOptional()
-  @IsUrl({ require_protocol: true, protocols: ['https'] })
-  avatarUrl?: string;
 
   // ADR-033: about one, two or three lessons a day.
   @IsOptional()

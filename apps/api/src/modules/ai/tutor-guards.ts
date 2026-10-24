@@ -11,6 +11,11 @@ export const MAX_CODE_LINES = 3;
 export const GENERIC_HINT =
   'Read the exercise again and compare it with what your program prints for the example. Which line produces the output, and what does it need to print instead?';
 
+// Sent instead of an explanation that wrote out the fix, e.g. after a
+// learner's code comment asked the tutor to ignore its rules.
+export const GENERIC_EXPLANATION =
+  'Look at the error message and the line it points to, then compare what your program printed with what the example expects. Change one thing at a time and run it again.';
+
 // A line that reads as code rather than prose: indented, a Python keyword
 // at the start, an assignment, or a call / open bracket at the end. (Not a
 // trailing colon: prose ends with one too, and Python lines that do start

@@ -12,3 +12,10 @@ ignoredBuiltDependencies:
   - protobufjs
   - sharp
   - unrs-resolver
+
+# Transitive packages held past security advisories (ADR-054): body-parser
+# and multer come with Express, fast-uri with ajv.
+overrides:
+  body-parser: '^2.4.0'
+  multer: '^2.5.0'
+  fast-uri: '^3.1.9'

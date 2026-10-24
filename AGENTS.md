@@ -33,7 +33,7 @@ It is a solo portfolio project. Its second purpose is to teach the developer sys
 
 1. **The client is never trusted.** Grading, XP, streaks, ratings and duel winners are computed on the server only.
 2. **Hidden test cases and duel solutions never leave the server.** No API response may include `hidden_tests`.
-3. **Secrets live only in `apps/api/.env`.** `GEMINI_API_KEY`, `SUPABASE_SERVICE_KEY` and `PISTON_URL` never reach the frontend bundle.
+3. **Secrets live only in `apps/api/.env`.** `GEMINI_API_KEY`, `DATABASE_URL` and `PISTON_URL` never reach the frontend bundle. The Supabase service key is used nowhere: the API verifies tokens with the public anon key (ADR-054).
 4. **Thin controllers.** Controllers and gateways validate, call one service method, and return. Business rules live in services (ADR-015).
 5. **One file per outside system.** Only `integrations/piston.client.ts` talks to Piston, only `integrations/gemini.client.ts` imports `@google/genai`, and only `integrations/supabase-auth.client.ts` calls Supabase Auth. Services use the shared `DbService` for Drizzle; there are no repository classes, interfaces or DI tokens in v1.
 6. **Test the logic that is easy to get wrong:** grading, streaks, ELO, the duel winner, and that no response contains hidden tests.

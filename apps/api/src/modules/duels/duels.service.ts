@@ -20,7 +20,18 @@ import type {
   QueueJoined,
   SocketError,
 } from '@loophole/shared';
-import { and, desc, eq, inArray, isNull, max, or, sql } from 'drizzle-orm';
+import {
+  and,
+  desc,
+  eq,
+  gt,
+  inArray,
+  isNull,
+  max,
+  ne,
+  or,
+  sql,
+} from 'drizzle-orm';
 import type { Namespace, Socket } from 'socket.io';
 import { avatarOf } from '../../common/avatars.js';
 import { RateLimiter } from '../../common/rate-limiter.js';
@@ -43,6 +54,8 @@ import {
   REMATCH_INTERVAL_MS,
   DUEL_DURATION_MS,
   MAX_ACTIVE_DUELS,
+  MAX_SOCKETS_PER_USER,
+  REMATCH_UNRATED_MS,
   SUBMIT_INTERVAL_MS,
   assertTransition,
   timeoutOutcome,
@@ -121,6 +134,13 @@ export class DuelsService implements OnApplicationBootstrap, OnModuleDestroy {
   }
 
   // ---- connections -------------------------------------------------------
+
+  // Checked before a socket connects: each connection costs database
+  // reads, so one user can't open hundreds.
+  async canConnect(userId: string): Promise<boolean> {
+    const open = await this.room([userRoom(userId)]).fetchSockets();
+    return open.length < MAX_SOCKETS_PER_USER;
+  }
 
   // A verified socket connected. If its user is mid-duel (a reload, a second
   // tab), it rejoins the room and gets the duel again.
@@ -345,6 +365,9 @@ export class DuelsService implements OnApplicationBootstrap, OnModuleDestroy {
         HttpStatus.TOO_MANY_REQUESTS,
       );
     }
+    // Before the first await: set later, submits sent at once all got past
+    // the check above.
+    this.lastSubmitAt.set(userId, now);
 
     const [row] = await this.db.drizzle
       .select({
@@ -362,11 +385,11 @@ export class DuelsService implements OnApplicationBootstrap, OnModuleDestroy {
     if (duel.status !== 'in_progress' || now >= (duel.endsAt?.getTime() ?? 0)) {
       throw duelNotRunning();
     }
-    this.lastSubmitAt.set(userId, now);
 
     const result = grade(
       await runTests(
         this.piston,
+        userId,
         row.language,
         code,
         row.sampleTests,
@@ -460,6 +483,26 @@ export class DuelsService implements OnApplicationBootstrap, OnModuleDestroy {
         )
         .returning({ id: duels.id });
       if (!ended) return null;
+
+      // A rematch within REMATCH_UNRATED_MS is unrated, so two accounts of
+      // one person can't farm Elo by forfeiting to each other.
+      const pair = or(
+        and(eq(duels.playerA, duel.playerA), eq(duels.playerB, duel.playerB)),
+        and(eq(duels.playerA, duel.playerB), eq(duels.playerB, duel.playerA)),
+      );
+      const [recent] = await tx
+        .select({ id: duels.id })
+        .from(duels)
+        .where(
+          and(
+            pair,
+            ne(duels.id, duel.id),
+            eq(duels.status, 'completed'),
+            gt(duels.endedAt, new Date(Date.now() - REMATCH_UNRATED_MS)),
+          ),
+        )
+        .limit(1);
+      if (recent) return { [duel.playerA]: 0, [duel.playerB]: 0 };
 
       const scoreA =
         winnerId === null ? 0.5 : winnerId === duel.playerA ? 1 : 0;

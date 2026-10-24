@@ -1,7 +1,7 @@
 import { BadGatewayException } from '@nestjs/common';
 import type { ConfigService } from '@nestjs/config';
 import type { EnvironmentVariables } from '../../config/env.validation.js';
-import { PistonClient } from '../piston.client.js';
+import { MAX_PENDING_RUNS, PistonClient } from '../piston.client.js';
 
 const config = {
   get: () => 'http://piston.test:2000',
@@ -103,6 +103,27 @@ describe('PistonClient', () => {
     const client = new PistonClient(config);
     await Promise.all([1, 2, 3, 4].map(() => client.run('python', '', '')));
     expect(maxActive).toBe(1);
+  });
+
+  it('refuses with 503 EXECUTOR_BUSY once the queue is full, then recovers', async () => {
+    let release = () => {};
+    const gate = new Promise<void>((resolve) => (release = resolve));
+    vi.stubGlobal('fetch', async () => {
+      await gate;
+      return new Response(JSON.stringify({ run: stage() }));
+    });
+
+    const client = new PistonClient(config);
+    const queued = Array.from({ length: MAX_PENDING_RUNS }, () =>
+      client.run('python', '', ''),
+    );
+    await expect(client.run('python', '', '')).rejects.toMatchObject({
+      response: { code: 'EXECUTOR_BUSY' },
+    });
+
+    release();
+    await Promise.all(queued);
+    await expect(client.run('python', '', '')).resolves.toBeDefined();
   });
 
   it('a failed run does not block the next one', async () => {

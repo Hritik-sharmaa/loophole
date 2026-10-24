@@ -18,6 +18,10 @@ export const MAX_ACTIVE_DUELS = 20;
 export const DISCONNECT_FORFEIT_MS = 30_000;
 // How often the queue is re-checked while rating bands widen (FR-18).
 export const REMATCH_INTERVAL_MS = 5_000;
+// The same two players' next duels within a day of their last are unrated.
+export const REMATCH_UNRATED_MS = 24 * 60 * 60 * 1000;
+// Open duel sockets (tabs) per user; one more is refused at connect.
+export const MAX_SOCKETS_PER_USER = 5;
 
 // 'waiting' is the in-memory queue; the rest are duels.status (FR-25).
 export type DuelPhase = 'waiting' | DuelStatus;

@@ -49,7 +49,7 @@ Create the two env files on the VPS. They are git-ignored and never leave the ma
 
 ```bash
 cp apps/api/.env.example apps/api/.env   # then edit:
-#   DATABASE_URL, SUPABASE_URL, SUPABASE_SERVICE_KEY  same as your laptop
+#   DATABASE_URL, SUPABASE_URL, SUPABASE_ANON_KEY     same as your laptop
 #   GEMINI_API_KEY                                    your key
 #   CORS_ORIGIN=https://<your-app>.vercel.app         exact web origin, no trailing slash
 #   PISTON_URL                                        ignored: Compose sets http://piston:2000
@@ -87,6 +87,34 @@ It runs a one-line JavaScript program 20 times and prints how many passed, how m
 
 - **20/20 passed and the slowest under about 2 s:** the 3 s limit stays. Tick "Re-test Node run times on the VPS" in `docs/ROADMAP.md` and note the numbers in ADR-025.
 - **Any time-outs, or the slowest near 3 s:** run it again once (the first run warms Node's cache). Still slow: the run limit for JavaScript needs raising in `integrations/piston.client.ts` (`RUN_TIMEOUT_MS`); paste the output to your AI assistant for that change.
+
+### Hardening (ADR-054)
+
+Run these once on the VPS after the stack is up; redo the network check after any Piston update.
+
+1. **Learner code has no network:**
+
+   ```bash
+   bash infra/check-piston-network.sh     # must print: network: off
+   ```
+
+   Anything else: stop and fix it before inviting users. `PISTON_DISABLE_NETWORKING` in `docker-compose.prod.yml` should already make it pass.
+
+2. **Pin Piston** to the exact image you tested, so a new release can't change the sandbox unseen:
+
+   ```bash
+   docker inspect --format '{{index .RepoDigests 0}}' "$(docker compose -f infra/docker-compose.prod.yml images -q piston)"
+   ```
+
+   It prints `ghcr.io/engineer-man/piston@sha256:…`. Put that as `image:` of `piston` in `infra/docker-compose.prod.yml` and commit it. Do the same for `caddy:2`.
+
+3. **AWS only: block the metadata address for containers.** EC2 → Instances → `loophole` → **Actions → Instance settings → Modify instance metadata options** → IMDSv2 **Required**, hop limit **1** → Save. Containers are one hop further away, so even a program that escaped Piston's network rule can't read the server's credentials.
+
+4. **Supabase:** Authentication → Sign In / Providers → Email: **Confirm email** on. Optional: Authentication → Attack Protection → CAPTCHA (needs a CAPTCHA widget on `/login`, not built yet). Both slow down throwaway accounts, which multiply every per-user limit.
+
+5. **The repo is public, and `content/` holds every hidden test.** Make the GitHub repo private (Settings → General → Danger Zone → Change visibility). The VPS then needs a read-only deploy key or a token to `git pull`. Anyone who cloned it before still has the old tests; new hidden tests for the duel pool fix that.
+
+SSH stays open to everyone on purpose: EC2 Instance Connect (how you log in, step 6 of 2b) connects from AWS's addresses, and the server accepts keys only.
 
 ### 2a. The VPS on Google Cloud (free trial)
 

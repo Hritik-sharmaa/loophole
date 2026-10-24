@@ -101,6 +101,7 @@ export class BotDuelsService {
     const result = grade(
       await runTests(
         this.piston,
+        userId,
         problem.language,
         code,
         problem.sampleTests,

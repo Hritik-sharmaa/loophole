@@ -29,7 +29,10 @@ import {
   SupabaseAuthClient,
   type AuthUser,
 } from '../src/integrations/supabase-auth.client.js';
-import { GENERIC_HINT } from '../src/modules/ai/tutor-guards.js';
+import {
+  GENERIC_EXPLANATION,
+  GENERIC_HINT,
+} from '../src/modules/ai/tutor-guards.js';
 import { CONTENT_DIR, createTestDb, type TestDb } from './support/test-db.js';
 
 const USERS: Record<string, AuthUser> = {
@@ -172,6 +175,21 @@ describe('AI tutor (e2e)', () => {
         actualOutput: 'Hello, world',
       },
       stderr: 'Warning: something odd on line 1',
+    });
+  });
+
+  it('an explanation that writes out the fix is replaced', async () => {
+    explainError.mockResolvedValue({
+      explanation:
+        'Use this:\na = int(input())\nb = int(input())\nc = a + b\nprint(c)',
+      line: 2,
+    });
+    const res = await post('learner', '/ai/explain', {
+      submissionId: failedSubmission.id,
+    }).expect(200);
+    expect(res.body).toMatchObject({
+      explanation: GENERIC_EXPLANATION,
+      line: null,
     });
   });
 

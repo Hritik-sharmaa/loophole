@@ -8,6 +8,9 @@ export type AuthUser = {
   id: string;
   email: string | null;
   name: string | null;
+  // When the token stops being valid (ms since epoch), for duel sockets
+  // that outlive their token. Absent in tests' fake users.
+  expiresAt?: number;
 };
 
 // The only file in the API that talks to Supabase Auth (AGENTS.md rule 5).
@@ -18,9 +21,11 @@ export class SupabaseAuthClient {
 
   constructor(config: ConfigService<EnvironmentVariables, true>) {
     // A server never keeps a session of its own; it only checks tokens.
+    // The public anon key is enough for that; the service key, which can
+    // manage every user, never sits on the server.
     this.auth = createClient(
       config.get('SUPABASE_URL', { infer: true }),
-      config.get('SUPABASE_SERVICE_KEY', { infer: true }),
+      config.get('SUPABASE_ANON_KEY', { infer: true }),
       { auth: { persistSession: false, autoRefreshToken: false } },
     ).auth;
   }
@@ -33,7 +38,7 @@ export class SupabaseAuthClient {
       const { data, error } = await this.auth.getClaims(token);
       if (error || !data || data.claims.role !== 'authenticated') return null;
 
-      const { sub, email } = data.claims;
+      const { sub, email, exp } = data.claims;
       const metadata: Record<string, unknown> = data.claims.user_metadata ?? {};
       const name = metadata.full_name ?? metadata.name;
 
@@ -41,6 +46,7 @@ export class SupabaseAuthClient {
         id: sub,
         email: email ?? null,
         name: typeof name === 'string' ? name : null,
+        expiresAt: exp * 1000,
       };
     } catch (err) {
       // Never log the token itself (CODING_STANDARDS §3).

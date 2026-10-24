@@ -29,10 +29,18 @@ services:
 
   # Runs learners' code. Never public: only the API reaches it, plus the
   # VPS itself on 127.0.0.1 for installing runtimes.
+  # The image is unpinned: pin it to the digest you run (docs/DEPLOY.md,
+  # "Hardening"), so a new release never changes the sandbox unseen.
   piston:
     image: ghcr.io/engineer-man/piston
     restart: unless-stopped
     privileged: true
+    environment:
+      # Learners' programs get no network: they must never reach the API,
+      # Piston's own package API or the cloud's metadata address. Piston's
+      # default, set here so no image change can turn it on.
+      # infra/check-piston-network.sh proves it.
+      PISTON_DISABLE_NETWORKING: 'true'
     ports:
       - '127.0.0.1:2000:2000'
     volumes:

@@ -21,7 +21,7 @@ export default defineConfig({
       CORS_ORIGIN: 'http://localhost:3000',
       DATABASE_URL: 'postgresql://postgres:postgres@localhost:5432/postgres',
       SUPABASE_URL: 'https://example.supabase.co',
-      SUPABASE_SERVICE_KEY: 'test-service-key',
+      SUPABASE_ANON_KEY: 'test-anon-key',
       // PistonClient is stubbed in tests, so this is never called either.
       PISTON_URL: 'http://localhost:2000',
       // GeminiClient is stubbed in tests too.

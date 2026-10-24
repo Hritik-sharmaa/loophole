@@ -27,6 +27,15 @@ describe('RateLimiter', () => {
     expect(limiter.hit('a', 1)).toBe(false);
   });
 
+  it('forgets keys with no hit in the last window', () => {
+    const limiter = new RateLimiter(5, 1000);
+    limiter.hit('gone', 0);
+    limiter.hit('stays', 500);
+    expect(limiter.size).toBe(2);
+    limiter.hit('stays', 1200); // a sweep: 'gone' was last seen 1200 ms ago
+    expect(limiter.size).toBe(1);
+  });
+
   it('a refused hit does not extend the wait', () => {
     const limiter = new RateLimiter(1, 1000);
     limiter.hit('a', 0);

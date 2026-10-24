@@ -5,6 +5,7 @@ import { withProgramHelpers } from '../../common/program-helpers.js';
 import { PistonClient } from '../../integrations/piston.client.js';
 import { LessonsService } from '../lessons/lessons.service.js';
 import { STDERR_MAX, TIMEOUT_MESSAGE } from '../submissions/grading.js';
+import { oneRunAtATime } from '../submissions/run-tests.js';
 import type { RunCodeDto } from './dto/run-code.dto.js';
 
 // Runs a Learn example once, ungraded (ADR-021). Nothing is stored and no
@@ -30,10 +31,12 @@ export class RunsService {
         message: 'This lesson runs in its own preview or terminal, not here.',
       });
     }
-    const run = await this.piston.run(
-      language,
-      withProgramHelpers(language, code),
-      input ?? '',
+    const run = await oneRunAtATime(userId, () =>
+      this.piston.run(
+        language,
+        withProgramHelpers(language, code),
+        input ?? '',
+      ),
     );
 
     return {

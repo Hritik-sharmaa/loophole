@@ -272,4 +272,4 @@ profiles 1─* bot_duels *─1 duel_problems
 
 ## Row-level security
 
-The API connects with the service key and enforces access in code. Enable RLS on every table with no public policies, so the anon key the browser holds can read nothing directly.
+The API connects with `DATABASE_URL` and enforces access in code. Enable RLS on every table with no public policies, so the anon key the browser holds can read nothing directly.

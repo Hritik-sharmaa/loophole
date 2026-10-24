@@ -51,18 +51,31 @@ export class DuelsGateway
         typeof token === 'string' && token
           ? this.auth.verify(token)
           : Promise.resolve(null);
-      verify.then(
-        (user) => {
+      verify
+        .then(async (user) => {
           if (!user) return next(unauthenticated());
+          if (!(await this.duels.canConnect(user.id))) {
+            return next(tooManyTabs());
+          }
           (socket.data as SocketData).user = user;
           next();
-        },
-        () => next(unauthenticated()),
-      );
+        })
+        .catch(() => next(unauthenticated()));
     });
   }
 
   async handleConnection(socket: Socket): Promise<void> {
+    // The token is checked once, at connect; once it expires, the next
+    // event closes the socket. The client reconnects with a fresh token,
+    // or can't, if the user signed out.
+    socket.use((_event, next) => {
+      const { expiresAt } = userOf(socket);
+      if (expiresAt !== undefined && Date.now() >= expiresAt) {
+        socket.disconnect(true);
+        return;
+      }
+      next();
+    });
     try {
       await this.duels.connect(socket, userOf(socket));
     } catch (err) {
@@ -117,5 +130,14 @@ function userOf(socket: Socket): AuthUser {
 function unauthenticated(): Error & { data: SocketError } {
   return Object.assign(new Error('UNAUTHENTICATED'), {
     data: { code: 'UNAUTHENTICATED', message: 'Sign in to duel.' },
+  });
+}
+
+function tooManyTabs(): Error & { data: SocketError } {
+  return Object.assign(new Error('RATE_LIMITED'), {
+    data: {
+      code: 'RATE_LIMITED',
+      message: 'Too many duel tabs open. Close one and try again.',
+    },
   });
 }

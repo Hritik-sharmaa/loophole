@@ -72,7 +72,7 @@ A slice is not done until its tests pass in CI.
 PORT=3001
 DATABASE_URL=
 SUPABASE_URL=
-SUPABASE_SERVICE_KEY=
+SUPABASE_ANON_KEY=
 PISTON_URL=http://piston:2000
 GEMINI_API_KEY=
 GEMINI_MODEL=gemini-flash-latest

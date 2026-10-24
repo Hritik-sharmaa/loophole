@@ -39,7 +39,6 @@ export class UsersService {
     const current = await this.getOrCreate(user);
     if (
       dto.username === undefined &&
-      dto.avatarUrl === undefined &&
       dto.dailyGoal === undefined &&
       dto.lessonLanguage === undefined &&
       dto.avatar === undefined
@@ -52,7 +51,6 @@ export class UsersService {
         .update(profiles)
         .set({
           username: dto.username,
-          avatarUrl: dto.avatarUrl,
           dailyGoal: dto.dailyGoal,
           lessonLanguage: dto.lessonLanguage,
           avatar: dto.avatar,

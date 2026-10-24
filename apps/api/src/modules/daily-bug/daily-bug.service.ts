@@ -137,6 +137,7 @@ export class DailyBugService {
     const result = grade(
       await runTests(
         this.piston,
+        user.id,
         problem.language,
         code,
         problem.sampleTests,

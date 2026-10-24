@@ -56,6 +56,9 @@ const NAMES = [
   'sam',
   'tia',
   'uma',
+  'vic',
+  'wes',
+  'yan',
 ];
 const USERS: Record<string, AuthUser> = Object.fromEntries(
   NAMES.map((name, i) => [
@@ -215,7 +218,13 @@ describe('Duels (e2e)', () => {
       .useValue({ drizzle: db })
       .overrideProvider(SupabaseAuthClient)
       .useValue({
-        verify: (token: string) => Promise.resolve(USERS[token] ?? null),
+        // "stale" is yan with a token that expired after connecting.
+        verify: (token: string) =>
+          Promise.resolve(
+            token === 'stale'
+              ? { ...USERS.yan, expiresAt: Date.now() + 200 }
+              : (USERS[token] ?? null),
+          ),
       })
       .overrideProvider(PistonClient)
       .useValue({ run })
@@ -393,8 +402,26 @@ describe('Duels (e2e)', () => {
     });
   });
 
+  it('a rematch within a day is unrated, so forfeits cannot farm Elo', async () => {
+    // ivy forfeited to jon in the test above.
+    const jonElo = (await ratingOf(USERS.jon.id)).elo;
+    const { pa, pb, duelId } = await duelBetween('ivy', 'jon');
+    pa.send('duel:forfeit', { duelId });
+    expect(await pb.next<DuelEnd>('duel:end')).toMatchObject({
+      result: 'forfeit',
+      winnerId: pb.id,
+      ratingChange: { [pa.id]: 0, [pb.id]: 0 },
+    });
+    expect((await ratingOf(USERS.jon.id)).elo).toBe(jonElo);
+  });
+
   it('a rematch shows the new ratings, and the higher one gains less (FR-24)', async () => {
     // cal and dee finished one duel: one is at 1216, the other at 1184.
+    // Moved back a day, so this rematch is rated.
+    await db
+      .update(duels)
+      .set({ endedAt: new Date(Date.now() - 25 * 60 * 60 * 1000) })
+      .where(eq(duels.playerA, USERS.cal.id));
     const calElo = (await ratingOf(USERS.cal.id)).elo;
     const deeElo = (await ratingOf(USERS.dee.id)).elo;
     await new Promise((r) => setTimeout(r, 3_100)); // past the throttle
@@ -569,6 +596,45 @@ describe('Duels (e2e)', () => {
     expect(await sam.next<SocketError>('error')).toMatchObject({
       code: 'VALIDATION_FAILED',
     });
+  });
+
+  it('submits sent at the same moment are graded once; the rest are RATE_LIMITED', async () => {
+    const { pa, duelId } = await duelBetween('vic', 'wes');
+    for (let i = 0; i < 3; i++) {
+      pa.send('duel:submit', { duelId, code: 'buggy' });
+    }
+    await pa.next('duel:result');
+    await settle();
+    expect(pa.count('duel:result')).toBe(1);
+    const limited = pa.events.filter(
+      (e) =>
+        e.event === 'error' && (e.data as SocketError).code === 'RATE_LIMITED',
+    );
+    expect(limited).toHaveLength(2);
+  });
+
+  it('refuses a sixth open duel tab for one user', async () => {
+    // ned has one socket open (the queue test); open four more.
+    for (let i = 0; i < 4; i++) {
+      await connect('ned');
+      await settle();
+    }
+    const err = await connect('ned').then(
+      () => null,
+      (e: Error & { data?: SocketError }) => e,
+    );
+    expect(err?.data).toMatchObject({ code: 'RATE_LIMITED' });
+  });
+
+  it('closes a socket whose token has expired on its next event', async () => {
+    const stale = await connect('stale');
+    const closed = new Promise<string>((resolve) =>
+      stale.socket.once('disconnect', resolve),
+    );
+    await new Promise((r) => setTimeout(r, 300)); // past expiresAt
+    stale.send('queue:join');
+    expect(await closed).toBe('io server disconnect');
+    expect(stale.count('queue:joined')).toBe(0);
   });
 
   it('no event ever carries hidden tests or code', () => {

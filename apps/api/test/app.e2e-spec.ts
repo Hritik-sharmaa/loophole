@@ -118,15 +118,19 @@ describe('API (e2e)', () => {
     expect(res.body).toMatchObject({ error: { code: 'RATE_LIMITED' } });
   });
 
-  // More than the 120-a-minute default, in parallel batches of 26 so the
-  // test stays quick when the whole e2e suite runs at once.
-  it('GET /health is never throttled', async () => {
+  // Each call asks Piston, so a flood must stop at the 120-a-minute default
+  // (ADR-054). Parallel batches of 26 keep the test quick.
+  it('GET /health is throttled like every route', async () => {
+    const statuses: number[] = [];
     for (let batch = 0; batch < 5; batch++) {
-      await Promise.all(
+      const res = await Promise.all(
         Array.from({ length: 26 }, () =>
-          request(app.getHttpServer()).get('/health').expect(200),
+          request(app.getHttpServer()).get('/health'),
         ),
       );
+      statuses.push(...res.map((r) => r.status));
     }
+    expect(statuses.filter((s) => s === 200).length).toBeLessThanOrEqual(120);
+    expect(statuses).toContain(429);
   }, 20_000);
 });
