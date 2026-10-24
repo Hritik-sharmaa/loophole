@@ -8,15 +8,15 @@ Conventions: `uuid` primary keys (`gen_random_uuid()`), `timestamptz` in UTC, sn
 
 ### profiles — S1
 
-| Column          | Type        | Notes                                                                                               |
-| --------------- | ----------- | --------------------------------------------------------------------------------------------------- |
-| id              | uuid PK     | = `auth.users.id`                                                                                   |
-| username        | text        | unique, 3–20 chars of a–z, 0–9, _ ; auto-generated on first login, editable via `PATCH /me`         |
-| avatar_url      | text        | nullable                                                                                            |
-| daily_goal      | smallint    | nullable; 10, 20 or 30 XP a day, picked in the welcome (ADR-033, migration 0012)                    |
-| avatar          | text        | nullable; a preset avatar id, `a1` to `a12` (ADR-044, migration 0018); a default is shown until set |
-| lesson_language | text        | `en` (default) or `hinglish` (check); the language lessons are shown in (ADR-042, migration 0016)   |
-| created_at      | timestamptz |                                                                                                     |
+| Column          | Type        | Notes                                                                                                                                                                   |
+| --------------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| id              | uuid PK     | = `auth.users.id`                                                                                                                                                       |
+| username        | text        | unique, 3–20 chars of a–z, 0–9, _ ; auto-generated on first login, editable via `PATCH /me`                                                                             |
+| avatar_url      | text        | nullable                                                                                                                                                                |
+| daily_goal      | smallint    | nullable; 10, 20 or 30 XP a day, picked in the welcome (ADR-033, migration 0012)                                                                                        |
+| avatar          | text        | nullable; an avatar code, ten part ids joined with dots (ADR-046; column from migration 0018). Old preset ids `a1` to `a12` still display. A default is shown until set |
+| lesson_language | text        | `en` (default) or `hinglish` (check); the language lessons are shown in (ADR-042, migration 0016)                                                                       |
+| created_at      | timestamptz |                                                                                                                                                                         |
 
 ### courses — S2
 

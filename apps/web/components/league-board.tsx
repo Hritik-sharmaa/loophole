@@ -148,7 +148,7 @@ export function LeagueBoard({
                     >
                       {m.rank}
                     </span>
-                    <Avatar id={m.avatar} />
+                    <Avatar code={m.avatar} />
                     <span className="flex-1 truncate font-bold">
                       {m.username}
                       {mine && (

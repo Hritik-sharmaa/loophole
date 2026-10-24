@@ -11,7 +11,7 @@
 
 import type {
   ActivityResponse,
-  AvatarId,
+  AvatarCode,
   BotDuel,
   BotDuelSubmission,
   BotOpponent,
@@ -175,7 +175,7 @@ type UserState = {
   username: string;
   dailyGoal: DailyGoal | null;
   lessonLanguage: LessonLanguage;
-  avatar: AvatarId | null;
+  avatar: AvatarCode | null;
   rating: number;
   xp: { at: Date; amount: number }[];
   completed: Map<string, Date>;
@@ -309,26 +309,21 @@ function states(user: UserState, course: Course): Map<string, LessonState> {
   return result;
 }
 
-// Like the API's avatarOf (ADR-044): the pick, or a default per id.
-const AVATAR_IDS: AvatarId[] = [
-  'a1',
-  'a2',
-  'a3',
-  'a4',
-  'a5',
-  'a6',
-  'a7',
-  'a8',
-  'a9',
-  'a10',
-  'a11',
-  'a12',
+// Like the API's avatarOf (ADR-046): the learner's own, or a default per
+// id. The API checks each part against its lists; the mock only checks
+// the shape (ten known-looking parts).
+const AVATAR_SHAPE = /^s[1-6](\.[a-z]+){9}$/;
+const DEFAULT_AVATARS: AvatarCode[] = [
+  's3.dots.fluffy.black.hoodie.violet.none.none.none.lilac',
+  's5.smile.braid.black.kurta.sky.none.none.jhumkas.peach',
+  's4.grin.patka.blue.tee.sun.none.none.beard.sun',
+  's2.smile.bob.darkbrown.sweater.coral.round.none.none.mint',
 ];
-function avatarOf(id: string, chosen: AvatarId | null = null): AvatarId {
+function avatarOf(id: string, chosen: AvatarCode | null = null): AvatarCode {
   if (chosen) return chosen;
   let hash = 0;
   for (const ch of id) hash = (hash * 31 + ch.charCodeAt(0)) >>> 0;
-  return AVATAR_IDS[hash % AVATAR_IDS.length];
+  return DEFAULT_AVATARS[hash % DEFAULT_AVATARS.length];
 }
 
 function me(user: UserState): MeResponse {
@@ -800,10 +795,17 @@ const apiRoutes: [
         u.lessonLanguage = body.lessonLanguage;
       }
       if (body.avatar !== undefined) {
-        if (!AVATAR_IDS.includes(body.avatar as AvatarId)) {
-          return fail(400, 'VALIDATION_FAILED', 'avatar must be a preset');
+        if (
+          typeof body.avatar !== 'string' ||
+          !AVATAR_SHAPE.test(body.avatar)
+        ) {
+          return fail(
+            400,
+            'VALIDATION_FAILED',
+            'avatar must be made of known avatar parts',
+          );
         }
-        u.avatar = body.avatar as AvatarId;
+        u.avatar = body.avatar;
       }
       if (typeof body.username === 'string') u.username = body.username;
       return ok(me(u));

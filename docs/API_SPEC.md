@@ -119,7 +119,7 @@ Hidden test results show only `passed`, never input or expected output. Throttle
 | GET    | `/leaderboard/weekly?limit=50` | `{ weekStart, entries: [{ rank, userId, username, avatar, xp }], me: { rank, xp } }` |
 | GET    | `/leaderboard/rating?limit=50` | `{ entries: [{ rank, userId, username, avatar, elo }], me: { rank, elo } }` (S8)     |
 
-- **Avatars (ADR-044):** `avatar` is a preset id (`a1` to `a12`): the one the user picked with `PATCH /me { avatar }`, or a default worked out from their id. The same field is in `GET /me`, league members and `duel:matched.opponent`. Any other id is 400.
+- **Avatars (ADR-046):** `avatar` is an avatar code, ten part ids joined with dots in this order: skin, face, hair, hair colour, top, top colour, glasses, item, extra, background (`s3.dots.fluffy.black.hoodie.violet.none.cat.none.lilac`). It is the one the user made with `PATCH /me { avatar }`, or a default worked out from their id. The same field is in `GET /me`, league members and `duel:matched.opponent`. A code with an unknown part, a missing part or a part in the wrong slot is 400, and so are the old preset ids.
 
 - Rating: only players who have finished a duel are listed; until then `me` is `{ rank: null, elo: 1200 }`. Equal Elo shares a rank. `GET /me` `rating` and `duel:matched` `opponent.elo` use the same numbers.
 

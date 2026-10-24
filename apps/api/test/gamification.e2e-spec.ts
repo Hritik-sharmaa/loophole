@@ -229,7 +229,7 @@ describe('XP, streak and leaderboard (e2e)', () => {
 
     const forAda = await board('ada');
     expect(forAda.weekStart).toBe(ist('2026-10-12T00:00:00').toISOString());
-    // Nobody picked an avatar yet: each shows their default (ADR-044).
+    // Nobody picked an avatar yet: each shows their default (ADR-046).
     expect(forAda.entries).toEqual([
       {
         rank: 1,
@@ -262,18 +262,21 @@ describe('XP, streak and leaderboard (e2e)', () => {
     ]);
   });
 
-  it('a picked avatar shows on /me and the board; an unknown one is refused (ADR-044)', async () => {
+  it('a made avatar shows on /me and the board; unknown parts are refused (ADR-046)', async () => {
+    const made = 's5.grin.braid.black.kurta.sun.round.flower.jhumkas.peach';
     const patch = (avatar: string) =>
       request(app.getHttpServer())
         .patch('/me')
         .set('Authorization', 'Bearer ada')
         .send({ avatar });
-    expect((await patch('a5').expect(200)).body).toMatchObject({
-      avatar: 'a5',
+    expect((await patch(made).expect(200)).body).toMatchObject({
+      avatar: made,
     });
     const { entries } = await board('bob');
-    expect(entries.find((e) => e.username === 'ada')?.avatar).toBe('a5');
-    await patch('a99').expect(400);
+    expect(entries.find((e) => e.username === 'ada')?.avatar).toBe(made);
+    await patch(made.replace('flower', 'dragon')).expect(400);
+    // The old presets are shown but can no longer be picked.
+    await patch('a5').expect(400);
   });
 
   it('?limit caps the entries but me is always filled in', async () => {

@@ -3,7 +3,7 @@
 import type {
   RatingLeaderboard,
   WeeklyLeaderboard,
-  AvatarId,
+  AvatarCode,
 } from '@loophole/shared';
 import { Swords, Zap } from 'lucide-react';
 import { useState, type ReactNode } from 'react';
@@ -185,7 +185,7 @@ function Rows({
     rank: number;
     userId: string;
     username: string;
-    avatar: AvatarId;
+    avatar: AvatarCode;
     value: ReactNode;
   }[];
   myId: string | undefined;
@@ -214,7 +214,7 @@ function Rows({
             >
               {e.rank}
             </span>
-            <Avatar id={e.avatar} />
+            <Avatar code={e.avatar} />
             <span className="flex-1 truncate font-bold">
               {e.username}
               {mine && <span className="text-text-secondary"> (you)</span>}

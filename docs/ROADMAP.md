@@ -151,4 +151,5 @@ Ideas from comparing Duolingo, Coddy and Codédex, kept here so none get lost. B
 
 - [x] Small projects between units, like Codédex's checkpoint projects (L, ADR-043): one per unit, 18 in all
 - [x] Learner avatars (M, ADR-044)
+- [x] Avatar maker: build your avatar from parts (M, ADR-046)
 - [x] Job-focused paths, e.g. "Frontend: HTML → CSS → JS → Git" (M, ADR-045)

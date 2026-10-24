@@ -7,12 +7,12 @@ import {
   Matches,
 } from 'class-validator';
 import type {
-  AvatarId,
+  AvatarCode,
   DailyGoal,
   LessonLanguage,
   UpdateMeRequest,
 } from '@loophole/shared';
-import { AVATAR_IDS } from '../../../common/avatars.js';
+import { AVATAR_CODE_PATTERN } from '../../../common/avatars.js';
 import { USERNAME_MAX, USERNAME_MIN, USERNAME_PATTERN } from '../username.js';
 
 // PATCH /me body. ValidationPipe rejects unknown fields and bad values with 400.
@@ -41,8 +41,11 @@ export class UpdateMeDto implements UpdateMeRequest {
   })
   lessonLanguage?: LessonLanguage;
 
-  // ADR-044: one of the preset avatars.
+  // ADR-046: an avatar from the avatar maker, one known part per slot.
   @IsOptional()
-  @IsIn(AVATAR_IDS, { message: 'avatar must be one of the preset avatars' })
-  avatar?: AvatarId;
+  @IsString()
+  @Matches(AVATAR_CODE_PATTERN, {
+    message: 'avatar must be made of known avatar parts',
+  })
+  avatar?: AvatarCode;
 }

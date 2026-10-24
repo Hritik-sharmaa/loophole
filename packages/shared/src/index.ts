@@ -14,21 +14,58 @@ export type DailyGoal = 10 | 20 | 30;
 // fixes and exercise prompts. Code and outputs are the same in both.
 export type LessonLanguage = 'en' | 'hinglish';
 
-// A learner's avatar (ADR-044): one of the preset illustrations the web
-// app draws. Everyone has one: a default until they pick.
-export type AvatarId =
-  | 'a1'
-  | 'a2'
-  | 'a3'
-  | 'a4'
-  | 'a5'
-  | 'a6'
-  | 'a7'
-  | 'a8'
-  | 'a9'
-  | 'a10'
-  | 'a11'
-  | 'a12';
+// A learner's avatar (ADR-046), built from parts in the avatar maker.
+// The web app draws each part; the API checks every part is one of these.
+export type AvatarSkin = 's1' | 's2' | 's3' | 's4' | 's5' | 's6';
+export type AvatarFace = 'dots' | 'smile' | 'grin' | 'wink' | 'sleepy' | 'wow';
+export type AvatarHair =
+  | 'fluffy'
+  | 'short'
+  | 'side'
+  | 'buzz'
+  | 'long'
+  | 'bob'
+  | 'bun'
+  | 'braid'
+  | 'patka'
+  | 'none';
+export type AvatarHairColor =
+  | 'black'
+  | 'darkbrown'
+  | 'brown'
+  | 'auburn'
+  | 'grey'
+  | 'violet'
+  | 'blue'
+  | 'pink';
+export type AvatarTop = 'hoodie' | 'tee' | 'kurta' | 'collar' | 'sweater';
+export type AvatarTopColor =
+  'violet' | 'sun' | 'coral' | 'sky' | 'teal' | 'ink' | 'white';
+export type AvatarGlasses = 'none' | 'round' | 'square' | 'shades';
+export type AvatarItem =
+  'none' | 'cat' | 'headphones' | 'cap' | 'flower' | 'crown' | 'sprout';
+export type AvatarDetail =
+  'none' | 'bindi' | 'jhumkas' | 'beard' | 'moustache' | 'freckles' | 'blush';
+export type AvatarBg =
+  'lilac' | 'sun' | 'peach' | 'sky' | 'mint' | 'paper' | 'grey';
+
+export type AvatarParts = {
+  skin: AvatarSkin;
+  face: AvatarFace;
+  hair: AvatarHair;
+  hairColor: AvatarHairColor;
+  top: AvatarTop;
+  topColor: AvatarTopColor;
+  glasses: AvatarGlasses;
+  item: AvatarItem;
+  detail: AvatarDetail;
+  bg: AvatarBg;
+};
+
+// The parts in this order, joined with dots:
+// "s3.dots.fluffy.black.hoodie.violet.none.cat.none.lilac".
+// Everyone has one: a default until they make their own.
+export type AvatarCode = string;
 
 export type MeResponse = {
   id: string;
@@ -43,7 +80,7 @@ export type MeResponse = {
   // XP earned since 00:00 IST today.
   todayXp: number;
   lessonLanguage: LessonLanguage;
-  avatar: AvatarId;
+  avatar: AvatarCode;
 };
 
 // PATCH /me body
@@ -52,7 +89,7 @@ export type UpdateMeRequest = {
   avatarUrl?: string;
   dailyGoal?: DailyGoal;
   lessonLanguage?: LessonLanguage;
-  avatar?: AvatarId;
+  avatar?: AvatarCode;
 };
 
 // GET /me/activity (ADR-033): XP per IST day for the streak calendar, the
@@ -330,7 +367,7 @@ export type WeeklyLeaderboard = {
     rank: number;
     userId: string;
     username: string;
-    avatar: AvatarId;
+    avatar: AvatarCode;
     xp: number;
   }[];
   me: { rank: number | null; xp: number };
@@ -354,7 +391,7 @@ export type LeagueResponse = {
     rank: number;
     userId: string;
     username: string;
-    avatar: AvatarId;
+    avatar: AvatarCode;
     xp: number;
     zone: LeagueZone;
   }[];
@@ -374,7 +411,7 @@ export type RatingLeaderboard = {
     rank: number;
     userId: string;
     username: string;
-    avatar: AvatarId;
+    avatar: AvatarCode;
     elo: number;
   }[];
   me: { rank: number | null; elo: number };
@@ -430,7 +467,7 @@ export type DuelForfeitRequest = { duelId: string };
 export type QueueJoined = { position: number };
 export type DuelMatched = {
   duelId: string;
-  opponent: { username: string; avatar: AvatarId; elo: number };
+  opponent: { username: string; avatar: AvatarCode; elo: number };
 };
 // Sample tests only; hidden tests never leave the server.
 export type DuelStart = {
