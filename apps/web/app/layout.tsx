@@ -24,11 +24,30 @@ const jetbrains = JetBrains_Mono({
   weight: ['400', '700'],
 });
 
+const TITLE = 'Loophole — learn to code, then out-code your friends';
+const DESCRIPTION =
+  'Bite-sized coding lessons in English or Hinglish, with real code, instant grading, AI hints, streaks, and live 1v1 debugging duels. Free.';
+
 export const metadata: Metadata = {
-  title: 'Loophole — learn to code, then out-code your friends',
-  description:
-    'Bite-sized coding lessons with real code, instant grading, AI hints, streaks, and live 1v1 debugging duels.',
+  // The live site (docs/DEPLOY.md), so shared links get a full image URL.
+  metadataBase: new URL('https://loophole-psi.vercel.app'),
+  title: TITLE,
+  description: DESCRIPTION,
   applicationName: 'Loophole',
+  // Link previews in WhatsApp, LinkedIn, X and Slack; the image is
+  // app/opengraph-image.tsx.
+  openGraph: {
+    type: 'website',
+    siteName: 'Loophole',
+    title: TITLE,
+    description: DESCRIPTION,
+    locale: 'en_IN',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: TITLE,
+    description: DESCRIPTION,
+  },
   // Installed on iOS: full-screen, named Loophole (ADR-022).
   appleWebApp: { capable: true, title: 'Loophole', statusBarStyle: 'default' },
 };

@@ -21,6 +21,8 @@
 /.next/
 # the e2e build (ADR-034)
 /.next-e2e/
+# Any other build folder (NEXT_DIST_DIR): Tailwind scans un-ignored files
+/.next-*/
 /out/
 
 # production

@@ -77,6 +77,17 @@ bash infra/check-piston-concurrency.sh
 
 Locally, parallel runs crashed Piston's sandbox (7/12 passed). If this VPS shows **parallel: 40/40**, Piston can take overlapping jobs here. Note the result in ADR-018. Raising the limit in `PistonClient` is a follow-up change, which also brings 8-test exercises back under NFR-09.
 
+### ADR-025 re-test (Node start-up time)
+
+```bash
+bash infra/check-node-runtime.sh
+```
+
+It runs a one-line JavaScript program 20 times and prints how many passed, how many timed out, and the fastest, average and slowest request. Locally, Node sometimes needed over 3 s just to start, which grades a correct answer as a time-out.
+
+- **20/20 passed and the slowest under about 2 s:** the 3 s limit stays. Tick "Re-test Node run times on the VPS" in `docs/ROADMAP.md` and note the numbers in ADR-025.
+- **Any time-outs, or the slowest near 3 s:** run it again once (the first run warms Node's cache). Still slow: the run limit for JavaScript needs raising in `integrations/piston.client.ts` (`RUN_TIMEOUT_MS`); paste the output to your AI assistant for that change.
+
 ### 2a. The VPS on Google Cloud (free trial)
 
 Google's free trial gives $300 of credit for 90 days. It needs a card to verify you but does not charge it: when the trial ends the account closes and the server stops, unless you choose to upgrade. The server below (`e2-medium`: 2 vCPU / 4 GB, x86, Mumbai) costs about $30 a month, so 90 days uses about a third of the credit.

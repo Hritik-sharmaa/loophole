@@ -171,7 +171,7 @@ export default function WelcomePage() {
               type="button"
               onClick={saveGoal}
               disabled={update.isPending}
-              className={`${primaryButton} uppercase sm:self-end sm:min-w-52`}
+              className={`${primaryButton} sm:self-end sm:min-w-52`}
             >
               {update.isPending ? 'Saving…' : 'Continue'}
             </button>
@@ -217,7 +217,7 @@ export default function WelcomePage() {
               type="button"
               onClick={saveLanguage}
               disabled={update.isPending}
-              className={`${primaryButton} uppercase sm:self-end sm:min-w-52`}
+              className={`${primaryButton} sm:self-end sm:min-w-52`}
             >
               {update.isPending ? 'Saving…' : 'Continue'}
             </button>
@@ -252,7 +252,7 @@ export default function WelcomePage() {
                 href={
                   next ? `/lessons/${next.id}` : `/learn/${course?.slug ?? ''}`
                 }
-                className={`${primaryButton} uppercase`}
+                className={`${primaryButton}`}
               >
                 Start my first lesson
               </Link>

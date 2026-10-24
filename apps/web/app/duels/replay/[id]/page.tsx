@@ -45,13 +45,13 @@ export default function DuelReplayPage() {
   return (
     <>
       <AppHeader />
-      <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-6 sm:px-6 sm:py-8">
+      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:px-6 sm:py-8">
         {loading || replay.isPending ? (
           <PageLoader label="Loading the replay…" />
         ) : replay.isError ? (
           <div
             role="alert"
-            className={`${stickerCard} flex flex-col items-center gap-4 px-6 py-12 text-center`}
+            className={`${stickerCard} mx-auto flex max-w-xl flex-col items-center gap-4 px-6 py-12 text-center`}
           >
             <Guide guide="priya" mood="oops" className="h-28 w-20" />
             <p className="font-display text-2xl font-semibold">
@@ -139,180 +139,192 @@ function Player({ replay }: { replay: DuelReplay }) {
   const { label, tone } = OUTCOME[replay.outcome];
 
   return (
-    <article className="flex flex-col gap-6">
-      <header className="flex flex-col gap-4 rounded-card border border-ink bg-ink px-5 py-4 text-paper shadow-sticker">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <p className="flex flex-wrap items-center gap-2 font-bold">
-            <span className={`${chip} bg-pink text-ink`}>Replay</span>
-            vs {opponent}
-            <span className={`${chip} ${tone} text-ink`}>{label}</span>
-          </p>
-          <p
-            className="font-display text-2xl font-semibold text-sun tabular-nums"
-            aria-label={`At ${clock(t)} of ${clock(durationMs)}`}
-          >
-            {clock(t)}
-            <span className="text-base text-border-muted">
-              {' '}
-              / {clock(durationMs)}
-            </span>
-          </p>
-        </div>
-        <Score
-          who="You"
-          passed={mine?.testsPassed ?? 0}
-          total={totalTests}
-          tone="orange"
-        />
-        <Score
-          who={opponent}
-          passed={theirs?.testsPassed ?? 0}
-          total={totalTests}
-          tone="pink"
-        />
-      </header>
-
-      {/* Controls: play, scrub, step between attempts, speed. */}
-      <section
-        aria-label="Replay controls"
-        className={`${stickerCard} flex flex-col gap-4 p-4`}
-      >
-        <input
-          type="range"
-          min={0}
-          max={durationMs}
-          step={100}
-          value={t}
-          onChange={(e) => jump(Number(e.target.value))}
-          aria-label="Replay position"
-          aria-valuetext={`${clock(t)} of ${clock(durationMs)}`}
-          className="w-full accent-sun"
-        />
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          {/* Prev, play and next stay together on one line. */}
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={() => jump(prev)}
-              aria-label="Previous attempt"
-              className={secondaryButton}
+    // Wide screens: what happened on the left, the code on the right.
+    <article className="grid gap-6 lg:grid-cols-2 lg:items-start lg:gap-8">
+      <div className="flex min-w-0 flex-col gap-6">
+        <header className="flex flex-col gap-4 rounded-card border border-ink bg-ink px-5 py-4 text-paper shadow-sticker">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <p className="flex flex-wrap items-center gap-2 font-bold">
+              <span className={`${chip} bg-pink text-ink`}>Replay</span>
+              vs {opponent}
+              <span className={`${chip} ${tone} text-ink`}>{label}</span>
+            </p>
+            <p
+              className="font-display text-2xl font-semibold text-sun tabular-nums"
+              aria-label={`At ${clock(t)} of ${clock(durationMs)}`}
             >
-              <SkipBack className="size-4" strokeWidth={3} aria-hidden />
-            </button>
-            <button type="button" onClick={playPause} className={primaryButton}>
-              {atEnd ? (
-                <>
-                  <RotateCcw className="size-4" strokeWidth={3} aria-hidden />{' '}
-                  Watch again
-                </>
-              ) : running ? (
-                <>
-                  <Pause className="size-4" strokeWidth={3} aria-hidden /> Pause
-                </>
-              ) : (
-                <>
-                  <Play className="size-4" strokeWidth={3} aria-hidden /> Play
-                </>
-              )}
-            </button>
-            <button
-              type="button"
-              onClick={() => jump(next)}
-              aria-label="Next attempt"
-              className={secondaryButton}
-            >
-              <SkipForward className="size-4" strokeWidth={3} aria-hidden />
-            </button>
+              {clock(t)}
+              <span className="text-base text-border-muted">
+                {' '}
+                / {clock(durationMs)}
+              </span>
+            </p>
           </div>
-          <div
-            role="group"
-            aria-label="Speed"
-            className="flex gap-1 rounded-card border border-border-muted p-1"
-          >
-            {SPEEDS.map((s) => (
-              <button
-                key={s}
-                type="button"
-                aria-pressed={speed === s}
-                onClick={() => setSpeed(s)}
-                className={`rounded-badge px-3 py-1 text-sm font-bold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet ${speed === s ? 'bg-ink text-paper' : 'text-text-secondary hover:text-ink'}`}
-              >
-                {s}×
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section
-        aria-labelledby="timeline-heading"
-        className="flex flex-col gap-3"
-      >
-        <h2 id="timeline-heading" className="font-display text-xl font-bold">
-          What happened
-        </h2>
-        <ol className="flex flex-col gap-2">
-          <TimelineItem at={0} active={!current} onPick={jump}>
-            The duel starts: same buggy program, five minutes.
-          </TimelineItem>
-          {events.map((e, i) => (
-            <TimelineItem
-              key={i}
-              at={e.atMs}
-              active={e === current && !atEnd}
-              onPick={jump}
-            >
-              <span className="font-bold">
-                {e.who === 'me' ? 'You' : opponent}
-              </span>{' '}
-              submitted: {e.testsPassed} / {e.totalTests} tests passing
-            </TimelineItem>
-          ))}
-          <TimelineItem at={durationMs} active={atEnd} onPick={jump}>
-            <span className="font-bold">{endLine(replay)}</span>
-          </TimelineItem>
-        </ol>
-        <p className="flex items-center gap-2 text-sm text-text-secondary">
-          <Lock className="size-4 shrink-0" strokeWidth={2.5} aria-hidden />
-          {opponent}&apos;s code stays private: a replay shows only their
-          scores.
-        </p>
-      </section>
-
-      <section className="flex flex-col gap-2">
-        <h2 className="font-display text-2xl font-semibold">{problem.title}</h2>
-        <p className="text-lg">
-          <InlineCode text={problem.description} />
-        </p>
-      </section>
-
-      <div className="flex flex-col gap-2">
-        <p className="flex items-center gap-2 font-bold" aria-live="polite">
-          <Guide
-            guide={guideFor(problem.language)}
-            crop="bust"
-            mood={mine?.testsPassed === totalTests ? 'happy' : 'thinking'}
-            className="size-9"
+          <Score
+            who="You"
+            passed={mine?.testsPassed ?? 0}
+            total={totalTests}
+            tone="orange"
           />
-          {mine
-            ? `Your code at ${clock(mine.atMs)}: ${mine.testsPassed} / ${mine.totalTests} passing`
-            : 'The buggy program, before your first attempt'}
-        </p>
-        <CodeEditor
-          value={mine?.code ?? problem.buggyCode}
-          fileName={languageInfo(problem.language).file}
-          language={languageInfo(problem.language).editor}
-          readOnly
-        />
+          <Score
+            who={opponent}
+            passed={theirs?.testsPassed ?? 0}
+            total={totalTests}
+            tone="pink"
+          />
+        </header>
+
+        {/* Controls: play, scrub, step between attempts, speed. */}
+        <section
+          aria-label="Replay controls"
+          className={`${stickerCard} flex flex-col gap-4 p-4`}
+        >
+          <input
+            type="range"
+            min={0}
+            max={durationMs}
+            step={100}
+            value={t}
+            onChange={(e) => jump(Number(e.target.value))}
+            aria-label="Replay position"
+            aria-valuetext={`${clock(t)} of ${clock(durationMs)}`}
+            className="w-full accent-sun"
+          />
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            {/* Prev, play and next stay together on one line. */}
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => jump(prev)}
+                aria-label="Previous attempt"
+                className={secondaryButton}
+              >
+                <SkipBack className="size-4" strokeWidth={3} aria-hidden />
+              </button>
+              <button
+                type="button"
+                onClick={playPause}
+                className={primaryButton}
+              >
+                {atEnd ? (
+                  <>
+                    <RotateCcw className="size-4" strokeWidth={3} aria-hidden />{' '}
+                    Watch again
+                  </>
+                ) : running ? (
+                  <>
+                    <Pause className="size-4" strokeWidth={3} aria-hidden />{' '}
+                    Pause
+                  </>
+                ) : (
+                  <>
+                    <Play className="size-4" strokeWidth={3} aria-hidden /> Play
+                  </>
+                )}
+              </button>
+              <button
+                type="button"
+                onClick={() => jump(next)}
+                aria-label="Next attempt"
+                className={secondaryButton}
+              >
+                <SkipForward className="size-4" strokeWidth={3} aria-hidden />
+              </button>
+            </div>
+            <div
+              role="group"
+              aria-label="Speed"
+              className="flex gap-1 rounded-card border border-border-muted p-1"
+            >
+              {SPEEDS.map((s) => (
+                <button
+                  key={s}
+                  type="button"
+                  aria-pressed={speed === s}
+                  onClick={() => setSpeed(s)}
+                  className={`rounded-badge px-3 py-1 text-sm font-bold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet ${speed === s ? 'bg-ink text-paper' : 'text-text-secondary hover:text-ink'}`}
+                >
+                  {s}×
+                </button>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section
+          aria-labelledby="timeline-heading"
+          className="flex flex-col gap-3"
+        >
+          <h2 id="timeline-heading" className="font-display text-xl font-bold">
+            What happened
+          </h2>
+          <ol className="flex flex-col gap-2">
+            <TimelineItem at={0} active={!current} onPick={jump}>
+              The duel starts: same buggy program, five minutes.
+            </TimelineItem>
+            {events.map((e, i) => (
+              <TimelineItem
+                key={i}
+                at={e.atMs}
+                active={e === current && !atEnd}
+                onPick={jump}
+              >
+                <span className="font-bold">
+                  {e.who === 'me' ? 'You' : opponent}
+                </span>{' '}
+                submitted: {e.testsPassed} / {e.totalTests} tests passing
+              </TimelineItem>
+            ))}
+            <TimelineItem at={durationMs} active={atEnd} onPick={jump}>
+              <span className="font-bold">{endLine(replay)}</span>
+            </TimelineItem>
+          </ol>
+          <p className="flex items-center gap-2 text-sm text-text-secondary">
+            <Lock className="size-4 shrink-0" strokeWidth={2.5} aria-hidden />
+            {opponent}&apos;s code stays private: a replay shows only their
+            scores.
+          </p>
+        </section>
       </div>
 
-      <div className="flex flex-wrap gap-3">
-        <Link href="/duels" className={primaryButton}>
-          Duel again
-        </Link>
-        <Link href="/learn" className={secondaryButton}>
-          Back to lessons
-        </Link>
+      <div className="flex min-w-0 flex-col gap-6 lg:sticky lg:top-24">
+        <section className="flex flex-col gap-2">
+          <h2 className="font-display text-2xl font-semibold">
+            {problem.title}
+          </h2>
+          <p className="text-lg">
+            <InlineCode text={problem.description} />
+          </p>
+        </section>
+
+        <div className="flex flex-col gap-2">
+          <p className="flex items-center gap-2 font-bold" aria-live="polite">
+            <Guide
+              guide={guideFor(problem.language)}
+              crop="bust"
+              mood={mine?.testsPassed === totalTests ? 'happy' : 'thinking'}
+              className="size-9"
+            />
+            {mine
+              ? `Your code at ${clock(mine.atMs)}: ${mine.testsPassed} / ${mine.totalTests} passing`
+              : 'The buggy program, before your first attempt'}
+          </p>
+          <CodeEditor
+            value={mine?.code ?? problem.buggyCode}
+            fileName={languageInfo(problem.language).file}
+            language={languageInfo(problem.language).editor}
+            readOnly
+          />
+        </div>
+
+        <div className="flex flex-wrap gap-3">
+          <Link href="/duels" className={primaryButton}>
+            Duel again
+          </Link>
+          <Link href="/learn" className={secondaryButton}>
+            Back to lessons
+          </Link>
+        </div>
       </div>
     </article>
   );

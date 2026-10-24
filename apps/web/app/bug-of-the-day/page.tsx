@@ -46,13 +46,13 @@ export default function BugOfTheDayPage() {
   return (
     <>
       <AppHeader />
-      <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-4 py-6 sm:px-6 sm:py-8">
+      <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 px-4 py-6 sm:px-6 sm:py-8">
         {loading || today.isPending ? (
           <PageLoader label="Loading today's bug…" />
         ) : today.isError ? (
           <div
             role="alert"
-            className={`${stickerCard} flex flex-col items-center gap-4 px-6 py-12 text-center`}
+            className={`${stickerCard} mx-auto flex w-full max-w-xl flex-col items-center gap-4 px-6 py-12 text-center`}
           >
             <Guide guide={HOST} mood="oops" className="h-28 w-20" />
             <p className="font-display text-2xl font-semibold">No bug today</p>
@@ -67,9 +67,9 @@ export default function BugOfTheDayPage() {
             key={today.data.day}
             today={today.data}
             board={board.data}
+            myId={me.data?.id}
           />
         )}
-        {board.data && <DailyBugBoard board={board.data} myId={me.data?.id} />}
       </main>
     </>
   );
@@ -88,9 +88,11 @@ function useNow(ms: number): number {
 function DailyBug({
   today,
   board,
+  myId,
 }: {
   today: DailyBugToday;
   board: Board | undefined;
+  myId: string | undefined;
 }) {
   const { problem, me } = today;
   const [code, setCode] = useState(problem.buggyCode);
@@ -107,25 +109,30 @@ function DailyBug({
     if (result && result.xpAwarded > 0) celebrate();
   }, [result]);
 
-  return (
-    <>
-      <header className={`${stickerCard} flex flex-col gap-3 p-5`}>
-        <div className="flex flex-wrap items-center gap-2">
-          <span className={`${chip} bg-pink text-ink`}>
-            <Bug className="size-3.5" strokeWidth={3} aria-hidden /> Bug of the
-            day
-          </span>
-          <span className={`${chip} bg-lemon text-ink tabular-nums`}>
-            New bug in {formatDuration(nextBugIn)}
-          </span>
-        </div>
-        <h1 className="font-display text-3xl font-semibold text-balance sm:text-4xl">
-          {problem.title}
-        </h1>
-        <p className="text-lg">{problem.description}</p>
-      </header>
+  const boardEl = board && <DailyBugBoard board={board} myId={myId} />;
+  const header = (
+    <header className={`${stickerCard} flex flex-col gap-3 p-5`}>
+      <div className="flex flex-wrap items-center gap-2">
+        <span className={`${chip} bg-pink text-ink`}>
+          <Bug className="size-3.5" strokeWidth={3} aria-hidden /> Bug of the
+          day
+        </span>
+        <span className={`${chip} bg-lemon text-ink tabular-nums`}>
+          New bug in {formatDuration(nextBugIn)}
+        </span>
+      </div>
+      <h1 className="font-display text-3xl font-semibold text-balance sm:text-4xl">
+        {problem.title}
+      </h1>
+      <p className="text-lg">{problem.description}</p>
+    </header>
+  );
 
-      {solvedMs !== null ? (
+  // Solved: the finish screen and the board, one column.
+  if (solvedMs !== null)
+    return (
+      <div className="mx-auto flex w-full max-w-3xl flex-col gap-6">
+        {header}
         <Squashed
           timeMs={solvedMs}
           result={result}
@@ -133,64 +140,75 @@ function DailyBug({
           solvers={result?.solvers ?? board?.solvers ?? null}
           nextBugIn={nextBugIn}
         />
-      ) : (
-        <>
-          <GuideSays
-            guide={HOST}
-            mood={result ? 'oops' : 'thinking'}
-            speak="Something in this program is broken. Fix it as fast as you can: your clock started when you opened it."
-          >
-            <p className="text-lg">
-              Something in this program is broken, maybe in more than one place.
-              Fix it as fast as you can: your clock started when you opened it.
-            </p>
-            <p
-              className={`${chip} mt-2 bg-paper text-ink tabular-nums`}
-              aria-label={`Your time so far: ${formatDuration(runningMs)}`}
-            >
-              <Timer className="size-3.5" strokeWidth={3} aria-hidden />
-              {formatDuration(runningMs)}
-            </p>
-          </GuideSays>
+        {boardEl}
+      </div>
+    );
 
-          <SampleTests tests={problem.sampleTests} />
-          <CodeEditor
-            value={code}
-            onChange={setCode}
-            fileName="bug.py"
-            language="python"
-          />
-          <div className="flex flex-wrap items-center gap-3">
-            <button
-              type="button"
-              onClick={() => submit.mutate({ code })}
-              disabled={submit.isPending}
-              className={primaryButton}
-            >
-              {submit.isPending ? 'Grading…' : 'Submit fix'}
-            </button>
-            <button
-              type="button"
-              onClick={() => setCode(problem.buggyCode)}
-              disabled={submit.isPending || code === problem.buggyCode}
-              className={secondaryButton}
-            >
-              <RotateCcw className="size-4" strokeWidth={3} aria-hidden /> Start
-              over
-            </button>
-          </div>
-          {submit.isError && (
-            <p
-              role="alert"
-              className="rounded-card border border-border-muted bg-surface px-4 py-3 font-bold"
-            >
-              {submit.error.message}
-            </p>
-          )}
-          {result && <TestResults result={result} />}
-        </>
-      )}
-    </>
+  // Wide screens: the bug and the board on the left, the editor on the
+  // right, kept in view. Phones: the board comes after the editor.
+  return (
+    <div className="grid gap-6 lg:grid-cols-2 lg:items-start lg:gap-8">
+      <div className="flex min-w-0 flex-col gap-6">
+        {header}
+        <GuideSays
+          guide={HOST}
+          mood={result ? 'oops' : 'thinking'}
+          speak="Something in this program is broken. Fix it as fast as you can: your clock started when you opened it."
+        >
+          <p className="text-lg">
+            Something in this program is broken, maybe in more than one place.
+            Fix it as fast as you can: your clock started when you opened it.
+          </p>
+          <p
+            className={`${chip} mt-2 bg-paper text-ink tabular-nums`}
+            aria-label={`Your time so far: ${formatDuration(runningMs)}`}
+          >
+            <Timer className="size-3.5" strokeWidth={3} aria-hidden />
+            {formatDuration(runningMs)}
+          </p>
+        </GuideSays>
+
+        <SampleTests tests={problem.sampleTests} />
+        <div className="hidden lg:block">{boardEl}</div>
+      </div>
+      <div className="flex min-w-0 flex-col gap-6 lg:sticky lg:top-24">
+        <CodeEditor
+          value={code}
+          onChange={setCode}
+          fileName="bug.py"
+          language="python"
+        />
+        <div className="flex flex-wrap items-center gap-3">
+          <button
+            type="button"
+            onClick={() => submit.mutate({ code })}
+            disabled={submit.isPending}
+            className={primaryButton}
+          >
+            {submit.isPending ? 'Grading…' : 'Submit fix'}
+          </button>
+          <button
+            type="button"
+            onClick={() => setCode(problem.buggyCode)}
+            disabled={submit.isPending || code === problem.buggyCode}
+            className={secondaryButton}
+          >
+            <RotateCcw className="size-4" strokeWidth={3} aria-hidden /> Start
+            over
+          </button>
+        </div>
+        {submit.isError && (
+          <p
+            role="alert"
+            className="rounded-card border border-border-muted bg-surface px-4 py-3 font-bold"
+          >
+            {submit.error.message}
+          </p>
+        )}
+        {result && <TestResults result={result} />}
+      </div>
+      <div className="lg:hidden">{boardEl}</div>
+    </div>
   );
 }
 

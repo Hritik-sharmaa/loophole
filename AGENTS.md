@@ -106,6 +106,7 @@ loophole/
 | What to build next                            | `docs/ROADMAP.md`          |
 | Why something was chosen                      | `docs/DECISIONS.md`        |
 | Putting it online (VPS, Vercel, Supabase)     | `docs/DEPLOY.md`           |
+| Testing with real beginners (Gate 1)          | `docs/FRIEND_TEST.md`      |
 
 ## 7. Current status
 
