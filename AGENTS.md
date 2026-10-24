@@ -42,21 +42,21 @@ It is a solo portfolio project. Its second purpose is to teach the developer sys
 
 ## 4. Stack (decided — do not swap without an entry in `docs/DECISIONS.md`)
 
-| Layer          | Choice                                                                                                               |
-| -------------- | -------------------------------------------------------------------------------------------------------------------- |
-| Monorepo       | pnpm workspaces: `apps/web`, `apps/api`, `packages/shared`                                                           |
-| Runtime        | Node.js 24 LTS, TypeScript (strict)                                                                                  |
-| Backend        | NestJS, @nestjs/websockets + Socket.io, @nestjs/throttler (@nestjs/event-emitter: later)                             |
-| Database       | Supabase Postgres via Drizzle ORM (drizzle-kit migrations)                                                           |
-| Auth           | Supabase Auth; NestJS guard verifies the JWT                                                                         |
-| Code execution | Piston, self-hosted in Docker (privileged container)                                                                 |
-| Web checking   | htmlparser2, css-select, postcss: HTML & CSS exercises are parsed and checked, never run (ADR-024)                   |
-| AI             | Google Gemini via `@google/genai` (not the legacy `@google/generative-ai`)                                           |
-| Frontend       | Next.js App Router, Tailwind, shadcn/ui, CodeMirror, TanStack Query, zustand, Framer Motion, GSAP (landing, ADR-048) |
-| Validation     | class-validator (API DTOs), zod (frontend forms)                                                                     |
-| Tests          | Vitest (API and web), PGlite for API database tests (ADR-017), Testing Library (web components), Playwright (e2e)    |
-| Lint / format  | ESLint and Prettier in both apps                                                                                     |
-| Hosting        | Vercel (web); one VPS with Docker Compose + Caddy (API + Piston); Supabase cloud                                     |
+| Layer          | Choice                                                                                                      |
+| -------------- | ----------------------------------------------------------------------------------------------------------- |
+| Monorepo       | pnpm workspaces: `apps/web`, `apps/api`, `packages/shared`                                                  |
+| Runtime        | Node.js 24 LTS, TypeScript (strict)                                                                         |
+| Backend        | NestJS, @nestjs/websockets + Socket.io, @nestjs/throttler                                                   |
+| Database       | Supabase Postgres via Drizzle ORM (drizzle-kit migrations)                                                  |
+| Auth           | Supabase Auth; NestJS guard verifies the JWT                                                                |
+| Code execution | Piston, self-hosted in Docker (privileged container)                                                        |
+| Web checking   | htmlparser2, css-select, postcss: HTML & CSS exercises are parsed and checked, never run (ADR-024)          |
+| AI             | Google Gemini via `@google/genai` (not the legacy `@google/generative-ai`)                                  |
+| Frontend       | Next.js App Router, Tailwind, shadcn/ui, CodeMirror, TanStack Query, Framer Motion, GSAP (landing, ADR-048) |
+| Validation     | class-validator (API DTOs), zod (frontend forms)                                                            |
+| Tests          | Vitest (API and web), PGlite for API database tests (ADR-017), Playwright (e2e)                             |
+| Lint / format  | ESLint and Prettier in both apps                                                                            |
+| Hosting        | Vercel (web); one VPS with Docker Compose + Caddy (API + Piston); Supabase cloud                            |
 
 ## 5. Repository layout
 

@@ -30,12 +30,12 @@ Conventions every file follows. AI assistants should apply these without being a
 - Throw Nest's built-in exceptions with an `API_SPEC.md` code, e.g. `new ForbiddenException({ code: 'LESSON_LOCKED', message })`; the global filter shapes the response.
 - Never select `hidden_tests` in a query whose result goes to a response.
 - Read config through `@nestjs/config`, validated at startup (fail fast if a key is missing).
-- Log with the Nest/pino logger, never `console.log`. Never log tokens, keys or user code.
+- Log with Nest's `Logger`, never `console.log`. Never log tokens, keys or user code.
 
 ## 4. Frontend rules
 
 - Server data through TanStack Query hooks in `lib/queries/`; no fetch calls inside components.
-- Local UI state in component state or zustand stores in `lib/stores/`.
+- Local UI state in component state (`useState`); server data in TanStack Query.
 - One API client (`lib/api.ts`) attaches the Supabase token.
 - Use design tokens from `DESIGN_SYSTEM.md`; no raw hex values in components.
 - Every interactive element is reachable by keyboard and has a visible focus ring.

@@ -33,7 +33,6 @@
   /* Soft, violet-tinted shadows. "press" sits under buttons, "sticker"
      under the main card of a region. */
   --shadow-press: 0 10px 20px -12px rgb(30 22 56 / 0.45);
-  --shadow-press-locked: none;
   --shadow-sticker: 0 22px 40px -28px rgb(60 30 120 / 0.5);
   --shadow-sticker-sm: 0 12px 24px -18px rgb(60 30 120 / 0.45);
   --shadow-sun: 0 12px 24px -12px rgb(232 165 0 / 0.85);

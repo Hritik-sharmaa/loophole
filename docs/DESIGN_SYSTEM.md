@@ -71,7 +71,7 @@ Framer Motion runs the app's motion; `<MotionConfig reducedMotion="user">` in `a
 
 ## 6. Components
 
-Shared class strings live in `components/ui/buttons.ts` (`primaryButton`, `secondaryButton`, `violetButton`) and `components/ui/card.ts` (`stickerCard`, `flatCard`, `chip`). Glossy icons and 3D tiles live in `components/stickers.tsx` (`CoinSticker`, `FlameSticker`, `TrophySticker`, `BugSticker`, `SwordsSticker`, `Sparkle`, `Tile`).
+Shared class strings live in `components/ui/buttons.ts` (`primaryButton`, `secondaryButton`) and `components/ui/card.ts` (`stickerOutline`, `stickerCard`, `chip`). Glossy icons and 3D tiles live in `components/stickers.tsx` (`CoinSticker`, `FlameSticker`, `TrophySticker`, `BugSticker`, `Sparkle`, `Tile`).
 
 | Component             | Spec                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -139,7 +139,7 @@ Tailwind v4 has no `tailwind.config.ts`; tokens are CSS variables in `@theme` bl
 ## 8. Do and don't
 
 - Do use Sunflower for one thing per screen region. Don't put three yellow buttons side by side.
-- Do give a region one sticker card; nested blocks use `flatCard` or a Surface panel. At most one Violet featured card per screen.
+- Do give a region one sticker card; nested blocks use a plain bordered block or a Surface panel. At most one Violet featured card per screen.
 - Do use a glossy sticker or a 3D Tile where an icon carries a reward or a moment (XP, streak, wins, bugs). Keep plain line icons for controls.
 - Do draw the map, the crew and avatars by hand in SVG. Don't use a diagram library, stock illustrations or an icon pack for them.
 - Don't go back to thick Ink outlines or hard offset shadows on cards and buttons; the doodle outline belongs to the characters only.
@@ -169,4 +169,4 @@ The guide voices the AI tutor ("Stuck? Ask Priya"), reads out each lesson's task
 
 **Logo** (`components/logo.tsx`): the loop, one stroke that rises, loops into a cursive "l" and ends in a dot, in Ink on a Sunflower tile (`LoopMark`), followed by the wordmark "loophole" in Lexend 600, all lowercase, Ink. **App icon** (`apps/web/app/icon.svg`, `apple-icon.png`, `public/icons/*`): the loop in Sunflower on a Violet tile; the maskable icon keeps the loop inside the safe zone. Byte is retired.
 
-**Stickers** (`components/stickers.tsx`): small glossy icons with one highlight each: a coin (XP), a flame (streak), a trophy (wins, the certificate), a bug (Bug of the day, Bug hunt), swords (duels), and a four-point sparkle for decoration. `Tile` puts an icon on a 3D-looking rounded square in a tile pastel (the landing's course tiles, Bug hunt, the certificate). No more than three stickers on a screen.
+**Stickers** (`components/stickers.tsx`): small glossy icons with one highlight each: a coin (XP), a flame (streak), a trophy (wins, the certificate), a bug (Bug of the day, Bug hunt), and a four-point sparkle for decoration. `Tile` puts an icon on a 3D-looking rounded square in a tile pastel (the landing's course tiles, Bug hunt, the certificate). No more than three stickers on a screen.

@@ -9,7 +9,3 @@ const base =
 export const primaryButton = `${base} bg-sun text-ink shadow-sun hover:bg-[#ffcb3d]`;
 
 export const secondaryButton = `${base} border border-border-muted bg-paper text-ink hover:border-violet`;
-
-// The brand button: for "Meet the crew"-style moments, never the main
-// action of a screen (that stays Sunflower).
-export const violetButton = `${base} bg-violet text-paper shadow-press hover:bg-violet-deep`;

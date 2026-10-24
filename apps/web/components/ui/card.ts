@@ -1,6 +1,5 @@
 // Card styles from docs/DESIGN_SYSTEM.md §6. A sticker card is the main
-// object on a screen region (white, thin outline, soft shadow); a flat
-// card is a quieter block inside one.
+// object on a screen region (white, thin outline, soft shadow).
 
 // Outline and shadow only. Use it with your own background (bg-lemon for a
 // win or a "continue" card): adding a second bg-* class to stickerCard
@@ -10,8 +9,6 @@ export const stickerOutline =
   'rounded-card border border-border-muted shadow-sticker';
 
 export const stickerCard = `${stickerOutline} bg-paper`;
-
-export const flatCard = 'rounded-card border border-border-muted bg-paper';
 
 // Small pill chips ("Unit 1", "Start here", streak and XP).
 export const chip =

@@ -2,7 +2,7 @@ import { useId } from 'react';
 
 // Stickers (docs/DESIGN_SYSTEM.md §9, ADR-047): small glossy icons for
 // rewards and moments. A coin for XP, a flame for streaks, a trophy for
-// wins, a bug for bugs, swords for duels. Decorative: always pass the
+// wins, a bug for bugs. Decorative: always pass the
 // meaning in text next to them.
 
 type Props = { className?: string };
@@ -100,37 +100,6 @@ export function BugSticker({ className = 'size-5' }: Props) {
       <circle cx="29.5" cy="26" r="2.6" fill="#1e1638" />
       <circle cx="19.5" cy="35" r="2" fill="#1e1638" />
       <circle cx="28.5" cy="35" r="2" fill="#1e1638" />
-    </svg>
-  );
-}
-
-export function SwordsSticker({ className = 'size-5' }: Props) {
-  return (
-    <svg viewBox="0 0 48 48" className={className} aria-hidden>
-      <path
-        d="M10 8l20 20M38 8L18 28"
-        stroke="#e9e6f2"
-        strokeWidth="6"
-        strokeLinecap="round"
-      />
-      <path
-        d="M10 8l20 20M38 8L18 28"
-        stroke="#fff"
-        strokeWidth="2.4"
-        strokeLinecap="round"
-      />
-      <path
-        d="M26 30l6-6M22 30l-6-6"
-        stroke="#ffc21a"
-        strokeWidth="5"
-        strokeLinecap="round"
-      />
-      <path
-        d="M32 30l6 6M16 30l-6 6"
-        stroke="#1e1638"
-        strokeWidth="5"
-        strokeLinecap="round"
-      />
     </svg>
   );
 }
