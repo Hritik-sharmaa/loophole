@@ -48,7 +48,7 @@ export default function BotDuelPage() {
             className={`${stickerCard} flex flex-col items-center gap-4 px-6 py-12 text-center`}
           >
             <Guide guide="priya" mood="oops" className="h-28 w-20" />
-            <p className="font-display text-2xl font-extrabold">
+            <p className="font-display text-2xl font-semibold">
               Duel not found
             </p>
             <p className="text-text-secondary">{duel.error.message}</p>
@@ -128,7 +128,7 @@ function Race({ duel, fetchedAt }: { duel: BotDuel; fetchedAt: number }) {
   return (
     <article className="flex flex-col gap-6">
       {/* DuelHeader (DESIGN_SYSTEM §6), with the bot's face. */}
-      <header className="flex flex-wrap items-center justify-between gap-4 rounded-card border-2 border-ink bg-ink px-5 py-4 text-paper shadow-sticker">
+      <header className="flex flex-wrap items-center justify-between gap-4 rounded-card border border-ink bg-ink px-5 py-4 text-paper shadow-sticker">
         <span
           className="flex size-12 shrink-0 items-end justify-center overflow-hidden rounded-node border-2 border-paper"
           style={{ backgroundColor: GUIDES[duel.opponent].tint }}
@@ -160,7 +160,7 @@ function Race({ duel, fetchedAt }: { duel: BotDuel; fetchedAt: number }) {
           />
         </div>
         {over ? (
-          <span className="font-display text-2xl font-extrabold">Finished</span>
+          <span className="font-display text-2xl font-semibold">Finished</span>
         ) : (
           <DuelCountdown endsAt={duel.endsAt} />
         )}
@@ -169,7 +169,7 @@ function Race({ duel, fetchedAt }: { duel: BotDuel; fetchedAt: number }) {
       {over && <Outcome duel={duel} />}
 
       <section className="flex flex-col gap-2">
-        <h1 className="font-display text-3xl font-extrabold">
+        <h1 className="font-display text-3xl font-semibold">
           {duel.problem.title}
         </h1>
         <p className="text-lg">
@@ -219,7 +219,7 @@ function Race({ duel, fetchedAt }: { duel: BotDuel; fetchedAt: number }) {
       {error && !over && (
         <p
           role="alert"
-          className="rounded-card border-2 border-ink bg-surface px-4 py-3 font-bold"
+          className="rounded-card border border-border-muted bg-surface px-4 py-3 font-bold"
         >
           {error.message}
         </p>
@@ -263,7 +263,7 @@ function Outcome({ duel }: { duel: BotDuel }) {
         className="h-24 w-[68px] shrink-0"
       />
       <div className="mr-auto min-w-48 flex-1">
-        <p className="font-display text-3xl font-extrabold">{title}</p>
+        <p className="font-display text-3xl font-semibold">{title}</p>
         <p className={won ? 'font-semibold' : 'text-text-secondary'}>
           <span className="font-bold">{name}:</span> “{said}”
         </p>

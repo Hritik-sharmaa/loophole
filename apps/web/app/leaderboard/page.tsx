@@ -39,12 +39,12 @@ export default function LeaderboardPage() {
     <>
       <AppHeader />
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-8 sm:px-6 sm:py-10">
-        <h1 className="font-display text-4xl font-extrabold">Leaderboard</h1>
+        <h1 className="font-display text-4xl font-semibold">Leaderboard</h1>
 
         <div
           role="tablist"
           aria-label="Leaderboard"
-          className="mt-4 inline-flex gap-1 rounded-card border-2 border-ink bg-paper p-1"
+          className="mt-4 inline-flex gap-1 rounded-card border border-border-muted bg-paper p-1"
         >
           <TabButton active={tab === 'league'} onClick={() => setTab('league')}>
             League
@@ -90,7 +90,7 @@ function TabButton({
       role="tab"
       aria-selected={active}
       onClick={onClick}
-      className={`rounded-badge px-4 py-2 text-sm font-bold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink ${active ? 'bg-ink text-paper' : 'text-text-secondary hover:text-ink'}`}
+      className={`rounded-badge px-4 py-2 text-sm font-bold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet ${active ? 'bg-ink text-paper' : 'text-text-secondary hover:text-ink'}`}
     >
       {children}
     </button>
@@ -107,11 +107,7 @@ function WeeklyBoard({
   const { entries, me, weekStart } = board;
   const xp = (value: number) => (
     <>
-      <Zap
-        className="size-4 text-orange-dark"
-        fill="currentColor"
-        aria-hidden
-      />
+      <Zap className="size-4 text-sun-deep" fill="currentColor" aria-hidden />
       {value} XP
     </>
   );
@@ -193,7 +189,7 @@ function Rows({
 }) {
   if (entries.length === 0) {
     return (
-      <div className="flex flex-col items-center gap-3 rounded-card border-2 border-ink bg-paper px-6 py-10 text-center font-bold">
+      <div className="flex flex-col items-center gap-3 rounded-card border border-border-muted bg-paper px-6 py-10 text-center font-bold">
         <Guide guide="priya" mood="thinking" className="h-24 w-[68px]" />
         <p>{empty}</p>
       </div>
@@ -207,10 +203,10 @@ function Rows({
           <li
             key={e.userId}
             aria-current={mine ? 'true' : undefined}
-            className={`flex items-center gap-4 rounded-card border-2 border-ink px-5 py-3 ${mine ? 'bg-orange-tint shadow-sticker-sm' : 'bg-paper'}`}
+            className={`flex items-center gap-4 rounded-card border border-border-muted px-5 py-3 ${mine ? 'bg-sun-tint shadow-sticker-sm' : 'bg-paper'}`}
           >
             <span
-              className={`flex size-9 shrink-0 items-center justify-center rounded-node border-2 border-ink font-display text-lg font-extrabold ${e.rank <= 3 ? 'bg-lemon' : 'bg-surface'}`}
+              className={`flex size-9 shrink-0 items-center justify-center rounded-node border border-border-muted font-display text-lg font-semibold ${e.rank <= 3 ? 'bg-lemon' : 'bg-surface'}`}
             >
               {e.rank}
             </span>
@@ -229,7 +225,7 @@ function Rows({
 
 function MyRank({ children }: { children: ReactNode }) {
   return (
-    <p className="rounded-card border-2 border-ink bg-orange-tint px-5 py-3 font-bold">
+    <p className="rounded-card border border-border-muted bg-sun-tint px-5 py-3 font-bold">
       {children}
     </p>
   );

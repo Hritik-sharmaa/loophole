@@ -24,7 +24,7 @@ export default function CoursePage() {
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-6 sm:px-6 sm:py-8">
         <Link
           href="/learn"
-          className="mb-6 inline-flex items-center gap-1 rounded-badge text-sm font-bold text-text-secondary hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+          className="mb-6 inline-flex items-center gap-1 rounded-badge text-sm font-bold text-text-secondary hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet"
         >
           <ArrowLeft className="size-4" strokeWidth={3} /> All courses
         </Link>
@@ -37,7 +37,7 @@ export default function CoursePage() {
             className={`${stickerCard} flex flex-col items-center gap-4 px-6 py-12 text-center`}
           >
             <Guide guide="priya" mood="oops" className="h-32 w-24" />
-            <p className="font-display text-2xl font-extrabold">
+            <p className="font-display text-2xl font-semibold">
               {path.error instanceof ApiError && path.error.status === 404
                 ? 'No course here'
                 : 'Could not load the path'}

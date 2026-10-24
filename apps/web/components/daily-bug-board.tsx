@@ -23,7 +23,7 @@ export function DailyBugBoard({
       className={`${stickerCard} flex flex-col gap-4 p-5`}
     >
       <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h2 id="daily-board" className="font-display text-2xl font-extrabold">
+        <h2 id="daily-board" className="font-display text-2xl font-semibold">
           Today&apos;s fastest
         </h2>
         <p className="text-sm font-bold text-text-secondary">
@@ -70,10 +70,10 @@ function Row({ entry, mine }: { entry: Entry; mine: boolean }) {
   return (
     <li
       aria-current={mine ? 'true' : undefined}
-      className={`flex items-center gap-4 rounded-card border-2 border-ink px-4 py-2.5 ${mine ? 'bg-orange-tint shadow-sticker-sm' : 'bg-paper'}`}
+      className={`flex items-center gap-4 rounded-card border border-border-muted px-4 py-2.5 ${mine ? 'bg-sun-tint shadow-sticker-sm' : 'bg-paper'}`}
     >
       <span
-        className={`flex size-9 shrink-0 items-center justify-center rounded-node border-2 border-ink font-display text-lg font-extrabold ${entry.rank <= 3 ? 'bg-lemon' : 'bg-surface'}`}
+        className={`flex size-9 shrink-0 items-center justify-center rounded-node border border-border-muted font-display text-lg font-semibold ${entry.rank <= 3 ? 'bg-lemon' : 'bg-surface'}`}
       >
         {entry.rank}
       </span>

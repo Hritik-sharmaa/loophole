@@ -76,7 +76,7 @@ export default function BugHuntPage() {
               <p className="text-sm font-bold text-text-secondary">
                 Bug hunt · {hunt.data.title} · {index + 1} of {bugs.length}
               </p>
-              <h1 className="font-display text-2xl font-extrabold text-balance sm:text-3xl">
+              <h1 className="font-display text-2xl font-semibold text-balance sm:text-3xl">
                 {bugs[index].lesson}
               </h1>
             </div>
@@ -115,7 +115,7 @@ function HuntComplete({
       className={`${stickerCard} flex flex-col items-center gap-5 overflow-hidden px-6 pb-8 text-center`}
     >
       <div
-        className="-mx-6 flex w-[calc(100%+3rem)] justify-center border-b-2 border-ink pt-6"
+        className="-mx-6 flex w-[calc(100%+3rem)] justify-center border-b border-border-muted pt-6"
         style={{ backgroundColor: tint }}
       >
         <Guide
@@ -125,7 +125,7 @@ function HuntComplete({
           className="h-48 w-[137px]"
         />
       </div>
-      <h1 className="font-display text-4xl font-extrabold">Bug hunt done!</h1>
+      <h1 className="font-display text-4xl font-semibold">Bug hunt done!</h1>
       <p className="text-lg">
         <span className="font-bold">{name}:</span> “{cheer} You found{' '}
         <span className="font-bold">
@@ -163,7 +163,7 @@ function Message({
       className={`${stickerCard} flex flex-col items-center gap-4 px-6 py-12 text-center`}
     >
       <Guide guide={guide} mood="oops" className="h-28 w-20" />
-      <p className="font-display text-2xl font-extrabold">{text}</p>
+      <p className="font-display text-2xl font-semibold">{text}</p>
       <Link href={`/learn/${slug}`} className={secondaryButton}>
         Back to the path
       </Link>

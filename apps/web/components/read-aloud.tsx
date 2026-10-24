@@ -76,7 +76,7 @@ export function ReadAloud({
       aria-label={speaking ? 'Stop reading' : 'Read aloud'}
       aria-pressed={speaking}
       title={speaking ? 'Stop reading' : 'Read aloud'}
-      className={`flex size-9 shrink-0 items-center justify-center rounded-node border-2 border-ink transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink ${speaking ? 'bg-ink text-paper' : 'bg-paper text-ink hover:bg-surface'}`}
+      className={`flex size-9 shrink-0 items-center justify-center rounded-node border border-border-muted transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet ${speaking ? 'bg-ink text-paper' : 'bg-paper text-ink hover:bg-surface'}`}
     >
       {speaking ? (
         <Square className="size-3.5" fill="currentColor" aria-hidden />

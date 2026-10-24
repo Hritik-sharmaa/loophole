@@ -20,10 +20,10 @@ export function ProgressBar({
       aria-valuemin={0}
       aria-valuemax={max}
       aria-valuenow={value}
-      className="h-4 w-full overflow-hidden rounded-node border-2 border-ink bg-surface"
+      className="h-4 w-full overflow-hidden rounded-node border border-border-muted bg-surface"
     >
       <div
-        className={`h-full rounded-node transition-[width] duration-300 ease-out motion-reduce:transition-none ${tone === 'pink' ? 'bg-pink' : 'bg-orange'}`}
+        className={`h-full rounded-node transition-[width] duration-300 ease-out motion-reduce:transition-none ${tone === 'pink' ? 'bg-pink' : 'bg-sun'}`}
         style={{ width: `${percent}%` }}
       />
     </div>

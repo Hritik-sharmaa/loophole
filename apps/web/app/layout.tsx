@@ -1,21 +1,21 @@
 import type { Metadata, Viewport } from 'next';
-import { Bricolage_Grotesque, DM_Sans, JetBrains_Mono } from 'next/font/google';
+import { JetBrains_Mono, Lexend, Plus_Jakarta_Sans } from 'next/font/google';
 import { PwaRegister } from '@/components/pwa-register';
 import { Providers } from './providers';
 import './globals.css';
 
 // Fonts from docs/DESIGN_SYSTEM.md §3, exposed as CSS variables that
 // globals.css maps to font-display, font-sans and font-mono.
-const bricolage = Bricolage_Grotesque({
-  variable: '--font-bricolage',
-  subsets: ['latin'],
-  weight: ['600', '700', '800'],
-});
-
-const dmSans = DM_Sans({
-  variable: '--font-dm-sans',
+const lexend = Lexend({
+  variable: '--font-lexend',
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
+});
+
+const jakarta = Plus_Jakarta_Sans({
+  variable: '--font-jakarta',
+  subsets: ['latin'],
+  weight: ['500', '600', '700', '800'],
 });
 
 const jetbrains = JetBrains_Mono({
@@ -44,7 +44,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
     <html
       lang="en"
-      className={`${bricolage.variable} ${dmSans.variable} ${jetbrains.variable} h-full antialiased`}
+      className={`${lexend.variable} ${jakarta.variable} ${jetbrains.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col font-sans font-medium">
         <Providers>{children}</Providers>

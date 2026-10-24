@@ -29,7 +29,7 @@ export function UnitBadge({
       {earned && (
         <path
           d="M24 9.5 L25.6 12.8 L29.2 13.3 L26.6 15.8 L27.2 19.4 L24 17.7 L20.8 19.4 L21.4 15.8 L18.8 13.3 L22.4 12.8 Z"
-          className="fill-orange-dark"
+          className="fill-sun-deep"
         />
       )}
       <text

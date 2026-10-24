@@ -48,7 +48,7 @@ export default function LearnPage() {
       <AppHeader />
       <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-10 px-4 py-8 sm:px-6 sm:py-10">
         <GuideSays guide={guideFor(current?.language)} mood="happy">
-          <p className="font-display text-xl font-extrabold sm:text-2xl">
+          <p className="font-display text-xl font-semibold sm:text-2xl">
             {me.data ? `Hi, ${me.data.username}!` : 'Hi!'}{' '}
             {current ? 'Ready to keep going?' : 'What do you want to learn?'}
           </p>
@@ -69,7 +69,7 @@ export default function LearnPage() {
             <DailyBugCard enabled={!loading} />
 
             <section className="flex flex-col gap-4">
-              <h2 className="font-display text-2xl font-extrabold">
+              <h2 className="font-display text-2xl font-semibold">
                 {current ? 'All courses' : 'Courses'}
               </h2>
               <ul className="grid gap-5 sm:grid-cols-2">
@@ -95,24 +95,23 @@ export default function LearnPage() {
   );
 }
 
-// The one orange button on the page: back into the current course.
+// The one yellow button on the page, on the one violet card: back into
+// the current course.
 function ContinueCard({ course }: { course: CourseOverview }) {
   return (
-    <section
-      className={`${stickerOutline} flex flex-col gap-4 bg-lemon p-5 sm:flex-row sm:items-center sm:p-6`}
-    >
+    <section className="relative flex flex-col gap-4 overflow-hidden rounded-card bg-violet p-5 text-paper shadow-[0_24px_40px_-24px_rgb(74_48_200/0.8)] sm:flex-row sm:items-center sm:p-6">
       <LanguageTile language={course.language} size="lg" />
       <div className="flex min-w-0 flex-1 flex-col gap-2">
-        <p className="text-xs font-bold tracking-wide uppercase">
+        <p className="text-xs font-bold tracking-wide text-violet-tint uppercase">
           Continue where you left off
         </p>
-        <h2 className="font-display text-2xl font-extrabold">{course.title}</h2>
+        <h2 className="font-display text-2xl font-semibold">{course.title}</h2>
         <ProgressBar
           value={course.completedCount}
           max={course.lessonCount}
           label={`${course.title} progress`}
         />
-        <p className="text-sm font-bold">
+        <p className="text-sm font-bold text-violet-tint">
           {course.completedCount} of {course.lessonCount} lessons done
         </p>
       </div>
@@ -140,14 +139,12 @@ function CourseCard({ course }: { course: CourseOverview }) {
       {/* Each course's own banner, like a land on a map (ADR-027). */}
       <CourseBanner
         language={course.language}
-        className="h-28 border-b-2 border-ink"
+        className="h-28 border-b border-border-muted"
       />
       <div className="flex flex-1 flex-col gap-4 p-5">
         <div className="flex items-center gap-3">
           <LanguageTile language={course.language} />
-          <h3 className="font-display text-xl font-extrabold">
-            {course.title}
-          </h3>
+          <h3 className="font-display text-xl font-semibold">{course.title}</h3>
         </div>
         {course.description && (
           <p className="text-text-secondary">{course.description}</p>
@@ -156,7 +153,7 @@ function CourseCard({ course }: { course: CourseOverview }) {
           <Guide
             guide={guide}
             crop="bust"
-            className="size-9 rounded-node border-2 border-ink"
+            className="size-9 rounded-node border border-border-muted"
             // The tint behind the face, like their course banner.
             style={{ backgroundColor: GUIDES[guide].tint }}
           />
@@ -204,7 +201,7 @@ function ComingSoonCard({
         <span className="opacity-50">
           <LanguageTile language={language} />
         </span>
-        <h3 className="font-display text-xl font-extrabold text-text-secondary">
+        <h3 className="font-display text-xl font-semibold text-text-secondary">
           {title}
         </h3>
       </div>

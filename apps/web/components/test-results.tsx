@@ -31,7 +31,7 @@ export function TestResults({ result }: { result: Graded }) {
           <h3 className="text-sm font-bold text-text-secondary">
             Error output
           </h3>
-          <pre className="overflow-x-auto rounded-card border-2 border-ink bg-ink px-4 py-3 font-mono text-sm leading-6 whitespace-pre-wrap text-canvas">
+          <pre className="overflow-x-auto rounded-card border border-ink bg-ink px-4 py-3 font-mono text-sm leading-6 whitespace-pre-wrap text-canvas">
             {stderr}
           </pre>
         </div>
@@ -53,15 +53,15 @@ function TestResultRow({ result }: { result: TestResult }) {
 
   return (
     <li
-      className={`rounded-card border-2 px-4 py-3 ${result.passed ? 'border-ink bg-blue-tint' : 'border-ink bg-paper'}`}
+      className={`rounded-card border-2 px-4 py-3 ${result.passed ? 'border-violet bg-violet-tint' : 'border-border-muted bg-paper'}`}
     >
       <div className="flex items-center gap-3">
         {result.passed ? (
-          <span className="flex size-6 items-center justify-center rounded-node border-2 border-ink bg-blue text-paper">
+          <span className="flex size-6 items-center justify-center rounded-node border border-border-muted bg-violet text-paper">
             <Check className="size-3.5" strokeWidth={3.5} aria-hidden />
           </span>
         ) : (
-          <span className="flex size-6 items-center justify-center rounded-node border-2 border-ink text-ink">
+          <span className="flex size-6 items-center justify-center rounded-node border border-border-muted text-ink">
             <X className="size-3.5" strokeWidth={3.5} aria-hidden />
           </span>
         )}

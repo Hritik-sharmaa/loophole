@@ -2,13 +2,15 @@
 
 import type { CoursePath, LessonState } from '@loophole/shared';
 import { Award, Bug, Dumbbell } from 'lucide-react';
+import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { CheatSheet } from '@/components/cheat-sheet';
 import { CourseBanner } from '@/components/course-banner';
 import { GUIDES, Guide, guideFor } from '@/components/guide';
 import { LessonNode } from '@/components/lesson-node';
 import { ProgressBar } from '@/components/progress-bar';
+import { BugSticker, Tile, TrophySticker } from '@/components/stickers';
 import { UnitBadge } from '@/components/unit-badge';
 import { secondaryButton } from '@/components/ui/buttons';
 import { chip, stickerCard } from '@/components/ui/card';
@@ -19,6 +21,7 @@ import {
   layoutNodes,
   pathHeight,
   pathThrough,
+  type Point,
 } from '@/lib/path-geometry';
 
 type States = Record<string, LessonState>;
@@ -29,8 +32,9 @@ const STATE_LABEL: Record<LessonState, string> = {
   locked: 'locked',
 };
 
-// The hand-built lesson path (DESIGN_SYSTEM §6 LessonPath): nodes zig-zag
-// down the page on a dotted track; the part already walked is solid Blue.
+// The lesson path as a map (DESIGN_SYSTEM §6 LessonPath, ADR-047): each
+// unit is a little world, its lessons are books on a winding road, and
+// the part already walked is marked in Violet footprints.
 // Lessons whose state moved forward since the last visit play the unlock
 // pop once; a normal page load stays still (DESIGN_SYSTEM §1).
 export function LessonPath({
@@ -74,11 +78,11 @@ export function LessonPath({
       <header className={`${stickerCard} overflow-hidden`}>
         <CourseBanner
           language={path.course.language}
-          className="h-32 border-b-2 border-ink sm:h-40"
+          className="h-32 border-b border-border-muted sm:h-40"
         />
         <div className="flex items-center gap-5 px-5 py-5">
           <div className="flex min-w-0 flex-1 flex-col gap-3">
-            <h1 className="font-display text-3xl font-extrabold sm:text-4xl">
+            <h1 className="font-display text-3xl font-semibold sm:text-4xl">
               {path.course.title}
             </h1>
             <ProgressBar
@@ -142,7 +146,7 @@ export function LessonPath({
                   <span className={`${chip} bg-lemon text-ink`}>
                     Unit {u + 1} · {unitDone}/{unit.lessons.length}
                   </span>
-                  <h2 className="font-display text-2xl font-extrabold">
+                  <h2 className="font-display text-2xl font-semibold">
                     {unit.title}
                   </h2>
                 </div>
@@ -154,43 +158,24 @@ export function LessonPath({
               />
             </div>
 
-            <div className="relative" style={{ width: PATH_WIDTH, height }}>
-              <svg
-                aria-hidden="true"
-                width={PATH_WIDTH}
-                height={height}
-                viewBox={`0 0 ${PATH_WIDTH} ${height}`}
-                fill="none"
-                className="absolute inset-0"
-              >
-                <path
-                  d={pathThrough(points)}
-                  className="stroke-border-muted"
-                  strokeWidth={6}
-                  strokeLinecap="round"
-                  strokeDasharray="0 14"
-                />
-                {done >= 2 && (
-                  <path
-                    d={pathThrough(points.slice(0, done))}
-                    className="stroke-blue"
-                    strokeWidth={6}
-                    strokeLinecap="round"
-                  />
-                )}
-              </svg>
-
+            <UnitMap
+              season={SEASONS[u % SEASONS.length]}
+              points={points}
+              done={done}
+              height={height}
+            >
               <ol>
                 {unit.lessons.map((lesson, i) => {
                   const node = (
                     <>
                       <LessonNode
                         state={lesson.state}
+                        number={firstIndex[u] + i + 1}
                         pop={popping.has(lesson.id)}
                         project={lesson.project}
                       />
                       <span
-                        className={`rounded-badge bg-canvas px-1 text-center text-sm leading-tight font-bold ${lesson.state === 'locked' ? 'text-text-secondary' : 'text-ink'}`}
+                        className={`rounded-badge bg-paper/90 px-2.5 py-0.5 text-center text-sm leading-tight font-bold shadow-sticker-sm ${lesson.state === 'locked' ? 'text-text-secondary' : 'text-ink'}`}
                       >
                         {lesson.title}
                         <span className="sr-only">
@@ -201,10 +186,22 @@ export function LessonPath({
                     </>
                   );
                   return (
-                    <li
+                    <motion.li
                       key={lesson.id}
                       className="absolute w-36"
-                      style={{ left: points[i].x - 72, top: points[i].y - 32 }}
+                      initial={{ opacity: 0, y: 18, scale: 0.85 }}
+                      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                      viewport={{ once: true, amount: 0.6 }}
+                      transition={{
+                        type: 'spring',
+                        stiffness: 320,
+                        damping: 18,
+                        delay: 0.15 + i * 0.07,
+                      }}
+                      style={{
+                        left: points[i].x - 72,
+                        top: ROAD_LEAD + points[i].y - 40,
+                      }}
                     >
                       {lesson.state === 'locked' ? (
                         <div
@@ -214,23 +211,23 @@ export function LessonPath({
                               ? 'Finish this unit to open its project'
                               : 'Finish the previous lesson first'
                           }
-                          className="flex flex-col items-center gap-2"
+                          className="flex flex-col items-center gap-1.5"
                         >
                           {node}
                         </div>
                       ) : (
                         <Link
                           href={`/lessons/${lesson.id}`}
-                          className="group flex flex-col items-center gap-2 rounded-card p-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+                          className="group flex flex-col items-center gap-1.5 rounded-card p-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet"
                         >
                           {node}
                         </Link>
                       )}
-                    </li>
+                    </motion.li>
                   );
                 })}
               </ol>
-            </div>
+            </UnitMap>
 
             {unit.bugs > 0 && (
               <BugHuntStop
@@ -252,8 +249,243 @@ export function LessonPath({
   );
 }
 
+// How the road and its centre line appear the first time a unit scrolls
+// into view.
+const drawIn = {
+  initial: { pathLength: 0 },
+  whileInView: { pathLength: 1 },
+  viewport: { once: true, amount: 0.15 },
+  transition: { duration: 1.4, ease: 'easeInOut' },
+} as const;
+const fadeIn = {
+  initial: { opacity: 0 },
+  whileInView: { opacity: 1 },
+  viewport: { once: true, amount: 0.15 },
+  transition: { duration: 0.5, delay: 1.1 },
+} as const;
+
+// The road runs this far above the first book and below the last, so it
+// enters and leaves the unit's map.
+const ROAD_LEAD = 48;
+
+type Season = {
+  ground: [string, string];
+  // The road's edge and the hills.
+  edge: string;
+  leaf: string;
+  leafLight: string;
+  water: string;
+  // Winter trees wear a little snow.
+  snow?: boolean;
+};
+
+// Each unit is a season, like the reading app the developer picked
+// (ADR-047): spring, summer, autumn, winter, then round again.
+const SEASONS: Season[] = [
+  {
+    ground: ['#E6F8EE', '#D3F1E2'],
+    edge: '#BFE6D0',
+    leaf: '#52C99E',
+    leafLight: '#8CE3C2',
+    water: '#BFE0FF',
+  },
+  {
+    ground: ['#FFF7DE', '#FFEDC2'],
+    edge: '#F4DCA4',
+    leaf: '#7FDDB8',
+    leafLight: '#B5EFD8',
+    water: '#A8DBFF',
+  },
+  {
+    ground: ['#FFF0E3', '#FFDFC6'],
+    edge: '#F3CBA8',
+    leaf: '#FFB56B',
+    leafLight: '#FFD3A1',
+    water: '#CFE0FF',
+  },
+  {
+    ground: ['#EEF5FF', '#DBEBFD'],
+    edge: '#C6DCF4',
+    leaf: '#82CCF8',
+    leafLight: '#C3E7FD',
+    water: '#FFFFFF',
+    snow: true,
+  },
+];
+
+// A unit's little world: the ground, a cream road through the books with
+// the walked part marked in Violet footprints, and scenery on the side of
+// the road away from each book.
+function UnitMap({
+  season,
+  points,
+  done,
+  height,
+  children,
+}: {
+  season: Season;
+  points: Point[];
+  done: number;
+  height: number;
+  children: ReactNode;
+}) {
+  const total = height + ROAD_LEAD * 2;
+  const shifted = points.map((p) => ({ x: p.x, y: p.y + ROAD_LEAD }));
+  const road = pathThrough([
+    { x: shifted[0].x, y: 0 },
+    ...shifted,
+    { x: shifted[shifted.length - 1].x, y: total },
+  ]);
+  const center = PATH_WIDTH / 2;
+  return (
+    <div
+      className="relative w-full overflow-hidden rounded-[2rem] border border-border-muted"
+      style={{
+        background: `linear-gradient(180deg, ${season.ground[0]}, ${season.ground[1]})`,
+      }}
+    >
+      {/* Clouds and hills for wide screens; the road column keeps its own
+          scenery for phones. */}
+      <div aria-hidden className="pointer-events-none absolute inset-0">
+        <span className="absolute top-8 left-[6%] h-6 w-20 rounded-full bg-paper/80" />
+        <span className="absolute top-5 left-[9%] h-8 w-10 rounded-full bg-paper/80" />
+        <span className="absolute top-[38%] right-[7%] h-6 w-24 rounded-full bg-paper/70" />
+        <span
+          className="absolute -bottom-16 -left-10 h-40 w-64 rounded-[50%]"
+          style={{ backgroundColor: season.edge }}
+        />
+        <span
+          className="absolute -right-12 -bottom-20 h-44 w-72 rounded-[50%]"
+          style={{ backgroundColor: season.edge }}
+        />
+      </div>
+      <div
+        className="relative mx-auto"
+        style={{ width: PATH_WIDTH, height: total }}
+      >
+        <svg
+          aria-hidden="true"
+          width={PATH_WIDTH}
+          height={total}
+          viewBox={`0 0 ${PATH_WIDTH} ${total}`}
+          fill="none"
+          className="absolute inset-0 overflow-visible"
+        >
+          {shifted.map((p, i) => (
+            <Scenery
+              key={i}
+              x={p.x >= center ? p.x - 118 : p.x + 118}
+              y={p.y + 6}
+              kind={i % 4}
+              season={season}
+            />
+          ))}
+          {/* The road draws itself the first time the unit is seen
+              (ADR-048); its centre line and footprints follow. */}
+          <motion.path
+            d={road}
+            stroke={season.edge}
+            strokeWidth={46}
+            strokeLinecap="round"
+            {...drawIn}
+          />
+          <motion.path
+            d={road}
+            stroke="#FFF8EA"
+            strokeWidth={36}
+            strokeLinecap="round"
+            {...drawIn}
+          />
+          <motion.path
+            {...fadeIn}
+            d={road}
+            stroke="#F1DDB3"
+            strokeWidth={3}
+            strokeLinecap="round"
+            strokeDasharray="8 10"
+          />
+          {done >= 1 && (
+            <motion.path
+              {...fadeIn}
+              d={pathThrough([
+                { x: shifted[0].x, y: 0 },
+                ...shifted.slice(0, done),
+              ])}
+              className="stroke-violet"
+              strokeWidth={6}
+              strokeLinecap="round"
+              strokeDasharray="0 14"
+            />
+          )}
+        </svg>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+// One piece of scenery: a tree, two trees, flowers or a pond.
+function Scenery({
+  x,
+  y,
+  kind,
+  season,
+}: {
+  x: number;
+  y: number;
+  kind: number;
+  season: Season;
+}) {
+  const tree = (dx: number, dy: number, r: number) => (
+    <g key={`${dx}-${dy}`} transform={`translate(${dx} ${dy})`}>
+      <rect x={-2.5} y={r - 4} width={5} height={14} rx={2} fill="#A77B5B" />
+      <circle r={r} fill={season.leaf} />
+      <circle cx={-r / 3} cy={-r / 3} r={r / 2.6} fill={season.leafLight} />
+      {season.snow && (
+        <path
+          d={`M${-r * 0.8} ${-r * 0.4} Q0 ${-r * 1.5} ${r * 0.8} ${-r * 0.4} Q0 ${-r * 0.8} ${-r * 0.8} ${-r * 0.4}Z`}
+          fill="#FFFFFF"
+        />
+      )}
+    </g>
+  );
+  return (
+    <g transform={`translate(${x} ${y})`}>
+      {kind === 0 && tree(0, 0, 13)}
+      {kind === 1 && [tree(-8, 4, 10), tree(9, -2, 12)]}
+      {kind === 2 && (
+        <g>
+          {[
+            [-10, 0],
+            [4, -6],
+            [12, 6],
+          ].map(([dx, dy]) => (
+            <g key={dx} transform={`translate(${dx} ${dy})`}>
+              <circle r={4} fill="#FFFFFF" />
+              <circle r={1.8} fill="#FFC21A" />
+            </g>
+          ))}
+        </g>
+      )}
+      {kind === 3 && (
+        <g>
+          <ellipse rx={26} ry={13} fill={season.water} />
+          <ellipse
+            cx={-6}
+            cy={-3}
+            rx={12}
+            ry={4}
+            fill="#FFFFFF"
+            opacity={0.6}
+          />
+        </g>
+      )}
+    </g>
+  );
+}
+
 // A unit's last stop (ADR-031): its Bug hunt, a review of the unit's
-// spot-the-bug cards. Pink, like a duel: the same skill. It opens once the
+// spot-the-bug cards, on a glossy bug tile. It opens once the
 // unit's badge is earned; until then it is dashed, like a locked lesson.
 function BugHuntStop({
   href,
@@ -271,14 +503,15 @@ function BugHuntStop({
       {open ? (
         <Link
           href={href}
-          className="group flex flex-col items-center gap-1.5 rounded-card p-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+          className="group flex flex-col items-center gap-1.5 rounded-card p-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet"
         >
-          <span
-            className={`${circle} border-ink bg-pink shadow-press transition-[translate,box-shadow] duration-[50ms] group-active:translate-y-1 group-active:shadow-none`}
+          <Tile
+            tone="mint"
+            className="size-16 transition-transform group-hover:-translate-y-1 group-active:scale-95"
           >
-            <Bug className="size-7" strokeWidth={2.5} />
-          </span>
-          <span className="font-display text-lg font-extrabold">Bug hunt</span>
+            <BugSticker />
+          </Tile>
+          <span className="font-display text-lg font-semibold">Bug hunt</span>
           <span className="text-sm font-bold text-text-secondary">
             {bugs} bugs to find
           </span>
@@ -293,7 +526,7 @@ function BugHuntStop({
           >
             <Bug className="size-7" strokeWidth={2.5} />
           </span>
-          <span className="font-display text-lg font-extrabold text-text-secondary">
+          <span className="font-display text-lg font-semibold text-text-secondary">
             Bug hunt
           </span>
           <span className="text-sm font-bold text-text-secondary">
@@ -305,7 +538,7 @@ function BugHuntStop({
   );
 }
 
-// The path's last stop (ADR-030): the course certificate. Lemon and
+// The path's last stop (ADR-030): the course certificate. A trophy tile,
 // clickable once earned; dashed and locked until every lesson is done.
 function CertificateStop({
   slug,
@@ -324,17 +557,20 @@ function CertificateStop({
       {/* The track runs on into the last stop. */}
       <span
         aria-hidden
-        className={`h-12 w-0 border-l-[6px] border-dotted ${slug ? 'border-blue' : 'border-border-muted'}`}
+        className={`h-12 w-0 border-l-[6px] border-dotted ${slug ? 'border-violet' : 'border-border-muted'}`}
       />
       {slug ? (
         <Link
           href={`/c/${slug}`}
-          className="group flex flex-col items-center gap-2 rounded-card p-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+          className="group flex flex-col items-center gap-2 rounded-card p-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet"
         >
-          <span className="flex size-20 items-center justify-center rounded-node border-[3px] border-ink bg-lemon shadow-press transition-[translate,box-shadow] duration-[50ms] group-active:translate-y-1 group-active:shadow-none">
-            <Award className="size-10" strokeWidth={2.5} />
-          </span>
-          <span className="font-display text-xl font-extrabold">
+          <Tile
+            tone="sun"
+            className="size-20 transition-transform group-hover:-translate-y-1 group-active:scale-95"
+          >
+            <TrophySticker />
+          </Tile>
+          <span className="font-display text-xl font-semibold">
             Your certificate
           </span>
           <span className="text-sm font-bold text-text-secondary">
@@ -346,7 +582,7 @@ function CertificateStop({
           <span className="flex size-20 items-center justify-center rounded-node border-[3px] border-dashed border-border-muted bg-paper text-text-tertiary">
             <Award className="size-10" strokeWidth={2.5} />
           </span>
-          <span className="font-display text-xl font-extrabold text-text-secondary">
+          <span className="font-display text-xl font-semibold text-text-secondary">
             Certificate
           </span>
           <span className="text-sm font-bold text-text-secondary">

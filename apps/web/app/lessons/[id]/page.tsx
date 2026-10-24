@@ -144,7 +144,7 @@ function Lesson({
       >
         <article className="flex flex-col gap-6">
           {step !== 'done' && (
-            <h1 className="font-display text-2xl font-extrabold text-balance sm:text-3xl">
+            <h1 className="font-display text-2xl font-semibold text-balance sm:text-3xl">
               {lesson.title}
             </h1>
           )}
@@ -280,7 +280,7 @@ function Exercise({
         <button
           type="button"
           onClick={onReviewCards}
-          className="-mt-3 inline-flex items-center gap-1 self-start rounded-badge text-sm font-bold text-text-secondary hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+          className="-mt-3 inline-flex items-center gap-1 self-start rounded-badge text-sm font-bold text-text-secondary hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet"
         >
           <ArrowLeft className="size-4" strokeWidth={3} aria-hidden /> Review
           the cards
@@ -347,7 +347,7 @@ function Exercise({
       {submit.isError && (
         <p
           role="alert"
-          className="rounded-card border-2 border-ink bg-surface px-4 py-3 font-bold"
+          className="rounded-card border border-border-muted bg-surface px-4 py-3 font-bold"
         >
           {submit.error.message}
         </p>
@@ -359,7 +359,7 @@ function Exercise({
           role="status"
           className={`${stickerOutline} flex flex-wrap items-center justify-between gap-4 bg-lemon px-5 py-3`}
         >
-          <p className="font-display text-xl font-extrabold">
+          <p className="font-display text-xl font-semibold">
             {lesson.project ? 'Project complete!' : 'Lesson complete!'}
           </p>
           <Link
@@ -426,7 +426,7 @@ function LessonComplete({
       className={`${stickerCard} flex flex-col items-center gap-5 overflow-hidden px-6 pb-8 text-center`}
     >
       <div
-        className="-mx-6 flex w-[calc(100%+3rem)] justify-center border-b-2 border-ink pt-6"
+        className="-mx-6 flex w-[calc(100%+3rem)] justify-center border-b border-border-muted pt-6"
         style={{ backgroundColor: tint }}
       >
         <Guide
@@ -436,7 +436,7 @@ function LessonComplete({
           className="h-48 w-[137px]"
         />
       </div>
-      <h1 className="font-display text-4xl font-extrabold">
+      <h1 className="font-display text-4xl font-semibold">
         {lesson.project ? 'Project complete!' : 'Lesson complete!'}
       </h1>
       <p className="text-lg">
@@ -454,7 +454,7 @@ function LessonComplete({
         />
         <Stat
           label="Streak"
-          head="bg-blue text-paper"
+          head="bg-violet text-paper"
           value={
             streak === undefined
               ? '…'
@@ -495,7 +495,7 @@ function LessonComplete({
         <button
           type="button"
           onClick={onReview}
-          className="self-center rounded-badge px-2 text-sm font-bold text-text-secondary hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+          className="self-center rounded-badge px-2 text-sm font-bold text-text-secondary hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet"
         >
           Back to my code
         </button>
@@ -516,13 +516,13 @@ function Stat({
   note?: string;
 }) {
   return (
-    <div className="flex flex-col overflow-hidden rounded-card border-2 border-ink">
+    <div className="flex flex-col overflow-hidden rounded-card border border-border-muted">
       <dt
         className={`px-2 py-1 text-xs font-bold tracking-wide uppercase ${head}`}
       >
         {label}
       </dt>
-      <dd className="px-2 py-2 font-display text-2xl font-extrabold tabular-nums">
+      <dd className="px-2 py-2 font-display text-2xl font-semibold tabular-nums">
         {value}
         {note && (
           <span className="block font-sans text-xs font-bold text-text-secondary">
@@ -547,7 +547,7 @@ function LessonError({ error }: { error: Error }) {
       ) : (
         <Guide guide="priya" mood="oops" className="h-28 w-20" />
       )}
-      <p className="font-display text-2xl font-extrabold">
+      <p className="font-display text-2xl font-semibold">
         {locked ? 'Finish the previous lesson first' : 'Lesson not available'}
       </p>
       {!locked && <p className="text-text-secondary">{error.message}</p>}

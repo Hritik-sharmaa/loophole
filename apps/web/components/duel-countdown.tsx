@@ -21,7 +21,7 @@ export function DuelCountdown({ endsAt }: { endsAt: string }) {
     <span
       role="timer"
       aria-label={`${minutes} minutes ${seconds} seconds left`}
-      className="font-display text-3xl font-extrabold text-orange tabular-nums"
+      className="font-display text-3xl font-semibold text-sun tabular-nums"
     >
       {left === 0 ? "Time's up" : `${minutes}:${seconds}`}
     </span>

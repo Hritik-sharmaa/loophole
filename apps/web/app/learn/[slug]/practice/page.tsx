@@ -81,7 +81,7 @@ export default function PracticePage() {
               <p className="text-sm font-bold text-text-secondary">
                 Practice · {index + 1} of {items.length}
               </p>
-              <h1 className="font-display text-2xl font-extrabold text-balance sm:text-3xl">
+              <h1 className="font-display text-2xl font-semibold text-balance sm:text-3xl">
                 {item.lesson}
               </h1>
             </div>
@@ -130,7 +130,7 @@ function PracticeComplete({
       className={`${stickerCard} flex flex-col items-center gap-5 overflow-hidden px-6 pb-8 text-center`}
     >
       <div
-        className="-mx-6 flex w-[calc(100%+3rem)] justify-center border-b-2 border-ink pt-6"
+        className="-mx-6 flex w-[calc(100%+3rem)] justify-center border-b border-border-muted pt-6"
         style={{ backgroundColor: tint }}
       >
         <Guide
@@ -140,7 +140,7 @@ function PracticeComplete({
           className="h-48 w-[137px]"
         />
       </div>
-      <h1 className="font-display text-4xl font-extrabold">Practice done!</h1>
+      <h1 className="font-display text-4xl font-semibold">Practice done!</h1>
       <p className="text-lg">
         <span className="font-bold">{name}:</span> “{cheer} You got{' '}
         <span className="font-bold">
@@ -178,7 +178,7 @@ function Message({
       className={`${stickerCard} flex flex-col items-center gap-4 px-6 py-12 text-center`}
     >
       <Guide guide={guide} mood="oops" className="h-28 w-20" />
-      <p className="font-display text-2xl font-extrabold">{text}</p>
+      <p className="font-display text-2xl font-semibold">{text}</p>
       <Link href={`/learn/${slug}`} className={secondaryButton}>
         Back to the path
       </Link>

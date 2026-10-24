@@ -1,14 +1,16 @@
 'use client';
 
-import { ArrowRight, Bug, Check } from 'lucide-react';
+import { ArrowRight, Check } from 'lucide-react';
 import Link from 'next/link';
+import { BugSticker, Tile } from '@/components/stickers';
 import { secondaryButton } from '@/components/ui/buttons';
 import { chip, stickerOutline } from '@/components/ui/card';
 import { formatDuration } from '@/lib/format-time';
 import { useDailyBugBoard } from '@/lib/queries/use-daily-bug';
 
-// The way into the bug of the day (ADR-035), on the signed-in home. Pink
-// like a duel: the same skill. It reads only the board, so seeing the card
+// The way into the bug of the day (ADR-035), on the signed-in home. A
+// white card with a glossy bug tile and a pink chip, like a duel: the
+// same skill. It reads only the board, so seeing the card
 // never starts the learner's clock.
 export function DailyBugCard({ enabled }: { enabled: boolean }) {
   const board = useDailyBugBoard(enabled);
@@ -18,17 +20,19 @@ export function DailyBugCard({ enabled }: { enabled: boolean }) {
   return (
     <section
       aria-label="Bug of the day"
-      className={`${stickerOutline} flex flex-col gap-4 bg-pink p-5 sm:flex-row sm:items-center`}
+      className={`${stickerOutline} flex flex-col gap-4 bg-paper p-5 sm:flex-row sm:items-center`}
     >
-      <span className="flex size-14 shrink-0 items-center justify-center rounded-node border-2 border-ink bg-paper">
-        <Bug className="size-7" strokeWidth={2.5} aria-hidden />
-      </span>
+      <Tile tone="mint" className="size-14">
+        <BugSticker />
+      </Tile>
       <div className="flex min-w-0 flex-1 flex-col gap-1">
-        <span className={`${chip} self-start bg-paper text-ink`}>
+        <span
+          className={`${chip} self-start border-transparent bg-pink text-ink`}
+        >
           Bug of the day
         </span>
-        <h2 className="font-display text-2xl font-extrabold">{title}</h2>
-        <p className="text-sm font-bold">
+        <h2 className="font-display text-2xl font-semibold">{title}</h2>
+        <p className="text-sm font-bold text-text-secondary">
           {me ? (
             <span className="inline-flex items-center gap-1">
               <Check className="size-4" strokeWidth={3} aria-hidden /> You fixed

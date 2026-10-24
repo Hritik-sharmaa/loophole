@@ -57,11 +57,11 @@ export function CodeEditor({
 }) {
   return (
     <section
-      className={`overflow-hidden rounded-card border-2 border-ink bg-paper focus-within:outline-2 focus-within:outline-offset-4 focus-within:outline-ink ${compact ? '' : 'shadow-sticker'}`}
+      className={`overflow-hidden rounded-card border border-border-muted bg-paper focus-within:outline-2 focus-within:outline-offset-4 focus-within:outline-violet ${compact ? '' : 'shadow-sticker'}`}
     >
       <div className="flex items-center gap-3 bg-ink px-4 py-2">
         <span aria-hidden className="flex gap-1.5">
-          <span className="size-2.5 rounded-full bg-orange" />
+          <span className="size-2.5 rounded-full bg-sun" />
           <span className="size-2.5 rounded-full bg-lemon" />
           <span className="size-2.5 rounded-full bg-pink" />
         </span>

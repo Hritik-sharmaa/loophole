@@ -47,7 +47,7 @@ export function CareerPaths({ courses }: { courses: CourseOverview[] }) {
   return (
     <section aria-labelledby="paths-heading" className="flex flex-col gap-4">
       <div>
-        <h2 id="paths-heading" className="font-display text-2xl font-extrabold">
+        <h2 id="paths-heading" className="font-display text-2xl font-semibold">
           Career paths
         </h2>
         <p className="text-text-secondary">
@@ -68,7 +68,7 @@ export function CareerPaths({ courses }: { courses: CourseOverview[] }) {
                 <Briefcase className="size-3.5" strokeWidth={3} aria-hidden />{' '}
                 Path
               </span>
-              <h3 className="font-display text-xl font-extrabold">{p.title}</h3>
+              <h3 className="font-display text-xl font-semibold">{p.title}</h3>
               <p className="text-sm text-text-secondary">{p.goal}</p>
               <ol
                 aria-label={`${p.title} courses`}
@@ -105,7 +105,7 @@ export function CareerPaths({ courses }: { courses: CourseOverview[] }) {
               {next ? (
                 <Link
                   href={`/learn/${next.slug}`}
-                  className="mt-auto inline-flex items-center gap-1 self-start rounded-badge font-bold underline hover:text-orange-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+                  className="mt-auto inline-flex items-center gap-1 self-start rounded-badge font-bold underline hover:text-sun-deep focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet"
                 >
                   {done === 0 ? 'Start with' : 'Next:'} {next.title}
                   <ArrowRight className="size-4" strokeWidth={3} aria-hidden />

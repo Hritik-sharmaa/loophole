@@ -72,7 +72,7 @@ export default function WelcomePage() {
 
   return (
     <>
-      <header className="sticky top-0 z-30 border-b-2 border-ink bg-paper pt-[env(safe-area-inset-top)]">
+      <header className="sticky top-0 z-30 border-b border-border-muted bg-paper pt-[env(safe-area-inset-top)]">
         <div className="mx-auto flex max-w-3xl items-center gap-4 px-4 py-3 sm:px-6">
           <Logo href="/" size="sm" />
           <div className="flex-1">
@@ -96,7 +96,7 @@ export default function WelcomePage() {
           <>
             <CrewLineup mood="happy" className="self-center" />
             <GuideSays guide="priya" mood="happy">
-              <h1 className="font-display text-2xl font-extrabold text-balance">
+              <h1 className="font-display text-2xl font-semibold text-balance">
                 Namaste{me.data ? `, ${me.data.username}` : ''}! We are the
                 Loophole crew.
               </h1>
@@ -115,16 +115,16 @@ export default function WelcomePage() {
                         setCourse(c);
                         setStep('goal');
                       }}
-                      className={`${stickerCard} flex h-full w-full items-center gap-4 p-4 text-left transition-[translate,box-shadow] duration-[50ms] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink active:translate-y-1 active:shadow-none`}
+                      className={`${stickerCard} flex h-full w-full items-center gap-4 p-4 text-left transition-[translate,box-shadow] duration-[50ms] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet active:translate-y-1 active:shadow-none`}
                     >
                       <Guide
                         guide={g}
                         crop="bust"
-                        className="size-16 shrink-0 rounded-node border-2 border-ink"
+                        className="size-16 shrink-0 rounded-node border border-border-muted"
                         style={{ backgroundColor: GUIDES[g].tint }}
                       />
                       <span className="flex min-w-0 flex-col gap-1">
-                        <span className="flex items-center gap-2 font-display text-xl font-extrabold">
+                        <span className="flex items-center gap-2 font-display text-xl font-semibold">
                           <LanguageTile language={c.language} size="sm" />
                           {c.title}
                         </span>
@@ -143,13 +143,13 @@ export default function WelcomePage() {
             <button
               type="button"
               onClick={() => setStep('course')}
-              className="inline-flex items-center gap-1 self-start rounded-badge text-sm font-bold text-text-secondary hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+              className="inline-flex items-center gap-1 self-start rounded-badge text-sm font-bold text-text-secondary hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet"
             >
               <ArrowLeft className="size-4" strokeWidth={3} aria-hidden /> Pick
               another course
             </button>
             <GuideSays guide={guide} mood="thinking">
-              <h1 className="font-display text-2xl font-extrabold text-balance">
+              <h1 className="font-display text-2xl font-semibold text-balance">
                 Great choice! How much time can you give each day?
               </h1>
               <p className="text-lg">
@@ -181,13 +181,13 @@ export default function WelcomePage() {
             <button
               type="button"
               onClick={() => setStep('goal')}
-              className="inline-flex items-center gap-1 self-start rounded-badge text-sm font-bold text-text-secondary hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+              className="inline-flex items-center gap-1 self-start rounded-badge text-sm font-bold text-text-secondary hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet"
             >
               <ArrowLeft className="size-4" strokeWidth={3} aria-hidden />{' '}
               Change my goal
             </button>
             <GuideSays guide={guide} mood="thinking">
-              <h1 className="font-display text-2xl font-extrabold text-balance">
+              <h1 className="font-display text-2xl font-semibold text-balance">
                 How should I explain things?
               </h1>
               <p className="text-lg">
@@ -227,7 +227,7 @@ export default function WelcomePage() {
             className={`${stickerCard} flex flex-col items-center gap-5 overflow-hidden px-6 pb-8 text-center`}
           >
             <div
-              className="-mx-6 flex w-[calc(100%+3rem)] justify-center border-b-2 border-ink pt-6"
+              className="-mx-6 flex w-[calc(100%+3rem)] justify-center border-b border-border-muted pt-6"
               style={{ backgroundColor: GUIDES[guide].tint }}
             >
               <Guide
@@ -237,7 +237,7 @@ export default function WelcomePage() {
                 className="h-48 w-[137px]"
               />
             </div>
-            <h1 className="font-display text-3xl font-extrabold text-balance">
+            <h1 className="font-display text-3xl font-semibold text-balance">
               Namaste{me.data ? `, ${me.data.username}` : ''}! I&apos;m {name}.
             </h1>
             <p className="max-w-md text-lg">

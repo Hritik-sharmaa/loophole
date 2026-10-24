@@ -42,7 +42,7 @@ function Profile({ me }: { me: MeResponse }) {
   return (
     <Centered>
       <Avatar code={me.avatar} className="size-28" />
-      <h1 className="font-display text-3xl font-extrabold break-all">
+      <h1 className="font-display text-3xl font-semibold break-all">
         Hi, {me.username}
       </h1>
       <Link href="/profile/avatar" className={`${secondaryButton} px-4 py-2`}>
@@ -155,7 +155,7 @@ function Certificates() {
           <li key={c.slug}>
             <Link
               href={`/c/${c.slug}`}
-              className="flex items-center gap-3 rounded-card border-2 border-ink bg-lemon px-4 py-3 font-bold shadow-sticker-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+              className="flex items-center gap-3 rounded-card border border-border-muted bg-lemon px-4 py-3 font-bold shadow-sticker-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet"
             >
               <Award className="size-5 text-ink" aria-hidden />
               {c.courseTitle}
@@ -194,7 +194,7 @@ function UsernameForm({ current }: { current: string }) {
           id="username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          className="min-w-0 flex-1 rounded-card border-2 border-ink bg-paper px-4 py-2 font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+          className="min-w-0 flex-1 rounded-card border border-border-muted bg-paper px-4 py-2 font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet"
         />
         <button
           type="submit"
@@ -227,7 +227,7 @@ function LogoutButton() {
     <button
       type="button"
       onClick={logOut}
-      className="rounded-badge text-sm font-semibold text-text-secondary underline hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+      className="rounded-badge text-sm font-semibold text-text-secondary underline hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet"
     >
       Log out
     </button>
@@ -245,9 +245,9 @@ function Stat({
   note?: string;
 }) {
   return (
-    <div className="rounded-card border-2 border-ink bg-paper p-4 shadow-sticker-sm">
+    <div className="rounded-card border border-border-muted bg-paper p-4 shadow-sticker-sm">
       <dt className="text-xs font-semibold text-text-secondary">{label}</dt>
-      <dd className="font-display text-2xl font-extrabold">{value}</dd>
+      <dd className="font-display text-2xl font-semibold">{value}</dd>
       {note && (
         <dd className="text-xs font-semibold text-text-secondary">{note}</dd>
       )}

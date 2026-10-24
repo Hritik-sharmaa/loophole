@@ -42,7 +42,9 @@ export function GoalRing({
         cy="12"
         r="9"
         strokeWidth={3.5}
-        className={met ? 'fill-blue stroke-blue' : 'fill-none stroke-surface'}
+        className={
+          met ? 'fill-violet stroke-violet' : 'fill-none stroke-surface'
+        }
       />
       {!met && value > 0 && (
         <circle
@@ -54,7 +56,7 @@ export function GoalRing({
           strokeLinecap="round"
           strokeDasharray={`${filled} ${circumference}`}
           transform="rotate(-90 12 12)"
-          className="stroke-orange"
+          className="stroke-sun"
         />
       )}
       {met && (
@@ -92,14 +94,14 @@ export function GoalPicker({
               onClick={() => onPick(g.xp)}
               disabled={disabled}
               aria-pressed={chosen}
-              className={`flex w-full items-center justify-between gap-3 rounded-card border-2 border-ink px-5 py-4 text-left transition-[translate,box-shadow] duration-[50ms] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink disabled:opacity-60 ${chosen ? 'bg-ink text-paper' : 'bg-paper text-ink shadow-press active:translate-y-1 active:shadow-none'}`}
+              className={`flex w-full items-center justify-between gap-3 rounded-card border border-border-muted px-5 py-4 text-left transition-[translate,box-shadow] duration-[50ms] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet disabled:opacity-60 ${chosen ? 'bg-ink text-paper' : 'bg-paper text-ink shadow-press active:translate-y-1 active:shadow-none'}`}
             >
               <span className="flex flex-col">
-                <span className="font-display text-xl font-extrabold">
+                <span className="font-display text-xl font-semibold">
                   {g.label}
                   {g.xp === 20 && (
                     <span
-                      className={`ml-2 rounded-badge border-2 px-1.5 py-0.5 align-middle font-sans text-xs font-bold ${chosen ? 'border-paper' : 'border-ink bg-lemon'}`}
+                      className={`ml-2 rounded-badge border-2 px-1.5 py-0.5 align-middle font-sans text-xs font-bold ${chosen ? 'border-paper' : 'border-sun bg-lemon'}`}
                     >
                       Recommended
                     </span>
@@ -111,7 +113,7 @@ export function GoalPicker({
                   {g.detail}
                 </span>
               </span>
-              <span className="font-display text-lg font-extrabold tabular-nums">
+              <span className="font-display text-lg font-semibold tabular-nums">
                 {g.xp} XP
               </span>
             </button>
@@ -180,11 +182,11 @@ export function StreakCalendar({
                 future
                   ? 'border-dashed border-border-muted text-text-tertiary'
                   : met
-                    ? 'border-ink bg-blue text-paper'
+                    ? 'border-violet bg-violet text-paper'
                     : xp > 0
-                      ? 'border-ink bg-blue-tint text-ink'
+                      ? 'border-violet bg-violet-tint text-ink'
                       : 'border-border-muted bg-paper text-text-secondary'
-              } ${today ? 'outline-3 outline-offset-1 outline-orange' : ''}`}
+              } ${today ? 'outline-3 outline-offset-1 outline-sun' : ''}`}
             >
               {met && !future ? (
                 <Check className="size-4" strokeWidth={3.5} aria-hidden />

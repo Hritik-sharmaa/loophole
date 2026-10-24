@@ -13,7 +13,7 @@ import { stickerCard } from '@/components/ui/card';
 import { supabase } from '@/lib/supabase';
 
 const INPUT =
-  'rounded-card border-2 border-ink bg-paper px-4 py-3 text-base font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink';
+  'rounded-card border border-border-muted bg-paper px-4 py-3 text-base font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet';
 
 const schema = z.object({
   email: z.email('Enter a valid email.'),
@@ -79,7 +79,7 @@ export default function LoginPage() {
             mood={mode === 'login' ? 'happy' : 'idle'}
             className="size-16 shrink-0"
           />
-          <h1 className="font-display text-3xl font-extrabold">
+          <h1 className="font-display text-3xl font-semibold">
             {mode === 'login' ? 'Welcome back' : 'Create your account'}
           </h1>
         </div>
@@ -151,7 +151,7 @@ export default function LoginPage() {
           <button
             type="button"
             onClick={() => setMode(mode === 'login' ? 'signup' : 'login')}
-            className="rounded-badge font-bold text-ink underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+            className="rounded-badge font-bold text-ink underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet"
           >
             {mode === 'login' ? 'Sign up' : 'Log in'}
           </button>
@@ -160,7 +160,7 @@ export default function LoginPage() {
 
       <Link
         href="/"
-        className="self-start rounded-badge text-sm text-text-secondary underline hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+        className="self-start rounded-badge text-sm text-text-secondary underline hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet"
       >
         Back home
       </Link>

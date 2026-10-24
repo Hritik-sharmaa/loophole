@@ -40,22 +40,22 @@ export function CheatSheet({
         aria-label={`Cheat sheet: ${unitTitle}`}
         // Clicking the backdrop (the dialog itself, outside the panel) closes.
         onClick={(e) => e.target === e.currentTarget && dialog.current?.close()}
-        className="m-auto max-h-[85dvh] w-[min(42rem,calc(100%-2rem))] overflow-hidden rounded-card border-2 border-ink bg-paper p-0 text-ink shadow-sticker backdrop:bg-ink/60"
+        className="m-auto max-h-[85dvh] w-[min(42rem,calc(100%-2rem))] overflow-hidden rounded-card border border-border-muted bg-paper p-0 text-ink shadow-sticker backdrop:bg-ink/60"
       >
         <div className="flex max-h-[85dvh] flex-col">
-          <header className="flex items-center justify-between gap-3 border-b-2 border-ink bg-lemon px-5 py-3">
+          <header className="flex items-center justify-between gap-3 border-b border-border-muted bg-lemon px-5 py-3">
             <div>
               <p className="text-xs font-bold tracking-wide uppercase">
                 Cheat sheet
               </p>
-              <h2 className="font-display text-2xl font-extrabold">
+              <h2 className="font-display text-2xl font-semibold">
                 {unitTitle}
               </h2>
             </div>
             <form method="dialog">
               <button
                 aria-label="Close the cheat sheet"
-                className="rounded-badge p-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+                className="rounded-badge p-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet"
               >
                 <X className="size-6" strokeWidth={3} />
               </button>
@@ -72,7 +72,7 @@ export function CheatSheet({
             ) : (
               sheet.data.lessons.map((lesson, i) => (
                 <section key={lesson.title} className="flex flex-col gap-3">
-                  <h3 className="font-display text-xl font-extrabold">
+                  <h3 className="font-display text-xl font-semibold">
                     <span className="text-text-secondary">{i + 1}.</span>{' '}
                     {lesson.title}
                   </h3>
@@ -80,7 +80,7 @@ export function CheatSheet({
                     {lesson.cards.map((card) => (
                       <li
                         key={card.title}
-                        className="flex flex-col gap-2 rounded-card border-2 border-ink bg-canvas px-4 py-3"
+                        className="flex flex-col gap-2 rounded-card border border-border-muted bg-canvas px-4 py-3"
                       >
                         <p className="font-bold">{card.title}</p>
                         <p>

@@ -34,10 +34,10 @@ export function Checklist({
           return (
             <li
               key={label}
-              className={`flex items-center gap-3 rounded-card border-2 border-ink px-4 py-2.5 ${state ? 'bg-blue-tint' : 'bg-paper'}`}
+              className={`flex items-center gap-3 rounded-card border border-border-muted px-4 py-2.5 ${state ? 'bg-violet-tint' : 'bg-paper'}`}
             >
               <span
-                className={`flex size-6 shrink-0 items-center justify-center rounded-node border-2 ${state === undefined ? 'border-dashed border-border-muted' : state ? 'border-ink bg-blue text-paper' : 'border-ink text-ink'}`}
+                className={`flex size-6 shrink-0 items-center justify-center rounded-node border-2 ${state === undefined ? 'border-dashed border-border-muted' : state ? 'border-violet bg-violet text-paper' : 'border-violet text-ink'}`}
               >
                 {state === true && (
                   <Check className="size-3.5" strokeWidth={3.5} aria-hidden />
@@ -59,7 +59,7 @@ export function Checklist({
         })}
       </ul>
       {result?.stderr && (
-        <pre className="overflow-x-auto rounded-card border-2 border-ink bg-ink px-4 py-3 font-mono text-sm leading-6 whitespace-pre-wrap text-canvas">
+        <pre className="overflow-x-auto rounded-card border border-ink bg-ink px-4 py-3 font-mono text-sm leading-6 whitespace-pre-wrap text-canvas">
           {result.stderr}
         </pre>
       )}

@@ -98,12 +98,12 @@ export function Terminal({
 
   return (
     <section
-      className="flex min-w-0 flex-col overflow-hidden rounded-card border-2 border-ink bg-ink shadow-sticker"
+      className="flex min-w-0 flex-col overflow-hidden rounded-card border border-ink bg-ink shadow-sticker"
       onClick={() => inputRef.current?.focus()}
     >
       <div className="flex items-center gap-3 border-b border-screen px-4 py-2">
         <span aria-hidden className="flex gap-1.5">
-          <span className="size-2.5 rounded-full bg-orange" />
+          <span className="size-2.5 rounded-full bg-sun" />
           <span className="size-2.5 rounded-full bg-lemon" />
           <span className="size-2.5 rounded-full bg-pink" />
         </span>
@@ -125,7 +125,7 @@ export function Terminal({
         {transcript.slice(hidden).map((step, i) => (
           <div key={hidden + i}>
             <p className="break-all">
-              <span className="text-orange" aria-hidden>
+              <span className="text-sun" aria-hidden>
                 ${' '}
               </span>
               {step.command}
@@ -144,7 +144,7 @@ export function Terminal({
         )}
 
         <form onSubmit={submit} className="flex items-center gap-2">
-          <label htmlFor="terminal-input" className="shrink-0 text-orange">
+          <label htmlFor="terminal-input" className="shrink-0 text-sun">
             {prompt}
           </label>
           <input
@@ -157,7 +157,7 @@ export function Terminal({
             autoCapitalize="off"
             spellCheck={false}
             maxLength={500}
-            className="min-w-0 flex-1 bg-transparent text-paper caret-orange outline-none"
+            className="min-w-0 flex-1 bg-transparent text-paper caret-sun outline-none"
           />
         </form>
         <div ref={endRef} />

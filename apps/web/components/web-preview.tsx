@@ -23,9 +23,9 @@ export function WebPreview({
   }, [html]);
 
   return (
-    <section className="flex min-w-0 flex-col overflow-hidden rounded-card border-2 border-ink bg-paper">
-      <div className="flex items-center gap-2 border-b-2 border-ink bg-surface px-4 py-1.5">
-        <span aria-hidden className="size-2 rounded-full bg-blue" />
+    <section className="flex min-w-0 flex-col overflow-hidden rounded-card border border-border-muted bg-paper">
+      <div className="flex items-center gap-2 border-b border-border-muted bg-surface px-4 py-1.5">
+        <span aria-hidden className="size-2 rounded-full bg-violet" />
         <h2 className="text-xs font-bold tracking-wide text-text-secondary uppercase">
           Live preview
         </h2>

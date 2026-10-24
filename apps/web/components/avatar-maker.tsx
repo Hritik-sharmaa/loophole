@@ -98,7 +98,7 @@ export function AvatarMaker({ saved }: { saved: AvatarCode }) {
       {/* Preview */}
       <div className="flex flex-col gap-4 md:sticky md:top-24">
         <div
-          className="relative aspect-square w-full overflow-hidden rounded-[2rem] border-2 border-ink shadow-sticker"
+          className="relative aspect-square w-full overflow-hidden rounded-[2rem] border border-border-muted shadow-sticker"
           style={{ backgroundColor: bgHex(parts.bg) }}
         >
           <svg
@@ -115,7 +115,7 @@ export function AvatarMaker({ saved }: { saved: AvatarCode }) {
               update.reset();
               setParts(randomAvatar());
             }}
-            className="absolute top-3 right-3 grid size-11 place-items-center rounded-full border-2 border-ink bg-paper shadow-sticker-sm transition-transform active:translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+            className="absolute top-3 right-3 grid size-11 place-items-center rounded-full border border-border-muted bg-paper shadow-sticker-sm transition-transform active:translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet"
             aria-label="Shuffle every part"
             title="Shuffle"
           >
@@ -126,7 +126,7 @@ export function AvatarMaker({ saved }: { saved: AvatarCode }) {
             onClick={() => setShowBg((s) => !s)}
             aria-expanded={showBg}
             aria-controls={`${ids}-bg`}
-            className="absolute right-3 bottom-3 grid size-11 place-items-center rounded-full border-2 border-ink bg-paper shadow-sticker-sm transition-transform active:translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+            className="absolute right-3 bottom-3 grid size-11 place-items-center rounded-full border border-border-muted bg-paper shadow-sticker-sm transition-transform active:translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet"
             aria-label="Background colour"
             title="Background"
           >
@@ -136,7 +136,7 @@ export function AvatarMaker({ saved }: { saved: AvatarCode }) {
         {showBg && (
           <div
             id={`${ids}-bg`}
-            className="flex flex-wrap items-center gap-2 rounded-card border-2 border-ink bg-paper px-3 py-2"
+            className="flex flex-wrap items-center gap-2 rounded-card border border-border-muted bg-paper px-3 py-2"
           >
             <Swatches
               label="Background"
@@ -187,7 +187,7 @@ export function AvatarMaker({ saved }: { saved: AvatarCode }) {
                 aria-selected={active}
                 aria-controls={`${ids}-panel`}
                 onClick={() => setTabIndex(i)}
-                className={`-mb-0.5 shrink-0 border-b-[3px] px-1.5 pt-1 pb-2 font-display text-[15px] font-bold sm:px-3 sm:text-base transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink ${active ? 'border-ink text-ink' : 'border-transparent text-text-tertiary hover:text-ink'}`}
+                className={`-mb-0.5 shrink-0 border-b-[3px] px-1.5 pt-1 pb-2 font-display text-[15px] font-bold sm:px-3 sm:text-base transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet ${active ? 'border-violet text-ink' : 'border-transparent text-text-tertiary hover:text-ink'}`}
               >
                 {t.name}
               </button>
@@ -230,7 +230,7 @@ export function AvatarMaker({ saved }: { saved: AvatarCode }) {
                     aria-pressed={chosen}
                     aria-label={option.label}
                     title={option.label}
-                    className={`flex aspect-square w-full items-center justify-center rounded-card border-2 bg-paper p-1 transition-[translate,border-color] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink ${chosen ? 'border-ink bg-surface' : 'border-border-muted hover:-translate-y-0.5 hover:border-ink'}`}
+                    className={`flex aspect-square w-full items-center justify-center rounded-card border-2 bg-paper p-1 transition-[translate,border-color] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet ${chosen ? 'border-violet bg-violet-tint' : 'border-border-muted hover:-translate-y-0.5 hover:border-violet'}`}
                   >
                     <svg viewBox={tab.crop} className="size-full" aria-hidden>
                       <AvatarArt parts={preview} />
@@ -274,7 +274,7 @@ function Swatches({
             aria-pressed={chosen}
             aria-label={`${label}: ${s.label}`}
             title={s.label}
-            className={`grid shrink-0 place-items-center rounded-full border-2 border-ink transition-transform focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink ${small ? 'size-7' : 'size-9'} ${chosen ? 'scale-110 ring-2 ring-ink ring-offset-2' : 'hover:scale-110'}`}
+            className={`grid shrink-0 place-items-center rounded-full border border-border-muted transition-transform focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet ${small ? 'size-7' : 'size-9'} ${chosen ? 'scale-110 ring-2 ring-ink ring-offset-2' : 'hover:scale-110'}`}
             style={{ backgroundColor: s.hex }}
           >
             {chosen && (

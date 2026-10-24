@@ -2,18 +2,18 @@
 
 import {
   BookOpen,
-  Flame,
   Swords,
   Trophy,
   UserRound,
-  Zap,
   type LucideIcon,
 } from 'lucide-react';
+import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type { ReactNode } from 'react';
 import { GoalRing } from '@/components/daily-goal';
 import { Logo } from '@/components/logo';
+import { CoinSticker, FlameSticker } from '@/components/stickers';
 import { chip } from '@/components/ui/card';
 import { useMe } from '@/lib/queries/use-me';
 import { useCountUp } from '@/lib/use-count-up';
@@ -46,8 +46,8 @@ export function AppHeader() {
 
   return (
     <>
-      <header className="sticky top-0 z-30 border-b-2 border-ink bg-paper pt-[env(safe-area-inset-top)]">
-        <nav className="mx-auto flex max-w-3xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
+      <header className="sticky top-0 z-30 border-b border-border-muted bg-paper/85 pt-[env(safe-area-inset-top)] backdrop-blur-md">
+        <nav className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
           <Logo href="/learn" size="sm" />
 
           {/* StreakBadge / XpBadge (DESIGN_SYSTEM §6). On phones they sit
@@ -77,12 +77,12 @@ export function AppHeader() {
                 </span>
               )}
               <Badge
-                icon={<Flame className="size-3.5" fill="currentColor" />}
+                icon={<FlameSticker className="size-4" />}
                 label={`${me.data.streak.current} day streak${me.data.streak.freezes > 0 ? `, ${me.data.streak.freezes} freeze${me.data.streak.freezes === 1 ? '' : 's'} saved` : ''}`}
                 value={me.data.streak.current}
               />
               <Badge
-                icon={<Zap className="size-3.5" fill="currentColor" />}
+                icon={<CoinSticker className="size-4" />}
                 label={`${me.data.xp} XP`}
                 value={me.data.xp}
                 suffix=" xp"
@@ -98,8 +98,20 @@ export function AppHeader() {
                   <Link
                     href={href}
                     aria-current={current ? 'page' : undefined}
-                    className={`rounded-badge border-2 px-3 py-1 text-sm font-bold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink ${current ? 'border-ink bg-ink text-paper' : 'border-transparent text-text-secondary hover:border-ink hover:text-ink'}`}
+                    className={`relative isolate block rounded-badge px-3.5 py-1.5 text-sm font-bold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet ${current ? 'text-violet' : 'text-text-secondary hover:text-ink'}`}
                   >
+                    {/* The pill slides from the old link to the new one. */}
+                    {current && (
+                      <motion.span
+                        layoutId="nav-pill"
+                        className="absolute inset-0 -z-10 rounded-badge bg-violet-tint"
+                        transition={{
+                          type: 'spring',
+                          stiffness: 420,
+                          damping: 34,
+                        }}
+                      />
+                    )}
                     {label}
                   </Link>
                 </li>
@@ -114,9 +126,9 @@ export function AppHeader() {
       <nav
         data-tabbar
         aria-label="Main"
-        className="fixed inset-x-0 bottom-0 z-30 border-t-2 border-ink bg-paper pb-[env(safe-area-inset-bottom)] sm:hidden"
+        className="fixed inset-x-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom))] z-30 rounded-[1.75rem] border border-border-muted bg-paper/95 shadow-[0_16px_30px_-18px_rgb(60_30_120/0.55)] backdrop-blur-md sm:hidden"
       >
-        <ul className="grid grid-cols-4 px-2 pt-2 pb-1.5">
+        <ul className="grid grid-cols-4 px-2 py-1.5">
           {LINKS.map(({ href, short, icon: Icon }) => {
             const current = isCurrent(href);
             return (
@@ -124,15 +136,30 @@ export function AppHeader() {
                 <Link
                   href={href}
                   aria-current={current ? 'page' : undefined}
-                  className="group flex flex-col items-center gap-0.5 rounded-badge py-0.5 text-xs font-bold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+                  className="group flex flex-col items-center gap-0.5 rounded-badge py-0.5 text-xs font-bold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet"
                 >
                   <span
-                    className={`flex h-8 w-12 items-center justify-center rounded-card border-2 transition-colors ${current ? 'border-ink bg-ink text-paper' : 'border-transparent text-text-secondary'}`}
+                    className={`relative flex h-8 w-12 items-center justify-center rounded-2xl transition-colors ${current ? 'text-violet' : 'text-text-tertiary'}`}
                   >
-                    <Icon className="size-5" strokeWidth={2.5} aria-hidden />
+                    {current && (
+                      <motion.span
+                        layoutId="tab-pill"
+                        className="absolute inset-0 rounded-2xl bg-violet-tint"
+                        transition={{
+                          type: 'spring',
+                          stiffness: 420,
+                          damping: 34,
+                        }}
+                      />
+                    )}
+                    <Icon
+                      className="relative size-5"
+                      strokeWidth={2.5}
+                      aria-hidden
+                    />
                   </span>
                   <span
-                    className={current ? 'text-ink' : 'text-text-secondary'}
+                    className={current ? 'text-violet' : 'text-text-secondary'}
                   >
                     {short}
                   </span>
@@ -146,7 +173,7 @@ export function AppHeader() {
   );
 }
 
-// A Lemon reward chip: Ink text, Orange icon.
+// A white reward chip with a glossy sticker (coin for XP, flame for the streak).
 function Badge({
   icon,
   label,
@@ -161,8 +188,8 @@ function Badge({
   // Counts up when XP or the streak grows (DESIGN_SYSTEM §5).
   const shown = useCountUp(value);
   return (
-    <span title={label} className={`${chip} bg-lemon text-ink`}>
-      <span className="text-orange-dark" aria-hidden>
+    <span title={label} className={`${chip} bg-paper py-1 text-ink`}>
+      <span className="-my-1" aria-hidden>
         {icon}
       </span>
       <span aria-hidden className="tabular-nums">

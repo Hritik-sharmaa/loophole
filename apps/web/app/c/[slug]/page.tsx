@@ -29,7 +29,7 @@ export default function CertificatePage() {
         >
           <title>Certificate not found · Loophole</title>
           <Guide guide="priya" mood="oops" className="h-28 w-20" />
-          <p className="font-display text-2xl font-extrabold">
+          <p className="font-display text-2xl font-semibold">
             Certificate not found
           </p>
           <p className="text-text-secondary">
@@ -68,10 +68,10 @@ function Certificate({ cert }: { cert: PublicCertificate }) {
   return (
     <>
       <title>{`${cert.username} · ${cert.courseTitle} · Loophole`}</title>
-      <article className="relative flex w-full flex-col items-center gap-4 rounded-card border-4 border-ink bg-paper px-6 py-12 text-center shadow-sticker">
+      <article className="relative flex w-full flex-col items-center gap-4 rounded-card border border-border-muted bg-paper px-6 py-12 text-center shadow-sticker">
         <div className="flex items-end gap-3">
           <CrewLineup mood="happy" size="sm" />
-          <span className="flex size-14 rotate-6 items-center justify-center rounded-node border-2 border-ink bg-lemon text-ink shadow-sticker-sm">
+          <span className="flex size-14 rotate-6 items-center justify-center rounded-node border border-border-muted bg-lemon text-ink shadow-sticker-sm">
             <Award className="size-8" strokeWidth={2.5} aria-hidden />
           </span>
         </div>
@@ -79,11 +79,11 @@ function Certificate({ cert }: { cert: PublicCertificate }) {
           Certificate of completion
         </p>
         <p className="text-text-secondary">This certifies that</p>
-        <h1 className="font-display text-4xl font-extrabold break-all">
+        <h1 className="font-display text-4xl font-semibold break-all">
           {cert.username}
         </h1>
         <p className="text-text-secondary">completed every lesson of</p>
-        <p className="font-display text-2xl font-extrabold">
+        <p className="font-display text-2xl font-semibold">
           {cert.courseTitle}
         </p>
         <p className="font-bold">on {date}</p>

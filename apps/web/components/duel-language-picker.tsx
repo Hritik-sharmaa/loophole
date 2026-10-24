@@ -76,7 +76,7 @@ export function DuelLanguagePicker({
               aria-checked={picked}
               disabled={disabled}
               onClick={() => onChange(id)}
-              className={`flex items-center gap-2 rounded-card border-2 border-ink px-4 py-2 font-bold transition-transform focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink disabled:cursor-not-allowed disabled:opacity-60 ${picked ? 'bg-lemon shadow-sticker-sm' : 'bg-paper hover:-translate-y-0.5'}`}
+              className={`flex items-center gap-2 rounded-card border border-border-muted px-4 py-2 font-bold transition-transform focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet disabled:cursor-not-allowed disabled:opacity-60 ${picked ? 'bg-lemon shadow-sticker-sm' : 'bg-paper hover:-translate-y-0.5'}`}
             >
               <LanguageLogo language={id} className="size-6" />
               {name}

@@ -80,7 +80,7 @@ function GitExample({
           </p>
         )}
         {run.data && (
-          <div className="overflow-hidden rounded-card border-2 border-ink bg-ink">
+          <div className="overflow-hidden rounded-card border border-ink bg-ink">
             <p className="border-b border-screen px-4 py-1.5 text-xs font-bold tracking-wide text-border-muted uppercase">
               Terminal
             </p>
@@ -88,7 +88,7 @@ function GitExample({
               {run.data.transcript.map((step, i) => (
                 <div key={i}>
                   <p>
-                    <span className="text-orange" aria-hidden>
+                    <span className="text-sun" aria-hidden>
                       ${' '}
                     </span>
                     {step.command}
@@ -220,7 +220,7 @@ function Console({
   stderr: string;
 }) {
   return (
-    <div className="overflow-hidden rounded-card border-2 border-ink bg-ink">
+    <div className="overflow-hidden rounded-card border border-ink bg-ink">
       <p className="border-b border-screen px-4 py-1.5 text-xs font-bold tracking-wide text-border-muted uppercase">
         {label}
       </p>
@@ -237,7 +237,7 @@ function UndoButton({ onClick }: { onClick: () => void }) {
     <button
       type="button"
       onClick={onClick}
-      className="inline-flex items-center gap-1 self-start rounded-badge px-2 py-1 text-sm font-bold text-text-secondary hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+      className="inline-flex items-center gap-1 self-start rounded-badge px-2 py-1 text-sm font-bold text-text-secondary hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet"
     >
       <RotateCcw className="size-3.5" strokeWidth={3} aria-hidden /> Undo my
       changes

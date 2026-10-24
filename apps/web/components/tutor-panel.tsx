@@ -62,7 +62,7 @@ export function TutorPanel({
   }
 
   return (
-    <section className="flex flex-col gap-4 rounded-card border-2 border-ink bg-surface px-5 py-4">
+    <section className="flex flex-col gap-4 rounded-card border border-border-muted bg-surface px-5 py-4">
       <div className="flex flex-wrap items-center gap-3">
         <Guide
           guide={guide}
@@ -104,7 +104,7 @@ export function TutorPanel({
       {answer && !error && (
         <div
           aria-live="polite"
-          className="flex flex-col gap-2 rounded-card border-2 border-ink bg-paper px-4 py-3 shadow-sticker-sm"
+          className="flex flex-col gap-2 rounded-card border border-border-muted bg-paper px-4 py-3 shadow-sticker-sm"
         >
           <p className="text-xs font-bold tracking-wide text-text-secondary uppercase">
             {answer.kind === 'hint' ? 'Hint' : 'What went wrong'}

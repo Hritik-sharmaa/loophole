@@ -875,7 +875,7 @@ export function Avatar({
   return (
     <svg
       viewBox="0 0 200 200"
-      className={`shrink-0 rounded-full border-2 border-ink ${className}`}
+      className={`shrink-0 rounded-full border border-border-muted ${className}`}
       style={{ backgroundColor: bgHex(parts.bg) }}
       role={label ? 'img' : undefined}
       aria-label={label}

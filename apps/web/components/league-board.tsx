@@ -12,10 +12,10 @@ import { stickerCard, stickerOutline } from '@/components/ui/card';
 
 // Each tier's badge fill: rewards in Lemon at the top, tints below it.
 const TIER_FILL = [
-  'fill-orange-tint',
+  'fill-sun-tint',
   'fill-surface',
   'fill-lemon',
-  'fill-blue-tint',
+  'fill-violet-tint',
 ];
 
 export function TierBadge({
@@ -77,7 +77,7 @@ export function LeagueBoard({
       <header className={`${stickerCard} flex items-center gap-4 px-5 py-4`}>
         <TierBadge level={tier.level} />
         <div className="flex-1">
-          <h2 className="font-display text-2xl font-extrabold">
+          <h2 className="font-display text-2xl font-semibold">
             {tier.name} league
           </h2>
           <p className="text-sm font-bold text-text-secondary">
@@ -141,10 +141,10 @@ export function LeagueBoard({
                   )}
                   <li
                     aria-current={mine ? 'true' : undefined}
-                    className={`flex items-center gap-4 rounded-card border-2 border-ink px-5 py-3 ${mine ? 'bg-orange-tint shadow-sticker-sm' : m.zone === 'up' ? 'bg-blue-tint' : 'bg-paper'}`}
+                    className={`flex items-center gap-4 rounded-card border border-border-muted px-5 py-3 ${mine ? 'bg-sun-tint shadow-sticker-sm' : m.zone === 'up' ? 'bg-violet-tint' : 'bg-paper'}`}
                   >
                     <span
-                      className={`flex size-9 shrink-0 items-center justify-center rounded-node border-2 border-ink font-display text-lg font-extrabold ${m.rank <= 3 ? 'bg-lemon' : 'bg-surface'}`}
+                      className={`flex size-9 shrink-0 items-center justify-center rounded-node border border-border-muted font-display text-lg font-semibold ${m.rank <= 3 ? 'bg-lemon' : 'bg-surface'}`}
                     >
                       {m.rank}
                     </span>
@@ -157,7 +157,7 @@ export function LeagueBoard({
                     </span>
                     {m.zone === 'up' && (
                       <ArrowUp
-                        className="size-4 text-blue"
+                        className="size-4 text-violet"
                         strokeWidth={3}
                         aria-label="moving up"
                       />
@@ -171,7 +171,7 @@ export function LeagueBoard({
                     )}
                     <span className="flex items-center gap-1 font-bold tabular-nums">
                       <Zap
-                        className="size-4 text-orange-dark"
+                        className="size-4 text-sun-deep"
                         fill="currentColor"
                         aria-hidden
                       />

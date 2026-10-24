@@ -16,7 +16,7 @@ export default function OfflinePage() {
         className={`${stickerCard} flex flex-col items-center gap-4 px-6 py-10`}
       >
         <Guide guide="priya" mood="oops" className="h-32 w-24" />
-        <h1 className="font-display text-3xl font-extrabold">
+        <h1 className="font-display text-3xl font-semibold">
           You&apos;re offline
         </h1>
         <p className="text-text-secondary">

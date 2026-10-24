@@ -18,6 +18,7 @@ import {
   useDuelLanguage,
 } from '@/components/duel-language-picker';
 import { InlineCode } from '@/components/inline-code';
+import { BugSticker, CoinSticker, Sparkle } from '@/components/stickers';
 import { ProgressBar } from '@/components/progress-bar';
 import { SampleTests } from '@/components/sample-tests';
 import { TestResults } from '@/components/test-results';
@@ -103,7 +104,7 @@ export default function DuelsPage() {
           <p className="mt-6 text-center">
             <Link
               href="/bug-of-the-day"
-              className="rounded-badge text-sm font-bold text-text-secondary underline hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+              className="rounded-badge text-sm font-bold text-text-secondary underline hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet"
             >
               Or warm up with today&apos;s bug of the day
             </Link>
@@ -128,25 +129,40 @@ function Lobby({
   onCancel: () => void;
 }) {
   const queued = state.phase === 'queued';
+  const me = useMe(true);
 
   return (
-    <section
-      className={`${stickerCard} flex flex-col items-center gap-6 px-6 py-12 text-center`}
-    >
-      <div className="flex items-end gap-4">
-        {/* The picked language's guide hosts: Priya, or Arjun. */}
+    <section className="relative flex flex-col items-center gap-6 overflow-hidden rounded-card bg-gradient-to-b from-[#5a3ee0] to-violet px-6 py-12 text-center text-paper shadow-[0_24px_44px_-26px_rgb(74_48_200/0.9)]">
+      <Sparkle className="absolute top-8 left-[10%] size-4 text-sun" />
+      <Sparkle className="absolute top-24 right-[12%] size-3 text-paper/70" />
+      {/* The duel stage: the picked language's guide hosts (Priya, or
+          Arjun) and faces the learner's own avatar. */}
+      <div className="relative flex items-center gap-5 sm:gap-8">
         <Guide
           guide={guideFor(language)}
           mood={queued ? 'thinking' : 'idle'}
-          className="h-28 w-20"
+          crop="bust"
+          className="size-20 drop-shadow-[0_16px_20px_rgb(0_0_0/0.35)] sm:size-24"
         />
-        <span className="flex size-14 -rotate-6 items-center justify-center rounded-card border-2 border-ink bg-pink shadow-sticker-sm">
-          <Swords className="size-7" strokeWidth={2.5} aria-hidden />
+        <span className="grid size-12 place-items-center rounded-full bg-sun font-display text-base font-semibold text-ink shadow-[0_0_0_7px_rgb(255_194_26/0.3)]">
+          VS
         </span>
+        {me.data ? (
+          <Avatar
+            code={me.data.avatar}
+            className="size-20 border-4 border-sun drop-shadow-[0_16px_20px_rgb(0_0_0/0.35)] sm:size-24"
+          />
+        ) : (
+          <span className="size-20 rounded-full bg-paper/20 sm:size-24" />
+        )}
+        <CoinSticker className="absolute -top-4 left-1/2 size-8 animate-bob" />
+        <BugSticker className="absolute bottom-0 -left-9 size-7 animate-bob [animation-delay:-1.3s]" />
       </div>
-      <span className={`${chip} bg-pink text-ink`}>Live 1v1</span>
-      <h1 className="font-display text-4xl font-extrabold">Debugging duels</h1>
-      <p className="max-w-md text-lg">
+      <span className={`${chip} border-transparent bg-paper/15 text-paper`}>
+        <Swords className="size-3.5" strokeWidth={2.5} aria-hidden /> Live 1v1
+      </span>
+      <h1 className="font-display text-4xl font-semibold">Debugging duels</h1>
+      <p className="max-w-md text-lg text-violet-tint">
         You and an opponent get the same buggy program and five minutes. The
         first fix that passes every test wins.
       </p>
@@ -164,7 +180,7 @@ function Lobby({
               ? ` (you are #${state.position} in line)`
               : ''}
           </p>
-          <p className="text-sm text-text-secondary">
+          <p className="text-sm text-violet-tint">
             Matching you with someone near your rating. The longer you wait, the
             wider the search.
           </p>
@@ -214,7 +230,7 @@ function Room({
     <article className="flex flex-col gap-6">
       {/* DuelHeader (DESIGN_SYSTEM §6): Ink band, Orange countdown and
           opponent progress. The opponent's code is never sent (FR-20). */}
-      <header className="flex flex-wrap items-center justify-between gap-4 rounded-card border-2 border-ink bg-ink px-5 py-4 text-paper shadow-sticker">
+      <header className="flex flex-wrap items-center justify-between gap-4 rounded-card border border-ink bg-ink px-5 py-4 text-paper shadow-sticker">
         <div className="flex min-w-48 flex-1 flex-col gap-2" aria-live="polite">
           <p className="flex items-center gap-2 text-sm font-bold">
             {opponent && <Avatar code={opponent.avatar} className="size-8" />}
@@ -235,7 +251,7 @@ function Room({
           />
         </div>
         {end ? (
-          <span className="font-display text-2xl font-extrabold">Finished</span>
+          <span className="font-display text-2xl font-semibold">Finished</span>
         ) : (
           <DuelCountdown endsAt={endsAt} />
         )}
@@ -256,9 +272,7 @@ function Room({
       )}
 
       <section className="flex flex-col gap-2">
-        <h1 className="font-display text-3xl font-extrabold">
-          {problem.title}
-        </h1>
+        <h1 className="font-display text-3xl font-semibold">{problem.title}</h1>
         <p className="text-lg">
           <InlineCode text={problem.description} />
         </p>
@@ -300,7 +314,7 @@ function Room({
       {state.error && !end && (
         <p
           role="alert"
-          className="rounded-card border-2 border-ink bg-surface px-4 py-3 font-bold"
+          className="rounded-card border border-border-muted bg-surface px-4 py-3 font-bold"
         >
           {state.error.message}
         </p>
@@ -350,7 +364,7 @@ function Outcome({
         className="h-24 w-[68px] shrink-0"
       />
       <div className="mr-auto">
-        <p className="font-display text-3xl font-extrabold">{title}</p>
+        <p className="font-display text-3xl font-semibold">{title}</p>
         <p className={won ? 'font-semibold' : 'text-text-secondary'}>
           {detail}
         </p>
@@ -389,7 +403,7 @@ function OpponentAway({ since }: { since: number }) {
   return (
     <p
       role="status"
-      className="rounded-card border-2 border-ink bg-surface px-4 py-3 font-bold"
+      className="rounded-card border border-border-muted bg-surface px-4 py-3 font-bold"
     >
       Your opponent disconnected. If they are not back in {left} s, you win.
     </p>
@@ -403,7 +417,7 @@ function Offline({ message }: { message?: string }) {
       className={`${stickerCard} flex flex-col items-center gap-4 px-6 py-12 text-center`}
     >
       <Guide guide="priya" mood="oops" className="h-28 w-20" />
-      <p className="font-display text-2xl font-extrabold">
+      <p className="font-display text-2xl font-semibold">
         Can&apos;t reach the duel server
       </p>
       <p className="text-text-secondary">

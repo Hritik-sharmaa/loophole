@@ -53,7 +53,7 @@ export default function DuelReplayPage() {
             className={`${stickerCard} flex flex-col items-center gap-4 px-6 py-12 text-center`}
           >
             <Guide guide="priya" mood="oops" className="h-28 w-20" />
-            <p className="font-display text-2xl font-extrabold">
+            <p className="font-display text-2xl font-semibold">
               No replay here
             </p>
             <p className="text-text-secondary">{replay.error.message}</p>
@@ -139,7 +139,7 @@ function Player({ replay }: { replay: DuelReplay }) {
 
   return (
     <article className="flex flex-col gap-6">
-      <header className="flex flex-col gap-4 rounded-card border-2 border-ink bg-ink px-5 py-4 text-paper shadow-sticker">
+      <header className="flex flex-col gap-4 rounded-card border border-ink bg-ink px-5 py-4 text-paper shadow-sticker">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <p className="flex flex-wrap items-center gap-2 font-bold">
             <span className={`${chip} bg-pink text-ink`}>Replay</span>
@@ -147,7 +147,7 @@ function Player({ replay }: { replay: DuelReplay }) {
             <span className={`${chip} ${tone} text-ink`}>{label}</span>
           </p>
           <p
-            className="font-display text-2xl font-extrabold text-orange tabular-nums"
+            className="font-display text-2xl font-semibold text-sun tabular-nums"
             aria-label={`At ${clock(t)} of ${clock(durationMs)}`}
           >
             {clock(t)}
@@ -185,7 +185,7 @@ function Player({ replay }: { replay: DuelReplay }) {
           onChange={(e) => jump(Number(e.target.value))}
           aria-label="Replay position"
           aria-valuetext={`${clock(t)} of ${clock(durationMs)}`}
-          className="w-full accent-orange"
+          className="w-full accent-sun"
         />
         <div className="flex flex-wrap items-center justify-between gap-3">
           {/* Prev, play and next stay together on one line. */}
@@ -226,7 +226,7 @@ function Player({ replay }: { replay: DuelReplay }) {
           <div
             role="group"
             aria-label="Speed"
-            className="flex gap-1 rounded-card border-2 border-ink p-1"
+            className="flex gap-1 rounded-card border border-border-muted p-1"
           >
             {SPEEDS.map((s) => (
               <button
@@ -234,7 +234,7 @@ function Player({ replay }: { replay: DuelReplay }) {
                 type="button"
                 aria-pressed={speed === s}
                 onClick={() => setSpeed(s)}
-                className={`rounded-badge px-3 py-1 text-sm font-bold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink ${speed === s ? 'bg-ink text-paper' : 'text-text-secondary hover:text-ink'}`}
+                className={`rounded-badge px-3 py-1 text-sm font-bold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet ${speed === s ? 'bg-ink text-paper' : 'text-text-secondary hover:text-ink'}`}
               >
                 {s}×
               </button>
@@ -279,9 +279,7 @@ function Player({ replay }: { replay: DuelReplay }) {
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="font-display text-2xl font-extrabold">
-          {problem.title}
-        </h2>
+        <h2 className="font-display text-2xl font-semibold">{problem.title}</h2>
         <p className="text-lg">
           <InlineCode text={problem.description} />
         </p>
@@ -365,7 +363,7 @@ function TimelineItem({
         type="button"
         onClick={() => onPick(at)}
         aria-current={active ? 'step' : undefined}
-        className={`flex w-full items-center gap-3 rounded-card border-2 border-ink px-4 py-2 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink ${active ? 'bg-orange-tint shadow-sticker-sm' : 'bg-paper hover:bg-surface'}`}
+        className={`flex w-full items-center gap-3 rounded-card border border-border-muted px-4 py-2 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet ${active ? 'bg-sun-tint shadow-sticker-sm' : 'bg-paper hover:bg-surface'}`}
       >
         <span className="w-10 shrink-0 font-mono text-sm font-bold tabular-nums">
           {clock(at)}

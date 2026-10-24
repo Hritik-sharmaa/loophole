@@ -16,7 +16,7 @@ export const BOTS: Record<
 > = {
   meera: {
     level: 'Easy',
-    levelTone: 'bg-blue-tint',
+    levelTone: 'bg-violet-tint',
     pace: 'about 4 minutes',
     line: "I'll take it slow. Promise!",
   },
@@ -54,7 +54,7 @@ export function BotOpponents({ language }: { language: DuelLanguage }) {
       className="mt-8 flex flex-col gap-4"
     >
       <div>
-        <h2 id="crew-heading" className="font-display text-2xl font-extrabold">
+        <h2 id="crew-heading" className="font-display text-2xl font-semibold">
           Practice with the crew
         </h2>
         <p className="text-text-secondary">
@@ -74,14 +74,14 @@ export function BotOpponents({ language }: { language: DuelLanguage }) {
             >
               {/* A row on phones, a column card from sm up. */}
               <div
-                className="flex w-24 shrink-0 items-end justify-center border-r-2 border-ink pt-3 sm:w-auto sm:border-r-0 sm:border-b-2 sm:pt-4"
+                className="flex w-24 shrink-0 items-end justify-center border-r border-border-muted pt-3 sm:w-auto sm:border-r-0 sm:border-b sm:pt-4"
                 style={{ backgroundColor: tint }}
               >
                 <Guide guide={id} mood="idle" className="h-28 w-20" />
               </div>
               <div className="flex flex-1 flex-col gap-2 p-4">
                 <div className="flex items-center justify-between gap-2">
-                  <p className="font-display text-xl font-extrabold">{name}</p>
+                  <p className="font-display text-xl font-semibold">{name}</p>
                   <span className={`${chip} ${bot.levelTone} text-ink`}>
                     {bot.level}
                   </span>
@@ -106,7 +106,7 @@ export function BotOpponents({ language }: { language: DuelLanguage }) {
       {start.isError && (
         <p
           role="alert"
-          className="rounded-card border-2 border-ink bg-surface px-4 py-3 font-bold"
+          className="rounded-card border border-border-muted bg-surface px-4 py-3 font-bold"
         >
           {start.error.message}
         </p>

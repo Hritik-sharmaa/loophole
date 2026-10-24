@@ -63,7 +63,7 @@ export function LanguageLogo({
   );
 }
 
-// A logo stuck on a small Paper sticker: course cards, the lesson page's
+// A logo on a small white rounded tile: course cards, the lesson page's
 // way back, the landing page's course strip. Unknown languages show their
 // name in mono instead.
 export function LanguageTile({
@@ -77,7 +77,7 @@ export function LanguageTile({
   return (
     <span
       aria-hidden
-      className={`flex shrink-0 items-center justify-center rounded-badge border-2 border-ink bg-paper ${box} ${size === 'sm' ? '' : 'shadow-sticker-sm'}`}
+      className={`flex shrink-0 items-center justify-center rounded-[30%] border border-border-muted bg-paper ${box} ${size === 'sm' ? '' : 'shadow-sticker-sm'}`}
     >
       {hasLanguageLogo(language) ? (
         <LanguageLogo language={language} className="size-full" />

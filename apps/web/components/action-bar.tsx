@@ -6,7 +6,7 @@ import type { ReactNode } from 'react';
 // (pb-36) while a bar is showing.
 const TONES = {
   plain: 'bg-paper',
-  right: 'bg-blue-tint',
+  right: 'bg-violet-tint',
   wrong: 'bg-surface',
 };
 
@@ -19,7 +19,7 @@ export function ActionBar({
 }) {
   return (
     <div
-      className={`fixed inset-x-0 bottom-0 z-30 border-t-2 border-ink pb-[env(safe-area-inset-bottom)] transition-colors ${TONES[tone]}`}
+      className={`fixed inset-x-0 bottom-0 z-30 border-t border-border-muted pb-[env(safe-area-inset-bottom)] transition-colors ${TONES[tone]}`}
     >
       <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6">
         {children}

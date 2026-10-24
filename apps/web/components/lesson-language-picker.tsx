@@ -44,9 +44,9 @@ export function LessonLanguagePicker({
               onClick={() => onPick(l.id)}
               disabled={disabled}
               aria-pressed={chosen}
-              className={`flex w-full flex-col gap-1 rounded-card border-2 border-ink px-5 py-4 text-left transition-[translate,box-shadow] duration-[50ms] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink disabled:opacity-60 ${chosen ? 'bg-ink text-paper' : 'bg-paper text-ink shadow-press active:translate-y-1 active:shadow-none'}`}
+              className={`flex w-full flex-col gap-1 rounded-card border border-border-muted px-5 py-4 text-left transition-[translate,box-shadow] duration-[50ms] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet disabled:opacity-60 ${chosen ? 'bg-ink text-paper' : 'bg-paper text-ink shadow-press active:translate-y-1 active:shadow-none'}`}
             >
-              <span className="font-display text-xl font-extrabold">
+              <span className="font-display text-xl font-semibold">
                 {l.label}
               </span>
               <span

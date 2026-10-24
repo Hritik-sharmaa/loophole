@@ -14,9 +14,9 @@ export function celebrate(): void {
   // Sticker colours from the design tokens, not hard-coded hex.
   const styles = getComputedStyle(document.documentElement);
   const colors = [
-    '--color-orange',
+    '--color-sun',
     '--color-lemon',
-    '--color-blue',
+    '--color-violet',
     '--color-pink',
   ]
     .map((token) => styles.getPropertyValue(token).trim())

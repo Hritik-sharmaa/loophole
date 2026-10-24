@@ -56,7 +56,7 @@ export function ExplainDifferently({
       <button
         type="button"
         onClick={ask}
-        className="inline-flex items-center gap-1.5 rounded-badge text-sm font-bold text-text-secondary underline-offset-4 hover:text-ink hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+        className="inline-flex items-center gap-1.5 rounded-badge text-sm font-bold text-text-secondary underline-offset-4 hover:text-ink hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet"
       >
         {explain.isError ? (
           <RotateCcw className="size-4" strokeWidth={3} aria-hidden />

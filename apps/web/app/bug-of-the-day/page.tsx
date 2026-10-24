@@ -54,7 +54,7 @@ export default function BugOfTheDayPage() {
             className={`${stickerCard} flex flex-col items-center gap-4 px-6 py-12 text-center`}
           >
             <Guide guide={HOST} mood="oops" className="h-28 w-20" />
-            <p className="font-display text-2xl font-extrabold">No bug today</p>
+            <p className="font-display text-2xl font-semibold">No bug today</p>
             <p className="text-text-secondary">{today.error.message}</p>
             <Link href="/learn" className={secondaryButton}>
               Back to learning
@@ -118,7 +118,7 @@ function DailyBug({
             New bug in {formatDuration(nextBugIn)}
           </span>
         </div>
-        <h1 className="font-display text-3xl font-extrabold text-balance sm:text-4xl">
+        <h1 className="font-display text-3xl font-semibold text-balance sm:text-4xl">
           {problem.title}
         </h1>
         <p className="text-lg">{problem.description}</p>
@@ -181,7 +181,7 @@ function DailyBug({
           {submit.isError && (
             <p
               role="alert"
-              className="rounded-card border-2 border-ink bg-surface px-4 py-3 font-bold"
+              className="rounded-card border border-border-muted bg-surface px-4 py-3 font-bold"
             >
               {submit.error.message}
             </p>
@@ -217,7 +217,7 @@ function Squashed({
       className={`${stickerCard} flex flex-col items-center gap-5 overflow-hidden px-6 pb-8 text-center`}
     >
       <div
-        className="-mx-6 flex w-[calc(100%+3rem)] justify-center border-b-2 border-ink pt-6"
+        className="-mx-6 flex w-[calc(100%+3rem)] justify-center border-b border-border-muted pt-6"
         style={{ backgroundColor: tint }}
       >
         <Guide
@@ -227,7 +227,7 @@ function Squashed({
           className="h-48 w-[137px]"
         />
       </div>
-      <h2 className="font-display text-4xl font-extrabold">Bug squashed!</h2>
+      <h2 className="font-display text-4xl font-semibold">Bug squashed!</h2>
       <p className="text-lg">
         <span className="font-bold">{name}:</span> “{cheer} You fixed it in{' '}
         <span className="font-bold">{formatDuration(timeMs)}</span>.”
@@ -247,7 +247,7 @@ function Squashed({
         />
         <Stat
           label="XP"
-          head="bg-blue text-paper"
+          head="bg-violet text-paper"
           value={`+${result ? paid : DAILY_BUG_XP}`}
           note={
             !result
@@ -286,13 +286,13 @@ function Stat({
   note?: string;
 }) {
   return (
-    <div className="flex flex-col overflow-hidden rounded-card border-2 border-ink">
+    <div className="flex flex-col overflow-hidden rounded-card border border-border-muted">
       <dt
         className={`px-2 py-1 text-xs font-bold tracking-wide uppercase ${head}`}
       >
         {label}
       </dt>
-      <dd className="px-2 py-2 font-display text-2xl font-extrabold tabular-nums">
+      <dd className="px-2 py-2 font-display text-2xl font-semibold tabular-nums">
         {value}
         {note && (
           <span className="block font-sans text-xs font-bold text-text-secondary">

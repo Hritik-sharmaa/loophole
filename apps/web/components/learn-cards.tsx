@@ -61,7 +61,7 @@ export function LearnCards({
       {/* key: each card starts with its own fresh example. */}
       <div key={index} className="flex flex-col gap-6">
         <GuideSays guide={guide} speak={`${card.title}. ${card.body}`}>
-          <h2 className="font-display text-xl font-extrabold text-balance sm:text-2xl">
+          <h2 className="font-display text-xl font-semibold text-balance sm:text-2xl">
             {card.title}
           </h2>
           <p className="mt-1 text-lg leading-relaxed">
@@ -86,7 +86,7 @@ export function LearnCards({
           <button
             type="button"
             onClick={() => onIndex(index - 1)}
-            className="inline-flex items-center gap-1 rounded-badge px-2 py-2 font-bold text-text-secondary hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+            className="inline-flex items-center gap-1 rounded-badge px-2 py-2 font-bold text-text-secondary hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet"
           >
             <ArrowLeft className="size-4" strokeWidth={3} aria-hidden /> Back
           </button>

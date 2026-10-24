@@ -6,7 +6,7 @@ export function SampleTests({ tests }: { tests: TestCase[] }) {
   return (
     <section className="flex flex-col gap-3">
       <h2 className="font-display text-xl font-bold">Example</h2>
-      <div className="overflow-x-auto rounded-card border-2 border-ink bg-paper">
+      <div className="overflow-x-auto rounded-card border border-border-muted bg-paper">
         <table className="w-full text-left font-mono text-sm">
           <thead className="bg-surface text-xs tracking-wide text-text-secondary uppercase">
             <tr>
@@ -16,7 +16,7 @@ export function SampleTests({ tests }: { tests: TestCase[] }) {
           </thead>
           <tbody>
             {tests.map((test, i) => (
-              <tr key={i} className="border-t-2 border-ink align-top">
+              <tr key={i} className="border-t border-border-muted align-top">
                 <td className="px-4 py-2 whitespace-pre">
                   {test.input.trimEnd() || (
                     <span className="text-text-secondary">(no input)</span>

@@ -49,13 +49,13 @@ export function QuickCheck({
     <section className="flex flex-col gap-6">
       <GuideSays guide={guide} mood={mood} speak={check.question}>
         <span className={`${chip} bg-lemon text-ink`}>Quick check</span>
-        <h2 className="mt-2 font-display text-xl font-extrabold sm:text-2xl">
+        <h2 className="mt-2 font-display text-xl font-semibold sm:text-2xl">
           {check.question}
         </h2>
       </GuideSays>
 
       {check.code && (
-        <pre className="overflow-x-auto rounded-card border-2 border-ink bg-ink px-4 py-3 font-mono text-sm leading-6 text-canvas">
+        <pre className="overflow-x-auto rounded-card border border-ink bg-ink px-4 py-3 font-mono text-sm leading-6 text-canvas">
           {check.code.trimEnd()}
         </pre>
       )}
@@ -71,15 +71,15 @@ export function QuickCheck({
                 onClick={() => pick(i)}
                 disabled={solved || isWrong}
                 aria-pressed={isAnswer || isWrong}
-                className={`flex w-full items-center gap-3 rounded-card border-2 border-ink px-4 py-3 text-left font-mono text-sm transition-[translate,box-shadow] duration-[50ms] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink ${
+                className={`flex w-full items-center gap-3 rounded-card border border-border-muted px-4 py-3 text-left font-mono text-sm transition-[translate,box-shadow] duration-[50ms] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet ${
                   isAnswer
-                    ? 'bg-blue-tint'
+                    ? 'bg-violet-tint'
                     : isWrong
                       ? 'bg-surface text-text-secondary line-through'
                       : 'bg-paper shadow-press active:translate-y-1 active:shadow-none disabled:shadow-none'
                 }`}
               >
-                <span className="flex size-6 shrink-0 items-center justify-center rounded-node border-2 border-ink font-sans text-xs font-bold">
+                <span className="flex size-6 shrink-0 items-center justify-center rounded-node border border-border-muted font-sans text-xs font-bold">
                   {isAnswer ? (
                     <Check className="size-3.5" strokeWidth={3.5} />
                   ) : isWrong ? (
@@ -99,8 +99,8 @@ export function QuickCheck({
         <div aria-live="polite" className="min-w-0 flex-1 basis-60">
           {solved ? (
             <p>
-              <span className="flex items-center gap-1 font-display text-lg font-extrabold">
-                <Check className="size-5 text-blue" strokeWidth={3.5} />
+              <span className="flex items-center gap-1 font-display text-lg font-semibold">
+                <Check className="size-5 text-violet" strokeWidth={3.5} />
                 {words.right}
               </span>
               <InlineCode text={check.explanation} />
