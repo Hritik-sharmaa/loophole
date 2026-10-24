@@ -23,6 +23,7 @@ import { chip, stickerCard } from '@/components/ui/card';
 import { languageInfo } from '@/lib/languages';
 import { useDuelReplay } from '@/lib/queries/use-duel-history';
 import { useRequireSession } from '@/lib/use-require-session';
+import { PageLoader } from '@/components/page-loader';
 
 // Playback speeds; a five-minute duel takes 30 s at 10×.
 const SPEEDS = [1, 5, 10] as const;
@@ -46,7 +47,7 @@ export default function DuelReplayPage() {
       <AppHeader />
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-6 sm:px-6 sm:py-8">
         {loading || replay.isPending ? (
-          <p className="text-text-secondary">Loading the replay…</p>
+          <PageLoader label="Loading the replay…" />
         ) : replay.isError ? (
           <div
             role="alert"

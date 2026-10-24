@@ -7,9 +7,12 @@ import { useId } from 'react';
 export function LoopMark({
   className = 'size-8',
   tone = 'sun',
+  drawing = false,
 }: {
   className?: string;
   tone?: 'sun' | 'violet';
+  // The loading screen: the loop draws itself over and over.
+  drawing?: boolean;
 }) {
   const id = useId();
   const sun = tone === 'sun';
@@ -37,6 +40,11 @@ export function LoopMark({
         stroke={sun ? '#1e1638' : '#ffc21a'}
         strokeWidth="6.5"
         strokeLinecap="round"
+        {...(drawing && {
+          pathLength: 1,
+          strokeDasharray: '1 1',
+          className: 'animate-loop-draw',
+        })}
       />
       <circle cx="47.5" cy="46.5" r="4.6" fill={sun ? '#1e1638' : '#ffc21a'} />
     </svg>

@@ -54,7 +54,7 @@ export function CareerPaths({ courses }: { courses: CourseOverview[] }) {
           Not sure where to start? Pick a goal and follow its courses in order.
         </p>
       </div>
-      <ul className="grid gap-5 sm:grid-cols-2">
+      <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {paths.map((p) => {
           const total = p.steps.reduce((n, c) => n + c.lessonCount, 0);
           const done = p.steps.reduce(

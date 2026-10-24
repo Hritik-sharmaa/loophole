@@ -47,7 +47,7 @@ export function AppHeader() {
   return (
     <>
       <header className="sticky top-0 z-30 border-b border-border-muted bg-paper/85 pt-[env(safe-area-inset-top)] backdrop-blur-md">
-        <nav className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
+        <nav className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
           <Logo href="/learn" size="sm" />
 
           {/* StreakBadge / XpBadge (DESIGN_SYSTEM §6). On phones they sit

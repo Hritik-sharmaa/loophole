@@ -17,6 +17,7 @@ import { chip, stickerOutline } from '@/components/ui/card';
 import { useCourses } from '@/lib/queries/use-lessons';
 import { useMe } from '@/lib/queries/use-me';
 import { useRequireSession } from '@/lib/use-require-session';
+import { PageLoader } from '@/components/page-loader';
 
 // Tracks announced but not seeded yet (ADR-023), shown so learners can see
 // what is coming. Every agreed track is live now; add an entry here when a
@@ -46,7 +47,7 @@ export default function LearnPage() {
   return (
     <>
       <AppHeader />
-      <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-10 px-4 py-8 sm:px-6 sm:py-10">
+      <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-10 px-4 py-8 sm:px-6 sm:py-10">
         <GuideSays guide={guideFor(current?.language)} mood="happy">
           <p className="font-display text-xl font-semibold sm:text-2xl">
             {me.data ? `Hi, ${me.data.username}!` : 'Hi!'}{' '}
@@ -55,24 +56,27 @@ export default function LearnPage() {
         </GuideSays>
 
         {loading || courses.isPending ? (
-          <p className="text-center text-text-secondary">
-            Loading your courses…
-          </p>
+          <PageLoader label="Loading your courses…" />
         ) : courses.isError ? (
           <p role="alert" className="text-center">
             ✕ Could not load the courses: {courses.error.message}
           </p>
         ) : (
           <>
-            {current && <ContinueCard course={current} />}
-            {/* Bug of the day (ADR-035): reads only the board. */}
-            <DailyBugCard enabled={!loading} />
+            {/* Side by side on wide screens, so the courses start higher. */}
+            <div
+              className={`grid items-stretch gap-5 ${current ? 'lg:grid-cols-[3fr_2fr]' : ''}`}
+            >
+              {current && <ContinueCard course={current} />}
+              {/* Bug of the day (ADR-035): reads only the board. */}
+              <DailyBugCard enabled={!loading} />
+            </div>
 
             <section className="flex flex-col gap-4">
               <h2 className="font-display text-2xl font-semibold">
                 {current ? 'All courses' : 'Courses'}
               </h2>
-              <ul className="grid gap-5 sm:grid-cols-2">
+              <ul className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
                 {list.map((course) => (
                   <li key={course.id}>
                     <CourseCard course={course} />

@@ -9,6 +9,7 @@ import { CrewLineup, Guide } from '@/components/guide';
 import { Logo } from '@/components/logo';
 import { primaryButton, secondaryButton } from '@/components/ui/buttons';
 import { usePublicCertificate } from '@/lib/queries/use-certificates';
+import { PageLoader } from '@/components/page-loader';
 
 // FR-15: a finished course's certificate, public, no login needed, so it
 // can go on a CV or LinkedIn. It shows only name, course and date.
@@ -21,7 +22,7 @@ export default function CertificatePage() {
       <Logo href="/" />
 
       {cert.isPending ? (
-        <p className="text-text-secondary">Loading the certificate…</p>
+        <PageLoader label="Loading the certificate…" />
       ) : cert.isError ? (
         <div
           role="alert"

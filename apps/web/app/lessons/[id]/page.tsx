@@ -36,6 +36,7 @@ import { useSubmissions, useSubmit } from '@/lib/queries/use-submissions';
 import { useCountUp } from '@/lib/use-count-up';
 import { useRequireSession } from '@/lib/use-require-session';
 import { useLessonWords } from '@/lib/lesson-words';
+import { PageLoader } from '@/components/page-loader';
 
 // One lesson, full screen (ADR-029): no app menu, just a way out and a
 // progress bar. Learn cards and a quick check, then the exercise (prompt,
@@ -71,9 +72,9 @@ export default function LessonPage() {
           max={1}
         />
         <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-6 sm:px-6 sm:py-8">
-          <p className="text-text-secondary">
-            {lesson.data ? 'Loading your code…' : 'Loading the lesson…'}
-          </p>
+          <PageLoader
+            label={lesson.data ? 'Loading your code…' : 'Loading the lesson…'}
+          />
         </main>
       </>
     );

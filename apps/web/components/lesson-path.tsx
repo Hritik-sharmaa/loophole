@@ -74,177 +74,216 @@ export function LessonPath({
   );
 
   return (
-    <div className="flex flex-col gap-12">
-      <header className={`${stickerCard} overflow-hidden`}>
-        <CourseBanner
-          language={path.course.language}
-          className="h-32 border-b border-border-muted sm:h-40"
-        />
-        <div className="flex items-center gap-5 px-5 py-5">
-          <div className="flex min-w-0 flex-1 flex-col gap-3">
-            <h1 className="font-display text-3xl font-semibold sm:text-4xl">
-              {path.course.title}
-            </h1>
-            <ProgressBar
-              value={completed}
-              max={lessons.length}
-              label="Course progress"
-            />
-            <p className="text-sm font-bold text-text-secondary">
-              {completed} of {lessons.length} lessons done
-            </p>
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-              <span className="text-sm font-bold">
-                Badges {earned.filter(Boolean).length}/{earned.length}
-              </span>
-              <ul className="flex flex-wrap gap-1">
-                {earned.map((got, u) => (
-                  <li key={path.units[u].id}>
-                    <UnitBadge number={u + 1} earned={got} className="size-7" />
-                  </li>
-                ))}
-              </ul>
-            </div>
-            {/* The practice stop (ADR-037): once there is something to
-                review. */}
-            {completed > 0 && (
-              <Link
-                href={`/learn/${path.course.slug}/practice`}
-                className={`${secondaryButton} self-start px-4 py-2 text-sm`}
-              >
-                <Dumbbell className="size-4" strokeWidth={2.5} aria-hidden />
-                Practice what you&apos;ve learned
-              </Link>
-            )}
-          </div>
-          {/* The course's guide (ADR-028), cheering once it's all done. */}
-          <Guide
-            guide={guide}
-            mood={completed === lessons.length ? 'happy' : 'idle'}
-            label={`${GUIDES[guide].name}, your ${path.course.title} guide`}
-            className="h-24 w-[68px] shrink-0 sm:h-28 sm:w-20"
+    // Wide screens: the road on the left, the course card and a list of
+    // units to jump to in a sticky column on the right.
+    <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start lg:gap-10">
+      <aside className="flex flex-col gap-6 lg:sticky lg:top-24 lg:order-2 lg:max-h-[calc(100dvh-7rem)] lg:overflow-y-auto">
+        <header className={`${stickerCard} overflow-hidden`}>
+          <CourseBanner
+            language={path.course.language}
+            className="h-32 border-b border-border-muted sm:h-40 lg:h-28"
           />
-        </div>
-      </header>
-
-      {path.units.map((unit, u) => {
-        const points = layoutNodes(unit.lessons.length, firstIndex[u]);
-        const done = donePointCount(unit.lessons.map((l) => l.state));
-        const height = pathHeight(unit.lessons.length);
-        const unitDone = unit.lessons.filter(
-          (l) => l.state === 'completed',
-        ).length;
-
-        return (
-          <section key={unit.id} className="flex flex-col items-center gap-8">
-            <div
-              className={`${stickerCard} flex w-full flex-wrap items-center justify-between gap-3 px-5 py-4`}
-            >
-              <div className="flex items-center gap-3">
-                <UnitBadge number={u + 1} earned={earned[u]} />
-                <div className="flex flex-col items-start gap-1">
-                  <span className={`${chip} bg-lemon text-ink`}>
-                    Unit {u + 1} · {unitDone}/{unit.lessons.length}
-                  </span>
-                  <h2 className="font-display text-2xl font-semibold">
-                    {unit.title}
-                  </h2>
-                </div>
-              </div>
-              <CheatSheet
-                slug={path.course.slug}
-                unitId={unit.id}
-                unitTitle={unit.title}
+          <div className="flex items-center gap-5 px-5 py-5">
+            <div className="flex min-w-0 flex-1 flex-col gap-3">
+              <h1 className="font-display text-3xl font-semibold sm:text-4xl lg:text-3xl">
+                {path.course.title}
+              </h1>
+              <ProgressBar
+                value={completed}
+                max={lessons.length}
+                label="Course progress"
               />
-            </div>
-
-            <UnitMap
-              season={SEASONS[u % SEASONS.length]}
-              points={points}
-              done={done}
-              height={height}
-            >
-              <ol>
-                {unit.lessons.map((lesson, i) => {
-                  const node = (
-                    <>
-                      <LessonNode
-                        state={lesson.state}
-                        number={firstIndex[u] + i + 1}
-                        pop={popping.has(lesson.id)}
-                        project={lesson.project}
+              <p className="text-sm font-bold text-text-secondary">
+                {completed} of {lessons.length} lessons done
+              </p>
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                <span className="text-sm font-bold">
+                  Badges {earned.filter(Boolean).length}/{earned.length}
+                </span>
+                <ul className="flex flex-wrap gap-1">
+                  {earned.map((got, u) => (
+                    <li key={path.units[u].id}>
+                      <UnitBadge
+                        number={u + 1}
+                        earned={got}
+                        className="size-7"
                       />
-                      <span
-                        className={`rounded-badge bg-paper/90 px-2.5 py-0.5 text-center text-sm leading-tight font-bold shadow-sticker-sm ${lesson.state === 'locked' ? 'text-text-secondary' : 'text-ink'}`}
-                      >
-                        {lesson.title}
-                        <span className="sr-only">
-                          {' '}
-                          ({STATE_LABEL[lesson.state]})
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              {/* The practice stop (ADR-037): once there is something to
+                review. */}
+              {completed > 0 && (
+                <Link
+                  href={`/learn/${path.course.slug}/practice`}
+                  className={`${secondaryButton} self-start px-4 py-2 text-sm`}
+                >
+                  <Dumbbell className="size-4" strokeWidth={2.5} aria-hidden />
+                  Practice what you&apos;ve learned
+                </Link>
+              )}
+            </div>
+            {/* The course's guide (ADR-028), cheering once it's all done. */}
+            <Guide
+              guide={guide}
+              mood={completed === lessons.length ? 'happy' : 'idle'}
+              label={`${GUIDES[guide].name}, your ${path.course.title} guide`}
+              className="h-24 w-[68px] shrink-0 sm:h-28 sm:w-20"
+            />
+          </div>
+        </header>
+
+        <nav
+          aria-label="Units"
+          className={`${stickerCard} hidden flex-col gap-0.5 p-3 lg:flex`}
+        >
+          <p className="px-2 pt-1 pb-2 text-sm font-bold text-text-secondary">
+            Units
+          </p>
+          {path.units.map((unit, u) => (
+            <a
+              key={unit.id}
+              href={`#unit-${unit.id}`}
+              className="flex items-center gap-3 rounded-2xl px-2 py-1.5 transition-colors hover:bg-canvas focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet"
+            >
+              <UnitBadge number={u + 1} earned={earned[u]} className="size-8" />
+              <span className="min-w-0 flex-1 truncate font-semibold">
+                {unit.title}
+              </span>
+              <span className="text-xs font-bold text-text-secondary tabular-nums">
+                {unit.lessons.filter((l) => l.state === 'completed').length}/
+                {unit.lessons.length}
+              </span>
+            </a>
+          ))}
+        </nav>
+      </aside>
+
+      <div className="flex min-w-0 flex-col gap-12 lg:order-1">
+        {path.units.map((unit, u) => {
+          const points = layoutNodes(unit.lessons.length, firstIndex[u]);
+          const done = donePointCount(unit.lessons.map((l) => l.state));
+          const height = pathHeight(unit.lessons.length);
+          const unitDone = unit.lessons.filter(
+            (l) => l.state === 'completed',
+          ).length;
+
+          return (
+            <section
+              key={unit.id}
+              id={`unit-${unit.id}`}
+              className="flex scroll-mt-24 flex-col items-center gap-8"
+            >
+              <div
+                className={`${stickerCard} flex w-full flex-wrap items-center justify-between gap-3 px-5 py-4`}
+              >
+                <div className="flex items-center gap-3">
+                  <UnitBadge number={u + 1} earned={earned[u]} />
+                  <div className="flex flex-col items-start gap-1">
+                    <span className={`${chip} bg-lemon text-ink`}>
+                      Unit {u + 1} · {unitDone}/{unit.lessons.length}
+                    </span>
+                    <h2 className="font-display text-2xl font-semibold">
+                      {unit.title}
+                    </h2>
+                  </div>
+                </div>
+                <CheatSheet
+                  slug={path.course.slug}
+                  unitId={unit.id}
+                  unitTitle={unit.title}
+                />
+              </div>
+
+              <UnitMap
+                season={SEASONS[u % SEASONS.length]}
+                points={points}
+                done={done}
+                height={height}
+              >
+                <ol>
+                  {unit.lessons.map((lesson, i) => {
+                    const node = (
+                      <>
+                        <LessonNode
+                          state={lesson.state}
+                          number={firstIndex[u] + i + 1}
+                          pop={popping.has(lesson.id)}
+                          project={lesson.project}
+                        />
+                        <span
+                          className={`rounded-badge bg-paper/90 px-2.5 py-0.5 text-center text-sm leading-tight font-bold shadow-sticker-sm ${lesson.state === 'locked' ? 'text-text-secondary' : 'text-ink'}`}
+                        >
+                          {lesson.title}
+                          <span className="sr-only">
+                            {' '}
+                            ({STATE_LABEL[lesson.state]})
+                          </span>
                         </span>
-                      </span>
-                    </>
-                  );
-                  return (
-                    <motion.li
-                      key={lesson.id}
-                      className="absolute w-36"
-                      initial={{ opacity: 0, y: 18, scale: 0.85 }}
-                      whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                      viewport={{ once: true, amount: 0.6 }}
-                      transition={{
-                        type: 'spring',
-                        stiffness: 320,
-                        damping: 18,
-                        delay: 0.15 + i * 0.07,
-                      }}
-                      style={{
-                        left: points[i].x - 72,
-                        top: ROAD_LEAD + points[i].y - 40,
-                      }}
-                    >
-                      {lesson.state === 'locked' ? (
-                        <div
-                          aria-disabled="true"
-                          title={
-                            lesson.project
-                              ? 'Finish this unit to open its project'
-                              : 'Finish the previous lesson first'
-                          }
-                          className="flex flex-col items-center gap-1.5"
-                        >
-                          {node}
-                        </div>
-                      ) : (
-                        <Link
-                          href={`/lessons/${lesson.id}`}
-                          className="group flex flex-col items-center gap-1.5 rounded-card p-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet"
-                        >
-                          {node}
-                        </Link>
-                      )}
-                    </motion.li>
-                  );
-                })}
-              </ol>
-            </UnitMap>
+                      </>
+                    );
+                    return (
+                      <motion.li
+                        key={lesson.id}
+                        className="absolute w-36"
+                        initial={{ opacity: 0, y: 18, scale: 0.85 }}
+                        whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                        viewport={{ once: true, amount: 0.6 }}
+                        transition={{
+                          type: 'spring',
+                          stiffness: 320,
+                          damping: 18,
+                          delay: 0.15 + i * 0.07,
+                        }}
+                        style={{
+                          left: points[i].x - 72,
+                          top: ROAD_LEAD + points[i].y - 40,
+                        }}
+                      >
+                        {lesson.state === 'locked' ? (
+                          <div
+                            aria-disabled="true"
+                            title={
+                              lesson.project
+                                ? 'Finish this unit to open its project'
+                                : 'Finish the previous lesson first'
+                            }
+                            className="flex flex-col items-center gap-1.5"
+                          >
+                            {node}
+                          </div>
+                        ) : (
+                          <Link
+                            href={`/lessons/${lesson.id}`}
+                            className="group flex flex-col items-center gap-1.5 rounded-card p-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet"
+                          >
+                            {node}
+                          </Link>
+                        )}
+                      </motion.li>
+                    );
+                  })}
+                </ol>
+              </UnitMap>
 
-            {unit.bugs > 0 && (
-              <BugHuntStop
-                href={`/learn/${path.course.slug}/bug-hunt/${unit.id}`}
-                bugs={unit.bugs}
-                open={lessonsDone[u]}
-              />
-            )}
-          </section>
-        );
-      })}
+              {unit.bugs > 0 && (
+                <BugHuntStop
+                  href={`/learn/${path.course.slug}/bug-hunt/${unit.id}`}
+                  bugs={unit.bugs}
+                  open={lessonsDone[u]}
+                />
+              )}
+            </section>
+          );
+        })}
 
-      <CertificateStop
-        slug={path.certificateSlug}
-        lessonCount={lessons.length}
-        courseTitle={path.course.title}
-      />
+        <CertificateStop
+          slug={path.certificateSlug}
+          lessonCount={lessons.length}
+          courseTitle={path.course.title}
+        />
+      </div>
     </div>
   );
 }

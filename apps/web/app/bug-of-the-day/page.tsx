@@ -25,6 +25,7 @@ import {
 } from '@/lib/queries/use-daily-bug';
 import { useMe } from '@/lib/queries/use-me';
 import { useRequireSession } from '@/lib/use-require-session';
+import { PageLoader } from '@/components/page-loader';
 
 // The bug pool is Python (content/duels/python), so Priya hosts it.
 const HOST = 'priya';
@@ -47,7 +48,7 @@ export default function BugOfTheDayPage() {
       <AppHeader />
       <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-4 py-6 sm:px-6 sm:py-8">
         {loading || today.isPending ? (
-          <p className="text-text-secondary">Loading today&apos;s bug…</p>
+          <PageLoader label="Loading today's bug…" />
         ) : today.isError ? (
           <div
             role="alert"

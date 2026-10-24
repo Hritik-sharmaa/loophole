@@ -10,6 +10,7 @@ import { primaryButton, secondaryButton } from '@/components/ui/buttons';
 import { stickerCard } from '@/components/ui/card';
 import { useBugHunt, useCoursePath } from '@/lib/queries/use-lessons';
 import { useRequireSession } from '@/lib/use-require-session';
+import { PageLoader } from '@/components/page-loader';
 
 // A unit's Bug hunt (ADR-031): every spot-the-bug card from the unit, one
 // after another, full screen like a lesson. Practice only: nothing is
@@ -53,7 +54,7 @@ export default function BugHuntPage() {
         className={`mx-auto w-full max-w-3xl flex-1 px-4 py-6 sm:px-6 sm:py-8 ${hunt.data && !done && bugs.length > 0 ? 'pb-44' : ''}`}
       >
         {loading || hunt.isPending ? (
-          <p className="text-text-secondary">Loading the bug hunt…</p>
+          <PageLoader label="Loading the bug hunt…" />
         ) : hunt.isError ? (
           <Message guide={guide} slug={slug} text={hunt.error.message} />
         ) : bugs.length === 0 ? (

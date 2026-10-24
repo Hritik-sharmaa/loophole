@@ -27,6 +27,7 @@ import {
   useSubmitBotDuel,
 } from '@/lib/queries/use-bot-duels';
 import { useRequireSession } from '@/lib/use-require-session';
+import { PageLoader } from '@/components/page-loader';
 
 // A practice duel against a guide bot (ADR-039): the live duel's room, but
 // the opponent is one of the crew fixing the same bug on a schedule. The
@@ -41,7 +42,7 @@ export default function BotDuelPage() {
       <AppHeader />
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-6 sm:px-6 sm:py-8">
         {loading || duel.isPending ? (
-          <p className="text-text-secondary">Loading the duel…</p>
+          <PageLoader label="Loading the duel…" />
         ) : duel.isError ? (
           <div
             role="alert"

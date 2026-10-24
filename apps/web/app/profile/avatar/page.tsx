@@ -4,6 +4,7 @@ import { AppHeader } from '@/components/app-header';
 import { AvatarMaker } from '@/components/avatar-maker';
 import { useMe } from '@/lib/queries/use-me';
 import { useRequireSession } from '@/lib/use-require-session';
+import { PageLoader } from '@/components/page-loader';
 
 // The avatar maker (ADR-046). Visitors without a session go to /login.
 export default function AvatarPage() {
@@ -23,7 +24,7 @@ export default function AvatarPage() {
           </p>
         </header>
         {loading || me.isPending ? (
-          <p>Loading…</p>
+          <PageLoader />
         ) : me.isError ? (
           <p role="alert">✕ Could not load your profile: {me.error.message}</p>
         ) : (

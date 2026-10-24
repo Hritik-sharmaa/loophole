@@ -15,6 +15,7 @@ import { useMyCertificates } from '@/lib/queries/use-certificates';
 import { useActivity, useMe, useUpdateMe } from '@/lib/queries/use-me';
 import { supabase } from '@/lib/supabase';
 import { useRequireSession } from '@/lib/use-require-session';
+import { PageLoader } from '@/components/page-loader';
 
 // The signed-in user's page. Visitors without a session go to /login.
 export default function ProfilePage() {
@@ -25,7 +26,7 @@ export default function ProfilePage() {
     <>
       <AppHeader />
       {loading || me.isPending ? (
-        <Centered>Loading…</Centered>
+        <PageLoader label="Loading your profile…" />
       ) : me.isError ? (
         <Centered>
           <p role="alert">✕ Could not load your profile: {me.error.message}</p>
@@ -38,37 +39,48 @@ export default function ProfilePage() {
   );
 }
 
+// Wide screens: who you are, your numbers and your streak on the left,
+// settings on the right. Phones: one column, in that order.
 function Profile({ me }: { me: MeResponse }) {
   return (
-    <Centered>
-      <Avatar code={me.avatar} className="size-28" />
-      <h1 className="font-display text-3xl font-semibold break-all">
-        Hi, {me.username}
-      </h1>
-      <Link href="/profile/avatar" className={`${secondaryButton} px-4 py-2`}>
-        Edit avatar
-      </Link>
-      <dl className="grid w-full grid-cols-2 gap-3 text-center">
-        <Stat label="XP" value={me.xp} />
-        <Stat
-          label="Streak"
-          value={me.streak.current}
-          note={
-            me.streak.freezes > 0
-              ? `${me.streak.freezes} freeze${me.streak.freezes === 1 ? '' : 's'} saved`
-              : 'Every 7 days earns a freeze'
-          }
-        />
-        <Stat label="Rating" value={me.rating} />
-        <Stat label="Lessons done" value={me.lessonsCompleted} />
-      </dl>
-      <StreakSection goal={me.dailyGoal} />
-      <GoalSetting current={me.dailyGoal} />
-      <LanguageSetting current={me.lessonLanguage} />
-      <Certificates />
-      <UsernameForm current={me.username} />
-      <LogoutButton />
-    </Centered>
+    <main className="mx-auto grid w-full max-w-5xl flex-1 gap-10 px-4 py-10 sm:px-6 sm:py-12 lg:grid-cols-[320px_minmax(0,1fr)] lg:items-start lg:gap-14">
+      <div className="flex flex-col items-center gap-6 text-center">
+        <Avatar code={me.avatar} className="size-28" />
+        <h1 className="font-display text-3xl font-semibold break-all">
+          Hi, {me.username}
+        </h1>
+        <Link href="/profile/avatar" className={`${secondaryButton} px-4 py-2`}>
+          Edit avatar
+        </Link>
+        <dl className="grid w-full grid-cols-2 gap-3 text-center">
+          <Stat label="XP" value={me.xp} />
+          <Stat
+            label="Streak"
+            value={me.streak.current}
+            note={
+              me.streak.freezes > 0
+                ? `${me.streak.freezes} freeze${me.streak.freezes === 1 ? '' : 's'} saved`
+                : 'Every 7 days earns a freeze'
+            }
+          />
+          <Stat label="Rating" value={me.rating} />
+          <Stat label="Lessons done" value={me.lessonsCompleted} />
+        </dl>
+        <StreakSection goal={me.dailyGoal} />
+        <span className="hidden lg:block">
+          <LogoutButton />
+        </span>
+      </div>
+      <div className="flex w-full flex-col items-center gap-8 lg:items-stretch">
+        <GoalSetting current={me.dailyGoal} />
+        <LanguageSetting current={me.lessonLanguage} />
+        <Certificates />
+        <UsernameForm current={me.username} />
+        <span className="lg:hidden">
+          <LogoutButton />
+        </span>
+      </div>
+    </main>
   );
 }
 

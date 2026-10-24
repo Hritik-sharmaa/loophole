@@ -18,6 +18,7 @@ import {
 } from '@/lib/queries/use-leaderboard';
 import { useMe } from '@/lib/queries/use-me';
 import { useRequireSession } from '@/lib/use-require-session';
+import { PageLoader } from '@/components/page-loader';
 
 type Tab = 'league' | 'weekly' | 'rating';
 
@@ -58,7 +59,7 @@ export default function LeaderboardPage() {
         </div>
 
         {loading || board.isPending ? (
-          <p className="mt-6 text-text-secondary">Loading the leaderboard…</p>
+          <PageLoader label="Loading the leaderboard…" />
         ) : board.isError ? (
           <p role="alert" className="mt-6">
             ✕ Could not load the leaderboard: {board.error.message}

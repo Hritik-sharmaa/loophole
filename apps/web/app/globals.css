@@ -42,6 +42,30 @@
   --animate-pulse-node: pulse-node 1.6s ease-in-out infinite;
   --animate-blink: blink 1.1s steps(1) infinite;
   --animate-bob: bob 3.2s ease-in-out infinite;
+  --animate-loop-draw: loop-draw 1.6s ease-in-out infinite;
+  --animate-nav-grow: nav-grow 8s cubic-bezier(0.1, 0.6, 0.2, 1) forwards;
+
+  /* The loading loop: drawn in, then drawn out from its start. */
+  @keyframes loop-draw {
+    0% {
+      stroke-dashoffset: 1;
+    }
+    55% {
+      stroke-dashoffset: 0;
+    }
+    100% {
+      stroke-dashoffset: -1;
+    }
+  }
+  /* The page-change bar creeps towards the end and waits there. */
+  @keyframes nav-grow {
+    from {
+      scale: 0 1;
+    }
+    to {
+      scale: 0.9 1;
+    }
+  }
 
   @keyframes pop {
     0%,
